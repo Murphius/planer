@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- button color -->
+    <color name="sommer_mom">#6C829A</color>
+
+    <!-- background color top -->
+    <color name="mr_and_mrs_jones">#324856</color>
+
+    <!-- text color button -->
+    <color name="un_graceful">#EBEDE0</color>
+
+    <!-- text color text -->
+    <color name="mr_and_mrs_jones_25">#9EC1D4</color>
+</resources>

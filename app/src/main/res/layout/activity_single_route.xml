@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/date_text_single"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Single_route">
+
+    <TextView
+        android:id="@+id/app_name2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/mr_and_mrs_jones"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="@string/einzelne_fahrt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/mr_and_mrs_jones_25"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="328dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_name2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_name2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/date_button"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:width="180dp"
+                    android:clickable="false"
+                    android:fontFamily="serif"
+                    android:hapticFeedbackEnabled="false"
+                    android:longClickable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:bootstrapBrand="regular"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/datum"
+                    app:roundedCorners="true"
+                    app:showOutline="false"
+                    tools:visibility="visible">
+
+                </com.beardedhen.androidbootstrap.BootstrapButton>
+
+                <EditText
+                    android:id="@+id/date_text"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="serif"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="date" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/an_abfahrt_button_einzelne_verbindung"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:width="180dp"
+                    android:backgroundTintMode="src_over"
+                    android:clickable="true"
+                    android:fontFamily="serif"
+                    android:hapticFeedbackEnabled="false"
+                    android:longClickable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:bootstrapBrand="regular"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/abfahrt"
+                    app:roundedCorners="true"
+                    app:showOutline="false"
+                    tools:visibility="visible">
+
+                </com.beardedhen.androidbootstrap.BootstrapButton>
+
+                <EditText
+                    android:id="@+id/time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="serif"
+                    android:textStyle="bold"
+                    android:inputType="time" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_margin="2dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/start_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:width="105dp"
+                    android:backgroundTintMode="src_over"
+                    android:clickable="false"
+                    android:fontFamily="serif"
+                    android:hapticFeedbackEnabled="false"
+                    android:longClickable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:bootstrapBrand="regular"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/start"
+                    app:roundedCorners="true"
+                    app:showOutline="false"
+                    tools:visibility="visible">
+
+                </com.beardedhen.androidbootstrap.BootstrapButton>
+
+                <EditText
+                    android:id="@+id/start_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/stopover_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:width="105dp"
+                    android:backgroundTintMode="src_over"
+                    android:clickable="false"
+                    android:fontFamily="serif"
+                    android:hapticFeedbackEnabled="false"
+                    android:longClickable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:bootstrapBrand="regular"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/zwischenhalt"
+                    app:roundedCorners="true"
+                    app:showOutline="false"
+                    tools:visibility="visible">
+
+                </com.beardedhen.androidbootstrap.BootstrapButton>
+
+                <EditText
+                    android:id="@+id/stopover_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/destination_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:width="105dp"
+                    android:backgroundTintMode="src_over"
+                    android:clickable="false"
+                    android:fontFamily="serif"
+                    android:hapticFeedbackEnabled="false"
+                    android:longClickable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:bootstrapBrand="regular"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/ziel"
+                    app:roundedCorners="true"
+                    app:showOutline="false"
+                    tools:visibility="visible">
+
+                </com.beardedhen.androidbootstrap.BootstrapButton>
+
+                <EditText
+                    android:id="@+id/destination_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_margin="2dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/cancel_button"
+                    style="@style/wrapping_button"
+                    android:layout_width="80dp"
+                    android:layout_height="53dp"
+                    android:layout_margin="2dp"
+                    android:elegantTextHeight="false"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="gfh"
+                    app:bootstrapSize="xl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:roundedCorners="true"
+                    app:typicon="ty_times" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/settings_button"
+                    style="@style/wrapping_button"
+                    android:layout_width="80dp"
+                    android:layout_height="53dp"
+                    android:layout_margin="2dp"
+                    android:elegantTextHeight="false"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="gfh"
+                    app:bootstrapSize="xl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:roundedCorners="true"
+                    app:typicon="ty_cog_outline" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/accept_button"
+                    style="@style/wrapping_button"
+                    android:layout_width="80dp"
+                    android:layout_height="53dp"
+                    android:layout_margin="2dp"
+                    android:elegantTextHeight="false"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="gfh"
+                    app:bootstrapSize="xl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:roundedCorners="true"
+                    app:typicon="ty_media_play" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:backgroundTint="@color/mr_and_mrs_jones" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="136dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

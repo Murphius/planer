@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Fahrscheinberater</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="fahrtauskunft">Einzelne Fahrt</string>
+    <string name="fahrtenplanen">Mehrere Fahrten</string>
+    <string name="fahrtenuebersicht">Zukünftige Fahrten</string>
+    <string name="fahrscheinuebersicht">Fahrscheinübersicht</string>
+
+    <string name="einstellungen">Einstellungen</string>
+
+    <string name="barrierefreiheit">Barrierefreiheit</string>
+    <string name="keine_einschraenkung">Keine Einschränkung</string>
+    <string name="mittlere_einschraenkung">Bedingt barrierefrei</string>
+    <string name="starke_einschraenkung">Barrierefrei</string>
+
+    <string name="gehtempo">Gehtempo</string>
+    <string name="langsam_gehtempo">Langsam</string>
+    <string name="mittel_gehtempo">Mittel</string>
+    <string name="schnell_gehtempo">Schnell</string>
+
+    <string name="optimierung">Optimierung</string>
+    <string name="schnelle_verbindung">Schnelle Verbindung</string>
+    <string name="wenig_umsteigen">Wenig Umsteigen</string>
+    <string name="kurzer_fussweg">Kurze Fußwege</string>
+
+    <string name="verkehrsmittel">Berücksichtigte Verkehrsmittel</string>
+    <string name="nur_regionalverkehr">Nur Regionalverkehr</string>
+    <string name="ubahn">U-Bahn</string>
+    <string name="tram">Tram</string>
+    <string name="bus">Bus</string>
+    <string name="ast">Anruf-Sammel-Taxi</string>
+    <string name="faehre">Fähre</string>
+    <string name="gondel">Gondel</string>
+    <string name="sbahn">S-Bahn</string>
+    <string name="regionalverkehr">Regionalverkehr</string>
+    <string name="fernverkehr">Fernverkehr</string>
+
+    <string name="informationsseite">Informationen über die Anwendung</string>
+
+    <string name="einzelne_fahrt">Einzelne Verbindungsauskunft</string>
+    <string name="mehrere_fahrten">Mehrere Fahrten</string>
+    <string name="eine_fahrt">Eine Fahrt</string>
+
+    <string name="datum">Datum:</string>
+    <string name="zeit">Uhrzeit:</string>
+    <string name="ankunft">Ankunftszeit:</string>
+    <string name="abfahrt">Abfahrtszeit:</string>
+    <string name="start">Start:</string>
+    <string name="zwischenhalt">Über:</string>
+    <string name="ziel">Ziel:</string>
+    <string name="erwachsene_anzahl">Anzahl Erwachsene:</string>
+    <string name="kinder_anzahl">Anzahl Kinder:</string>
+
+    <string name="moegliche_verbindungen">Mögliche Verbindungen</string>
+    <string name="frueher">Früher</string>
+    <string name="spaeter">Später</string>
+    <string name="fahrt_anpassen">Fahrt anpassen</string>
+
+
+</resources>

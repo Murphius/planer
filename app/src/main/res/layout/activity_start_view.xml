@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".start_view">
+
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/mr_and_mrs_jones"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#9EC1D4"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <LinearLayout
+        android:id="@+id/margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#6C829A"
+        android:backgroundTintMode="screen"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constrainedWidth="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.436">
+
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/fahrtauskunft_button_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTintMode="src_over"
+            android:clickable="true"
+            android:fontFamily="serif"
+            android:hapticFeedbackEnabled="false"
+            android:longClickable="false"
+            android:minWidth="@android:dimen/thumbnail_width"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapBrand="regular"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrtauskunft"
+            app:roundedCorners="true"
+            app:showOutline="false"
+            tools:visibility="visible">
+
+        </com.beardedhen.androidbootstrap.BootstrapButton>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/fahrtenplanen_button_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10pt"
+            android:backgroundTintMode="src_over"
+            android:fontFamily="serif"
+            android:minWidth="@android:dimen/thumbnail_width"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrtenplanen"
+            app:roundedCorners="true"
+            tools:visibility="visible">
+
+        </com.beardedhen.androidbootstrap.BootstrapButton>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/fahrtenuebersicht_button_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10pt"
+            android:backgroundTintMode="src_over"
+            android:fontFamily="serif"
+            android:minWidth="@android:dimen/thumbnail_width"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrtenuebersicht"
+            app:roundedCorners="true"
+            tools:visibility="visible">
+
+        </com.beardedhen.androidbootstrap.BootstrapButton>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/fahrtscheinuebersicht_button_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10pt"
+            android:width="245dp"
+            android:backgroundTintMode="src_atop"
+            android:clickable="true"
+            android:fontFamily="serif"
+            android:hapticFeedbackEnabled="false"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapBrand="regular"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrscheinuebersicht"
+            app:roundedCorners="true"
+            tools:visibility="visible">
+
+        </com.beardedhen.androidbootstrap.BootstrapButton>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/bootstrap_alert_paddings"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/info_start"
+                style="@style/wrapping_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elegantTextHeight="false"
+                android:gravity="start|left"
+                android:text="gfh"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:roundedCorners="true"
+                app:typicon="ty_info_large" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/settings_start"
+                style="@style/wrapping_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:elegantTextHeight="false"
+                android:gravity="start"
+                android:text="gfh"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:roundedCorners="true"
+                app:typicon="ty_cog_outline" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="115dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/sommer_mom"
+        android:backgroundTintMode="add"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="365dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="84dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="329dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
