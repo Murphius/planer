@@ -31,10 +31,52 @@ public class Single_route extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_route);
 
+        Intent intent = getIntent();
+
+        String date = intent.getStringExtra(Possible_connections.EXTRA__DATE);
+        TextView date_view = findViewById(R.id.date_text);
+
+        date_view.setText(date);
+
+        String time = intent.getStringExtra(Possible_connections.EXTRA__TIME);
+        TextView time_view = findViewById(R.id.time_text);
+
+        time_view.setText(time);
+
+        isArrivalTime = intent.getBooleanExtra(Possible_connections.EXTRA__ISARRIVALTIME,false);
+        System.out.println(isArrivalTime);
+
+        BootstrapButton button = findViewById(R.id.an_abfahrt_button_einzelne_verbindung);
+        Context context = button.getContext();
+        BootstrapText.Builder builder = new BootstrapText.Builder(context);
+        if(isArrivalTime){
+            builder.addText("Ankunftszeit:");
+        }else{
+            builder.addText("Abfahrszeit:");
+        }
+        button.setBootstrapText(builder.build());
+
+        String start = intent.getStringExtra(Single_route.EXTRA__START);
+        TextView textView_start = findViewById(R.id.start_text);
+
+        String stopover = intent.getStringExtra(Single_route.EXTRA__STOPOVER);
+        TextView textView_stopover = findViewById(R.id.stopover_text);
+
+        String destination = intent.getStringExtra(Single_route.EXTRA__DESTINATION);
+        TextView textView_destination = findViewById(R.id.destination_text);
+
+        textView_start.setText(start);
+        textView_stopover.setText(stopover);
+        textView_destination.setText(destination);
+
+
+
         ((BootstrapButton) this.findViewById(R.id.date_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
 
         ((BootstrapButton) this.findViewById(R.id.an_abfahrt_button_einzelne_verbindung)).setBootstrapBrand(new ButtonBootstrapBrandVisible());
+
         final BootstrapButton btn = this.findViewById(R.id.an_abfahrt_button_einzelne_verbindung);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +94,7 @@ public class Single_route extends Activity {
 
             }
         });
+
         ((BootstrapButton) this.findViewById(R.id.start_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
 
         ((BootstrapButton) this.findViewById(R.id.stopover_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
@@ -137,7 +180,12 @@ public class Single_route extends Activity {
         return true;
     }
 
-
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 }

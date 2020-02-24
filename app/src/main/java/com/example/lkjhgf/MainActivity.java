@@ -67,22 +67,27 @@ public class MainActivity extends Activity {
     public void open_single_route(){
         Intent intent = new Intent(this, Single_route.class);
         startActivity(intent);
+        finish();
     }
 
     public void open_settings(){
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
+        finish();
     }
 
     public void open_information_page(){
         Intent intent = new Intent(this, InformationPage.class);
         startActivity(intent);
+        finish();
     }
 
     public void open_fahrten_planen(){
         Intent intent = new Intent(this, Multiple_routes.class);
         intent.putExtra("Count", 1);
         startActivity(intent);
+        finish();
     }
+
 
 }
