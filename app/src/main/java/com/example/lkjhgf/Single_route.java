@@ -90,7 +90,7 @@ public class Single_route extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_route);
 
-        // Variablen initialisieren, einfachere Bennenung: Nummer -> Name
+        //Variablen initialisieren, einfachere Bennenung: Nummer -> Name
         date_button = findViewById(R.id.BootstrapButton7);
         arrival_departure_button = findViewById(R.id.BootstrapButton8);
         start_button = findViewById(R.id.BootstrapButton9);

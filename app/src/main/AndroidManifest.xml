@@ -9,9 +9,8 @@
         <activity
             android:name=".Possible_connections_single"
             android:parentActivityName=".Single_route" />
-        <activity android:name=".Multiple_routes">
-            android:parentActivityName=".MainActivity"
-        </activity>
+        <activity android:name=".Multiple_routes"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Single_route"
             android:parentActivityName=".MainActivity" />

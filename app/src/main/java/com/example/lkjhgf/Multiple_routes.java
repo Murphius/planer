@@ -137,7 +137,7 @@ public class Multiple_routes extends Activity {
         int num_adult = Integer.parseInt(num_passenger_adult_text.getText().toString());
         int num_children = Integer.parseInt(num_passenger_children_text.getText().toString());
 
-        Intent intent = new Intent(this, Possible_connections_single.class);
+        Intent intent = new Intent(this, Possible_connections_multiple.class);
 
         //Nutzereingaben an die naechste Ansicht weiterleiten
         intent.putExtra(EXTRA__DATE, date);
