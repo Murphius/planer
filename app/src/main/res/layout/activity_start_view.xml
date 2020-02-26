@@ -43,7 +43,7 @@
 
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/fahrtauskunft_button_start"
+            android:id="@+id/BootstrapButton1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTintMode="src_over"
@@ -65,7 +65,7 @@
         </com.beardedhen.androidbootstrap.BootstrapButton>
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/fahrtenplanen_button_start"
+            android:id="@+id/BootstrapButton2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10pt"
@@ -82,7 +82,7 @@
         </com.beardedhen.androidbootstrap.BootstrapButton>
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/fahrtenuebersicht_button_start"
+            android:id="@+id/BootstrapButton3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10pt"
@@ -99,7 +99,7 @@
         </com.beardedhen.androidbootstrap.BootstrapButton>
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/fahrtscheinuebersicht_button_start"
+            android:id="@+id/BootstrapButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10pt"
@@ -127,7 +127,7 @@
             android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/info_start"
+                android:id="@+id/BootstrapButton5"
                 style="@style/wrapping_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                 android:layout_weight="1" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/settings_start"
+                android:id="@+id/BootstrapButton6"
                 style="@style/wrapping_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

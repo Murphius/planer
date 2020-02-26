@@ -5,29 +5,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 
-import org.w3c.dom.Text;
-
-public class Possible_connections extends Activity {
-
-    public static final String EXTRA__DATE = "com.example.lkjhgf.EXTRA_DATE";
-    public static final String EXTRA__ISARRIVALTIME = "com.example.lkjhgf.ISARRIVALTIME";
-    public static final String EXTRA__TIME = "com.example.lkjhgf.EXTRA_TIME";
-    public static final String EXTRA__START = "com.example.lkjhgf.EXTRA_START";
-    public static final String EXTRA__STOPOVER = "com.example.lkjhgf.EXTRA_STOPOVER";
-    public static final String EXTRA__DESTINATION = "com.example.lkjhgf.EXTRA_DESTINATION";
+public class Possible_connections_single extends Activity {
 
     private boolean isArrivalTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_possible_connections);
+        setContentView(R.layout.activity_possible_connections_single);
 
         Intent intent = getIntent();
 
@@ -75,32 +65,7 @@ public class Possible_connections extends Activity {
     }
 
     public void open_single_route(){
-        Intent intent = new Intent(this, Single_route.class);
-
-        TextView date_text = this.findViewById(R.id.date);
-        String date = date_text.getText().toString();
-
-        TextView time_text = this.findViewById(R.id.time);
-        String time = time_text.getText().toString();
-
-        TextView start_text = this.findViewById(R.id.start);
-        String start = start_text.getText().toString();
-
-        TextView stopover_text = this.findViewById(R.id.stopover);
-        String stopover = stopover_text.getText().toString();
-
-        TextView destination_text = this.findViewById(R.id.destination);
-        String destination = destination_text.getText().toString();
-
-        intent.putExtra(EXTRA__DATE, date);
-        intent.putExtra(EXTRA__ISARRIVALTIME,isArrivalTime);
-        intent.putExtra(EXTRA__TIME,time);
-        intent.putExtra(EXTRA__START,start);
-        intent.putExtra(EXTRA__STOPOVER, stopover);
-        intent.putExtra(EXTRA__DESTINATION,destination);
-
-        startActivity(intent);
-        finish();
+        onBackPressed();
     }
 
 }

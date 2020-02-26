@@ -5,15 +5,21 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="">
-        <activity android:name=".Possible_connections"
-            android:parentActivityName=".Single_route"></activity>
-        <activity android:name=".Multiple_routes" />
-        <activity android:name=".Single_route"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".InformationPage" />
+        <activity android:name=".Possible_connections_multiple"></activity>
+        <activity
+            android:name=".Possible_connections_single"
+            android:parentActivityName=".Single_route" />
+        <activity android:name=".Multiple_routes">
+            android:parentActivityName=".MainActivity"
+        </activity>
+        <activity
+            android:name=".Single_route"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".InformationPage"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".Settings" />
-        <activity android:name=".MainActivity"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

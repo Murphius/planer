@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -16,6 +15,7 @@ import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 
 public class Single_route extends Activity {
 
+    // Konstanten fuer Intent
     public static final String EXTRA__DATE = "com.example.lkjhgf.EXTRA_DATE";
     public static final String EXTRA__ISARRIVALTIME = "com.example.lkjhgf.ISARRIVALTIME";
     public static final String EXTRA__TIME = "com.example.lkjhgf.EXTRA_TIME";
@@ -23,143 +23,28 @@ public class Single_route extends Activity {
     public static final String EXTRA__STOPOVER = "com.example.lkjhgf.EXTRA_STOPOVER";
     public static final String EXTRA__DESTINATION = "com.example.lkjhgf.EXTRA_DESTINATION";
 
+    private BootstrapButton date_button, arrival_departure_button, start_button, stopover_button, destination_button, back_button, settings_button, further_button;
+    private TextView date_view, arrival_departure_view, start_view, stopover_view, destination_view;
 
-    private boolean isArrivalTime = false;
+    private boolean isArrivalTime;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_route);
-
-        Intent intent = getIntent();
-
-        String date = intent.getStringExtra(Possible_connections.EXTRA__DATE);
-        TextView date_view = findViewById(R.id.date_text);
-
-        date_view.setText(date);
-
-        String time = intent.getStringExtra(Possible_connections.EXTRA__TIME);
-        TextView time_view = findViewById(R.id.time_text);
-
-        time_view.setText(time);
-
-        isArrivalTime = intent.getBooleanExtra(Possible_connections.EXTRA__ISARRIVALTIME,false);
-        System.out.println(isArrivalTime);
-
-        BootstrapButton button = findViewById(R.id.an_abfahrt_button_einzelne_verbindung);
-        Context context = button.getContext();
-        BootstrapText.Builder builder = new BootstrapText.Builder(context);
-        if(isArrivalTime){
-            builder.addText("Ankunftszeit:");
-        }else{
-            builder.addText("Abfahrszeit:");
-        }
-        button.setBootstrapText(builder.build());
-
-        String start = intent.getStringExtra(Single_route.EXTRA__START);
-        TextView textView_start = findViewById(R.id.start_text);
-
-        String stopover = intent.getStringExtra(Single_route.EXTRA__STOPOVER);
-        TextView textView_stopover = findViewById(R.id.stopover_text);
-
-        String destination = intent.getStringExtra(Single_route.EXTRA__DESTINATION);
-        TextView textView_destination = findViewById(R.id.destination_text);
-
-        textView_start.setText(start);
-        textView_stopover.setText(stopover);
-        textView_destination.setText(destination);
-
-
-
-        ((BootstrapButton) this.findViewById(R.id.date_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
-
-        ((BootstrapButton) this.findViewById(R.id.an_abfahrt_button_einzelne_verbindung)).setBootstrapBrand(new ButtonBootstrapBrandVisible());
-
-        final BootstrapButton btn = this.findViewById(R.id.an_abfahrt_button_einzelne_verbindung);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isArrivalTime = !isArrivalTime;
-                Context context = btn.getContext();
-                BootstrapText.Builder builder = new BootstrapText.Builder(context);
-
-                if (isArrivalTime) {
-                    builder.addText(context.getText(R.string.ankunft));
-                } else {
-                    builder.addText(context.getText(R.string.abfahrt));
-                }
-
-                btn.setBootstrapText(builder.build());
-
-            }
-        });
-
-        ((BootstrapButton) this.findViewById(R.id.start_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
-
-        ((BootstrapButton) this.findViewById(R.id.stopover_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
-
-        ((BootstrapButton) this.findViewById(R.id.destination_button)).setBootstrapBrand(new ButtonBootstrapBrandInvisible());
-
-        ((BootstrapButton) this.findViewById(R.id.cancel_button)).setBootstrapBrand(new ButtonBootstrapBrandVisible());
-        this.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                open_main_activity();
-            }
-        });
-
-        ((BootstrapButton) this.findViewById(R.id.settings_button)).setBootstrapBrand(new ButtonBootstrapBrandVisible());
-        this.findViewById(R.id.settings_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                open_settings();
-            }
-        });
-
-        ((BootstrapButton) this.findViewById(R.id.accept_button)).setBootstrapBrand(new ButtonBootstrapBrandVisible());
-        this.findViewById(R.id.accept_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(completed_form()){
-                    open_possible_connections();
-                }else{
-                    //TODO Anzeigen eines Hinweises -> alle Felder ausfuellen
-                    System.out.println("test");
-                }
-
-            }
-        });
-    }
-
-    public void open_main_activity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void open_settings(){
+    public void change_view_to_settings(){
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
 
-    public void open_possible_connections(){
-        EditText date_text = this.findViewById(R.id.date_text);
-        String date = date_text.getText().toString();
+    public void change_view_to_possible_connections(){
 
-        EditText time_text = this.findViewById(R.id.time_text);
-        String time = time_text.getText().toString();
+        //Nutzereingaben holen
+        String date = date_view.getText().toString();
+        String time = arrival_departure_view.getText().toString();
+        String start = start_view.getText().toString();
+        String stopover = stopover_view.getText().toString();
+        String destination = destination_view.getText().toString();
 
-        EditText start_text = this.findViewById(R.id.start_text);
-        String start = start_text.getText().toString();
+        Intent intent = new Intent(this, Possible_connections_single.class);
 
-        EditText stopover_text = this.findViewById(R.id.stopover_text);
-        String stopover = stopover_text.getText().toString();
-
-        EditText destination_text = this.findViewById(R.id.destination_text);
-        String destination = destination_text.getText().toString();
-
-        Intent intent = new Intent(this, Possible_connections.class);
-
+        //Nutzereingaben an die naechste Ansicht weiterleiten
         intent.putExtra(EXTRA__DATE, date);
         intent.putExtra(EXTRA__ISARRIVALTIME,isArrivalTime);
         intent.putExtra(EXTRA__TIME,time);
@@ -171,10 +56,10 @@ public class Single_route extends Activity {
     }
 
     private boolean completed_form(){
-        if (((TextView) this.findViewById(R.id.date_text)).getText().length() == 0
-            ||((TextView) this.findViewById(R.id.time_text)).getText().length() == 0
-            || ((TextView) this.findViewById(R.id.start_text)).getText().length() == 0
-            || ((TextView) this.findViewById(R.id.destination_text)).getText().length() == 0){
+        if (((TextView) this.findViewById(R.id.EditText1)).getText().length() == 0
+                ||((TextView) this.findViewById(R.id.EditText2)).getText().length() == 0
+                || ((TextView) this.findViewById(R.id.EditText3)).getText().length() == 0
+                || ((TextView) this.findViewById(R.id.EditText5)).getText().length() == 0){
             return false;
         }
         return true;
@@ -187,5 +72,87 @@ public class Single_route extends Activity {
         finish();
     }
 
+    private void set_arrival_departure_button(){
+        Context context = arrival_departure_button.getContext();
+        BootstrapText.Builder builder = new BootstrapText.Builder(context);
+
+        if(isArrivalTime){
+            builder.addText("Ankunftszeit:");
+        }else{
+            builder.addText("Abfahrtszeit");
+        }
+
+        arrival_departure_button.setBootstrapText(builder.build());
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_single_route);
+
+        // Variablen initialisieren, einfachere Bennenung: Nummer -> Name
+        date_button = findViewById(R.id.BootstrapButton7);
+        arrival_departure_button = findViewById(R.id.BootstrapButton8);
+        start_button = findViewById(R.id.BootstrapButton9);
+        stopover_button = findViewById(R.id.BootstrapButton10);
+        destination_button = findViewById(R.id.BootstrapButton11);
+        back_button = findViewById(R.id.BootstrapButton12);
+        settings_button = findViewById(R.id.BootstrapButton13);
+        further_button = findViewById(R.id.BootstrapButton14);
+
+        date_view = findViewById(R.id.EditText1);
+        arrival_departure_view = findViewById(R.id.EditText2);
+        start_view = findViewById(R.id.EditText3);
+        stopover_view = findViewById(R.id.EditText4);
+        destination_view = findViewById(R.id.EditText5);
+
+        // Button-Design
+        date_button.setBootstrapBrand(new ButtonBootstrapBrandInvisible());
+        arrival_departure_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        start_button.setBootstrapBrand(new ButtonBootstrapBrandInvisible());
+        stopover_button.setBootstrapBrand(new ButtonBootstrapBrandInvisible());
+        destination_button.setBootstrapBrand(new ButtonBootstrapBrandInvisible());
+        back_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        settings_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        further_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+
+        // OnClick Listener für die einzelnen Buttons
+        arrival_departure_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isArrivalTime = !isArrivalTime;
+                set_arrival_departure_button();
+            }
+        });
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        settings_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                change_view_to_settings();
+            }
+        });
+
+        further_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        this.findViewById(R.id.BootstrapButton14).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(completed_form()){
+                    change_view_to_possible_connections();
+                }else{
+                    //TODO Anzeigen eines Hinweises -> alle Felder ausfuellen
+                    System.out.println("Bitte komplett ausfuellen");
+                }
+
+            }
+        });
+
+    }
 
 }
