@@ -10,7 +10,7 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 
-public class MainActivity extends Activity {
+public class Main_activity extends Activity {
 
     private BootstrapButton single_route, multiple_routes, future_connections, ticket_overwiew, information_page, settings;
 
@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
     }
 
     public void change_view_to_information_page(){
-        Intent intent = new Intent(this, InformationPage.class);
+        Intent intent = new Intent(this, Informationpage.class);
         startActivity(intent);
     }
 

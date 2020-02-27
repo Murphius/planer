@@ -95,7 +95,13 @@ public class Multiple_routes extends Activity {
        forward_button.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               change_view_to_possible_connections();
+               if(completed_form()){
+                   change_view_to_possible_connections();
+               }else{
+                   //TODO Mehrere Fahrten -> nicht alle Felder ausgefuellt
+                   System.out.println("Alle Felder muessen ausgefuellt werden");
+               }
+
            }
        });
 
@@ -103,7 +109,7 @@ public class Multiple_routes extends Activity {
 
     @Override
     public void onBackPressed(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Main_activity.class);
         startActivity(intent);
         finish();
     }
@@ -150,5 +156,11 @@ public class Multiple_routes extends Activity {
         intent.putExtra(EXTRA_NUM_ADULTS,num_adult);
 
         startActivity(intent);
+    }
+
+    private boolean completed_form(){
+        return !(start_text.getText().toString().isEmpty() || stopover_text.getText().toString().isEmpty()
+        || destination_text.getText().toString().isEmpty() || date_text.getText().toString().isEmpty()
+        || arrival_departure_text.getText().toString().isEmpty());
     }
 }

@@ -60,5 +60,9 @@
     <string name="spaeter">Später</string>
     <string name="fahrt_anpassen">Fahrt anpassen</string>
 
+    <string name="dauer">Dauer:</string>
+    <string name="anz_umstiege">Umstiege:</string>
+    <string name="preisstufe">Preisstufe:</string>
+
 
 </resources>

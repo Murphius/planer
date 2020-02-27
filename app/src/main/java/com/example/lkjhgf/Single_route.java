@@ -67,7 +67,7 @@ public class Single_route extends Activity {
 
     @Override
     public void onBackPressed(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Main_activity.class);
         startActivity(intent);
         finish();
     }

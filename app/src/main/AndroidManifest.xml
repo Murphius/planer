@@ -10,15 +10,15 @@
             android:name=".Possible_connections_single"
             android:parentActivityName=".Single_route" />
         <activity android:name=".Multiple_routes"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".Main_activity" />
         <activity
             android:name=".Single_route"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".Main_activity" />
         <activity
-            android:name=".InformationPage"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Informationpage"
+            android:parentActivityName=".Main_activity" />
         <activity android:name=".Settings" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Main_activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
