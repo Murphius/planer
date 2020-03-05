@@ -29,14 +29,14 @@ public class Possible_connections_multiple extends Activity {
         edit_button = findViewById(R.id.BootstrapButton27);
         later_button = findViewById(R.id.BootstrapButton28);
 
-        date_text = findViewById(R.id.TextView17);
-        arrival_departure_text = findViewById(R.id.TextView18);
-        start_text = findViewById(R.id.TextView19);
-        stopover_text = findViewById(R.id.TextView20);
-        destination_text = findViewById(R.id.TextView21);
-        num_adult_text = findViewById(R.id.TextView22);
-        num_children_text = findViewById(R.id.TextView23);
-        arrival_departure_view = findViewById(R.id.TextView25);
+        date_text = findViewById(R.id.textView17);
+        arrival_departure_text = findViewById(R.id.textView18);
+        start_text = findViewById(R.id.textView19);
+        stopover_text = findViewById(R.id.textView20);
+        destination_text = findViewById(R.id.textView21);
+        num_adult_text = findViewById(R.id.textView22);
+        num_children_text = findViewById(R.id.textView23);
+        arrival_departure_view = findViewById(R.id.textView25);
 
         //Button Layout
         earlier_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());

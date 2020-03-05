@@ -1,17 +1,14 @@
 package com.example.lkjhgf;
 
-import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 
 public class Connection_item {
-    private String time_of_arrival, time_of_departure, preisstufe;
+    private String time_of_arrival, time_of_departure, preisstufe, id;
     private ArrayList<Journey_item> journey_items;
     private int duration, num_changes;
 
-    public Connection_item(String Time_of_arrival, String Time_of_departure, int Num_changes, String Preisstufe, ArrayList<Journey_item> Journey_items){
+
+    public Connection_item(String Time_of_arrival, String Time_of_departure, int Num_changes, String Preisstufe, String ID, ArrayList<Journey_item> Journey_items){
         time_of_arrival = Time_of_arrival;
         time_of_departure = Time_of_departure;
         //TODO Dauer ergibt sich aus Ankunftszeit-Startzeit
@@ -19,6 +16,7 @@ public class Connection_item {
         journey_items = Journey_items;
         num_changes = Num_changes;
         preisstufe = Preisstufe;
+        id = ID;
     }
 
     public String get_time_of_arrival(){
@@ -36,6 +34,7 @@ public class Connection_item {
     public int get_num_changes(){
         return num_changes;
     }
+    public String get_id(){ return id;}
     public ArrayList<Journey_item> get_journey_items(){
         return journey_items;
     }

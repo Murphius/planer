@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/sommer_mom</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/sommer_mom</item>
     </style>
 
@@ -29,5 +29,38 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="textViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:textColor">@color/mr_and_mrs_jones</item>
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="radioButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:textColor">@color/mr_and_mrs_jones</item>
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="kalenderStyle" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/mr_and_mrs_jones</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/sommer_mom</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/lucky_one</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/un_graceful</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/un_graceful</item>    <!--days of the week-->
+        <item name="android:selectableItemBackgroundBorderless">@color/mr_and_mrs_jones</item> <!-- < > Buttons -->
+    </style>
+
+    <style name="UhrStyle" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/mr_and_mrs_jones</item>
+    </style>
 
 </resources>

@@ -45,15 +45,15 @@ public class Multiple_routes extends Activity {
         settings_button = findViewById(R.id.BootstrapButton21);
         forward_button = findViewById(R.id.BootstrapButton22);
 
-        activity_name = findViewById(R.id.TextView1);
+        activity_name = findViewById(R.id.textView1);
 
-        date_text = findViewById(R.id.EditText6);
-        arrival_departure_text = findViewById(R.id.EditText7);
-        start_text = findViewById(R.id.EditText8);
-        stopover_text = findViewById(R.id.EditText9);
-        destination_text = findViewById(R.id.EditText10);
-        num_passenger_adult_text = findViewById(R.id.EditText11);
-        num_passenger_children_text = findViewById(R.id.EditText12);
+        date_text = findViewById(R.id.editText6);
+        arrival_departure_text = findViewById(R.id.editText7);
+        start_text = findViewById(R.id.editText8);
+        stopover_text = findViewById(R.id.editText9);
+        destination_text = findViewById(R.id.editText10);
+        num_passenger_adult_text = findViewById(R.id.editText11);
+        num_passenger_children_text = findViewById(R.id.editText12);
 
         date_button.setBootstrapBrand(new ButtonBootstrapBrandInvisible());
         arrival_departure_button.setBootstrapBrand(new ButtonBootstrapBrandVisible());

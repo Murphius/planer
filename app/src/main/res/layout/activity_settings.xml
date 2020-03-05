@@ -31,7 +31,7 @@
                 android:visibility="visible" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView43"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/sommer_mom"
@@ -47,31 +47,34 @@
 
                 <RadioButton
                     android:id="@+id/settings_barrierefreiheit_keine_einschraenkung"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:checked="true"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/keine_einschraenkung" />
+                    android:text="@string/keine_einschraenkung"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/mittlere_einschraenkung" />
+                    android:text="@string/mittlere_einschraenkung"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/starke_einschraenkung" />
+                    android:text="@string/starke_einschraenkung"
+                    android:textStyle="bold" />
             </RadioGroup>
 
             <View
@@ -82,7 +85,7 @@
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView44"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/sommer_mom"
@@ -98,31 +101,34 @@
 
                 <RadioButton
                     android:id="@+id/radioButton4"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/schnell_gehtempo" />
+                    android:text="@string/schnell_gehtempo"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/radioButton5"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:checked="true"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/mittel_gehtempo" />
+                    android:text="@string/mittel_gehtempo"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/radioButton6"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
-                    android:textStyle="bold"
-                    android:text="@string/langsam_gehtempo" />
+                    android:text="@string/langsam_gehtempo"
+                    android:textStyle="bold" />
             </RadioGroup>
 
             <View
@@ -133,7 +139,7 @@
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textView45"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/sommer_mom"
@@ -149,6 +155,7 @@
 
                 <RadioButton
                     android:id="@+id/radioButton7"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -159,6 +166,7 @@
 
                 <RadioButton
                     android:id="@+id/radioButton8"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -168,6 +176,7 @@
 
                 <RadioButton
                     android:id="@+id/radioButton9"
+                    style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -184,7 +193,7 @@
             </RadioGroup>
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView46"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/sommer_mom"
@@ -229,6 +238,7 @@
 
                                 <CheckBox
                                     android:id="@+id/checkBox"
+                                    style="@style/radioButtonStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -238,6 +248,7 @@
 
                                 <CheckBox
                                     android:id="@+id/regional_traffic_check_box"
+                                    style="@style/radioButtonStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -248,6 +259,7 @@
 
                                 <CheckBox
                                     android:id="@+id/checkBox3"
+                                    style="@style/radioButtonStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -258,6 +270,7 @@
 
                                 <CheckBox
                                     android:id="@+id/checkBox4"
+                                    style="@style/radioButtonStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:buttonTint="@color/mr_and_mrs_jones"
@@ -287,6 +300,7 @@
 
                             <CheckBox
                                 android:id="@+id/checkBox6"
+                                style="@style/radioButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:buttonTint="@color/mr_and_mrs_jones"
@@ -297,6 +311,7 @@
 
                             <CheckBox
                                 android:id="@+id/checkBox7"
+                                style="@style/radioButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:buttonTint="@color/mr_and_mrs_jones"
@@ -307,6 +322,7 @@
 
                             <CheckBox
                                 android:id="@+id/checkBox8"
+                                style="@style/radioButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:buttonTint="@color/mr_and_mrs_jones"
@@ -317,6 +333,7 @@
 
                             <CheckBox
                                 android:id="@+id/checkBox9"
+                                style="@style/radioButtonStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:buttonTint="@color/mr_and_mrs_jones"

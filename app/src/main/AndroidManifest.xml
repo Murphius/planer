@@ -4,12 +4,15 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
         android:label="">
-        <activity android:name=".Possible_connections_multiple"></activity>
+        <activity android:name=".Connection_view_detail"></activity>
+        <activity android:name=".Possible_connections_multiple" />
         <activity
             android:name=".Possible_connections_single"
             android:parentActivityName=".Single_route" />
-        <activity android:name=".Multiple_routes"
+        <activity
+            android:name=".Multiple_routes"
             android:parentActivityName=".Main_activity" />
         <activity
             android:name=".Single_route"

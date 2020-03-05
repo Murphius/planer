@@ -16,21 +16,42 @@ public class Connection_adapter extends RecyclerView.Adapter<Connection_adapter.
     private ArrayList<Connection_item> connection_list;
     private RecyclerView.LayoutManager journey_layout;
     private RecyclerView.Adapter journey_adapter;
+    private On_item_click_listener on_item_click_listener;
+
+    public interface On_item_click_listener {
+        void onItemClick(int position);
+    }
+
+    public void set_on_item_click_listener(On_item_click_listener listener){
+        on_item_click_listener = listener;
+    }
 
     public static class ConnectionViewHolder extends RecyclerView.ViewHolder{
         public TextView departure_view, arrival_view, duration_view, num_changes_view, preisstufe_view;
         public RecyclerView journey_items;
 
 
-        public ConnectionViewHolder(View itemView) {
+        public ConnectionViewHolder(View itemView, final On_item_click_listener listener) {
             super(itemView);
-            departure_view = itemView.findViewById(R.id.TextView32);
-            arrival_view = itemView.findViewById(R.id.TextView33);
-            duration_view = itemView.findViewById(R.id.TextView34);
-            num_changes_view = itemView.findViewById(R.id.TextView35);
-            preisstufe_view = itemView.findViewById(R.id.TextView36);
+            departure_view = itemView.findViewById(R.id.textView32);
+            arrival_view = itemView.findViewById(R.id.textView33);
+            duration_view = itemView.findViewById(R.id.textView34);
+            num_changes_view = itemView.findViewById(R.id.textView35);
+            preisstufe_view = itemView.findViewById(R.id.textView36);
             journey_items = itemView.findViewById(R.id.recyclerView2);
             journey_items.setHasFixedSize(true);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -41,7 +62,7 @@ public class Connection_adapter extends RecyclerView.Adapter<Connection_adapter.
     @Override
     public ConnectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.connections, parent, false);
-        ConnectionViewHolder connectionViewHolder = new ConnectionViewHolder(view);
+        ConnectionViewHolder connectionViewHolder = new ConnectionViewHolder(view, on_item_click_listener);
         return connectionViewHolder;
     }
 

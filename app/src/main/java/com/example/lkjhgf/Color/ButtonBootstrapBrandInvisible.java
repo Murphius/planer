@@ -17,7 +17,7 @@ public class ButtonBootstrapBrandInvisible implements BootstrapBrand {
 
     @Override
     public int defaultTextColor(Context context) {
-        return 0xff000000;
+        return 0xff324856;
     }
 
     @Override

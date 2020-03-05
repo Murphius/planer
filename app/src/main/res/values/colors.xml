@@ -6,6 +6,7 @@
 
     <!-- button color -->
     <color name="sommer_mom">#6C829A</color>
+    <color name="sommer_mom_65">#83b0c9</color>
 
     <!-- background color top -->
     <color name="mr_and_mrs_jones">#324856</color>
@@ -15,4 +16,8 @@
 
     <!-- text color text -->
     <color name="mr_and_mrs_jones_25">#9EC1D4</color>
+
+    <color name="black">#000000</color>
+
+    <color name="lucky_one">#BAE1F2</color>
 </resources>

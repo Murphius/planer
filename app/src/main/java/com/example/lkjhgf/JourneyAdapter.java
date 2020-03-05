@@ -23,7 +23,7 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.JourneyV
         public JourneyViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView1);
-            time = itemView.findViewById(R.id.TextView303);
+            time = itemView.findViewById(R.id.textView37);
         }
     }
 
