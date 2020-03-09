@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
-                    android:id="@+id/settings_barrierefreiheit_keine_einschraenkung"
+                    android:id="@+id/radioButton1"
                     style="@style/radioButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -203,17 +203,6 @@
                 android:textColor="@color/un_graceful"
                 android:textSize="18sp" />
 
-            <Switch
-                android:id="@+id/regional_traffic_switch"
-                android:layout_width="248dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:fontFamily="serif"
-                android:textStyle="bold"
-                android:text="@string/nur_regionalverkehr"
-                android:thumbTint="@color/mr_and_mrs_jones" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -226,9 +215,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -247,7 +237,7 @@
                                     android:textStyle="bold" />
 
                                 <CheckBox
-                                    android:id="@+id/regional_traffic_check_box"
+                                    android:id="@+id/checkBox1"
                                     style="@style/radioButtonStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -281,6 +271,7 @@
 
                                 <CheckBox
                                     android:id="@+id/checkBox5"
+                                    style="@style/textViewStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:buttonTint="@color/mr_and_mrs_jones"

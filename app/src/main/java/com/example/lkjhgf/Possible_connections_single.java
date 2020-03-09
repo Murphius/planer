@@ -2,22 +2,46 @@ package com.example.lkjhgf;
 
 import android.app.Activity;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.public_transport.QueryMoreParameter;
+import com.example.lkjhgf.public_transport.QueryMoreTask;
+import com.example.lkjhgf.public_transport.QueryParameter;
+import com.example.lkjhgf.public_transport.QueryTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
-public class Possible_connections_single extends Activity{
+import de.schildbach.pte.NetworkProvider;
+import de.schildbach.pte.VrrProvider;
+import de.schildbach.pte.dto.Location;
+import de.schildbach.pte.dto.LocationType;
+import de.schildbach.pte.dto.Product;
+import de.schildbach.pte.dto.QueryTripsResult;
+import de.schildbach.pte.dto.Trip;
+import de.schildbach.pte.dto.TripOptions;
+
+public class Possible_connections_single extends Activity {
 
     public static String EXTRA_DATE = "com.example.lkjhgf.EXTRA_DATE";
     public static String EXTRA_TIME_OF_ARRIVAL = "com.example.lkjhgf.EXTRA_TIME_OF_ARRIVAL";
@@ -33,19 +57,15 @@ public class Possible_connections_single extends Activity{
 
     private boolean is_arrival_time;
     private ArrayList<Connection_item> connection_items;
-
-
+    private Date user_date_time;
+    private Location start, destination, stopover;
     private Connection_adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private TripOptions tripOptions;
+    private NetworkProvider provider;
+    private QueryTripsResult result;
 
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_possible_connections_single);
-
+    private void init() {
         // Variablen initialisieren, einfachere Bennenung: Nummer -> Name
         earlierButton = findViewById(R.id.BootstrapButton23);
         editButton = findViewById(R.id.BootstrapButton24);
@@ -59,38 +79,52 @@ public class Possible_connections_single extends Activity{
         arrival_departureView = findViewById(R.id.textView13);
         recyclerView = findViewById(R.id.recyclerView1);
 
-
-
-
-
-
-        //Inhalte aus der vorherigen Seite holen und anschliessend in die Textfelder fuellen
-        Intent intent = getIntent();
-
-        String user_date = intent.getStringExtra(Single_route.EXTRA__DATE);
-        is_arrival_time = intent.getBooleanExtra(Single_route.EXTRA__ISARRIVALTIME, false);
-        String time = intent.getStringExtra(Single_route.EXTRA__TIME);
-        String start = intent.getStringExtra(Single_route.EXTRA__START);
-        String stopover = intent.getStringExtra(Single_route.EXTRA__STOPOVER);
-        String destination = intent.getStringExtra(Single_route.EXTRA__DESTINATION);
-
-        dateView.setText(user_date);
-        arrival_departure_timeView.setText(time);
-        departure_pointView.setText(start);
-        stopoverView.setText(stopover);
-        destinationView.setText(destination);
-
-        if(!is_arrival_time){
-            arrival_departureView.setText("Abfahrtszeit:");
-        }else{
-            arrival_departureView.setText("Ankunftszeit:");
-        }
+        fillView();
 
         // Button-Design
         earlierButton.setBootstrapBrand(new ButtonBootstrapBrandVisible());
         laterButton.setBootstrapBrand(new ButtonBootstrapBrandVisible());
         editButton.setBootstrapBrand(new ButtonBootstrapBrandVisible());
 
+        provider = new VrrProvider();
+    }
+
+    private void fillView() {
+        //Inhalte aus der vorherigen Seite holen und anschliessend in die Textfelder fuellen
+        Intent intent = getIntent();
+
+        Calendar user_date = (Calendar) intent.getSerializableExtra(Single_route.EXTRA__DATE);
+        is_arrival_time = intent.getBooleanExtra(Single_route.EXTRA__ISARRIVALTIME, false);
+        user_date_time = user_date.getTime();
+        start = (Location) intent.getSerializableExtra(Single_route.EXTRA__START);
+        stopover = (Location) intent.getSerializableExtra(Single_route.EXTRA__STOPOVER);
+        destination = (Location) intent.getSerializableExtra(Single_route.EXTRA__DESTINATION);
+
+        setDateAndTime();
+
+        departure_pointView.setText(start.place + " " + start.name);
+
+        if (stopover != null) {
+            stopoverView.setText(stopover.place + " " + stopover.name);
+        }
+
+        destinationView.setText(destination.place + " " + destination.name);
+
+        if (!is_arrival_time) {
+            arrival_departureView.setText("Abfahrtszeit:");
+        } else {
+            arrival_departureView.setText("Ankunftszeit:");
+        }
+    }
+
+    private void setDateAndTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd. MMMM yyyy");
+        dateView.setText(dateFormat.format(user_date_time));
+        dateFormat = new SimpleDateFormat("HH : mm");
+        arrival_departure_timeView.setText(dateFormat.format(user_date_time));
+    }
+
+    private void setOnClickListener() {
         //OnClickListener fuer die einzelnen Buttons
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,35 +132,39 @@ public class Possible_connections_single extends Activity{
                 onBackPressed();
             }
         });
-        laterButton.setOnClickListener(new View.OnClickListener(){
+        laterButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                //Parameter der Funktion -> wie viel spaeter die Abfahrt erfolgen soll
-                newConnectionsWithLater(5);
+            public void onClick(View view) {
+                newConnectionsLater();
             }
         });
         earlierButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newConnectionsEarlier(5);
+                newConnectionsEarlier();
             }
         });
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_possible_connections_single);
+
+        init();
+        setOnClickListener();
 
         createConnectionList();
         buildRecyclerView();
-
-
-
     }
 
-    private void change_view_connection_detail(Connection_item connection){
+    private void change_view_connection_detail(Connection_item connection) {
         Intent intent = new Intent(this, Connection_view_detail.class);
 
         intent.putExtra(EXTRA_DATE, dateView.getText().toString());
         intent.putExtra(EXTRA_TIME_OF_DEPARTURE, connection.get_time_of_departure());
         intent.putExtra(EXTRA_TIME_OF_ARRIVAL, connection.get_time_of_arrival());
-        intent.putExtra(EXTRA_DURATION, connection.get_duration());
+        intent.putExtra(EXTRA_DURATION, connection.getDuration());
         intent.putExtra(EXTRA_NUM_CHANGES, connection.get_num_changes());
         intent.putExtra(EXTRA_PREISSTUFE, connection.get_preisstufe());
         intent.putExtra(EXTRA_ID, connection.get_id());
@@ -134,74 +172,93 @@ public class Possible_connections_single extends Activity{
         startActivity(intent);
     }
 
-    private void newConnectionsEarlier(int minutes){
-        //TODO Oeffi Abfrage mit frueherer Zeit
-        ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
+    private void newConnectionsEarlier() {
+        if(result == null){
+            return;
+        }
 
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_underground_train, "U11"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_walk, "3 Minuten"));
+        QueryMoreParameter query = new QueryMoreParameter(result.context, false, provider);
 
-        connection_items.add(0, new Connection_item("5", "3", 2, "A", "abc",list_of_journey_elements));
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
 
-        list_of_journey_elements = new ArrayList<>();
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_regionaltrain,"RE11"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram,"3"));
-
-        connection_items.add(0, new Connection_item("10", "9", 1, "B", "sdlkaf",list_of_journey_elements));
-
-        adapter.notifyDataSetChanged();
-
-    }
-
-    private void newConnectionsWithLater(int minutes){
-        //TODO Oeffi Abfrage mit spaeterer Zeit
-        ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
-
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_bus, "SB 27"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram, "306"));
-
-        connection_items.add(new Connection_item("5", "3", 2, "A", "abc",list_of_journey_elements));
-
-        list_of_journey_elements = new ArrayList<>();
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_underground_train,"U11"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram,"3"));
-
-        connection_items.add(new Connection_item("10", "9", 1, "B", "sdlkaf",list_of_journey_elements));
-
+        try {
+            QueryTripsResult resultEarlier = execute.get();
+            List<Trip> trips = resultEarlier.trips;
+            connection_items.clear();
+            fillConnectionList(trips);
+            // Aktualisierung der Zeit
+            user_date_time = trips.get(0).legs.get(0).getDepartureTime();
+            setDateAndTime();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         adapter.notifyDataSetChanged();
     }
 
-    public void createConnectionList(){
+    private void newConnectionsLater() {
+        if(result == null){
+            return;
+        }
+
+        QueryMoreParameter query = new QueryMoreParameter(result.context, true, provider);
+
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
+
+        try {
+           QueryTripsResult resultLater = execute.get();
+            List<Trip> trips = resultLater.trips;
+            connection_items.clear();
+            fillConnectionList(trips);
+            List<Trip.Leg> legs = trips.get(trips.size() - 1).legs;
+            //Aktualisierung der Zeit
+            user_date_time = trips.get(0).legs.get(0).getDepartureTime();
+            setDateAndTime();
+            user_date_time = legs.get(legs.size() - 1).getArrivalTime();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void createConnectionList() {
+        result = null;
+
+        tripOptions = Settings.getTripOptions(this);
+
+        QueryParameter query = new QueryParameter(start,
+                stopover,
+                destination,
+                user_date_time,
+                !is_arrival_time,
+                tripOptions, provider);
+
+        AsyncTask<QueryParameter, Void, QueryTripsResult> execute = new QueryTask().execute(query);
+
         connection_items = new ArrayList<>();
-        ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
+        connection_items.clear();
 
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_bus, "SB 27"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram, "306"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_bus, "3"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram, "2"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_bus, "1"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_tram, "10"));
+        try {
+            result = execute.get();
+            List<Trip> trip = result.trips;
+            if (trip != null) {
+                fillConnectionList(trip);
+            } else {
+                Toast.makeText(this, "Keine Fahrten gefunden", Toast.LENGTH_SHORT);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         adapter = new Connection_adapter(connection_items);
-        //TODO hier muessen die Angaben aus Oeffi geholt werden!
-        // ID -> OEFFI
-        connection_items.add(new Connection_item("5", "3", 2, "A", "abc",list_of_journey_elements));
-        list_of_journey_elements = new ArrayList<>();
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_walk, "5 Minuten"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_regionaltrain, "RE 43"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_time, "5 Minuten"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_underground_train, "U5"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_walk, "5 Minuten"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_non_regional_traffic, "ICE 647"));
-        list_of_journey_elements.add(new Journey_item(R.drawable.ic_taxi, "AST 7"));
-        connection_items.add(new Connection_item("3", "4", 1, "B", "def",list_of_journey_elements));
-        connection_items.add(new Connection_item("2", "1", 3, "C", "jkl", list_of_journey_elements));
-        connection_items.add(new Connection_item("6", "9", 14, "D", "mno",list_of_journey_elements));
-        connection_items.add(new Connection_item("7", "10", 13, "E", "123",list_of_journey_elements));
-        connection_items.add(new Connection_item("8", "11", 12, "F", "as", list_of_journey_elements));
     }
 
-    public void buildRecyclerView(){
+    public void buildRecyclerView() {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -213,5 +270,93 @@ public class Possible_connections_single extends Activity{
                 change_view_connection_detail(connection);
             }
         });
+    }
+
+    private void fillConnectionList(List<Trip> trips) {
+        for (Trip t : trips) {
+            ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
+            if (t.isTravelable()) {
+                List<Trip.Leg> legs = t.legs;
+                for (Trip.Leg l : legs) {
+                    int icon = R.drawable.ic_bus;
+                    String name = "";
+                    if (l instanceof Trip.Public) {
+                        Trip.Public p = (Trip.Public) l;
+                        name = p.line.label;
+                        switch (p.line.product) {
+                            case HIGH_SPEED_TRAIN:
+                                icon = R.drawable.ic_non_regional_traffic;
+                                break;
+                            case SUBWAY:
+                                icon = R.drawable.ic_underground_train;
+                                break;
+                            case SUBURBAN_TRAIN:
+                                icon = R.drawable.ic_s_bahn;
+                                break;
+                            case TRAM:
+                                icon = R.drawable.ic_tram;
+                                break;
+                            case CABLECAR:
+                                icon = R.drawable.ic_gondola;
+                                break;
+                            case FERRY:
+                                icon = R.drawable.ic_ship;
+                                break;
+                            case REGIONAL_TRAIN:
+                                icon = R.drawable.ic_regionaltrain;
+                                break;
+                            case BUS:
+                                icon = R.drawable.ic_bus;
+                                break;
+                            case ON_DEMAND:
+                                icon = R.drawable.ic_taxi;
+                                break;
+                            default:
+                                icon = R.drawable.ic_android;
+                                break;
+                        }
+                    } else if (l instanceof Trip.Individual) {
+                        switch (((Trip.Individual) l).type) {
+                            case WALK:
+                                icon = R.drawable.ic_walk;
+                                break;
+                            case TRANSFER:
+                                icon = R.drawable.ic_time;
+                                break;
+                            case CAR:
+                                icon = R.drawable.ic_taxi;
+                                break;
+                            case BIKE:
+                                icon = R.drawable.ic_bike;
+                                break;
+                            default:
+                                icon = R.drawable.ic_android;
+                                break;
+                        }
+                        name = ((Trip.Individual) l).min + "min";
+                    } else {
+                        System.out.println("--------------------------------------");
+                        System.out.println("Hier sollte man nicht landen");
+                    }
+                    list_of_journey_elements.add(new Journey_item(icon, name));
+                }
+                String preisstufe;
+                if (t.fares != null) {
+                    preisstufe = t.fares.get(0).units;
+                } else {
+                    preisstufe = "";
+                }
+                connection_items.add(
+                        new Connection_item(
+                                t.getFirstDepartureTime(),
+                                t.getLastArrivalTime(),
+                                t.getNumChanges(),
+                                t.getDuration(),
+                                preisstufe,
+                                t.getId(),
+                                list_of_journey_elements));
+
+            }
+        }
     }
 }

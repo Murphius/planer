@@ -71,7 +71,7 @@ public class Connection_adapter extends RecyclerView.Adapter<Connection_adapter.
         Connection_item current_connection = connection_list.get(position);
         holder.arrival_view.setText(current_connection.get_time_of_arrival());
         holder.departure_view.setText(current_connection.get_time_of_departure());
-        holder.duration_view.setText("" + current_connection.get_duration());
+        holder.duration_view.setText("" + current_connection.get_duration_string());
         holder.num_changes_view.setText("" + current_connection.get_num_changes());
         holder.preisstufe_view.setText(current_connection.get_preisstufe());
         journey_adapter = new JourneyAdapter(current_connection.get_journey_items());

@@ -22,7 +22,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="2dp"
-                android:padding="2dp" />
+                android:padding="2dp"
+                tools:text="Icon Tätigkeit"/>
 
             <TextView
                 android:id="@+id/textView37"
@@ -34,7 +35,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="gfh"
+                tools:text="Linien Bezeichner / Minuten "
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>

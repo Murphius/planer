@@ -8,27 +8,11 @@
         <item name="colorAccent">@color/sommer_mom</item>
     </style>
 
-    <style name="teststyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">439dp</item>
-        <item name="android:background">@color/sommer_mom</item>
-    </style>
-
     <style name="wrapping_button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="textViewStyle">
         <item name="android:layout_width">0dp</item>

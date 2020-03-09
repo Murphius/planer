@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">Fahrscheinberater</string>
 
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
     <string name="fahrtauskunft">Einzelne Fahrt</string>
     <string name="fahrtenplanen">Mehrere Fahrten</string>
     <string name="fahrtenuebersicht">Zukünftige Fahrten</string>
@@ -42,11 +38,9 @@
     <string name="informationsseite">Informationen über die Anwendung</string>
 
     <string name="einzelne_fahrt">Einzelne Verbindungsauskunft</string>
-    <string name="mehrere_fahrten">Mehrere Fahrten</string>
     <string name="eine_fahrt">Eine Fahrt</string>
 
     <string name="datum">Datum:</string>
-    <string name="zeit">Uhrzeit:</string>
     <string name="ankunft">Ankunftszeit:</string>
     <string name="abfahrt">Abfahrtszeit:</string>
     <string name="start">Start:</string>
@@ -56,9 +50,6 @@
     <string name="kinder_anzahl">Anzahl Kinder:</string>
 
     <string name="moegliche_verbindungen">Mögliche Verbindungen</string>
-    <string name="frueher">Früher</string>
-    <string name="spaeter">Später</string>
-    <string name="fahrt_anpassen">Fahrt anpassen</string>
 
     <string name="dauer">Dauer:</string>
     <string name="anz_umstiege">Umstiege:</string>

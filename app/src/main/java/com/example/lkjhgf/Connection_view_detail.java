@@ -66,7 +66,7 @@ public class Connection_view_detail extends Activity {
         button_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Fahrt soll unter zukuenftige Fahrten angezeigt werden
+                //TODO Fahrt soll unter zukuenftige Fahrten angezeigt werden, wenn der Zeitpunkt in der Zukunft liegt
                 // -> Wechsel der Ansicht, speichern der Fahrt
             }
         });
