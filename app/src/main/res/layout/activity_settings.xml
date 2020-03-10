@@ -278,6 +278,7 @@
                                     android:checked="true"
                                     android:fontFamily="serif"
                                     android:text="@string/tram"
+                                    android:textSize="14sp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>

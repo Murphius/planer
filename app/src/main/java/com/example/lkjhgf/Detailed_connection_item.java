@@ -1,5 +1,6 @@
 package com.example.lkjhgf;
 
+
 public class Detailed_connection_item {
 
     private String time_of_departure, time_of_arrival, start, destination, start_platform, destination_platform, number, destination_of_number;

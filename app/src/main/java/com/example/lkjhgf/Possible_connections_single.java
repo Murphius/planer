@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,31 +23,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Location;
-import de.schildbach.pte.dto.LocationType;
-import de.schildbach.pte.dto.Product;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
 import de.schildbach.pte.dto.TripOptions;
 
 public class Possible_connections_single extends Activity {
 
-    public static String EXTRA_DATE = "com.example.lkjhgf.EXTRA_DATE";
-    public static String EXTRA_TIME_OF_ARRIVAL = "com.example.lkjhgf.EXTRA_TIME_OF_ARRIVAL";
-    public static String EXTRA_TIME_OF_DEPARTURE = "com.example.lkjhgf.EXTRA_TIME_OF_DEPARTURE";
-    public static String EXTRA_NUM_CHANGES = "com.example.lkjhgf.EXTRA_NUM_CHANGES";
-    public static String EXTRA_DURATION = "com.example.lkjhgf.EXTRA_DURATION";
-    public static String EXTRA_PREISSTUFE = "com.example.lkjhgf.EXTRA_PREISSTUFE";
-    public static String EXTRA_ID = "com.example.lkjhgf.EXTRA_ID";
+    public static String EXTRA_TRIP = "com.example.lkjhgf.EXTRA_TRIP";
 
     private BootstrapButton earlierButton, editButton, laterButton;
     private TextView dateView, arrival_departure_timeView, arrival_departureView, departure_pointView, stopoverView, destinationView;
@@ -161,25 +148,20 @@ public class Possible_connections_single extends Activity {
     private void change_view_connection_detail(Connection_item connection) {
         Intent intent = new Intent(this, Connection_view_detail.class);
 
-        intent.putExtra(EXTRA_DATE, dateView.getText().toString());
-        intent.putExtra(EXTRA_TIME_OF_DEPARTURE, connection.get_time_of_departure());
-        intent.putExtra(EXTRA_TIME_OF_ARRIVAL, connection.get_time_of_arrival());
-        intent.putExtra(EXTRA_DURATION, connection.getDuration());
-        intent.putExtra(EXTRA_NUM_CHANGES, connection.get_num_changes());
-        intent.putExtra(EXTRA_PREISSTUFE, connection.get_preisstufe());
-        intent.putExtra(EXTRA_ID, connection.get_id());
+        intent.putExtra(EXTRA_TRIP, connection.getTrip());
 
         startActivity(intent);
     }
 
     private void newConnectionsEarlier() {
-        if(result == null){
+        if (result == null) {
             return;
         }
 
         QueryMoreParameter query = new QueryMoreParameter(result.context, false, provider);
 
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(
+                query);
 
         try {
             QueryTripsResult resultEarlier = execute.get();
@@ -198,16 +180,17 @@ public class Possible_connections_single extends Activity {
     }
 
     private void newConnectionsLater() {
-        if(result == null){
+        if (result == null) {
             return;
         }
 
         QueryMoreParameter query = new QueryMoreParameter(result.context, true, provider);
 
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(
+                query);
 
         try {
-           QueryTripsResult resultLater = execute.get();
+            QueryTripsResult resultLater = execute.get();
             List<Trip> trips = resultLater.trips;
             connection_items.clear();
             fillConnectionList(trips);
@@ -315,7 +298,7 @@ public class Possible_connections_single extends Activity {
                                 icon = R.drawable.ic_android;
                                 break;
                         }
-                    } else if (l instanceof Trip.Individual) {
+                    } else {
                         switch (((Trip.Individual) l).type) {
                             case WALK:
                                 icon = R.drawable.ic_walk;
@@ -334,29 +317,11 @@ public class Possible_connections_single extends Activity {
                                 break;
                         }
                         name = ((Trip.Individual) l).min + "min";
-                    } else {
-                        System.out.println("--------------------------------------");
-                        System.out.println("Hier sollte man nicht landen");
                     }
                     list_of_journey_elements.add(new Journey_item(icon, name));
                 }
-                String preisstufe;
-                if (t.fares != null) {
-                    preisstufe = t.fares.get(0).units;
-                } else {
-                    preisstufe = "";
-                }
-                connection_items.add(
-                        new Connection_item(
-                                t.getFirstDepartureTime(),
-                                t.getLastArrivalTime(),
-                                t.getNumChanges(),
-                                t.getDuration(),
-                                preisstufe,
-                                t.getId(),
-                                list_of_journey_elements));
-
             }
+            connection_items.add(new Connection_item(t, list_of_journey_elements));
         }
     }
 }

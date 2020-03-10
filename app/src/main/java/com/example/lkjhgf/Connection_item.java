@@ -7,25 +7,38 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import de.schildbach.pte.dto.Trip;
+
 public class Connection_item {
-    private String time_of_arrival, time_of_departure, preisstufe, id;
+    private Trip trip;
+    Date arrival, departure;
+    private String time_of_arrival, time_of_departure, preisstufe;
     private ArrayList<Journey_item> journey_items;
     private int num_changes;
     private long duration_hours, duration_minutes;
 
-
-    public Connection_item(Date Time_of_departure, Date Time_of_arrival, int Num_changes, long d, String Preisstufe, String ID, ArrayList<Journey_item> Journey_items){
+    public Connection_item(Trip trip, ArrayList<Journey_item> journey_items){
+        this.trip = trip;
+        this.journey_items = journey_items;
+        departure = trip.getFirstDepartureTime();
+        arrival = trip.getLastArrivalTime();
         DateFormat dateFormat = new SimpleDateFormat("HH : mm");
-        time_of_arrival = dateFormat.format(Time_of_arrival);
-        time_of_departure = dateFormat.format(Time_of_departure);
-        //TODO Dauer ergibt sich aus Ankunftszeit-Startzeit
-        duration_hours = TimeUnit.HOURS.convert(d, TimeUnit.MILLISECONDS) % 24;
-        duration_minutes = TimeUnit.MINUTES.convert(d, TimeUnit.MILLISECONDS) % 60;
-        journey_items = Journey_items;
-        num_changes = Num_changes;
-        preisstufe = Preisstufe;
-        id = ID;
+        time_of_arrival = dateFormat.format(arrival);
+        time_of_departure = dateFormat.format(departure);
+        duration_hours = TimeUnit.HOURS.convert(trip.getDuration(), TimeUnit.MILLISECONDS) % 24;
+        duration_minutes = TimeUnit.MINUTES.convert(trip.getDuration(), TimeUnit.MILLISECONDS) % 60;
+        num_changes = trip.getNumChanges();
+        if(trip.fares != null){
+            preisstufe = trip.fares.get(0).units;
+        }else{
+            preisstufe = "?";
+        }
     }
+
+    public Trip getTrip(){
+        return trip;
+    }
+
 
     public String get_time_of_arrival(){
         return time_of_arrival;
@@ -54,11 +67,7 @@ public class Connection_item {
     public int get_num_changes(){
         return num_changes;
     }
-    public String get_id(){ return id;}
     public ArrayList<Journey_item> get_journey_items(){
         return journey_items;
-    }
-    public long getDuration(){
-        return duration_hours*60+duration_minutes;
     }
 }

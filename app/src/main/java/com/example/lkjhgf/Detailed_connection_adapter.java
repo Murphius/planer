@@ -41,7 +41,6 @@ public class Detailed_connection_adapter extends RecyclerView.Adapter<Detailed_c
             destination_platform_view = itemView.findViewById(R.id.textView59);
 
             icon = itemView.findViewById(R.id.imageView);
-
         }
     }
 
