@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.main_menu;
 
 import android.app.Activity;
 
@@ -12,6 +12,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandInvisible;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.R;
 
 public class Multiple_routes extends Activity {
 

@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.individual_trip.secondView_service.secondView_components;
 
 public class Journey_item {
     private int image_resource;

@@ -1,8 +1,10 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.main_menu;
 
 import android.app.Activity;
 
 import android.os.Bundle;
+
+import com.example.lkjhgf.R;
 
 public class Informationpage extends Activity {
 

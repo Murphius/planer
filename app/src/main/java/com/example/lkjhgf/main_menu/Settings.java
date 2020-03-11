@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.main_menu;
 
 import android.app.Activity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
+import com.example.lkjhgf.R;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

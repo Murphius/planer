@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.individual_trip;
 
 import android.app.Activity;
 
@@ -14,6 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.individual_trip.secondView_service.Connection_adapter;
+import com.example.lkjhgf.individual_trip.secondView_service.Connection_item;
+import com.example.lkjhgf.individual_trip.secondView_service.secondView_components.Journey_item;
+import com.example.lkjhgf.R;
+import com.example.lkjhgf.main_menu.Settings;
 import com.example.lkjhgf.public_transport.QueryMoreParameter;
 import com.example.lkjhgf.public_transport.QueryMoreTask;
 import com.example.lkjhgf.public_transport.QueryParameter;
@@ -34,7 +39,7 @@ import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
 import de.schildbach.pte.dto.TripOptions;
 
-public class Possible_connections_single extends Activity {
+public class SecondView_AllPossibleConnections extends Activity {
 
     public static String EXTRA_TRIP = "com.example.lkjhgf.EXTRA_TRIP";
 
@@ -80,12 +85,12 @@ public class Possible_connections_single extends Activity {
         //Inhalte aus der vorherigen Seite holen und anschliessend in die Textfelder fuellen
         Intent intent = getIntent();
 
-        Calendar user_date = (Calendar) intent.getSerializableExtra(Single_route.EXTRA__DATE);
-        is_arrival_time = intent.getBooleanExtra(Single_route.EXTRA__ISARRIVALTIME, false);
+        Calendar user_date = (Calendar) intent.getSerializableExtra(StartView_Form.EXTRA__DATE);
+        is_arrival_time = intent.getBooleanExtra(StartView_Form.EXTRA__ISARRIVALTIME, false);
         user_date_time = user_date.getTime();
-        start = (Location) intent.getSerializableExtra(Single_route.EXTRA__START);
-        stopover = (Location) intent.getSerializableExtra(Single_route.EXTRA__STOPOVER);
-        destination = (Location) intent.getSerializableExtra(Single_route.EXTRA__DESTINATION);
+        start = (Location) intent.getSerializableExtra(StartView_Form.EXTRA__START);
+        stopover = (Location) intent.getSerializableExtra(StartView_Form.EXTRA__STOPOVER);
+        destination = (Location) intent.getSerializableExtra(StartView_Form.EXTRA__DESTINATION);
 
         setDateAndTime();
 
@@ -146,7 +151,7 @@ public class Possible_connections_single extends Activity {
     }
 
     private void change_view_connection_detail(Connection_item connection) {
-        Intent intent = new Intent(this, Connection_view_detail.class);
+        Intent intent = new Intent(this, ThirdView_CloseUp.class);
 
         intent.putExtra(EXTRA_TRIP, connection.getTrip());
 
@@ -246,20 +251,18 @@ public class Possible_connections_single extends Activity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        adapter.set_on_item_click_listener(new Connection_adapter.On_item_click_listener() {
-            @Override
-            public void onItemClick(int position) {
-                Connection_item connection = connection_items.get(position);
-                change_view_connection_detail(connection);
-            }
+
+        adapter.set_on_item_click_listener(position -> {
+            Connection_item connection = connection_items.get(position);
+            change_view_connection_detail(connection);
         });
     }
 
     private void fillConnectionList(List<Trip> trips) {
-        for (Trip t : trips) {
+        for (Trip trip : trips) {
             ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
-            if (t.isTravelable()) {
-                List<Trip.Leg> legs = t.legs;
+            if (trip.isTravelable()) {
+                List<Trip.Leg> legs = trip.legs;
                 for (Trip.Leg l : legs) {
                     int icon = R.drawable.ic_bus;
                     String name = "";
@@ -321,7 +324,7 @@ public class Possible_connections_single extends Activity {
                     list_of_journey_elements.add(new Journey_item(icon, name));
                 }
             }
-            connection_items.add(new Connection_item(t, list_of_journey_elements));
+            connection_items.add(new Connection_item(trip, list_of_journey_elements));
         }
     }
 }

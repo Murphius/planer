@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.individual_trip;
 
 import android.app.Activity;
 
@@ -18,6 +18,9 @@ import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.Adapter.MyArrayAdapter;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandInvisible;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.main_menu.Main_activity;
+import com.example.lkjhgf.R;
+import com.example.lkjhgf.main_menu.Settings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,7 +29,7 @@ import java.util.Date;
 
 import de.schildbach.pte.dto.Location;
 
-public class Single_route extends Activity {
+public class StartView_Form extends Activity {
 
     // Konstanten fuer Intent
     public static final String EXTRA__DATE = "com.example.lkjhgf.EXTRA_DATE";
@@ -55,7 +58,7 @@ public class Single_route extends Activity {
     public void change_view_to_possible_connections() {
         if (!checkAmbigous()) {
             //Nutzereingaben holen
-           Intent intent = new Intent(this, Possible_connections_single.class);
+           Intent intent = new Intent(this, SecondView_AllPossibleConnections.class);
 
             //Nutzereingaben an die naechste Ansicht weiterleiten
             intent.putExtra(EXTRA__DATE, selectedDate);
@@ -198,7 +201,7 @@ public class Single_route extends Activity {
                 int month = selectedDate.get(Calendar.MONTH);
                 int dayOfMonth = selectedDate.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(Single_route.this,
+                DatePickerDialog dialog = new DatePickerDialog(StartView_Form.this,
                         R.style.kalenderStyle,
                         onDateSetListener,
                         year,
@@ -225,7 +228,7 @@ public class Single_route extends Activity {
                 int hour = selectedDate.get(Calendar.HOUR_OF_DAY);
                 int min = selectedDate.get(Calendar.MINUTE);
 
-                TimePickerDialog dialog = new TimePickerDialog(Single_route.this,
+                TimePickerDialog dialog = new TimePickerDialog(StartView_Form.this,
                         R.style.UhrStyle,
                         onTimeSetListener,
                         hour,

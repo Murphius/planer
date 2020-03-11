@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.main_menu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,13 +9,15 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.R;
+import com.example.lkjhgf.individual_trip.StartView_Form;
 
 public class Main_activity extends Activity {
 
     private BootstrapButton single_route, multiple_routes, future_connections, ticket_overwiew, information_page, settings;
 
     public void change_view_to_single_route(){
-        Intent intent = new Intent(this, Single_route.class);
+        Intent intent = new Intent(this, StartView_Form.class);
         startActivity(intent);
         finish();
     }

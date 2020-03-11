@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#7E7474"
-    tools:context=".Possible_connections_single">
+    tools:context=".individual_trip.SecondView_AllPossibleConnections">
 
 
     <LinearLayout

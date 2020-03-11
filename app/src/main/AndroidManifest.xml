@@ -9,22 +9,22 @@
         android:label=""
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".Connection_view_detail"></activity>
-        <activity android:name=".Possible_connections_multiple" />
+        <activity android:name=".individual_trip.ThirdView_CloseUp"></activity>
+        <activity android:name=".main_menu.Possible_connections_multiple" />
         <activity
-            android:name=".Possible_connections_single"
-            android:parentActivityName=".Single_route" />
+            android:name=".individual_trip.SecondView_AllPossibleConnections"
+            android:parentActivityName=".individual_trip.StartView_Form" />
         <activity
-            android:name=".Multiple_routes"
-            android:parentActivityName=".Main_activity" />
+            android:name=".main_menu.Multiple_routes"
+            android:parentActivityName=".main_menu.Main_activity" />
         <activity
-            android:name=".Single_route"
-            android:parentActivityName=".Main_activity" />
+            android:name=".individual_trip.StartView_Form"
+            android:parentActivityName=".main_menu.Main_activity" />
         <activity
-            android:name=".Informationpage"
-            android:parentActivityName=".Main_activity" />
-        <activity android:name=".Settings" />
-        <activity android:name=".Main_activity">
+            android:name=".main_menu.Informationpage"
+            android:parentActivityName=".main_menu.Main_activity" />
+        <activity android:name=".main_menu.Settings" />
+        <activity android:name=".main_menu.Main_activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

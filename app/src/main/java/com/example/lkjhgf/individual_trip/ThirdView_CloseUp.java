@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.individual_trip;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,29 +11,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.individual_trip.thirdView_DetailedView.components.Stopover_item;
+import com.example.lkjhgf.individual_trip.thirdView_DetailedView.CloseUp_adapter;
+import com.example.lkjhgf.individual_trip.thirdView_DetailedView.CloseUp_item;
+import com.example.lkjhgf.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
-public class Connection_view_detail extends Activity {
+public class ThirdView_CloseUp extends Activity {
 
     private TextView date, time_of_arrival, time_of_departure, duration, num_changes, preisstufe;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private Detailed_connection_adapter adapter;
+    private CloseUp_adapter adapter;
     private BootstrapButton button_back, button_accept;
 
     private Trip trip;
 
     private long duration_hours, duration_minutes;
 
-    private ArrayList<Detailed_connection_item> items;
 
+
+    private ArrayList<CloseUp_item> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class Connection_view_detail extends Activity {
         fillView();
         setOnClickListener();
         createConnectionList();
+
     }
 
     private void init() {
@@ -69,7 +77,7 @@ public class Connection_view_detail extends Activity {
     private void fillView() {
         Intent intent = getIntent();
 
-        trip = (Trip) intent.getSerializableExtra(Possible_connections_single.EXTRA_TRIP);
+        trip = (Trip) intent.getSerializableExtra(SecondView_AllPossibleConnections.EXTRA_TRIP);
 
         num_changes.setText(trip.getNumChanges() + "");
         if(trip.fares != null){
@@ -84,6 +92,7 @@ public class Connection_view_detail extends Activity {
         duration.setText(getDuration_string());
 
         setDateAndTime();
+
     }
 
     private void setOnClickListener() {
@@ -107,12 +116,19 @@ public class Connection_view_detail extends Activity {
         items = new ArrayList<>();
         fillDetailedConnectionList();
 
-        adapter = new Detailed_connection_adapter(items);
+        adapter = new CloseUp_adapter(items);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new CloseUp_adapter.OnItemClickListener(){
+            @Override
+            public void onShowDetails(int position){
+                items.get(position).setShowDetails();
+                adapter.notifyDataSetChanged();
+            }
+        });
         recyclerView.setFocusable(false);
-
     }
+
 
     private void fillDetailedConnectionList() {
         final List<Trip.Leg> legs = trip.legs;
@@ -127,20 +143,31 @@ public class Connection_view_detail extends Activity {
 
             if (l instanceof Trip.Public) {
                 Trip.Public publicTrip = (Trip.Public) l;
-                Detailed_connection_item connection_item = new Detailed_connection_item(
+                ArrayList<Stopover_item> stopovers = fillDetailsList(publicTrip);
+                String start_platform = "Gleis";
+                String destination_platform = "Gleis";
+                if(publicTrip.arrivalStop.plannedArrivalPosition != null){
+                    start_platform += " " + publicTrip.departureStop.plannedDeparturePosition.toString();
+                }
+                if(publicTrip.arrivalStop.plannedArrivalPosition != null){
+                    destination_platform += " " + publicTrip.arrivalStop.plannedArrivalPosition.toString();
+                }
+                CloseUp_item connection_item = new CloseUp_item(
                         departureTime,
                         arrivalTime,
                         departureLocation + " "  + publicTrip.departureStop.location.name ,
                         arrivalLocation + " "  + publicTrip.arrivalStop.location.name,
-                        "Gleis " + publicTrip.departureStop.plannedDeparturePosition.toString(),
-                        "Gleis " + publicTrip.arrivalStop.plannedArrivalPosition.toString(),
+                        start_platform,
+                        destination_platform,
                         "" +publicTrip.line.label,
                         publicTrip.destination.name,
-                        iconPublic(publicTrip));
+                        iconPublic(publicTrip),
+                        stopovers);
                 items.add(connection_item);
             } else {
                 Trip.Individual individualTrip = (Trip.Individual) l;
-                Detailed_connection_item connection_item = new Detailed_connection_item(
+                ArrayList<Stopover_item> stopovers = fillDetailsList(individualTrip);
+                CloseUp_item connection_item = new CloseUp_item(
                         departureTime,
                         arrivalTime,
                         departureLocation,
@@ -149,11 +176,35 @@ public class Connection_view_detail extends Activity {
                         individualTrip.arrival.name,
                         individualTrip.min + "min",
                         "",
-                        iconIndividual(individualTrip)
+                        iconIndividual(individualTrip),
+                        stopovers
                         );
                 items.add(connection_item);
             }
         }
+    }
+
+    private ArrayList<Stopover_item> fillDetailsList(Trip.Individual individualTrip){
+        ArrayList<Stopover_item> stopovers = new ArrayList<>();
+        stopovers.add(new Stopover_item(individualTrip.distance + "", " "));
+        return stopovers;
+    }
+
+    private ArrayList<Stopover_item> fillDetailsList(Trip.Public publicTrip){
+        ArrayList<Stopover_item> stopovers = new ArrayList<>();
+        List<Stop> stops = publicTrip.intermediateStops;
+        for(Stop stop : stops){
+            Date arrivalTime = stop.plannedArrivalTime;
+            DateFormat dateFormat = new SimpleDateFormat("HH : mm");
+            String nameOfStop = stop.location.place + ", " + stop.location.name;
+            if(arrivalTime != null){
+                stopovers.add(new Stopover_item(dateFormat.format(arrivalTime),nameOfStop ));
+            }else {
+                stopovers.add(new Stopover_item(" ", nameOfStop));
+            }
+
+        }
+        return stopovers;
     }
 
     private int iconPublic(Trip.Public publicTrip) {
@@ -221,4 +272,5 @@ public class Connection_view_detail extends Activity {
 
         return result;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.main_menu;
 
 
 import android.app.Activity;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.R;
+import com.example.lkjhgf.main_menu.Multiple_routes;
 
 
 public class Possible_connections_multiple extends Activity {

@@ -1,8 +1,9 @@
-package com.example.lkjhgf;
+package com.example.lkjhgf.individual_trip.secondView_service;
+
+import com.example.lkjhgf.individual_trip.secondView_service.secondView_components.Journey_item;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
