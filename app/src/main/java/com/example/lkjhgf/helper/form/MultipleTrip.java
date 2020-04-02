@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
 import com.example.lkjhgf.main_menu.Main_activity;
 import com.example.lkjhgf.trip.multipleTrips.SecondView_AllPossibleConnections;
 
@@ -29,7 +30,9 @@ public class MultipleTrip extends Form {
         super(activity, view, provider);
         TextView titleView = view.findViewById(R.id.app_name2);
         Intent intent = activity.getIntent();
-        numTrip = intent.getIntExtra(Main_activity.EXTRA_NUMBER, 1);
+        int numTrip1 = intent.getIntExtra(Main_activity.EXTRA_NUMBER, 1);
+        int numTrip2 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
+        numTrip = Integer.max(numTrip1, numTrip2);
 
         String titleString = numTrip + ". Fahrt";
         titleView.setText(titleString);

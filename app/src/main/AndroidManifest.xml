@@ -26,6 +26,10 @@
             android:parentActivityName=".trip.multipleTrips.StartView_Form"/>
         <activity android:name=".trip.multipleTrips.ThirdView_DetailedView"
             android:parentActivityName=".trip.multipleTrips.SecondView_AllPossibleConnections"/>
+        <activity android:name=".futureTrips.Incomplete"
+            android:parentActivityName=".main_menu.Main_activity"/>
+        <activity android:name=".futureTrips.Complete"
+            android:parentActivityName=".main_menu.Main_activity"/>
         <activity android:name=".main_menu.Settings" />
         <activity android:name=".main_menu.Main_activity">
             <intent-filter>

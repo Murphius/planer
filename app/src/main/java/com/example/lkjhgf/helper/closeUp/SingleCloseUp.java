@@ -1,7 +1,10 @@
 package com.example.lkjhgf.helper.closeUp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
+
+import com.example.lkjhgf.futureTrips.Complete;
 
 import java.util.Calendar;
 
@@ -24,6 +27,12 @@ public class SingleCloseUp extends CloseUp {
             buttons.button_accept.setClickable(false);
         }
 
+    }
+
+    @Override
+    public void onAcceptClicked() {
+        Intent newIntent = new Intent(activity, Complete.class);
+        super.onAcceptClicked(newIntent);
     }
 
 }

@@ -11,10 +11,13 @@ class Buttons {
 
     private Activity activity;
 
+    private CloseUp closeUp;
+
     private BootstrapButton button_back, button_refresh;
     BootstrapButton button_accept;
 
-    Buttons(Activity activity, View view){
+    Buttons(Activity activity, View view, CloseUp closeUp){
+        this.closeUp = closeUp;
         this.activity = activity;
         findButtons(view);
         designButtons();
@@ -35,8 +38,7 @@ class Buttons {
 
     private void setOnClickListener(){
         button_accept.setOnClickListener(v -> {
-            //TODO Fahrt soll unter zukuenftige Fahrten angezeigt werden
-            // -> Wechsel der Ansicht, speichern der Fahrt
+            closeUp.onAcceptClicked();
         });
 
         button_back.setOnClickListener(v -> activity.onBackPressed());

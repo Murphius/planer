@@ -135,17 +135,23 @@ public final class Utils {
             ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
             if (trip.isTravelable()) {
                 List<Trip.Leg> legs = trip.legs;
-                for (Trip.Leg leg : legs) {
-                    if (leg instanceof Trip.Public) {
-                        list_of_journey_elements.add(publicItems((Trip.Public) leg));
-                    } else {
-                        list_of_journey_elements.add(individualItems((Trip.Individual) leg));
-                    }
-                }
+                list_of_journey_elements = journeyItems(legs);
             }
             connection_items.add(new Connection_item(trip, list_of_journey_elements));
         }
         return connection_items;
+    }
+
+    public static ArrayList<Journey_item> journeyItems(List<Trip.Leg> legs){
+        ArrayList<Journey_item> journeyItems = new ArrayList<>();
+        for(Trip.Leg leg : legs){
+            if (leg instanceof Trip.Public) {
+                journeyItems.add(publicItems((Trip.Public) leg));
+            } else {
+                journeyItems.add(individualItems((Trip.Individual) leg));
+            }
+        }
+        return journeyItems;
     }
 
     public static ArrayList<CloseUp_item> fillDetailedConnectonList(List<Trip.Leg> legs) {

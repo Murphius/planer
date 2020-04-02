@@ -64,5 +64,7 @@
     <string name="google_android_map_api_key">AIzaSyDVudVPYr07B0VDxLvxiHjNh2KkH1ouOEI</string>
     <string name="maps">Auf der Karte anzeigen</string>
 
+    <string name="zukunftige_fahrten">Zukünftige Fahrten</string>
+
 
 </resources>
