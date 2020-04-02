@@ -10,7 +10,6 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity android:name=".trip.singleTrip.ThirdView_CloseUp"></activity>
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDVudVPYr07B0VDxLvxiHjNh2KkH1ouOEI"/>
         <activity
             android:name=".trip.singleTrip.SecondView_AllPossibleConnections"
             android:parentActivityName=".trip.singleTrip.StartView_Form" />
