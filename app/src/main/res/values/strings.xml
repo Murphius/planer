@@ -46,7 +46,7 @@
     <string name="start">Start:</string>
     <string name="zwischenhalt">Über:</string>
     <string name="ziel">Ziel:</string>
-    <string name="erwachsene_anzahl">Anzahl Erwachsene:</string>
+    <string name="erwachsene_anzahl">Anzahl\nErwachsene:</string>
     <string name="kinder_anzahl">Anzahl Kinder:</string>
 
     <string name="moegliche_verbindungen">Mögliche Verbindungen</string>
@@ -56,6 +56,13 @@
     <string name="preisstufe">Preisstufe:</string>
 
     <string name="detaillierte_fahrt">Detaillierte Fahrt</string>
+
+    <string name="verbindungssuche">Suche nach einer geeigneten Verbindung...</string>
+
+    <string name="ok">Okay</string>
+
+    <string name="google_android_map_api_key">AIzaSyDVudVPYr07B0VDxLvxiHjNh2KkH1ouOEI</string>
+    <string name="maps">Auf der Karte anzeigen</string>
 
 
 </resources>

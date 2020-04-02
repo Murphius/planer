@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#7E7474"
-    tools:context=".individual_trip.SecondView_AllPossibleConnections">
+    tools:context=".trip.singleTrip.SecondView_AllPossibleConnections">
 
 
     <LinearLayout
@@ -17,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/app_name_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/mr_and_mrs_jones"
@@ -29,16 +31,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView12"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:layout_weight="1"
+                android:layout_weight="0.4"
                 android:fontFamily="serif"
                 android:text="@string/datum"
                 android:textSize="18sp"
@@ -50,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:clickable="true"
                 android:focusable="false"
                 android:fontFamily="serif"
@@ -61,16 +63,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView13"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:layout_weight="1"
+                android:layout_weight="0.4"
                 android:fontFamily="serif"
                 android:text="@string/abfahrt"
                 android:textSize="18sp"
@@ -82,7 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:fontFamily="serif"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -98,7 +100,7 @@
                 android:id="@+id/textView14"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="0.3"
                 android:fontFamily="serif"
@@ -128,7 +130,7 @@
                 android:id="@+id/textView15"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="0.3"
                 android:fontFamily="serif"
@@ -158,7 +160,7 @@
                 android:id="@+id/textView16"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="0.3"
                 android:fontFamily="serif"
@@ -173,6 +175,72 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="0.7"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/mr_and_mrs_jones" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView77"
+                style="@style/textViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:fontFamily="serif"
+                android:text="@string/erwachsene_anzahl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView78"
+                style="@style/textViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView76"
+                style="@style/textViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:fontFamily="serif"
+                android:text="@string/kinder_anzahl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView79"
+                style="@style/textViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
                 android:fontFamily="serif"
                 android:textSize="18sp"
                 android:textStyle="bold" />

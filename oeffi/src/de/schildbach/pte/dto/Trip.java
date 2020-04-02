@@ -313,7 +313,8 @@ public final class Trip implements Serializable {
 
         public final Location departure;
         public final Location arrival;
-        public transient List<Point> path; // custom serialization, to save space
+        //TODO path -> transient
+        public List<Point> path; // custom serialization, to save space
 
         public Leg(final Location departure, final Location arrival, final List<Point> path) {
             this.departure = checkNotNull(departure);

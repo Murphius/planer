@@ -12,16 +12,14 @@ public class QueryParameter {
     private Date date;
     private boolean dep;
     private TripOptions options;
-    private NetworkProvider provider;
 
-    public QueryParameter(Location from, Location via, Location to, Date date, boolean dep, TripOptions options, NetworkProvider provider){
+    public QueryParameter(Location from, Location via, Location to, Date date, boolean dep, TripOptions options){
         this.from = from;
         this.via = via;
         this.to = to;
         this.date = date;
         this.dep = dep;
         this.options = options;
-        this.provider = provider;
     }
 
     public Location getFrom() {
@@ -41,8 +39,5 @@ public class QueryParameter {
     }
     public TripOptions getOptions(){
         return options;
-    }
-    public NetworkProvider getProvider() {
-        return provider;
     }
 }

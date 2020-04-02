@@ -160,7 +160,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:roundedCorners="true"
-                app:typicon="ty_cog_outline" />
+                app:typicon="ty_cog" />
 
         </LinearLayout>
 

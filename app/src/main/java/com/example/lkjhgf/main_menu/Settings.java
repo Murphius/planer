@@ -2,8 +2,10 @@ package com.example.lkjhgf.main_menu;
 
 import android.app.Activity;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -65,6 +67,7 @@ public class Settings extends Activity {
         loadData(this);
         updateView();
         tripOptions = tripOptions();
+        setOnClickListener();
     }
 
     @Override
@@ -110,8 +113,8 @@ public class Settings extends Activity {
     public static void loadData(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(SETTINGS, MODE_PRIVATE);
 
-        barrierfreeSettings = sharedPreferences.getBoolean(BARRIERFREE, true);
-        notBarrierfreeSettings = sharedPreferences.getBoolean(NOTBARRIERFREE, false);
+        barrierfreeSettings = sharedPreferences.getBoolean(BARRIERFREE, false);
+        notBarrierfreeSettings = sharedPreferences.getBoolean(NOTBARRIERFREE, true);
         limitedBarrierfreeSettings = sharedPreferences.getBoolean(LIMITEDBARRIERFREE, false);
 
         walkSlowlySettings = sharedPreferences.getBoolean(WALKSLOWLY, false);
@@ -212,7 +215,7 @@ public class Settings extends Activity {
             products.add(Product.ON_DEMAND);
         }
 
-        NetworkProvider.Optimize optimize = null;
+        NetworkProvider.Optimize optimize;
         if (fewChangesSettings) {
             optimize = NetworkProvider.Optimize.LEAST_CHANGES;
         } else if (fastConnectionSettings) {
@@ -221,7 +224,7 @@ public class Settings extends Activity {
             optimize = NetworkProvider.Optimize.LEAST_WALKING;
         }
 
-        NetworkProvider.WalkSpeed walkSpeed = null;
+        NetworkProvider.WalkSpeed walkSpeed;
         if (walkFastSettings) {
             walkSpeed = NetworkProvider.WalkSpeed.FAST;
         } else if (walkNormalSettings) {
@@ -230,7 +233,7 @@ public class Settings extends Activity {
             walkSpeed = NetworkProvider.WalkSpeed.SLOW;
         }
 
-        NetworkProvider.Accessibility accessibility = null;
+        NetworkProvider.Accessibility accessibility;
         if (notBarrierfreeSettings) {
             accessibility = NetworkProvider.Accessibility.NEUTRAL;
         } else if (limitedBarrierfreeSettings) {
@@ -245,6 +248,31 @@ public class Settings extends Activity {
         loadData(activity);
         tripOptions = tripOptions();
         return tripOptions;
+    }
+
+    private void setOnClickListener(){
+        limitedBarrierfree.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(Settings.this).setTitle("Bedingt Barrierefrei")
+                        .setMessage("Es werden Niederflurfahrzeuge ohne Einstiegshilfe berücksichtigt, sowie bei dem Benutzen von Bahnhöfen " +
+                                "werden zusätzlich kurze Treppenabsätze sowie Rolltreppen berücksichtigt.")
+                        .setNegativeButton(R.string.ok,null)
+                        .show();
+                return false;
+            }
+        });
+        barrierfree.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(Settings.this).setTitle("Barrierefrei")
+                        .setMessage("Mit dieser Option werden nur voll barrierefrei zugänglichen Fahrzeugen (mit Rampe oder andere Einstiegshilfe) berücksichtigt, sowie " +
+                                "nur Aufzüge, ebenerdige Wege und Rampen beim Umstieg in Bahnhöfen berücksichtigt.")
+                        .setNegativeButton(R.string.ok,null)
+                        .show();
+                return false;
+            }
+        });
     }
 
 }

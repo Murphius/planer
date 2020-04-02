@@ -1,26 +1,58 @@
 package com.example.lkjhgf.public_transport;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.trip.secondView_service.Connection_item;
+import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import de.schildbach.pte.NetworkProvider;
-import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Location;
-import de.schildbach.pte.dto.QueryTripsContext;
 import de.schildbach.pte.dto.QueryTripsResult;
+import de.schildbach.pte.dto.Trip;
 import de.schildbach.pte.dto.TripOptions;
 
 public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
 
+    // Konstante fuer Intent
+    public static final String EXTRA_CONNECTION_ITEMS = "com.example.lkjhgf.public_transport.EXTRA_CONNECTION_ITEMS";
+    public static final String EXTRA_TRIP_CONTEXT = "com.example.lkjhgf.public_transport.EXTRA_TRIP_CONTEXT";
+    public static final String EXTRA_TEST = "com.example.lkjhgf.public_transport.EXTRA_TEST";
+
     private NetworkProvider provider;
+    private Context context;
+    private AlertDialog dialog;
+    private Intent intent;
+
+    public QueryTask(NetworkProvider provider, Context context, Intent intent) {
+        this.provider = provider;
+        this.context = context;
+        this.intent = intent;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        //Nutzer über das Suchen der Verbindung informieren mittels Fragment
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(R.layout.fragment);
+        builder.setCancelable(false);
+        dialog = builder.create();
+        dialog.show();
+    }
 
     @Override
     protected QueryTripsResult doInBackground(QueryParameter... queryParameters) {
-        provider = new VrrProvider();
         QueryParameter queryParameter = queryParameters[0];
         QueryTripsResult result = null;
         try {
@@ -33,6 +65,7 @@ public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult>
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return result;
     }
 
@@ -45,8 +78,17 @@ public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult>
         return provider.queryTrips(from, via, to, date, dep, options);
     }
 
-    protected QueryTripsResult queryMoreTrips(final QueryTripsContext context, final boolean later)
-            throws IOException {
-        return provider.queryMoreTrips(context, later);
+    @Override
+    protected void onPostExecute(QueryTripsResult result) {
+        if (result != null) {
+            ArrayList<Connection_item> connection_items = Utils.fillConnectionList(result.trips);
+            intent.putExtra(EXTRA_TRIP_CONTEXT, result.context);
+            intent.putExtra(EXTRA_TEST, result);
+            intent.putExtra(EXTRA_CONNECTION_ITEMS, connection_items);
+            context.startActivity(intent);
+        }
+        dialog.dismiss();
     }
+
+
 }

@@ -63,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
+                    android:longClickable="true"
                     android:text="@string/mittlere_einschraenkung"
                     android:textStyle="bold" />
 
@@ -73,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/mr_and_mrs_jones"
                     android:fontFamily="serif"
+                    android:longClickable="true"
                     android:text="@string/starke_einschraenkung"
                     android:textStyle="bold" />
             </RadioGroup>
