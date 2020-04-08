@@ -4,7 +4,6 @@ import com.example.lkjhgf.helper.Utils;
 import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -44,7 +43,7 @@ public class TripItem {
         return numChildren;
     }
 
-    public ArrayList<Journey_item> getJourney_items(){
+    ArrayList<Journey_item> getJourney_items(){
         return journey_items;
     }
 

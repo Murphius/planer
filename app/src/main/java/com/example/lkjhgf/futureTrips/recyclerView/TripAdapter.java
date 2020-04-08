@@ -19,7 +19,8 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTrip> {
 
 
     private ArrayList<TripItem> tripItems;
-    Activity activity;
+    private OnItemClickListener onItemClickListener;
+    private Activity activity;
 
 
     public TripAdapter(ArrayList<TripItem> tripItems, Activity activity){
@@ -27,12 +28,15 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTrip> {
         this.tripItems = tripItems;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     @NonNull
     @Override
     public FutureTrip onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.future_item, parent, false);
-        return new FutureTrip(v);
+        return new FutureTrip(v, onItemClickListener);
     }
 
     @Override
@@ -40,6 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTrip> {
         TripItem currentItem = tripItems.get(position);
         if(currentItem.isComplete()){
             holder.view.setBackgroundColor(activity.getResources().getColor(R.color.mr_and_mrs_jones_25,null));
+            holder.recyclerView.setBackgroundColor(activity.getResources().getColor(R.color.mr_and_mrs_jones_25, null));
             holder.textViewClass.numAdult.setVisibility(View.GONE);
             holder.textViewClass.userNumAdult.setVisibility(View.GONE);
             holder.textViewClass.numChildren.setVisibility(View.GONE);

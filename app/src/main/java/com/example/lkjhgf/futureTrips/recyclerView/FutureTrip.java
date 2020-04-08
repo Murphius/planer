@@ -16,13 +16,28 @@ public class FutureTrip extends RecyclerView.ViewHolder{
     public RecyclerView recyclerView;
     View view;
     Trip trip;
-    public FutureTrip(@NonNull View itemView) {
+    public FutureTrip(@NonNull View itemView, OnItemClickListener onItemClickListener) {
         super(itemView);
         textViewClass = new TextViewClass(itemView);
-        buttonClass = new ButtonClass(itemView);
+        buttonClass = new ButtonClass(itemView, this);
         view = itemView.findViewById(R.id.CardView1);
         recyclerView = itemView.findViewById(R.id.recyclerView6);
         recyclerView.setHasFixedSize(true);
+
+        buttonClass.setOnClickListener(onItemClickListener);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener != null){
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        onItemClickListener.onItemClick(position);
+                    }
+                }
+            }
+        });
+
     }
 
     public void setTrip(Trip trip){

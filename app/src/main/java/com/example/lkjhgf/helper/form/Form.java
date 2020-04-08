@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Location;
+import de.schildbach.pte.dto.Trip;
 import de.schildbach.pte.dto.TripOptions;
 
 
@@ -28,7 +29,7 @@ public abstract class Form {
     Location startLocation, stopoverLocation, destinationLocation;
     Calendar selectedDate;
     boolean isArrivalTime;
-    NetworkProvider provider;
+    private NetworkProvider provider;
 
     protected Context context;
     protected Activity activity;
@@ -50,6 +51,12 @@ public abstract class Form {
         selectedDate = Calendar.getInstance();
     }
 
+    Form(Activity activity, View view, NetworkProvider provider, Trip trip){
+        this(activity, view, provider);
+        text.fillTextViews(trip);
+        selectedDate.setTime(trip.getFirstDepartureTime());
+    }
+
     public void setOnClickListener() {
        buttons.setOnClickListener();
     }
@@ -60,10 +67,6 @@ public abstract class Form {
 
     Form_Text getText() {
         return text;
-    }
-
-    Form_Buttons getButtons() {
-        return buttons;
     }
 
     boolean checkFormComplete() {
@@ -92,7 +95,7 @@ public abstract class Form {
         }
     }
 
-    void setIntentExtras() {
+    private void setIntentExtras() {
         intent.putExtra(EXTRA_DATE, selectedDate.getTime());
         intent.putExtra(EXTRA_ISARRIVALTIME, isArrivalTime);
         intent.putExtra(EXTRA_START, startLocation);
@@ -109,4 +112,5 @@ public abstract class Form {
         new QueryTask(provider, activity, intent).execute(queryParameter);
     }
 
+    public abstract void copy();
 }

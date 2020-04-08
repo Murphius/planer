@@ -311,10 +311,9 @@ public final class Trip implements Serializable {
     public abstract static class Leg implements Serializable {
         private static final long serialVersionUID = 8498461220084523265L;
 
-        public final Location departure;
-        public final Location arrival;
-        //TODO path -> transient
-        public List<Point> path; // custom serialization, to save space
+        public final Location departure; //
+        public final Location arrival; //
+        public transient List<Point> path; // custom serialization, to save space
 
         public Leg(final Location departure, final Location arrival, final List<Point> path) {
             this.departure = checkNotNull(departure);
@@ -367,10 +366,10 @@ public final class Trip implements Serializable {
     public final static class Public extends Leg {
         private static final long serialVersionUID = 1312066446239817422L;
 
-        public final Line line;
+        public final Line line; //
         public final @Nullable Location destination;
-        public final Stop departureStop;
-        public final Stop arrivalStop;
+        public final Stop departureStop; //
+        public final Stop arrivalStop; //
         public final @Nullable List<Stop> intermediateStops;
         public final @Nullable String message;
 

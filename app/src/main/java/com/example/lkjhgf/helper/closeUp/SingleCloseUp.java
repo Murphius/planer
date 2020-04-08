@@ -3,6 +3,7 @@ package com.example.lkjhgf.helper.closeUp;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.lkjhgf.futureTrips.Complete;
 
@@ -21,12 +22,20 @@ public class SingleCloseUp extends CloseUp {
         textViews.numAdultView.setVisibility(View.GONE);
         textViews.numAdult.setVisibility(View.GONE);
         textViews.view.setVisibility(View.GONE);
+        textViews.useTicket.setVisibility(View.GONE);
+        textViews.ticket.setVisibility(View.GONE);
 
         //Nur Fahrten, die in der Zukunft liegen, können "gespeichert" werden
-        if(trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
-            buttons.button_accept.setClickable(false);
-        }
-
+        buttons.button_accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
+                    Toast.makeText(activity.getApplicationContext(), "Nur zukünftige Fahrten können gespeichert werden", Toast.LENGTH_SHORT).show();
+                }else{
+                    onAcceptClicked();
+                }
+            }
+        });
     }
 
     @Override

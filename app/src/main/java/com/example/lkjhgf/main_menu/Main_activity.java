@@ -9,6 +9,7 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.futureTrips.Complete;
 import com.example.lkjhgf.helper.Utils;
 import com.example.lkjhgf.trip.singleTrip.StartView_Form;
 
@@ -70,7 +71,8 @@ public class Main_activity extends Activity {
         multiple_routes.setOnClickListener(v -> change_view_to_multiple_routes());
 
         future_connections.setOnClickListener(v -> {
-            //TODO
+            Intent intent = new Intent(this, Complete.class);
+            startActivity(intent);
         });
 
         ticket_overwiew.setOnClickListener(v -> {

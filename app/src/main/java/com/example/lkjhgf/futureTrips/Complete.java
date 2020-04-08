@@ -7,15 +7,17 @@ import android.view.View;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
+import com.example.lkjhgf.helper.futureTrip.MyTrip;
 import com.example.lkjhgf.helper.futureTrip.TripComplete;
-
-import java.util.ArrayList;
+import com.example.lkjhgf.main_menu.Main_activity;
 
 import de.schildbach.pte.dto.Trip;
 
 import static com.example.lkjhgf.helper.closeUp.CloseUp.EXTRA_TRIP;
 
 public class Complete extends Activity {
+
+    private MyTrip myTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +30,26 @@ public class Complete extends Activity {
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
 
-        ArrayList<TripItem> tripItems = new ArrayList<>();
-
-        TripItem newTripItem = new TripItem(trip, true);
-
-        if(!tripItems.contains(newTripItem)){
-            tripItems.add(newTripItem);
+        if(trip != null){
+            TripItem newTripItem = new TripItem(trip, true);
+            myTrip = new TripComplete(this, view, newTripItem);
+        }else{
+            myTrip = new TripComplete(this, view, null);
         }
-
-        //TODO ? farbe, trip
-        new TripComplete(this, view, tripItems);
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this.getApplicationContext(), Main_activity.class);
+        myTrip.saveData();
+        finishAffinity();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        myTrip.saveData();
+        super.onResume();
+    }
+
 }

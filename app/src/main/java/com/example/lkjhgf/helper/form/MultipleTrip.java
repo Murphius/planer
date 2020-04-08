@@ -7,6 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.futureTrip.MyTrip;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
 import com.example.lkjhgf.main_menu.Main_activity;
 import com.example.lkjhgf.trip.multipleTrips.SecondView_AllPossibleConnections;
@@ -14,6 +16,7 @@ import com.example.lkjhgf.trip.multipleTrips.SecondView_AllPossibleConnections;
 import java.util.Calendar;
 
 import de.schildbach.pte.NetworkProvider;
+import de.schildbach.pte.dto.Trip;
 
 public class MultipleTrip extends Form {
 
@@ -26,49 +29,84 @@ public class MultipleTrip extends Form {
 
     public MultipleTrip(Activity activity,
                         View view,
+                        NetworkProvider provider,
+                        Trip trip,
+                        int numChildren,
+                        int numAdult) {
+        this(activity, view, provider);
+        String setText = numAdult + "";
+        this.numAdult = numAdult;
+        text.numAdultView.setText(setText);
+        setText = numChildren + "";
+        this.numChildren = numChildren;
+        text.numChildrenView.setText(setText);
+        selectedDate.setTime(trip.getFirstDepartureTime());
+        text.date_view.setText(Utils.setDate(trip.getFirstDepartureTime()));
+        text.arrival_departure_view.setText(Utils.setTime(trip.getFirstDepartureTime()));
+        startLocation = trip.from;
+        destinationLocation = trip.to;
+        text.start_view.setText(Utils.setLocationName(startLocation));
+        text.destination_view.setText(Utils.setLocationName(destinationLocation));
+
+    }
+
+    public MultipleTrip(Activity activity,
+                        View view,
                         NetworkProvider provider) {
         super(activity, view, provider);
         TextView titleView = view.findViewById(R.id.app_name2);
         Intent intent = activity.getIntent();
         int numTrip1 = intent.getIntExtra(Main_activity.EXTRA_NUMBER, 1);
         int numTrip2 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
+        int numTrip3 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
         numTrip = Integer.max(numTrip1, numTrip2);
-
+        numTrip = Integer.max(numTrip3, numTrip);
         String titleString = numTrip + ". Fahrt";
         titleView.setText(titleString);
     }
 
-    public boolean checkFormComplete(){
+    public boolean checkFormComplete() {
         System.out.println("MULTIPLE TRIP CHECK COMPLETE");
-        if(!super.checkFormComplete()){
+        if (!super.checkFormComplete()) {
             return false;
         }
-        if(Calendar.getInstance().getTime().after(selectedDate.getTime())){
-            Toast.makeText(context, "Bitte einen Zeitpunkt in der Zukunft auswählen", Toast.LENGTH_SHORT).show();
+        if (Calendar.getInstance().getTime().after(selectedDate.getTime())) {
+            Toast.makeText(context,
+                    "Bitte einen Zeitpunkt in der Zukunft auswählen",
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
         numAdult = 0;
         numChildren = 0;
         String numAdultString = text.numAdultView.getText().toString();
         String numChildrenString = text.numChildrenView.getText().toString();
-        if(!numAdultString.isEmpty()){
+        if (!numAdultString.isEmpty()) {
             numAdult = Integer.parseInt(numAdultString);
         }
-        if(!numChildrenString.isEmpty()){
+        if (!numChildrenString.isEmpty()) {
             numChildren = Integer.parseInt(numChildrenString);
         }
-        if(numAdult + numChildren <= 0){
-            Toast.makeText(context,"Die Personenanzahl muss mindestens eins sein", Toast.LENGTH_SHORT).show();
+        if (numAdult + numChildren <= 0) {
+            Toast.makeText(context,
+                    "Die Personenanzahl muss mindestens eins sein",
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    void changeViewToPossibleConnections(){
+    void changeViewToPossibleConnections() {
         intent = new Intent(context, SecondView_AllPossibleConnections.class);
-        intent.putExtra(EXTRA_NUM_TRIP,numTrip);
+        intent.putExtra(EXTRA_NUM_TRIP, numTrip);
         intent.putExtra(EXTRA_NUM_ADULT, numAdult);
         intent.putExtra(EXTRA_NUM_CHILDREN, numChildren);
         super.changeViewToPossibleConnections();
+    }
+
+    @Override
+    public void copy() {
+        selectedDate = Calendar.getInstance();
+        text.arrival_departure_view.setText("");
+        text.date_view.setText("");
     }
 }

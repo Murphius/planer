@@ -3,17 +3,24 @@ package com.example.lkjhgf.futureTrips.recyclerView;
 import android.app.Activity;
 import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 
+import java.util.concurrent.Future;
+
 class ButtonClass {
+
+    private  FutureTrip futureTrip;
 
     private BootstrapButton edit;
     private BootstrapButton delete;
     private BootstrapButton copy;
 
-    ButtonClass(View view){
+    ButtonClass(View view, FutureTrip futureTrip){
+        this.futureTrip = futureTrip;
         findButtons(view);
     }
 
@@ -30,29 +37,44 @@ class ButtonClass {
         copy.setBootstrapBrand(new ButtonBootstrapBrandVisible());
     }
 
-    private void setOnClickListener(){
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-                // Wechseln in die Ansicht des Formulars
-                // Intent: Start, Ziel, Datum, Uhrzeit
-            }
-        });
+    void setOnClickListener(OnItemClickListener onItemClickListener){
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                //Entfernen der Fahrt aus der Liste
+                if(onItemClickListener != null){
+                    int position = futureTrip.getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        onItemClickListener.onDeleteClicked(position);
+                    }
+                }
             }
         });
         copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                //Wechseln in die Ansicht des Formulars
-                //Intent: Start, Ziel
+                if(onItemClickListener != null){
+                    int position = futureTrip.getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        onItemClickListener.onCopyClicked(position);
+                    }
+                }
             }
         });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener != null){
+                    int position = futureTrip.getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        onItemClickListener.onEditClicked(position);
+                    }
+                }
+            }
+        });
+
+
     }
+
+
 }

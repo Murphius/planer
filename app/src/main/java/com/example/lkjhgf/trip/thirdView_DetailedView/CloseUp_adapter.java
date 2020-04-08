@@ -52,6 +52,7 @@ public class CloseUp_adapter extends RecyclerView.Adapter<CloseUp_adapter.Detail
         public TextView number_view, destination_of_number_view;
         public TextView time_of_arrival_view, destination_view, destination_platform_view;
         public TextView delay_departure, delay_arrival;
+        public TextView ticketView, useTicket;
         public ImageView icon;
         public int myGreen, myRed;
         public BootstrapButton stopoverLocationsShow;
@@ -81,12 +82,17 @@ public class CloseUp_adapter extends RecyclerView.Adapter<CloseUp_adapter.Detail
             delay_departure = itemView.findViewById(R.id.textView68);
             delay_arrival = itemView.findViewById(R.id.textView69);
 
+            ticketView = itemView.findViewById(R.id.textView89);
+            useTicket = itemView.findViewById(R.id.textView90);
+
             recyclerView = itemView.findViewById(R.id.recyclerView4);
             recyclerView.setHasFixedSize(true);
 
             icon = itemView.findViewById(R.id.imageView);
 
             view = itemView.findViewById(R.id.view4);
+
+
 
             showOnMap.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -152,6 +158,15 @@ public class CloseUp_adapter extends RecyclerView.Adapter<CloseUp_adapter.Detail
 
         holder.time_of_arrival_view.setText(current.getTime_of_arrival());
         holder.time_of_departure_view.setText(current.getTime_of_departure());
+
+        if(current.getTicket() == null){
+            //TODO
+            //holder.useTicket.setVisibility(View.GONE);
+            //holder.ticketView.setVisibility(View.GONE);
+        }else{
+            //TODO
+            //holder.useTicket.setText(current.getTicket.toString());
+        }
 
         if(current instanceof CloseUp_publicItem){
             holder.showOnMap.setVisibility(View.GONE);

@@ -16,6 +16,14 @@
         <activity
             android:name=".trip.singleTrip.StartView_Form"
             android:parentActivityName=".main_menu.Main_activity" />
+        <activity android:name=".futureTrips.closeUp.CompleteCloseUp"
+            android:parentActivityName=".futureTrips.Complete"/>
+        <activity android:name=".futureTrips.closeUp.IncompleteCloseUp"
+            android:parentActivityName=".futureTrips.Incomplete"/>
+        <activity android:name=".trip.singleTrip.EditSingleTrip"/>
+        <activity android:name=".trip.multipleTrips.CopyMultipleTrip"/>
+        <activity android:name=".trip.multipleTrips.EditMultipleTrip"/>
+        <activity android:name=".trip.singleTrip.CopySingleTrip"/>
         <activity
             android:name=".main_menu.Informationpage"
             android:parentActivityName=".main_menu.Main_activity" />

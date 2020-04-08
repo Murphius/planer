@@ -13,8 +13,8 @@ class Buttons {
 
     private CloseUp closeUp;
 
-    private BootstrapButton button_back, button_refresh;
-    BootstrapButton button_accept;
+    private BootstrapButton button_refresh;
+    BootstrapButton button_accept,button_back;
 
     Buttons(Activity activity, View view, CloseUp closeUp){
         this.closeUp = closeUp;

@@ -4,7 +4,7 @@ import com.example.lkjhgf.helper.Utils;
 
 import de.schildbach.pte.dto.Trip;
 
-public class CloseUp_item {
+public abstract class CloseUp_item {
 
     private String time_of_departure, time_of_arrival;
     private  String departure, destination;
@@ -51,6 +51,11 @@ public class CloseUp_item {
 
     public void setShowDetails(){
         showDetails = !showDetails;
+    }
+
+    //TODO hier soll das Ticket zuruckgegeben werden
+    public Object getTicket(){
+        return  null;
     }
 
 }

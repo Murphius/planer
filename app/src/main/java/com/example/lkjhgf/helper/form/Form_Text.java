@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.Adapter.MyArrayAdapter;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.Utils;
+
+import de.schildbach.pte.dto.Trip;
 
 class Form_Text {
 
@@ -52,6 +55,18 @@ class Form_Text {
         stopover_view.setAdapter(new MyArrayAdapter(context, stopover_view.getThreshold()));
         stopover_view.setOnItemClickListener((parent, view, position, id) -> form.stopoverLocation = ((MyArrayAdapter.LocationHolder) parent.getItemAtPosition(
                 position)).location);
+    }
+
+    void fillTextViews(Trip trip){
+        form.selectedDate.setTime(trip.getFirstDepartureTime());
+        date_view.setText(Utils.setDate(form.selectedDate.getTime()));
+        arrival_departure_view.setText(Utils.setTime(form.selectedDate.getTime()));
+
+        form.startLocation = trip.from;
+        start_view.setText(Utils.setLocationName(trip.from));
+
+        form.destinationLocation = trip.to;
+        destination_view.setText(Utils.setLocationName(trip.to));
     }
 
 }

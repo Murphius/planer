@@ -4,20 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.lkjhgf.futureTrips.Complete;
 import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
 import com.example.lkjhgf.helper.closeUp.MultipleCloseUp;
+import com.example.lkjhgf.trip.multipleTrips.CopyMultipleTrip;
 import com.example.lkjhgf.trip.multipleTrips.StartView_Form;
 
 import java.util.ArrayList;
 
 public class TripIncomplete extends MyTrip {
 
-    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.helper.futureTrip.EXTRA_NUM_TRIP";
-
     private int numTrip;
 
-    public TripIncomplete(Activity activity, View view, ArrayList<TripItem> tripItems) {
-        super(activity, view, tripItems);
+    public TripIncomplete(Activity activity, View view, TripItem tripItem) {
+        super(activity, view, tripItem, MyTrip.SAVED_TRIPS);
 
         numTrip = activity.getIntent().getIntExtra(MultipleCloseUp.EXTRA_NUM_TRIP, 1);
 
@@ -25,14 +25,50 @@ public class TripIncomplete extends MyTrip {
         recyclerViewBlah();
     }
 
+    void myOnCopyClicked(int position) {
+        //loadData();
+        Intent newIntent = new Intent(activity.getApplicationContext(), CopyMultipleTrip.class);
+        TripItem tripItem = tripItems.get(position);
+        newIntent.putExtra(EXTRA_NUM_TRIP, numTrip);
+        newIntent.putExtra(EXTRA_NUM_ADULT, tripItem.getNumAdult());
+        newIntent.putExtra(EXTRA_NUM_CHILDREN, tripItem.getNumChildren());
+        newIntent.putExtra(EXTRA_TRIP, tripItem.getTrip());
+        setIntent(newIntent,position);
+        startNextActivity(newIntent);
+    }
+
     private void setOnClickListener() {
-        addTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(activity, StartView_Form.class);
-                newIntent.putExtra(EXTRA_NUM_TRIP, numTrip + 1);
-                startNextActivity(newIntent);
-            }
+        addTrip.setOnClickListener(v -> {
+            Intent newIntent = new Intent(activity, StartView_Form.class);
+            newIntent.putExtra(EXTRA_NUM_TRIP, numTrip + 1);
+            startNextActivity(newIntent);
         });
+
+        abort.setOnClickListener(v -> activity.onBackPressed());
+
+        //TODO Kalkulierung der Tickets
+        calculateTickets.setOnClickListener(v -> {
+            ArrayList<TripItem> copy = new ArrayList<>();
+           copy.addAll(tripItems);
+            dataPath = ALL_SAVED_TRIPS;
+            tripItems.clear();
+            loadData();
+            for(TripItem item : copy){
+                insertTrip(item);
+            }
+            //TODO eigentlich anzeigen der Tickets statt aller Fahrten
+            Intent newIntent = new Intent(activity.getApplicationContext(), Complete.class);
+            startNextActivity(newIntent);
+        });
+    }
+
+    @Override
+    void removeItemAtPosition(int position){
+        numTrip -= 1;
+        super.removeItemAtPosition(position);
+    }
+
+    private void setIntent(Intent newIntent, int position){
+
     }
 }
