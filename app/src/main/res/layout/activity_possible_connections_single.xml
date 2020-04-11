@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#7E7474"
-    tools:context=".trip.singleTrip.SecondView_AllPossibleConnections">
+    tools:context=".activites.singleTrip.ShowAllPossibleConnections">
 
 
     <LinearLayout

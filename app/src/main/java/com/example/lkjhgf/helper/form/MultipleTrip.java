@@ -8,10 +8,9 @@ import android.widget.Toast;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.helper.futureTrip.MyTrip;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
-import com.example.lkjhgf.main_menu.Main_activity;
-import com.example.lkjhgf.trip.multipleTrips.SecondView_AllPossibleConnections;
+import com.example.lkjhgf.activites.MainMenu;
+import com.example.lkjhgf.activites.multipleTrips.ShowAllPossibleConnections;
 
 import java.util.Calendar;
 
@@ -56,7 +55,7 @@ public class MultipleTrip extends Form {
         super(activity, view, provider);
         TextView titleView = view.findViewById(R.id.app_name2);
         Intent intent = activity.getIntent();
-        int numTrip1 = intent.getIntExtra(Main_activity.EXTRA_NUMBER, 1);
+        int numTrip1 = intent.getIntExtra(MainMenu.EXTRA_NUMBER, 1);
         int numTrip2 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
         int numTrip3 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
         numTrip = Integer.max(numTrip1, numTrip2);
@@ -96,7 +95,7 @@ public class MultipleTrip extends Form {
     }
 
     void changeViewToPossibleConnections() {
-        intent = new Intent(context, SecondView_AllPossibleConnections.class);
+        intent = new Intent(context, ShowAllPossibleConnections.class);
         intent.putExtra(EXTRA_NUM_TRIP, numTrip);
         intent.putExtra(EXTRA_NUM_ADULT, numAdult);
         intent.putExtra(EXTRA_NUM_CHILDREN, numChildren);

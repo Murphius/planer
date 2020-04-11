@@ -1,4 +1,4 @@
-package com.example.lkjhgf.main_menu;
+package com.example.lkjhgf.activites;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,31 +9,47 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.futureTrips.Complete;
+import com.example.lkjhgf.activites.futureTrips.Complete;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.singleTrip.StartView_Form;
+import com.example.lkjhgf.activites.singleTrip.UserForm;
 
-public class Main_activity extends Activity {
+/**
+ * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet
+ */
+
+public class MainMenu extends Activity {
 
     public static String EXTRA_NUMBER = "com.example.lkjhgf.main_menu.EXTRA_NUMBER";
 
-    public void change_view_to_single_route(){
-        Intent intent = new Intent(this, StartView_Form.class);
+    /**
+     * Planen einer einzelnen Fahrt, keine Fahrkostenoptimierung
+     */
+    public void change_view_to_single_route() {
+        Intent intent = new Intent(this, UserForm.class);
         startActivity(intent);
     }
 
-    public void change_view_to_settings(){
+    /**
+     * Öffnen der Einstellungen
+     */
+    public void change_view_to_settings() {
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
 
-    public void change_view_to_information_page(){
+    /**
+     * Anzeigen einer Hilfsseite, mit Erklärungen zur Funktionsweise App
+     */
+    public void change_view_to_information_page() {
         Intent intent = new Intent(this, Informationpage.class);
         startActivity(intent);
     }
 
-    public void change_view_to_multiple_routes(){
-        Intent intent = new Intent(this, com.example.lkjhgf.trip.multipleTrips.StartView_Form.class);
+    /**
+     * Planen mehrerer Fahrten, diese werden jeweils bei der Fahrkostenoptimierung berücksichtigt
+     */
+    public void change_view_to_multiple_routes() {
+        Intent intent = new Intent(this, com.example.lkjhgf.activites.multipleTrips.UserForm.class);
         intent.putExtra(EXTRA_NUMBER, 1);
         startActivity(intent);
     }
@@ -41,7 +57,8 @@ public class Main_activity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        System.out.println(Utils.setLocationName("Münster", "Münster(Westf)") + "------------------------------------------");
+        System.out.println(Utils.setLocationName("Münster",
+                "Münster(Westf)") + "------------------------------------------");
         super.onCreate(savedInstanceState);
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_start_view);

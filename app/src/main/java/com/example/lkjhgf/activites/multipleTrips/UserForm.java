@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.multipleTrips;
+package com.example.lkjhgf.activites.multipleTrips;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,14 +6,23 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 
 import de.schildbach.pte.VrrProvider;
 
-public class StartView_Form extends Activity {
+/**
+ * Planung mehrerer Fahrten <br/>
+ * Ansicht eines Formulars, dass der Nutzer ausfüllen muss <br/>
+ * Dabei muss der Nutzer Angaben zu seiner geplanten Fahrt machen (Datum, Uhrzeit, Start-, [Zwischenhalt], Zielpunkt, Anzahl reisende
+ * Personen) <br/>
+ * <p>
+ * Das Managen dieser Ansicht erfolgt in der Klasse Form
+ * {@link MultipleTrip}
+ */
 
-    Form form;
+public class UserForm extends Activity {
+
+    com.example.lkjhgf.helper.form.Form form;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

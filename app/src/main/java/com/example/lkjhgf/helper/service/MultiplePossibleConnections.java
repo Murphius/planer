@@ -7,12 +7,12 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.form.MultipleTrip;
-import com.example.lkjhgf.trip.multipleTrips.ThirdView_DetailedView;
+import com.example.lkjhgf.activites.multipleTrips.DetailedView;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
 
-public class MultiplePossibleConnection extends PossibleConnections {
+public class MultiplePossibleConnections extends PossibleConnections {
 
     private int numTrip;
     private int numAdult, numChildren;
@@ -21,10 +21,10 @@ public class MultiplePossibleConnection extends PossibleConnections {
     public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.helper.service.EXTRA_NUM_ADULT";
     public static String EXTRA_NUM_CHILDREN = "com.example.lkjhgf.helper.service.EXTRA_NUM_CHILDREN";
 
-    public MultiplePossibleConnection(Activity activity,
-                                      View view,
-                                      Intent intent,
-                                      NetworkProvider provider) {
+    public MultiplePossibleConnections(Activity activity,
+                                       View view,
+                                       Intent intent,
+                                       NetworkProvider provider) {
         super(activity, view, intent, provider);
 
         numTrip = intent.getIntExtra(MultipleTrip.EXTRA_NUM_TRIP, 1);
@@ -42,7 +42,7 @@ public class MultiplePossibleConnection extends PossibleConnections {
 
     @Override
     public void change_view_connection_detail(Trip trip) {
-        Intent newIntent = new Intent(context, ThirdView_DetailedView.class);
+        Intent newIntent = new Intent(context, DetailedView.class);
         newIntent.putExtra(EXTRA_NUM_TRIP, numTrip);
         newIntent.putExtra(EXTRA_NUM_ADULT, numAdult);
         newIntent.putExtra(EXTRA_NUM_CHILDREN, numChildren);

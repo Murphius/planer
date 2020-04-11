@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTintMode="multiply"
-    tools:context=".main_menu.Settings">
+    tools:context=".activites.Settings">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -9,36 +9,36 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".trip.singleTrip.ThirdView_CloseUp"></activity>
+        <activity android:name=".activites.singleTrip.ThirdView_CloseUp"></activity>
         <activity
-            android:name=".trip.singleTrip.SecondView_AllPossibleConnections"
-            android:parentActivityName=".trip.singleTrip.StartView_Form" />
+            android:name=".activites.singleTrip.ShowAllPossibleConnections"
+            android:parentActivityName=".activites.singleTrip.UserForm" />
         <activity
-            android:name=".trip.singleTrip.StartView_Form"
-            android:parentActivityName=".main_menu.Main_activity" />
-        <activity android:name=".futureTrips.closeUp.CompleteCloseUp"
-            android:parentActivityName=".futureTrips.Complete"/>
-        <activity android:name=".futureTrips.closeUp.IncompleteCloseUp"
-            android:parentActivityName=".futureTrips.Incomplete"/>
-        <activity android:name=".trip.singleTrip.EditSingleTrip"/>
-        <activity android:name=".trip.multipleTrips.CopyMultipleTrip"/>
-        <activity android:name=".trip.multipleTrips.EditMultipleTrip"/>
-        <activity android:name=".trip.singleTrip.CopySingleTrip"/>
+            android:name=".activites.singleTrip.UserForm"
+            android:parentActivityName=".activites.MainMenu" />
+        <activity android:name=".activites.futureTrips.closeUp.Complete"
+            android:parentActivityName=".activites.futureTrips.Complete"/>
+        <activity android:name=".activites.futureTrips.closeUp.Incomplete"
+            android:parentActivityName=".activites.futureTrips.Incomplete"/>
+        <activity android:name=".activites.singleTrip.EditTrip"/>
+        <activity android:name=".activites.multipleTrips.CopyTrip"/>
+        <activity android:name=".activites.multipleTrips.EditTrip"/>
+        <activity android:name=".activites.singleTrip.CopyTrip"/>
         <activity
-            android:name=".main_menu.Informationpage"
-            android:parentActivityName=".main_menu.Main_activity" />
-        <activity android:name=".trip.multipleTrips.StartView_Form"
-            android:parentActivityName=".main_menu.Main_activity"/>
-        <activity android:name=".trip.multipleTrips.SecondView_AllPossibleConnections"
-            android:parentActivityName=".trip.multipleTrips.StartView_Form"/>
-        <activity android:name=".trip.multipleTrips.ThirdView_DetailedView"
-            android:parentActivityName=".trip.multipleTrips.SecondView_AllPossibleConnections"/>
-        <activity android:name=".futureTrips.Incomplete"
-            android:parentActivityName=".main_menu.Main_activity"/>
-        <activity android:name=".futureTrips.Complete"
-            android:parentActivityName=".main_menu.Main_activity"/>
-        <activity android:name=".main_menu.Settings" />
-        <activity android:name=".main_menu.Main_activity">
+            android:name=".activites.Informationpage"
+            android:parentActivityName=".activites.MainMenu" />
+        <activity android:name=".activites.multipleTrips.UserForm"
+            android:parentActivityName=".activites.MainMenu"/>
+        <activity android:name=".activites.multipleTrips.ShowAllPossibleConnections"
+            android:parentActivityName=".activites.multipleTrips.UserForm"/>
+        <activity android:name=".activites.multipleTrips.DetailedView"
+            android:parentActivityName=".activites.multipleTrips.ShowAllPossibleConnections"/>
+        <activity android:name=".activites.futureTrips.Incomplete"
+            android:parentActivityName=".activites.MainMenu"/>
+        <activity android:name=".activites.futureTrips.Complete"
+            android:parentActivityName=".activites.MainMenu"/>
+        <activity android:name=".activites.Settings" />
+        <activity android:name=".activites.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

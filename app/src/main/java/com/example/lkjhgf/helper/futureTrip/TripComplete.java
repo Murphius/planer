@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
-import com.example.lkjhgf.trip.multipleTrips.EditMultipleTrip;
-import com.example.lkjhgf.trip.singleTrip.CopySingleTrip;
-import com.example.lkjhgf.trip.singleTrip.EditSingleTrip;
-import com.example.lkjhgf.trip.singleTrip.StartView_Form;
+import com.example.lkjhgf.activites.singleTrip.UserForm;
 
 public class TripComplete extends MyTrip {
 
@@ -25,7 +22,7 @@ public class TripComplete extends MyTrip {
 
     private void setOnClickListener() {
         addTrip.setOnClickListener(v -> {
-            Intent newIntent = new Intent(activity, StartView_Form.class);
+            Intent newIntent = new Intent(activity, UserForm.class);
             super.startNextActivity(newIntent);
         });
 

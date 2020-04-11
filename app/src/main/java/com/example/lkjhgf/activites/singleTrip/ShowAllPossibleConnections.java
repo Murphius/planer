@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.singleTrip;
+package com.example.lkjhgf.activites.singleTrip;
 
 import android.app.Activity;
 
@@ -13,7 +13,21 @@ import com.example.lkjhgf.helper.service.SinglePossibleConnection;
 
 import de.schildbach.pte.VrrProvider;
 
-public class SecondView_AllPossibleConnections extends Activity {
+/**
+ * Planung einer einzelnen Fahrt <br/>
+ * Anzeigen aller möglichen Verbindungen
+ * <p>
+ *
+ * Vorbedingung: Der Nutzer hat das Formular ausgefüllt
+ * {@link  }<br/>
+ * Mittels Intent werden vom Provider (hier VRR-Provider) vorgeschlagene Fahrten,
+ * sowie die vom Nutzer im Formular gemachten Eingaben an diese Ansicht übergeben.
+ *
+ * <p>
+ * Die Ansicht wird in der Klasse {@link SinglePossibleConnection} gefüllt, sowie Klicks gehandhabt
+ */
+
+public class ShowAllPossibleConnections extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

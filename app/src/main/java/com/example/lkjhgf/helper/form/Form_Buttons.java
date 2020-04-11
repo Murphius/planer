@@ -12,7 +12,7 @@ import com.example.lkjhgf.Color.ButtonBootstrapBrandInvisible;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.main_menu.Settings;
+import com.example.lkjhgf.activites.Settings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

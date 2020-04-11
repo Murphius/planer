@@ -13,15 +13,13 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.Adapter.InterfaceAdapter;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.futureTrips.closeUp.CompleteCloseUp;
-import com.example.lkjhgf.futureTrips.closeUp.IncompleteCloseUp;
+import com.example.lkjhgf.activites.futureTrips.closeUp.Complete;
+import com.example.lkjhgf.activites.futureTrips.closeUp.Incomplete;
 import com.example.lkjhgf.futureTrips.recyclerView.OnItemClickListener;
 import com.example.lkjhgf.futureTrips.recyclerView.TripAdapter;
 import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
-import com.example.lkjhgf.trip.multipleTrips.CopyMultipleTrip;
-import com.example.lkjhgf.trip.multipleTrips.EditMultipleTrip;
-import com.example.lkjhgf.trip.singleTrip.CopySingleTrip;
-import com.example.lkjhgf.trip.singleTrip.EditSingleTrip;
+import com.example.lkjhgf.activites.singleTrip.CopyTrip;
+import com.example.lkjhgf.activites.singleTrip.EditTrip;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -112,9 +110,9 @@ public abstract class MyTrip {
 
         Intent newIntent;
         if (current.isComplete()){
-            newIntent = new Intent(activity.getApplicationContext(), CopySingleTrip.class);
+            newIntent = new Intent(activity.getApplicationContext(), CopyTrip.class);
         }else{
-            newIntent = new Intent(activity.getApplicationContext(), CopyMultipleTrip.class);
+            newIntent = new Intent(activity.getApplicationContext(), com.example.lkjhgf.activites.multipleTrips.CopyTrip.class);
             newIntent.putExtra(EXTRA_NUM_TRIP, position);
             newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
             newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumChildren());
@@ -138,9 +136,9 @@ public abstract class MyTrip {
         TripItem current = tripItems.get(position);
         Intent newIntent;
         if (tripItems.get(position).isComplete()) {
-            newIntent = new Intent(activity.getApplicationContext(), CompleteCloseUp.class);
+            newIntent = new Intent(activity.getApplicationContext(), Complete.class);
         } else {
-            newIntent = new Intent(activity.getApplicationContext(), IncompleteCloseUp.class);
+            newIntent = new Intent(activity.getApplicationContext(), Incomplete.class);
             newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
             newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumAdult());
         }
@@ -165,9 +163,9 @@ public abstract class MyTrip {
         adapter.notifyItemRemoved(position);
         Intent newIntent;
         if (current.isComplete()){
-            newIntent = new Intent(activity.getApplicationContext(), EditSingleTrip.class);
+            newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
         }else{
-            newIntent = new Intent(activity.getApplicationContext(), EditMultipleTrip.class);
+            newIntent = new Intent(activity.getApplicationContext(), com.example.lkjhgf.activites.multipleTrips.EditTrip.class);
             newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
             newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumChildren());
         }

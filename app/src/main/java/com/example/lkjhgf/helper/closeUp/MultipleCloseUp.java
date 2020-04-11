@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.futureTrips.Incomplete;
-import com.example.lkjhgf.helper.service.MultiplePossibleConnection;
+import com.example.lkjhgf.activites.futureTrips.Incomplete;
+import com.example.lkjhgf.helper.service.MultiplePossibleConnections;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -26,9 +26,9 @@ public class MultipleCloseUp extends CloseUp {
         super(activity, view, trip);
 
         Intent intent = activity.getIntent();
-        numTrip = intent.getIntExtra(MultiplePossibleConnection.EXTRA_NUM_TRIP, 1);
-        numAdult = intent.getIntExtra(MultiplePossibleConnection.EXTRA_NUM_ADULT, 0);
-        numChildren = intent.getIntExtra(MultiplePossibleConnection.EXTRA_NUM_CHILDREN, 0);
+        numTrip = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_TRIP, 1);
+        numAdult = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_ADULT, 0);
+        numChildren = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_CHILDREN, 0);
 
         String setText = numTrip + ". Fahrt \n Detaillierte Fahrt";
 

@@ -28,7 +28,7 @@ public abstract class PossibleConnections {
     boolean isArrivalTime;
     QueryTripsResult result;
 
-    public static String EXTRA_ITEM = "com.example.lkjhgf.helper.service.EXTRA_ITEM";
+    public static String EXTRA_TRIP = "com.example.lkjhgf.helper.service.EXTRA_ITEM";
 
 
     PossibleConnections(Activity activity, View view, Intent intent, NetworkProvider provider){
@@ -51,7 +51,7 @@ public abstract class PossibleConnections {
     public abstract void change_view_connection_detail(Trip trip);
 
     void change_view_connection_detail(Trip trip, Intent newIntent){
-        newIntent.putExtra(EXTRA_ITEM, trip);
+        newIntent.putExtra(EXTRA_TRIP, trip);
         activity.startActivity(newIntent);
     }
 

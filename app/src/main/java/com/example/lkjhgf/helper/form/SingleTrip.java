@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.closeUp.SingleCloseUp;
-import com.example.lkjhgf.trip.singleTrip.SecondView_AllPossibleConnections;
-import com.example.lkjhgf.main_menu.Settings;
-import com.example.lkjhgf.public_transport.QueryParameter;
-import com.example.lkjhgf.public_transport.QueryTask;
+import com.example.lkjhgf.activites.singleTrip.ShowAllPossibleConnections;
 
 import java.util.Calendar;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
-import de.schildbach.pte.dto.TripOptions;
 
 
 public class SingleTrip extends Form {
@@ -41,7 +36,7 @@ public class SingleTrip extends Form {
     }
 
     void changeViewToPossibleConnections(){
-        intent = new Intent(context, SecondView_AllPossibleConnections.class);
+        intent = new Intent(context, ShowAllPossibleConnections.class);
         super.changeViewToPossibleConnections();
     }
 

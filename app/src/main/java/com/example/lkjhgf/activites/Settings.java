@@ -1,11 +1,10 @@
-package com.example.lkjhgf.main_menu;
+package com.example.lkjhgf.activites;
 
 import android.app.Activity;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -18,6 +17,10 @@ import java.util.Set;
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Product;
 import de.schildbach.pte.dto.TripOptions;
+
+/**
+ * Die Einstellungen, welche bei der Verbindungssuche berücksichtigt werden sollen
+ */
 
 public class Settings extends Activity {
 
@@ -58,6 +61,11 @@ public class Settings extends Activity {
     public static final String FERRY = "com.example.lkjhf.ferry";
     public static final String GONDOLA = "com.example.lkjhf.gondola";
 
+    /**
+     * Wenn die Aktivität gestartet wird, werden zu erst die Variablen initaliisiert ({@link #init()}
+     * und anschließend die gespeicherten Einstellungen geladen sowie die Ansicht an diese
+     * angepasst, sowie die Erläuterungen ({@link #setOnClickListener()}) gesetzt.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +78,12 @@ public class Settings extends Activity {
         setOnClickListener();
     }
 
+    /**
+     * Wenn der Nutzer zurück klickt, kommt er in die vorherige Ansicht, zuvor werden jedoch die Einstellungen
+     * gespeichert <br/>
+     * @postconditions Die aktuellen Einstellungen werden gespeichert und dem Nutzer eine Meldung darüber angezeigt
+     * @see #saveData()
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -77,6 +91,11 @@ public class Settings extends Activity {
         saveData();
     }
 
+    /**
+     * Speichern der Einstellungen mittels shared Preferences <br/>
+     * Für jede einzelne Merkmalsausprägung wird der Wert hinterlegt, auch wenn an sich bei den
+     * RadioButtons nur 2 statt 3 nötig wären
+     */
     public void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SETTINGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -110,6 +129,13 @@ public class Settings extends Activity {
         Toast.makeText(this, "Einstellungen gespeichert", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Lädt die Einstellungen, welche mittels SharedPreferences gespeichert wurden
+     *
+     * Dabei wird für jed Einstellung eine Boolean Variable mit dem gespeicherten Wert belgt <br/>
+     * Die Standardwerte sind als Defaultwerte angegeben
+     * @param activity: die aufrufende Aktivität
+     */
     public static void loadData(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(SETTINGS, MODE_PRIVATE);
 
@@ -136,6 +162,12 @@ public class Settings extends Activity {
         gondolaB = sharedPreferences.getBoolean(GONDOLA, true);
     }
 
+    /**
+     * Füllt die Ansicht gemäß der gespeicherten Einstellungen <br/>
+     * @preconditions Die Checkboxen und RadioButtons sind standardmäßig wie in dem Layout hinterlegt
+     * gefüllt (für den Nutzer nicht sichtbar)
+     * @postconditions Die Checkboxen und RadioButtons sind wie gespeichert ausgewählt
+     */
     private void updateView() {
         barrierfree.setChecked(barrierfreeSettings);
         limitedBarrierfree.setChecked(limitedBarrierfreeSettings);
@@ -160,6 +192,11 @@ public class Settings extends Activity {
         gondola.setChecked(gondolaB);
     }
 
+
+    /**
+     * Initalisierung der Variablen <br/>
+     * ID < - > Variable
+     */
     private void init() {
         notBarrierfree = findViewById(R.id.radioButton1);
         barrierfree = findViewById(R.id.radioButton3);
@@ -184,6 +221,14 @@ public class Settings extends Activity {
         gondola = findViewById(R.id.checkBox9);
     }
 
+
+    /**
+     * Kreeiert aus den Nutzereingaben die Einstellungen für die Verbindungssuche
+     * <p>
+     * @return Ein Objekt der Klasse {@link TripOptions}, mit den berücksichtigten Verkehrsmitteln,
+     * der jeweiligen Optimierung, Gehgeschwindigkeit sowie Barrierefreiheit die der Nutzer angegeben
+     * hat.
+     */
     private static TripOptions tripOptions() {
 
         Set<Product> products = new LinkedHashSet<Product>();
@@ -244,34 +289,43 @@ public class Settings extends Activity {
         return new TripOptions(products, optimize, walkSpeed, accessibility, null);
     }
 
+    /**
+     * Lädt die aktuellen Einstellungen, und erzeugt für diese ein {@link TripOptions} Objekt.
+     * <p>
+     *     Lädt die aktuellen Einstellungen mittels {@link #loadData(Activity)}, und erzeugt
+     *     für diese anschließend ein {@link TripOptions} Objekt, welches zurückgegeben wird.
+     *     Die aktuellen Einstellungen werden außerdem in der statischen Variable tripOptions
+     *     gespeichert
+     * </p>
+     * @param activity
+     * @return
+     */
     public static TripOptions getTripOptions(Activity activity){
         loadData(activity);
         tripOptions = tripOptions();
         return tripOptions;
     }
 
+    /**
+     * Für die beiden Optionen 'bedingt barrierefrei' sowie 'barrierefrei' erhält der Nutzer eine
+     * Erläuterung, wenn er den jeweiligen Button / Text länger gedrückt hält
+     */
     private void setOnClickListener(){
-        limitedBarrierfree.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new AlertDialog.Builder(Settings.this).setTitle("Bedingt Barrierefrei")
-                        .setMessage("Es werden Niederflurfahrzeuge ohne Einstiegshilfe berücksichtigt, sowie bei dem Benutzen von Bahnhöfen " +
-                                "werden zusätzlich kurze Treppenabsätze sowie Rolltreppen berücksichtigt.")
-                        .setNegativeButton(R.string.ok,null)
-                        .show();
-                return false;
-            }
+        limitedBarrierfree.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(Settings.this).setTitle("Bedingt Barrierefrei")
+                    .setMessage("Es werden Niederflurfahrzeuge ohne Einstiegshilfe berücksichtigt, sowie bei dem Benutzen von Bahnhöfen " +
+                            "werden zusätzlich kurze Treppenabsätze sowie Rolltreppen berücksichtigt.")
+                    .setNegativeButton(R.string.ok,null)
+                    .show();
+            return false;
         });
-        barrierfree.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new AlertDialog.Builder(Settings.this).setTitle("Barrierefrei")
-                        .setMessage("Mit dieser Option werden nur voll barrierefrei zugänglichen Fahrzeugen (mit Rampe oder andere Einstiegshilfe) berücksichtigt, sowie " +
-                                "nur Aufzüge, ebenerdige Wege und Rampen beim Umstieg in Bahnhöfen berücksichtigt.")
-                        .setNegativeButton(R.string.ok,null)
-                        .show();
-                return false;
-            }
+        barrierfree.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(Settings.this).setTitle("Barrierefrei")
+                    .setMessage("Mit dieser Option werden nur voll barrierefrei zugänglichen Fahrzeugen (mit Rampe oder andere Einstiegshilfe) berücksichtigt, sowie " +
+                            "nur Aufzüge, ebenerdige Wege und Rampen beim Umstieg in Bahnhöfen berücksichtigt.")
+                    .setNegativeButton(R.string.ok,null)
+                    .show();
+            return false;
         });
     }
 

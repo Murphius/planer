@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.singleTrip;
+package com.example.lkjhgf.activites.singleTrip;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ public class ThirdView_CloseUp extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_view_detail);
 
-        Trip trip = (Trip) getIntent().getSerializableExtra(SinglePossibleConnection.EXTRA_ITEM);
+        Trip trip = (Trip) getIntent().getSerializableExtra(SinglePossibleConnection.EXTRA_TRIP);
 
         new SingleCloseUp(this, findViewById(R.id.constraintLayout2), trip);
     }

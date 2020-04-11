@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.futureTrips.Complete;
-import com.example.lkjhgf.futureTrips.Incomplete;
+import com.example.lkjhgf.activites.futureTrips.Incomplete;
 
 import de.schildbach.pte.dto.Trip;
 

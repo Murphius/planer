@@ -1,4 +1,4 @@
-package com.example.lkjhgf.main_menu;
+package com.example.lkjhgf.activites;
 
 import android.app.Activity;
 

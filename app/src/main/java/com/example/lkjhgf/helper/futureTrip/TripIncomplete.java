@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.futureTrips.Complete;
+import com.example.lkjhgf.activites.futureTrips.Complete;
 import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
 import com.example.lkjhgf.helper.closeUp.MultipleCloseUp;
-import com.example.lkjhgf.trip.multipleTrips.CopyMultipleTrip;
-import com.example.lkjhgf.trip.multipleTrips.StartView_Form;
+import com.example.lkjhgf.activites.multipleTrips.CopyTrip;
+import com.example.lkjhgf.activites.multipleTrips.UserForm;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class TripIncomplete extends MyTrip {
 
     void myOnCopyClicked(int position) {
         //loadData();
-        Intent newIntent = new Intent(activity.getApplicationContext(), CopyMultipleTrip.class);
+        Intent newIntent = new Intent(activity.getApplicationContext(), CopyTrip.class);
         TripItem tripItem = tripItems.get(position);
         newIntent.putExtra(EXTRA_NUM_TRIP, numTrip);
         newIntent.putExtra(EXTRA_NUM_ADULT, tripItem.getNumAdult());
@@ -39,7 +39,7 @@ public class TripIncomplete extends MyTrip {
 
     private void setOnClickListener() {
         addTrip.setOnClickListener(v -> {
-            Intent newIntent = new Intent(activity, StartView_Form.class);
+            Intent newIntent = new Intent(activity, UserForm.class);
             newIntent.putExtra(EXTRA_NUM_TRIP, numTrip + 1);
             startNextActivity(newIntent);
         });

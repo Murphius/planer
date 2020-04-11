@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.singleTrip;
+package com.example.lkjhgf.activites.singleTrip;
 
 import android.app.Activity;
 
@@ -12,7 +12,16 @@ import com.example.lkjhgf.R;
 
 import de.schildbach.pte.VrrProvider;
 
-public class StartView_Form extends Activity {
+/**
+ * Planung einer einzelnen Fahrt <br/>
+ * Ansicht eines Formulars, dass der Nutzer ausfüllen muss <br/>
+ * Dabei muss der Nutzer Angaben zu seiner geplanten Fahrt machen (Datum, Uhrzeit, Start-, [Zwischenhalt], Zielpunkt) <br/>
+ * <p>
+ * Das Managen dieser Ansicht erfolgt in der Klasse Form
+ * {@link SingleTrip}
+ */
+
+public class UserForm extends Activity {
 
     Form form;
 
