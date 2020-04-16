@@ -5,6 +5,9 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 
+/**
+ * Enthält alle Textfelder der Komponenten einer Fahrt
+ */
 class TextViewClass {
     TextView time_of_departure_view, start_view, start_platform_view;
     TextView number_view, destination_of_number_view;
@@ -12,6 +15,13 @@ class TextViewClass {
     TextView delay_departure, delay_arrival;
     TextView ticketView, useTicket;
 
+    /**
+     * Initialisierung der Variablen <br/>
+     *
+     * @param view - zugehöriges Layout
+     *
+     *             Zuordunung Variable - ID
+     */
     TextViewClass(View view) {
         time_of_departure_view = view.findViewById(R.id.textView5);
         start_view = view.findViewById(R.id.textView57);

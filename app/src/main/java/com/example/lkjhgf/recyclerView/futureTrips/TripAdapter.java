@@ -40,8 +40,6 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
 
     /**
      * Erzeugt neuen View
-     * @param parent
-     * @param viewType
      * @return neue Ansicht
      */
     @NonNull

@@ -9,12 +9,28 @@ import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.detailedView.OnItemClickListener;
 
- class ButtonClass {
+/**
+ * Enthält alle Buttons eines einzelnen Fahrtabschnitts
+ */
+class ButtonClass {
 
     BootstrapButton stopoverLocationsShow;
     BootstrapButton showOnMap;
 
-    ButtonClass(DetailedConnectionViewHolder detailedConnectionViewHolder, View view, OnItemClickListener onItemClickListener){
+    /**
+     * Initalisierung der Variablen <br/>
+     *
+     * @param detailedConnectionViewHolder - Zugeordnete Ansicht
+     * @param view                         - Layout in dem gesucht wird
+     * @param onItemClickListener          - Interface, dessen Funktionen beim Klick aufgerufen werden sollen
+     *                                     <br/>
+     *                                     <p>
+     *                                     Zuoordnung Variable - ID <br/>
+     *                                     Button Design
+     *                                     OnClickListener setzen in {@link #setOnClickListener(DetailedConnectionViewHolder, OnItemClickListener)}
+     *                                     </p>
+     */
+    ButtonClass(DetailedConnectionViewHolder detailedConnectionViewHolder, View view, OnItemClickListener onItemClickListener) {
         stopoverLocationsShow = view.findViewById(R.id.BootstrapButton29);
         stopoverLocationsShow.setBootstrapSize(1.5f);
         stopoverLocationsShow.setBootstrapBrand(new ButtonBootstrapBrandVisible());
@@ -25,11 +41,16 @@ import com.example.lkjhgf.recyclerView.detailedView.OnItemClickListener;
         setOnClickListener(detailedConnectionViewHolder, onItemClickListener);
     }
 
-    private void setOnClickListener(DetailedConnectionViewHolder viewHolder,OnItemClickListener listener){
+    /**
+     * OnClickListener für die zwei Buttons
+     * @param viewHolder -> für die Position des geklickten Elements
+     * @param listener ->  stellt Funktionen zur Verfügung
+     */
+    private void setOnClickListener(DetailedConnectionViewHolder viewHolder, OnItemClickListener listener) {
         showOnMap.setOnClickListener(v -> {
-            if(listener != null){
+            if (listener != null) {
                 int position = viewHolder.getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     listener.onShowDetails(position);
                 }
             }
