@@ -10,10 +10,10 @@ import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.trip.secondView_service.Connection_item;
 import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_privateItem;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_publicItem;
-import com.example.lkjhgf.trip.thirdView_DetailedView.components.Stopover_item;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_item;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
+import com.example.lkjhgf.recyclerView.detailedView.components.Stopover_item;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -142,9 +142,9 @@ public final class Utils {
         return connection_items;
     }
 
-    public static ArrayList<Journey_item> journeyItems(List<Trip.Leg> legs){
+    public static ArrayList<Journey_item> journeyItems(List<Trip.Leg> legs) {
         ArrayList<Journey_item> journeyItems = new ArrayList<>();
-        for(Trip.Leg leg : legs){
+        for (Trip.Leg leg : legs) {
             if (leg instanceof Trip.Public) {
                 journeyItems.add(publicItems((Trip.Public) leg));
             } else {
@@ -154,17 +154,17 @@ public final class Utils {
         return journeyItems;
     }
 
-    public static ArrayList<CloseUp_item> fillDetailedConnectonList(List<Trip.Leg> legs) {
-        ArrayList<CloseUp_item> items = new ArrayList<>();
+    public static ArrayList<CloseUpItem> fillDetailedConnectonList(List<Trip.Leg> legs) {
+        ArrayList<CloseUpItem> items = new ArrayList<>();
         if (legs == null) {
             return items;
         }
 
         for (Trip.Leg leg : legs) {
             if (leg instanceof Trip.Public) {
-                items.add(new CloseUp_publicItem((Trip.Public) leg));
+                items.add(new CloseUpPublicItem((Trip.Public) leg));
             } else {
-                items.add(new CloseUp_privateItem((Trip.Individual) leg));
+                items.add(new CloseUpPrivateItem((Trip.Individual) leg));
             }
         }
 
@@ -288,5 +288,13 @@ public final class Utils {
             }
         }
         return "?";
+    }
+
+    public static String setNumChanges(Trip trip) {
+        if (trip.getNumChanges() != null) {
+            return trip.getNumChanges() + "x";
+        } else {
+            return "";
+        }
     }
 }

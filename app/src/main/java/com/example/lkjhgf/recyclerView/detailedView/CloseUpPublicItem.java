@@ -1,36 +1,49 @@
-package com.example.lkjhgf.trip.thirdView_DetailedView;
+package com.example.lkjhgf.recyclerView.detailedView;
 
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.thirdView_DetailedView.components.Stopover_item;
+import com.example.lkjhgf.recyclerView.detailedView.components.Stopover_item;
 
 import java.util.ArrayList;
 
 import de.schildbach.pte.dto.Trip;
 
-public class CloseUp_publicItem extends CloseUp_item {
+/**
+ * Ein Abschnitt in dem der ÖPNV genutzt wird
+ */
+public class CloseUpPublicItem extends CloseUpItem {
 
     private int delayDeparture, delayArrival;
     private ArrayList<Stopover_item> stopoverItems;
     private String number, destination_of_number;
 
-
     private  String departure_platform, destination_platform;
 
-    public CloseUp_publicItem(Trip.Public publicTrip){
+    /**
+     * Aufruf des Konstruktors der Oberklasse <br/>
+     * Festlegen von Icon, Gleisen, Linienname, Linienziel und Zwischenhalten
+     * @param publicTrip enthält alle Informationen zum Streckenabschnitt
+     */
+    public CloseUpPublicItem(Trip.Public publicTrip){
         super(publicTrip);
 
+        //Gleise
         departure_platform = Utils.platform(publicTrip.departureStop, false);
         destination_platform = Utils.platform(publicTrip.arrivalStop, true);
 
+        //Linienname
         number = publicTrip.line.label;
+        //Endhaltestelle der Linie
         if(publicTrip.destination != null){
             destination_of_number = Utils.setLocationName(publicTrip.destination);
         }
+        // Icon
         image_resource = Utils.iconPublic(publicTrip.line.product);
 
+        // Verspätungen
         delayDeparture = Utils.longToMinutes(publicTrip.getDepartureDelay());
         delayArrival = Utils.longToMinutes(publicTrip.getArrivalDelay());
 
+        //Zwischenhalte
         stopoverItems = Utils.createStopoverList(publicTrip);
     }
 
@@ -43,7 +56,7 @@ public class CloseUp_publicItem extends CloseUp_item {
     public String getNumber(){
         return number;
     }
-    public String getDestination_of_number() {
+    public String getDestinationOfNumber() {
         return destination_of_number;
     }
     public String getDeparturePlatform(){

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.activites.futureTrips.Complete;
-import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.closeUp.MultipleCloseUp;
 import com.example.lkjhgf.activites.multipleTrips.CopyTrip;
 import com.example.lkjhgf.activites.multipleTrips.UserForm;

@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.thirdView_DetailedView.components;
+package com.example.lkjhgf.recyclerView.detailedView.components;
 
 public class Stopover_item {
     private String timeOfDeparture;

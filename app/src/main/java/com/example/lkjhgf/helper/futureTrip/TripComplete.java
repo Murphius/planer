@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activites.singleTrip.UserForm;
 
 public class TripComplete extends MyTrip {

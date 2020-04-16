@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_adapter;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_publicItem;
-import com.example.lkjhgf.trip.thirdView_DetailedView.CloseUp_item;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpAdapter;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
+import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 
 import java.util.ArrayList;
 
-class CloseUpRecyclerView {
+public class CloseUpRecyclerView {
 
-    private CloseUp_adapter adapter;
+    private CloseUpAdapter adapter;
 
-    private ArrayList<CloseUp_item> items;
+    private ArrayList<CloseUpItem> items;
 
     CloseUpRecyclerView(Activity activity, View view, CloseUp closeUp) {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
@@ -28,24 +28,20 @@ class CloseUpRecyclerView {
 
         items = Utils.fillDetailedConnectonList(closeUp.trip.legs);
 
-        adapter = new CloseUp_adapter(items, activity);
+        adapter = new CloseUpAdapter(items, activity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new CloseUp_adapter.OnItemClickListener() {
-            @Override
-            public void onShowDetails(int position) {
-                if (items.get(position) instanceof CloseUp_publicItem) {
-                    System.out.println("Hier eigentlich nicht -------------------------------------------");
-                    items.get(position).setShowDetails();
-                    adapter.notifyDataSetChanged();
-                } else {
-                    items.get(position).setShowDetails();
-                    adapter.notifyDataSetChanged();
-                    activity.recreate();
-                }
-
-
+        adapter.setOnItemClickListener(position -> {
+            if (items.get(position) instanceof CloseUpPublicItem) {
+                items.get(position).setShowDetails();
+                adapter.notifyDataSetChanged();
+            } else {
+                items.get(position).setShowDetails();
+                adapter.notifyDataSetChanged();
+                activity.recreate();
             }
+
+
         });
         recyclerView.setFocusable(false);
     }

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.futureTrips.recyclerView.TripItem;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
 import com.example.lkjhgf.activites.MainMenu;
 

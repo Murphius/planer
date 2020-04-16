@@ -1,4 +1,4 @@
-package com.example.lkjhgf.trip.thirdView_DetailedView.components;
+package com.example.lkjhgf.recyclerView.detailedView.components;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;

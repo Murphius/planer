@@ -1,6 +1,5 @@
-package com.example.lkjhgf.futureTrips.recyclerView;
+package com.example.lkjhgf.recyclerView.futureTrips.util;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
@@ -10,7 +9,10 @@ import com.example.lkjhgf.helper.Utils;
 
 import de.schildbach.pte.dto.Trip;
 
-class TextViewClass {
+/**
+ * Enthält alle Textfelder der Ansicht für eine geplante Fahrt
+ */
+public class TextViewClass {
 
     private TextView userDate;
     private TextView timeOfDeparture, timeOfArrival;
@@ -19,15 +21,26 @@ class TextViewClass {
     private TextView startLocation, destinationLocation;
     private TextView numChanges;
     private TextView preisstufe;
-    View line;
-    TextView numAdult, userNumAdult;
-    TextView numChildren, userNumChildren;
+    //einezelne horizontale Linie, unsichtbar wenn Personenanzahl unsichtbar ist
+    public View line;
+    public TextView numAdult, userNumAdult;
+    public TextView numChildren, userNumChildren;
 
-    TextViewClass(View view){
+    /**
+     * Initialisierung der Varibalen in der Funktion {@link #findTextView(View)}
+     *
+     * @param view In welcher Ansicht gesucht werden soll
+     */
+    TextViewClass(View view) {
         findTextView(view);
     }
 
-    private void findTextView(View view){
+    /**
+     * Zuordnung Variable - ID
+     *
+     * @param view - In welcher Ansicht gesucht werden soll
+     */
+    private void findTextView(View view) {
         userDate = view.findViewById(R.id.textView17);
         timeOfDeparture = view.findViewById(R.id.textView19);
         timeOfArrival = view.findViewById(R.id.textView22);
@@ -52,41 +65,49 @@ class TextViewClass {
         line = view.findViewById(R.id.view6);
     }
 
-
-    void fillTextView(Trip trip, Resources resources){
+    /**
+     * Füllt die Textfelder mit den Informationen aus dem Trip <br/>
+     *
+     * @param trip      - Alle Informationen zur Reise
+     * @param resources - Benötigt, um die Textfarbe zu ändern
+     */
+    public void fillTextView(Trip trip, Resources resources) {
+        // Datum, Ankunfts, Abfahrtszeit
         userDate.setText(Utils.setDate(trip.getFirstDepartureTime()));
         timeOfDeparture.setText(Utils.setTime(trip.getFirstDepartureTime()));
         timeOfArrival.setText(Utils.setTime(trip.getLastArrivalTime()));
 
+        // Verspätung bei der Abfahrt
         int delay = 0;
-        if(trip.getFirstPublicLeg() != null){
-            if(trip.getFirstPublicLeg().getDepartureDelay() != null){
+        if (trip.getFirstPublicLeg() != null) {
+            if (trip.getFirstPublicLeg().getDepartureDelay() != null) {
                 delay = Utils.longToMinutes(trip.getFirstPublicLeg().getDepartureDelay());
             }
         }
         Utils.setDelayView(delayDeparture, delay, resources);
 
+        // Verspätung bei der Ankunft
         delay = 0;
-        if(trip.getLastPublicLeg() != null){
-            if(trip.getLastPublicLeg().getArrivalDelay() != null){
+        if (trip.getLastPublicLeg() != null) {
+            if (trip.getLastPublicLeg().getArrivalDelay() != null) {
                 delay = Utils.longToMinutes(trip.getLastPublicLeg().getArrivalDelay());
             }
         }
         Utils.setDelayView(delayArrival, delay, resources);
 
+        // Dauer der Fahrt
         long durationHour = Utils.durationToHour(trip.getDuration());
         long durationMinute = Utils.durationToMinutes(trip.getDuration());
         duration.setText(Utils.durationString(durationHour, durationMinute));
 
-        if(trip.getNumChanges() != null){
-            String text = trip.getNumChanges() + "x";
-            numChanges.setText(text);
-        }
+        //Umstiege
+        numChanges.setText(Utils.setNumChanges(trip));
 
+        // Preisstufe
         preisstufe.setText(trip.fares.get(0).units);
 
+        // Start- und Zielpunkt
         startLocation.setText(Utils.setLocationName(trip.from));
         destinationLocation.setText(Utils.setLocationName(trip.to));
     }
-
 }
