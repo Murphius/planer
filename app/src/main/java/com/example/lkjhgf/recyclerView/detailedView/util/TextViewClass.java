@@ -16,11 +16,11 @@ class TextViewClass {
     TextView ticketView, useTicket;
 
     /**
-     * Initialisierung der Variablen <br/>
+     * Initialisierung der Attribute <br/>
      *
      * @param view - zugehöriges Layout
      *
-     *             Zuordunung Variable - ID
+     *             Zuordunung Attribut - ID
      */
     TextViewClass(View view) {
         time_of_departure_view = view.findViewById(R.id.textView5);

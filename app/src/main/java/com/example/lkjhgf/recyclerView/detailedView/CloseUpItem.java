@@ -69,9 +69,9 @@ public abstract class CloseUpItem {
     }
 
     /**
-     * Wenn der Nutzer auf den Details anzeigen / verbergen Button klickt, wird die Variable
+     * Wenn der Nutzer auf den Details anzeigen / verbergen Button klickt, wird das Attribut
      * immer auf das Gegenteil gesetzt <br/>
-     * verbergen -> anzeigen bzw anzeigen -> verbergen
+     * verbergen -> anzeigen bzw. anzeigen -> verbergen
      */
     public void setShowDetails() {
         showDetails = !showDetails;

@@ -46,11 +46,11 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionViewHolder
 
     /**
      * Füllt das Layout mit den Informationen des Elements an der entsprechenden Position <br/>
-     *
+     * <p>
      * Füllen der Ansicht erfolgt in {@link ConnectionViewHolder#fillView(ConnectionItem)}
-     * @param holder gibt an, welches Layout gefüllt werden soll
-     * @param position gibt an, welches Element genutzt werden soll, um die Ansicht zu füllen
      *
+     * @param holder   gibt an, welches Layout gefüllt werden soll
+     * @param position gibt an, welches Element genutzt werden soll, um die Ansicht zu füllen
      */
     @Override
     public void onBindViewHolder(ConnectionViewHolder holder, int position) {

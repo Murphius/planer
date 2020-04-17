@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 /**
  * Adapter für die detaillierte Ansicht eines einzelnen Fahrtabschnitts <br/>
+ * Adapter für die detaillierte Ansicht eines einzelnen Fahrtabschnitts <br/>
  * Verbindung zwischen Ansicht und CloseUpItem (Trip)
  */
 public class CloseUpAdapter extends RecyclerView.Adapter<DetailedConnectionViewHolder> {

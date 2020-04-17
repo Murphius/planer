@@ -21,9 +21,9 @@ class DetailViewHolder extends RecyclerView.ViewHolder {
    Resources resources;
 
     /**
-     * Initalisierung der Variablen <br/>
+     * Initalisierung der Attribute <br/>
      *
-     * Zuordnung Variable - ID
+     * Zuordnung Attribut - ID
      * @param itemView - Layout, in welchem nach den IDs gesucht werden soll
      */
     DetailViewHolder(View itemView) {

@@ -18,17 +18,18 @@ class ButtonClass {
     BootstrapButton showOnMap;
 
     /**
-     * Initalisierung der Variablen <br/>
+     * Initalisierung der Attribute <br/>
+     *
+     * <p>
+     * Zuoordnung Attribute - ID <br/>
+     * Button Design
+     * OnClickListener setzen in {@link #setOnClickListener(DetailedConnectionViewHolder, OnItemClickListener)}
+     * </p>
      *
      * @param detailedConnectionViewHolder - Zugeordnete Ansicht
      * @param view                         - Layout in dem gesucht wird
      * @param onItemClickListener          - Interface, dessen Funktionen beim Klick aufgerufen werden sollen
      *                                     <br/>
-     *                                     <p>
-     *                                     Zuoordnung Variable - ID <br/>
-     *                                     Button Design
-     *                                     OnClickListener setzen in {@link #setOnClickListener(DetailedConnectionViewHolder, OnItemClickListener)}
-     *                                     </p>
      */
     ButtonClass(DetailedConnectionViewHolder detailedConnectionViewHolder, View view, OnItemClickListener onItemClickListener) {
         stopoverLocationsShow = view.findViewById(R.id.BootstrapButton29);
@@ -43,8 +44,9 @@ class ButtonClass {
 
     /**
      * OnClickListener für die zwei Buttons
+     *
      * @param viewHolder -> für die Position des geklickten Elements
-     * @param listener ->  stellt Funktionen zur Verfügung
+     * @param listener   ->  stellt Funktionen zur Verfügung
      */
     private void setOnClickListener(DetailedConnectionViewHolder viewHolder, OnItemClickListener listener) {
         showOnMap.setOnClickListener(v -> {

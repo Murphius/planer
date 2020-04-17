@@ -36,7 +36,7 @@ public class TextViewClass {
     }
 
     /**
-     * Zuordnung Variable - ID
+     * Zuordnung Attribut - ID
      *
      * @param view - In welcher Ansicht gesucht werden soll
      */

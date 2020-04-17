@@ -31,7 +31,7 @@ class ButtonClass {
     }
 
     /**
-     * Zuoordnung Variablen - ID, sowie Anpassung des Layouts in {@link #designButtons()}<br/>
+     * Zuoordnung Attribute - ID, sowie Anpassung des Layouts in {@link #designButtons()}<br/>
      *
      * @param view
      */

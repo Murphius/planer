@@ -16,12 +16,12 @@ public class Stopover_item {
         this.delay = delay;
     }
 
-    public String getTimeOfDeparture(){
+    String getTimeOfDeparture(){
         return timeOfDeparture;
     }
-    public String getNameOfStop(){
+    String getNameOfStop(){
         return nameOfStop;
     }
-    public int getDelay(){return delay;}
+    int getDelay(){return delay;}
 
 }

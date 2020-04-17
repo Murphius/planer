@@ -20,8 +20,8 @@ class JourneyViewHolder extends RecyclerView.ViewHolder {
     private TextView timeOrLine;
 
     /**
-     * Initalisierung der Variablen <br/>
-     * Zuordnung Variable - ID
+     * Initalisierung der Attribute <br/>
+     * Zuordnung Attribut - ID
      * @param itemView in welchem Layout nach den IDs gesucht werden soll
      */
     JourneyViewHolder(View itemView) {
