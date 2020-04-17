@@ -198,7 +198,7 @@ public final class Utils {
         if (stops != null) {
             for (Stop stop : stops) {
                 //TODO für den ersten Zwischenhalt prüfen
-                int delay = 0;
+                int delay;
                 if (stop.getDepartureDelay() != null) {
                     delay = longToMinutes(stop.getDepartureDelay());
                     stopoverItems.add(new Stopover_item(setTime(stop.plannedDepartureTime),

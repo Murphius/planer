@@ -4,6 +4,11 @@ import android.content.Context;
 
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 
+/**
+ * Färbt einen BootstrapButton weiß (inklusive Rand) mit dunkelblauer Schrift
+ * <br/>
+ * Bei einem Klick bleiben die Farben gleich
+ */
 public class ButtonBootstrapBrandInvisible implements BootstrapBrand {
     @Override
     public int defaultFill(Context context) {
