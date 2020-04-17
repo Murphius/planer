@@ -1,4 +1,4 @@
-package com.example.lkjhgf.Adapter;
+package com.example.lkjhgf.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -19,10 +19,24 @@ import de.schildbach.pte.dto.Point;
 import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Zur Speicherung von geplanten Fahrten, müssen die {@link Trip.Leg} manuell serialisiert und
+ * deserialisert werden. Dies erfolgt in dieser Klasse. <br/>
+ * <p>
+ * Die statischen Attribute werden für das serialisieren / deserialisieren genutzt, zur identifikation. <br/>
+ * <p>
+ * Wichtig ist es, die abstrakte Klasse, sowie die erbenden Klassen hinzuzufügen. <br/>
+ * <p>
+ * Bei der Serialisierung ist die Klasse bekannt, beim Deserialisieren hingegen nicht, deshalb muss
+ * der Klassenname ebenfalls gespeichert werden, um das Objekt korrekt zu "rekonstruieren"
+ */
 public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
 
     private static String CLASSNAME = "CLASSNAME";
     private static String DATA = "DATA";
+
+    //Leg
+    private static String EXTRA_PATH = "com.example.lkjhgf.EXTRA_PATH";
 
     //Public Transport
     private static String EXTRA_LINE = "com.example.lkjhgf.EXTRA_LINE";
@@ -30,7 +44,6 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static String EXTRA_DEPARTURE_STOP = "com.example.lkjhgf.EXTRA_DEPARTURE_STOP";
     private static String EXTRA_ARRIVAL_STOP = "com.example.lkjhgf.EXTRA_ARRIVAL_STOP";
     private static String EXTRA_INTERMEDIATE_STOPS = "com.example.lkjhgf.EXTRA_INTERMEDIATE_STOPS";
-    private static String EXTRA_PATH = "com.example.lkjhgf.EXTRA_PATH";
     private static String EXTRA_MESSAGE = "com.example.lkjhgf.EXTRA_MESSAGE";
 
     //Individual
@@ -41,16 +54,15 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static final String EXTRA_ARRIVAL_TIME = "com.example.lkjhgf.EXTRA_ARRIVAL_TIME";
     private static final String EXTRA_DISTANCE = "com.example.lkjhgf.EXTRA_DISTANCE";
 
-    /****** Helper method to get the className of the object to be deserialized *****/
-    public Class getObjectClass(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            //e.printStackTrace();
-            throw new JsonParseException(e.getMessage());
-        }
-    }
-
+    /**
+     * Deserialisierung eines JsonElements
+     *
+     * @param json    Element, dass deserialisiert werden soll
+     * @param context zum deserialisieren benötigt
+     * @return Abhängig von der Klasse des jsonElements, entweder ein rekonstruiertes {@link Trip.Public}
+     * oder {@link Trip.Individual} Objekt.
+     * @throws JsonParseException Fehler beim Parsen
+     */
     @Override
     public Object deserialize(JsonElement json,
                               java.lang.reflect.Type typeOfT,
@@ -58,18 +70,32 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
         JsonObject jsonObject = json.getAsJsonObject();
         String className = jsonObject.get(CLASSNAME).getAsString();
 
-        if (className.equals(Trip.Public.class.getName())) {
+        if (className.equals(Trip.Public.class.getName())) { // Erzeugen eines neuen Trip.Public Objekts
             Line line = context.deserialize(jsonObject.get(EXTRA_LINE), Line.class);
-            Location destination = context.deserialize(jsonObject.get(EXTRA_DESTINATION), Location.class);
-            Stop departureStop = context.deserialize(jsonObject.get(EXTRA_DEPARTURE_STOP), Stop.class);
+            Location destination = context.deserialize(jsonObject.get(EXTRA_DESTINATION),
+                    Location.class);
+            Stop departureStop = context.deserialize(jsonObject.get(EXTRA_DEPARTURE_STOP),
+                    Stop.class);
             Stop arrivalStop = context.deserialize(jsonObject.get(EXTRA_ARRIVAL_STOP), Stop.class);
-            Type intermediateStopType =  new TypeToken<List<Stop>>() {}.getType();
-            List<Stop> intermediateStops = context.deserialize(jsonObject.get(EXTRA_INTERMEDIATE_STOPS), intermediateStopType);
-            Type listType = new TypeToken<List<Point>>() {}.getType();
+            // Deserialisierung der Zwischenhalte-Liste
+            Type intermediateStopType = new TypeToken<List<Stop>>() {
+            }.getType();
+            List<Stop> intermediateStops = context.deserialize(jsonObject.get(
+                    EXTRA_INTERMEDIATE_STOPS), intermediateStopType);
+            // Deserialisierung der GPS-Koordinaten-Liste
+            Type listType = new TypeToken<List<Point>>() {
+            }.getType();
             List<Point> path = context.deserialize(jsonObject.get(EXTRA_PATH), listType);
+
             String message = context.deserialize(jsonObject.get(EXTRA_MESSAGE), String.class);
-            return new Trip.Public(line, destination, departureStop, arrivalStop, intermediateStops, path, message);
-        }else if (className.equals(Trip.Individual.class.getName())){
+            return new Trip.Public(line,
+                    destination,
+                    departureStop,
+                    arrivalStop,
+                    intermediateStops,
+                    path,
+                    message);
+        } else if (className.equals(Trip.Individual.class.getName())) { // Erzeugen eines neuen Trip.Individual Objekts
             Trip.Individual.Type type = context.deserialize(jsonObject.get(EXTRA_TYPE),
                     Trip.Individual.Type.class);
             Location departure = context.deserialize(jsonObject.get(EXTRA_DEPARTURE),
@@ -78,8 +104,11 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                     Date.class);
             Location arrival = context.deserialize(jsonObject.get(EXTRA_ARRIVAL), Location.class);
             Date arrivalTime = context.deserialize(jsonObject.get(EXTRA_ARRIVAL_TIME), Date.class);
-            Type listType = new TypeToken<List<Point>>() {}.getType();
+            //Deserialisierung der GPS-Koordinaten-Liste
+            Type listType = new TypeToken<List<Point>>() {
+            }.getType();
             List<Point> path = context.deserialize(jsonObject.get(EXTRA_PATH), listType);
+
             int distance = context.deserialize(jsonObject.get(EXTRA_DISTANCE), Integer.class);
             return new Trip.Individual(type,
                     departure,
@@ -92,14 +121,25 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
         return null;
     }
 
+    /**
+     * Serialisierung des Objekts, mit manueller serialisierung für die Klassen Trip.Public und
+     * Trip.Individual <br/>
+     * <p>
+     * Serialisiert die einzelnen Attribute der Klassen mit "Speicheradressen"
+     *
+     * @param src      Objekt das serialisiert wird
+     * @param context, zum Serialisieren benötigt
+     * @return das Objekt serialisiert als JsonObject
+     */
     @Override
     public JsonElement serialize(Object src,
                                  java.lang.reflect.Type typeOfSrc,
                                  JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
+        //Klassenname serialisieren
         jsonObject.addProperty(CLASSNAME, src.getClass().getName());
-        if(src instanceof Trip.Leg){
-            if (src instanceof Trip.Public) {
+        if (src instanceof Trip.Leg) {
+            if (src instanceof Trip.Public) { // Serialisierung von Trip.Public
                 Trip.Public publicTrip = (Trip.Public) src;
                 jsonObject.add(EXTRA_LINE, context.serialize(publicTrip.line));
                 jsonObject.add(EXTRA_DESTINATION, context.serialize(publicTrip.destination));
@@ -109,17 +149,18 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                         context.serialize(publicTrip.intermediateStops));
                 jsonObject.add(EXTRA_PATH, context.serialize(publicTrip.path));
                 jsonObject.add(EXTRA_MESSAGE, context.serialize(publicTrip.message));
-            }else if (src instanceof Trip.Individual){
+            } else if (src instanceof Trip.Individual) { // Serialisierung von Trip.Individual
                 Trip.Individual individualTrip = (Trip.Individual) src;
-                jsonObject.add(EXTRA_TYPE,context.serialize(individualTrip.type));
-                jsonObject.add(EXTRA_DEPARTURE,context.serialize(individualTrip.departure));
-                jsonObject.add(EXTRA_DEPARTURE_TIME, context.serialize(individualTrip.departureTime));
-                jsonObject.add(EXTRA_ARRIVAL,context.serialize(individualTrip.arrival));
+                jsonObject.add(EXTRA_TYPE, context.serialize(individualTrip.type));
+                jsonObject.add(EXTRA_DEPARTURE, context.serialize(individualTrip.departure));
+                jsonObject.add(EXTRA_DEPARTURE_TIME,
+                        context.serialize(individualTrip.departureTime));
+                jsonObject.add(EXTRA_ARRIVAL, context.serialize(individualTrip.arrival));
                 jsonObject.add(EXTRA_ARRIVAL_TIME, context.serialize(individualTrip.arrivalTime));
                 jsonObject.add(EXTRA_PATH, context.serialize(individualTrip.path));
                 jsonObject.add(EXTRA_DISTANCE, context.serialize(individualTrip.distance));
-        }
-        }else{
+            }
+        } else {
             JsonElement element = context.serialize(src);
             jsonObject.add(DATA, element);
         }

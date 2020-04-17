@@ -1,28 +1,29 @@
-package com.example.lkjhgf.Color;
+package com.example.lkjhgf.color;
 
 import android.content.Context;
 
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 
 /**
- * Färbt einen BootstrapButton weiß (inklusive Rand) mit dunkelblauer Schrift
+ * Färbt den BootstrapButton in blaugrau -> für ein einheitliches Farbschema
  * <br/>
- * Bei einem Klick bleiben die Farben gleich
+ * Rand gleich gefärbt, Schrift in weiß <br/>
+ * Klickt der Nutzer einen Button wird dieser etwas dunkler eingefärbt, um den Klick zu kennzeichnen
  */
-public class ButtonBootstrapBrandInvisible implements BootstrapBrand {
+public class ButtonBootstrapBrandVisible implements BootstrapBrand {
     @Override
     public int defaultFill(Context context) {
-        return 0x0;
+        return 0xff6C829A;
     }
 
     @Override
     public int defaultEdge(Context context) {
-        return 0x0;
+        return 0xff6C829A;
     }
 
     @Override
     public int defaultTextColor(Context context) {
-        return 0xff324856;
+        return 0xffffffff;
     }
 
     @Override
@@ -37,12 +38,12 @@ public class ButtonBootstrapBrandInvisible implements BootstrapBrand {
 
     @Override
     public int activeTextColor(Context context) {
-        return 0xff172b35;
+        return 0xffffffff;
     }
 
     @Override
     public int disabledFill(Context context) {
-        return 0xffffffff;
+        return 0xff6C829A;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ButtonBootstrapBrandInvisible implements BootstrapBrand {
 
     @Override
     public int disabledTextColor(Context context) {
-        return 0xff000000;
+        return 0xff6C829A;
     }
 
     @Override

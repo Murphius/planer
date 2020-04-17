@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.public_transport.QueryMoreParameter;
-import com.example.lkjhgf.public_transport.QueryMoreTask;
+import com.example.lkjhgf.publicTransport.QueryMoreParameter;
+import com.example.lkjhgf.publicTransport.QueryMoreTask;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionAdapter;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 

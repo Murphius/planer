@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.public_transport.QueryTask;
+import com.example.lkjhgf.publicTransport.QueryTask;
 import com.example.lkjhgf.helper.form.Form;
 
 import java.util.Date;
@@ -40,7 +40,7 @@ public abstract class PossibleConnections {
         stopover = (Location) intent.getSerializableExtra(Form.EXTRA_STOPOVER);
         destination = (Location) intent.getSerializableExtra(Form.EXTRA_DESTINATION);
         isArrivalTime = intent.getBooleanExtra(Form.EXTRA_ISARRIVALTIME, false);
-        result = (QueryTripsResult) intent.getSerializableExtra(QueryTask.EXTRA_TEST);
+        result = (QueryTripsResult) intent.getSerializableExtra(QueryTask.EXTRA_QUERY_TRIPS_RESULT);
 
         text = new TextViews(view, this);
         RecyclerViewService recyclerViewService = new RecyclerViewService(view, activity, this, provider);

@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.lkjhgf.activites.Settings;
-import com.example.lkjhgf.public_transport.QueryParameter;
-import com.example.lkjhgf.public_transport.QueryTask;
+import com.example.lkjhgf.publicTransport.QueryParameter;
+import com.example.lkjhgf.publicTransport.QueryTask;
 
 import java.util.Calendar;
 

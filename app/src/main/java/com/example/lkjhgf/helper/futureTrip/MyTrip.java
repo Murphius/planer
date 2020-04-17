@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
-import com.example.lkjhgf.Adapter.InterfaceAdapter;
+import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.adapter.InterfaceAdapter;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activites.futureTrips.closeUp.Complete;
 import com.example.lkjhgf.activites.futureTrips.closeUp.Incomplete;

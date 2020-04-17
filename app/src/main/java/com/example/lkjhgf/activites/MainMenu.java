@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
-import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activites.futureTrips.Complete;
 import com.example.lkjhgf.helper.Utils;

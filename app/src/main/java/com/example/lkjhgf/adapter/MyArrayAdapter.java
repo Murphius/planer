@@ -1,4 +1,4 @@
-package com.example.lkjhgf.Adapter;
+package com.example.lkjhgf.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

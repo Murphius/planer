@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 
 public class Buttons {

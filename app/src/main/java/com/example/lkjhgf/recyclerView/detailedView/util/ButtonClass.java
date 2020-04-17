@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.example.lkjhgf.Color.ButtonBootstrapBrandVisible;
+import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.detailedView.OnItemClickListener;
 
