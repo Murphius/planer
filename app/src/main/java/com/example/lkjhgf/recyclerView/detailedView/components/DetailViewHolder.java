@@ -8,6 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 
+/**
+ * Ansicht eines Zwischenhaltes <br/>
+ *
+ * Aufgrund der wenigen Parameter, wurde keine extra Klasse für die Textfelder erstellt
+ */
 class DetailViewHolder extends RecyclerView.ViewHolder {
 
    TextView timeOfDeparture;
@@ -15,6 +20,12 @@ class DetailViewHolder extends RecyclerView.ViewHolder {
    TextView stopName;
    Resources resources;
 
+    /**
+     * Initalisierung der Variablen <br/>
+     *
+     * Zuordnung Variable - ID
+     * @param itemView - Layout, in welchem nach den IDs gesucht werden soll
+     */
     DetailViewHolder(View itemView) {
         super(itemView);
         timeOfDeparture = itemView.findViewById(R.id.textView65);

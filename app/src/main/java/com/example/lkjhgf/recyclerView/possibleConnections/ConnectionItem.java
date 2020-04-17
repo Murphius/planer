@@ -1,7 +1,8 @@
-package com.example.lkjhgf.trip.secondView_service;
+package com.example.lkjhgf.recyclerView.possibleConnections;
 
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,20 +10,29 @@ import java.util.Date;
 
 import de.schildbach.pte.dto.Trip;
 
-public class Connection_item implements Serializable {
+/**
+ * Die Informationen über eine mögliche Verbindung <br/>
+ *
+ * @preconditions Der Nutzer hat das Formular {@link com.example.lkjhgf.helper.form.Form} ausgefüllt,
+ * für die Anfrage wurden mögliche Verbindungen gefunden. <br/>
+ * <p>
+ * Information über die Antwort des Servers, keine Angaben vom Nutzer, die hier verwendet werden
+ */
+public class ConnectionItem implements Serializable {
     private Trip trip;
     private String time_of_arrival, time_of_departure, preisstufe;
     private int delayDeparture, delayArrival;
-    private ArrayList<Journey_item> journey_items;
+    private ArrayList<JourneyItem> journeyItems;
     private int num_changes;
     private long duration_hours, duration_minutes;
 
-    public Connection_item(Trip trip, ArrayList<Journey_item> journey_items){
+    public ConnectionItem(Trip trip, ArrayList<JourneyItem> journeyItems){
         this.trip = trip;
-        this.journey_items = journey_items;
+        this.journeyItems = journeyItems;
         long delayDepartureL = 0, arrivalDelayL = 0;
         Date arrival, departure;
 
+        // Abfahrtszeit
         if(trip.legs.get(0) instanceof Trip.Individual){
             departure = trip.getFirstDepartureTime();
         }else if(trip.getFirstPublicLeg() != null){
@@ -32,7 +42,7 @@ public class Connection_item implements Serializable {
             departure = null;
         }
 
-
+        //Ankunftszeit
         if(trip.legs.get(trip.legs.size()-1) instanceof  Trip.Individual){
             arrival = trip.getLastArrivalTime();
         }else if(trip.getLastPublicLeg() != null){
@@ -42,6 +52,7 @@ public class Connection_item implements Serializable {
             arrival = null;
         }
 
+        //Die Zeit als String speichern, um später die Ansicht damit zu füllen
         if(arrival != null){
             time_of_arrival = Utils.setTime(arrival);
         }else{
@@ -53,21 +64,25 @@ public class Connection_item implements Serializable {
             time_of_departure = " ? ";
         }
 
+        // Dauer der Fahrt
         duration_hours = Utils.durationToHour(trip.getDuration());
         duration_minutes = Utils.durationToMinutes(trip.getDuration());
 
+        //Anzahlumstiege
         if(trip.getNumChanges() == null){
             num_changes = 0;
         }else{
             num_changes = trip.getNumChanges();
         }
 
+        //Preisstufe
         if(trip.fares != null){
             preisstufe = trip.fares.get(0).units;
         }else{
             preisstufe = " ? ";
         }
 
+        // Verspätung bei der Abfahrt / Ankunft
         delayDeparture = Utils.longToMinutes(delayDepartureL);
         delayArrival = Utils.longToMinutes(arrivalDelayL);
     }
@@ -76,44 +91,55 @@ public class Connection_item implements Serializable {
         return trip;
     }
 
-    String get_time_of_arrival(){
+    public String getTimeOfArrival(){
         return time_of_arrival;
     }
 
-    String get_time_of_departure(){
+    public String getTimeOfDeparture(){
         return time_of_departure;
     }
 
-    String get_preisstufe(){
+    public String getPreisstufe(){
         return preisstufe;
     }
 
-    String get_duration_string(){
+    public String getDurationString(){
        return Utils.durationString(duration_hours, duration_minutes);
     }
 
-    int get_num_changes(){
+    public int getNumChanges(){
         return num_changes;
     }
 
-    ArrayList<Journey_item> get_journey_items(){
-        return journey_items;
+    public ArrayList<JourneyItem> getJourneyItems(){
+        return journeyItems;
     }
 
-    int getDelayArrival() {
+    public int getDelayArrival() {
         return delayArrival;
     }
 
-    int getDelayDeparture(){
+    public int getDelayDeparture(){
         return delayDeparture;
     }
 
+    /**
+     * Damit ein Nutzer nicht die gleiche Fahrt mehrfach hinzufügen kann, wird über die ID der
+     * Trips überprüft, ob eine Fahrt schon enthalten ist <br/>
+     *
+     * Erzeugung der IDs: {@link Trip#buildSubstituteId()} <br/>
+     * Nutzung der Funktion in: {@link com.example.lkjhgf.helper.futureTrip.MyTrip#insertTrip(TripItem)}
+     * @param o zu vergleichendes Objekt
+     * @return true - wenn die ID der Fahrten übereinstimmt
+     * @return  false - wenn das zu vergleichende Objekt kein ConnectionItem ist
+     * @return  false - wenn die IDs der Fahrten verschieden sind
+     */
     @Override
     public boolean equals(Object o){
-        if(! (o instanceof Connection_item)){
+        if(! (o instanceof ConnectionItem)){
             return false;
         }
-        Connection_item item = (Connection_item) o;
+        ConnectionItem item = (ConnectionItem) o;
         return item.getTrip().getId().equals(this.getTrip().getId());
     }
 }

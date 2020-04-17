@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.futureTrips.util.FutureTripViewHolder;
-import com.example.lkjhgf.trip.secondView_service.secondView_components.JourneyAdapter;
+import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyAdapter;
 
 import java.util.ArrayList;
 

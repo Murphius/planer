@@ -9,18 +9,15 @@ import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.secondView_service.Connection_item;
-import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
+import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.QueryTripsResult;
-import de.schildbach.pte.dto.Trip;
 import de.schildbach.pte.dto.TripOptions;
 
 public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
@@ -81,7 +78,7 @@ public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult>
     @Override
     protected void onPostExecute(QueryTripsResult result) {
         if (result != null) {
-            ArrayList<Connection_item> connection_items = Utils.fillConnectionList(result.trips);
+            ArrayList<ConnectionItem> connection_items = Utils.fillConnectionList(result.trips);
             intent.putExtra(EXTRA_TRIP_CONTEXT, result.context);
             intent.putExtra(EXTRA_TEST, result);
             intent.putExtra(EXTRA_CONNECTION_ITEMS, connection_items);

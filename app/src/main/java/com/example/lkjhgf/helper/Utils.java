@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.trip.secondView_service.Connection_item;
-import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
+import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
+import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.components.Stopover_item;
@@ -126,24 +126,24 @@ public final class Utils {
 
     //TODO Verbindungsarten -> andere Farben
     // versuchen Umstiege anzuzeigen
-    public static ArrayList<Connection_item> fillConnectionList(List<Trip> trips) {
-        ArrayList<Connection_item> connection_items = new ArrayList<>();
+    public static ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips) {
+        ArrayList<ConnectionItem> connection_items = new ArrayList<>();
         if (trips == null) {
             return connection_items;
         }
         for (Trip trip : trips) {
-            ArrayList<Journey_item> list_of_journey_elements = new ArrayList<>();
+            ArrayList<JourneyItem> list_of_journey_elements = new ArrayList<>();
             if (trip.isTravelable()) {
                 List<Trip.Leg> legs = trip.legs;
                 list_of_journey_elements = journeyItems(legs);
             }
-            connection_items.add(new Connection_item(trip, list_of_journey_elements));
+            connection_items.add(new ConnectionItem(trip, list_of_journey_elements));
         }
         return connection_items;
     }
 
-    public static ArrayList<Journey_item> journeyItems(List<Trip.Leg> legs) {
-        ArrayList<Journey_item> journeyItems = new ArrayList<>();
+    public static ArrayList<JourneyItem> journeyItems(List<Trip.Leg> legs) {
+        ArrayList<JourneyItem> journeyItems = new ArrayList<>();
         for (Trip.Leg leg : legs) {
             if (leg instanceof Trip.Public) {
                 journeyItems.add(publicItems((Trip.Public) leg));
@@ -172,21 +172,21 @@ public final class Utils {
         return items;
     }
 
-    private static Journey_item publicItems(Trip.Public publicTrip) {
+    private static JourneyItem publicItems(Trip.Public publicTrip) {
         String name = publicTrip.line.label;
         int icon = R.drawable.ic_android;
         Product product = publicTrip.line.product;
         if (product == null) {
-            return new Journey_item(icon, name);
+            return new JourneyItem(icon, name);
         }
         icon = iconPublic(publicTrip.line.product);
-        return new Journey_item(icon, name);
+        return new JourneyItem(icon, name);
     }
 
-    private static Journey_item individualItems(Trip.Individual individualTrip) {
+    private static JourneyItem individualItems(Trip.Individual individualTrip) {
         String time = individualTrip.min + " min";
         int icon = iconIndividual(individualTrip.type);
-        return new Journey_item(icon, time);
+        return new JourneyItem(icon, time);
     }
 
 
@@ -292,9 +292,13 @@ public final class Utils {
 
     public static String setNumChanges(Trip trip) {
         if (trip.getNumChanges() != null) {
-            return trip.getNumChanges() + "x";
+            return setNumChanges(trip.getNumChanges());
         } else {
-            return "";
+            return setNumChanges(0);
         }
+    }
+
+    public static String setNumChanges(int num_changes) {
+        return num_changes + "x ";
     }
 }

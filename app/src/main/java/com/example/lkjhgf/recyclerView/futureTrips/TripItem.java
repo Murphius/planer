@@ -1,7 +1,7 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.trip.secondView_service.secondView_components.Journey_item;
+import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class TripItem {
     /**
      * Kurze Zusammenfassung der Abfolge von Verkehrsmitteln
      */
-    private ArrayList<Journey_item> journeyItems;
+    private ArrayList<JourneyItem> journeyItems;
 
     /**
      * Konstruktor für Fahrten, deren Fahrkosten nicht optimiert werden sollen<br/>
@@ -65,7 +65,7 @@ public class TripItem {
         return numChildren;
     }
 
-    ArrayList<Journey_item> getJourneyItems() {
+    ArrayList<JourneyItem> getJourneyItems() {
         return journeyItems;
     }
 

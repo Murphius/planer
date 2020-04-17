@@ -13,8 +13,8 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
 import com.example.lkjhgf.public_transport.QueryMoreParameter;
 import com.example.lkjhgf.public_transport.QueryMoreTask;
-import com.example.lkjhgf.trip.secondView_service.Connection_adapter;
-import com.example.lkjhgf.trip.secondView_service.Connection_item;
+import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionAdapter;
+import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import de.schildbach.pte.dto.Trip;
 
 class RecyclerViewService {
 
-    private ArrayList<Connection_item> connection_items;
+    private ArrayList<ConnectionItem> connection_items;
 
     private RecyclerView recyclerView;
     private Context context;
@@ -34,7 +34,7 @@ class RecyclerViewService {
 
     private PossibleConnections possibleConnections;
 
-    private Connection_adapter adapter;
+    private ConnectionAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -52,10 +52,10 @@ class RecyclerViewService {
 
         if (possibleConnections.result == null) {
             Toast.makeText(activity, "Keine passenden Verbindungen gefunden", Toast.LENGTH_SHORT).show();
-            adapter = new Connection_adapter(new ArrayList<>());
+            adapter = new ConnectionAdapter(new ArrayList<>());
         } else {
             connection_items = Utils.fillConnectionList(possibleConnections.result.trips);
-            adapter = new Connection_adapter(connection_items);
+            adapter = new ConnectionAdapter(connection_items);
         }
         buildRecyclerView();
     }
@@ -66,8 +66,8 @@ class RecyclerViewService {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        adapter.set_on_item_click_listener(position -> {
-            Connection_item connection = connection_items.get(position);
+        adapter.setOnItemClickListener(position -> {
+            ConnectionItem connection = connection_items.get(position);
             possibleConnections.change_view_connection_detail(connection.getTrip());
         });
     }
@@ -90,7 +90,7 @@ class RecyclerViewService {
                     Toast.LENGTH_SHORT).show();
         }else{
             List<Trip> trips = possibleConnections.result.trips;
-            ArrayList<Connection_item> newConnections = Utils.fillConnectionList(trips);
+            ArrayList<ConnectionItem> newConnections = Utils.fillConnectionList(trips);
 
             connection_items.clear();
             connection_items.addAll(newConnections);

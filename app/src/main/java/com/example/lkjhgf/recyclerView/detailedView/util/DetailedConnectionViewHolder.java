@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Bausteine für die detaillierte Ansicht einer Fahrt <br/>
+ * Ansicht eines einzelnen Fahrtabschnitts <br/>
  * <p>
  * Die Textfelder sind in die Klasse {@link TextViewClass} verschoben <br/>
  * und die Buttons in die Klasse {@link ButtonClass} verschoben.
