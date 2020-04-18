@@ -1,7 +1,7 @@
 package com.example.lkjhgf.recyclerView.possibleConnections;
 
-import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 

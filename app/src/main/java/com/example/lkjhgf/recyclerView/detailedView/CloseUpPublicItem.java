@@ -1,8 +1,8 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
-import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.helper.UtilsString;
-import com.example.lkjhgf.helper.UtilsList;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.recyclerView.detailedView.components.StopoverItem;
 
 import java.util.ArrayList;

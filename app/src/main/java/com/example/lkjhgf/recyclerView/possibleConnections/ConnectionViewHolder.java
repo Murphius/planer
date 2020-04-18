@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyAdapter;
 
 /**

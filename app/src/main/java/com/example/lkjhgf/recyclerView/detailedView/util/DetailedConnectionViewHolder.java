@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.font.Typicon;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.util.Utils;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;

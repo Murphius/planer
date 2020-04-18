@@ -11,7 +11,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.color.ButtonBootstrapBrandInvisible;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.util.Utils;
 import com.example.lkjhgf.activites.Settings;
 
 import java.text.DateFormat;

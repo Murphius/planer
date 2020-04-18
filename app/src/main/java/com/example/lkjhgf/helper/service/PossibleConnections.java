@@ -15,14 +15,27 @@ import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Handhabung des Layouts für mögliche Verbindungen <br/>
+ * <p>
+ * Die Ansicht wurde in drei Teile unterteilt: <br/>
+ * - Textfelder: {@link TextViewClass} <br/>
+ * - Buttons: {@link ButtonClass} <br/>
+ * - RecyclerView: {@link RecyclerViewService} <br/>
+ * Das Füllen / Handhaben dieser ist in die jeweilige Klasse ausgelagert
+ *
+ * @preconditions Der Nutzer hat das Formular ({@link Form}) ausgefüllt, und es wurden passende
+ * Verbindungen gesucht ({@link QueryTask})
+ */
 public abstract class PossibleConnections {
 
     protected Context context;
     protected Activity activity;
     protected Intent intent;
 
-    private TextViews text;
+    private TextViewClass textViews;
 
+    // Aus dem Formular
     Date user_date_time;
     Location start, destination, stopover;
     boolean isArrivalTime;
@@ -30,32 +43,57 @@ public abstract class PossibleConnections {
 
     public static String EXTRA_TRIP = "com.example.lkjhgf.helper.service.EXTRA_ITEM";
 
-
-    PossibleConnections(Activity activity, View view, Intent intent, NetworkProvider provider){
+    /**
+     * Initialisiert die Attribute, welche in beiden Formularen enthalten sind <br/>
+     * <p>
+     * Datum, Start, Ziel, Via, Abfahrts / Ankunftszeit sind Nutzereingaben aus dem Formular.
+     * Result ist hingegen die passende Provider Antwort auf diese. <br/>
+     * <p>
+     *  Initialisierung der Attribute <br/>
+     * Initialisierung des Attributs der Klasse TextViewClass;
+     * anlegen des RecyclerViews sowie der Buttons.
+     *
+     * @param activity - aufrufende Aktivität
+     * @param view     - Layout das gefüllt wird
+     * @param intent   - Werte aus der vorherigen Aktivität
+     * @param provider - für das Laden von früheren / späteren Verbindungen
+     */
+    PossibleConnections(Activity activity, View view, Intent intent, NetworkProvider provider) {
         this.activity = activity;
         context = activity.getApplicationContext();
 
-        user_date_time = (Date)intent.getSerializableExtra(Form.EXTRA_DATE);
+        user_date_time = (Date) intent.getSerializableExtra(Form.EXTRA_DATE);
         start = (Location) intent.getSerializableExtra(Form.EXTRA_START);
         stopover = (Location) intent.getSerializableExtra(Form.EXTRA_STOPOVER);
         destination = (Location) intent.getSerializableExtra(Form.EXTRA_DESTINATION);
         isArrivalTime = intent.getBooleanExtra(Form.EXTRA_ISARRIVALTIME, false);
         result = (QueryTripsResult) intent.getSerializableExtra(QueryTask.EXTRA_QUERY_TRIPS_RESULT);
 
-        text = new TextViews(view, this);
-        RecyclerViewService recyclerViewService = new RecyclerViewService(view, activity, this, provider);
+        textViews = new TextViewClass(view, this);
 
-        new Buttons(view, activity).setRecyclerView(recyclerViewService);
+        RecyclerViewService recyclerViewService = new RecyclerViewService(view, activity, this, provider);
+        new ButtonClass(view, activity).setRecyclerView(recyclerViewService);
     }
 
-    public abstract void change_view_connection_detail(Trip trip);
+    /**
+     * Wechsel in die Detailansicht <br/>
+     *
+     * @param trip Verbindung die der Nutzer genauer betrachten will
+     */
+    public abstract void changeViewConnectionDetail(Trip trip);
 
-    void change_view_connection_detail(Trip trip, Intent newIntent){
+    /**
+     * 
+     * @param trip Verbindung die detaillierter betrachtet werden soll
+     * @param newIntent Informationen die an die nächste Ansicht übergeben werden sollen, ebenfalls ist 
+     *                  enthalten, welche Aktivität als nächstes gestartet werden soll
+     */
+    void changeViewConnectionDetail(Trip trip, Intent newIntent) {
         newIntent.putExtra(EXTRA_TRIP, trip);
         activity.startActivity(newIntent);
     }
 
-    TextViews getText(){
-        return text;
+    TextViewClass getTextViews() {
+        return textViews;
     }
 }

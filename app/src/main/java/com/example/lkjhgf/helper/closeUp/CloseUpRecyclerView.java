@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.UtilsList;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpAdapter;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;

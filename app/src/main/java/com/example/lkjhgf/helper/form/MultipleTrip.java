@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
 import com.example.lkjhgf.activites.MainMenu;
 import com.example.lkjhgf.activites.multipleTrips.ShowAllPossibleConnections;

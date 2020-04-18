@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
-import com.example.lkjhgf.helper.UtilsList;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.util.ArrayList;

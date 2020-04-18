@@ -1,4 +1,4 @@
-package com.example.lkjhgf.helper;
+package com.example.lkjhgf.helper.util;
 
 import android.content.Context;
 import android.content.res.Resources;

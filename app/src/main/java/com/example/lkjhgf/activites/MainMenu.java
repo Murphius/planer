@@ -11,7 +11,7 @@ import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activites.futureTrips.Complete;
 import com.example.lkjhgf.activites.singleTrip.UserForm;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 
 /**
  * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet

@@ -5,8 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsString;
 
 
 import de.schildbach.pte.dto.Trip;

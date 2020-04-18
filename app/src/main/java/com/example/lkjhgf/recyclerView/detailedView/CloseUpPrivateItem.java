@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
-import com.example.lkjhgf.helper.UtilsList;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.google.android.gms.maps.model.LatLng;
 
 import de.schildbach.pte.dto.Trip;

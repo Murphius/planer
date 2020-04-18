@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 

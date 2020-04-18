@@ -4,24 +4,35 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 
-
-class TextViews {
+/**
+ * Handhabung der Textfelder des Layouts für die Ansicht möglicher Verbindungen
+ */
+class TextViewClass {
 
     private TextView dateView, arrival_departure_timeView, arrival_departureView;
     private TextView departurePointView, user_stopoverView, destinationView, stopoverView;
     TextView numChildren, numAdult, numChildrenView, numAdultView;
 
-    private PossibleConnections possibleConnections;
-
-    TextViews(View view, PossibleConnections possibleConnections) {
-        this.possibleConnections = possibleConnections;
+    /**
+     * Aufruf der Funktionen zur initialierung der Attribute & füllen der Textfelder
+     *
+     * @param view                - Layout
+     * @param possibleConnections - enthält die Informationen zum füllen der Textfelder
+     */
+    TextViewClass(View view, PossibleConnections possibleConnections) {
         findTextViews(view);
-        fillTextViews();
-
+        fillTextViews(possibleConnections);
     }
 
+    /**
+     * Initialisierung der Attribute
+     * <p>
+     * Zuordnung Attribut -> ID --> einfachere Handhabung
+     *
+     * @param view Layout in dem nach den Elementen gesucht werden soll
+     */
     private void findTextViews(View view) {
         dateView = view.findViewById(R.id.textView7);
         arrival_departure_timeView = view.findViewById(R.id.textView8);
@@ -36,22 +47,31 @@ class TextViews {
         numAdultView = view.findViewById(R.id.textView77);
     }
 
-    private void fillTextViews() {
+    /**
+     * Füllen der Textfelder mit den Informationen aus dem Parameter
+     * <p>
+     * Nutzt Hilfsfunktionen der Klasse {@link UtilsString}
+     *
+     * @param possibleConnections enthält die Informationen, welche angezeigt werden sollen
+     */
+    private void fillTextViews(PossibleConnections possibleConnections) {
+        // Ankunftszeit / Abfahrtszeit
         arrival_departureView.setText(UtilsString.arrivalDepartureTime(possibleConnections.isArrivalTime));
-
-        String setText = UtilsString.setLocationName(possibleConnections.start);
-        departurePointView.setText(setText);
+        //Abfahrtsort
+        departurePointView.setText(UtilsString.setLocationName(possibleConnections.start));
+        //Zwischenhalt
         if (possibleConnections.stopover != null) {
-            setText = UtilsString.setLocationName(possibleConnections.stopover);
-            user_stopoverView.setText(setText);
+            user_stopoverView.setText(UtilsString.setLocationName(possibleConnections.stopover));
         } else {
+            //Wenn kein Zwischenhalt angegeben ist, sollen die Textfelder nicht angezeigt werden
             user_stopoverView.setVisibility(View.GONE);
             stopoverView.setVisibility(View.GONE);
         }
-        setText = UtilsString.setLocationName(possibleConnections.destination);
-        destinationView.setText(setText);
-
+        //Ziel
+        destinationView.setText(UtilsString.setLocationName(possibleConnections.destination));
+        //Datum
         dateView.setText(UtilsString.setDate(possibleConnections.user_date_time));
+        //Zeit
         arrival_departure_timeView.setText(UtilsString.setTime(possibleConnections.user_date_time));
     }
 

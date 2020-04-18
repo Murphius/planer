@@ -1,4 +1,4 @@
-package com.example.lkjhgf.helper;
+package com.example.lkjhgf.helper.util;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
@@ -16,9 +16,9 @@ import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
 /**
- *  * Enthält Funktionen, die in verschiednen Klassen verwendet werden <br/>
- *  * <p>
- *  * Das Erzeugen der Listen für die RecyclerViews findet hier statt
+ *   Enthält Funktionen, die in verschiednen Klassen verwendet werden <br/>
+ *   <p>
+ *   Das Erzeugen der Listen für die RecyclerViews findet hier statt
  */
 public final class UtilsList {
     /**

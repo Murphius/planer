@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 
 import java.io.IOException;
 import java.util.ArrayList;

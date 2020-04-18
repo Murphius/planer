@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.adapter.MyArrayAdapter;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.util.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
