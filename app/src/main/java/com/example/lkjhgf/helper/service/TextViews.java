@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 
 class TextViews {
@@ -37,22 +37,22 @@ class TextViews {
     }
 
     private void fillTextViews() {
-        arrival_departureView.setText(Utils.arrivalDepartureTime(possibleConnections.isArrivalTime));
+        arrival_departureView.setText(UtilsString.arrivalDepartureTime(possibleConnections.isArrivalTime));
 
-        String setText = Utils.setLocationName(possibleConnections.start);
+        String setText = UtilsString.setLocationName(possibleConnections.start);
         departurePointView.setText(setText);
         if (possibleConnections.stopover != null) {
-            setText = Utils.setLocationName(possibleConnections.stopover);
+            setText = UtilsString.setLocationName(possibleConnections.stopover);
             user_stopoverView.setText(setText);
         } else {
             user_stopoverView.setVisibility(View.GONE);
             stopoverView.setVisibility(View.GONE);
         }
-        setText = Utils.setLocationName(possibleConnections.destination);
+        setText = UtilsString.setLocationName(possibleConnections.destination);
         destinationView.setText(setText);
 
-        dateView.setText(Utils.setDate(possibleConnections.user_date_time));
-        arrival_departure_timeView.setText(Utils.setTime(possibleConnections.user_date_time));
+        dateView.setText(UtilsString.setDate(possibleConnections.user_date_time));
+        arrival_departure_timeView.setText(UtilsString.setTime(possibleConnections.user_date_time));
     }
 
 }

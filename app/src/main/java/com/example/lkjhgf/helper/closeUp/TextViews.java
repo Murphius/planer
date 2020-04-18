@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 
 import de.schildbach.pte.dto.Trip;
@@ -61,23 +62,23 @@ public class TextViews {
             preisstufe.setText(" ? ");
         }
 
-        duration.setText(Utils.durationString(Utils.durationToHour(closeUp.trip.getDuration()),
+        duration.setText(UtilsString.durationString(Utils.durationToHour(closeUp.trip.getDuration()),
                 Utils.durationToMinutes(closeUp.trip.getDuration())));
 
         //TODO ueberpruefen
-        date.setText(Utils.setDate(closeUp.trip.getFirstDepartureTime()));
-        time_of_departure.setText(Utils.setTime(closeUp.trip.getFirstDepartureTime()));
-        time_of_arrival.setText(Utils.setTime(closeUp.trip.getLastArrivalTime()));
+        date.setText(UtilsString.setDate(closeUp.trip.getFirstDepartureTime()));
+        time_of_departure.setText(UtilsString.setTime(closeUp.trip.getFirstDepartureTime()));
+        time_of_arrival.setText(UtilsString.setTime(closeUp.trip.getLastArrivalTime()));
 
         //TODO ueberpruefen
         Trip.Leg firstLeg = closeUp.trip.legs.get(0);
         Trip.Leg lastLeg = closeUp.trip.legs.get(closeUp.trip.legs.size()-1);
 
         if(firstLeg instanceof Trip.Public){
-            Utils.setDelayView(delay_departure, Utils.longToMinutes(((Trip.Public)firstLeg).getDepartureDelay()), resources);
+            Utils.setDelayView(delay_departure, Utils.longToInt(((Trip.Public)firstLeg).getDepartureDelay()), resources);
         }
         if(lastLeg instanceof  Trip.Public){
-            Utils.setDelayView(delay_arrival, Utils.longToMinutes(((Trip.Public)lastLeg).getArrivalDelay()), resources);
+            Utils.setDelayView(delay_arrival, Utils.longToInt(((Trip.Public)lastLeg).getArrivalDelay()), resources);
         }
 
     }

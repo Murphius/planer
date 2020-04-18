@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsList;
 import com.example.lkjhgf.publicTransport.QueryMoreParameter;
 import com.example.lkjhgf.publicTransport.QueryMoreTask;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionAdapter;
@@ -54,7 +54,7 @@ class RecyclerViewService {
             Toast.makeText(activity, "Keine passenden Verbindungen gefunden", Toast.LENGTH_SHORT).show();
             adapter = new ConnectionAdapter(new ArrayList<>());
         } else {
-            connection_items = Utils.fillConnectionList(possibleConnections.result.trips);
+            connection_items = UtilsList.fillConnectionList(possibleConnections.result.trips);
             adapter = new ConnectionAdapter(connection_items);
         }
         buildRecyclerView();
@@ -90,7 +90,7 @@ class RecyclerViewService {
                     Toast.LENGTH_SHORT).show();
         }else{
             List<Trip> trips = possibleConnections.result.trips;
-            ArrayList<ConnectionItem> newConnections = Utils.fillConnectionList(trips);
+            ArrayList<ConnectionItem> newConnections = UtilsList.fillConnectionList(trips);
 
             connection_items.clear();
             connection_items.addAll(newConnections);
@@ -124,7 +124,7 @@ class RecyclerViewService {
             possibleConnections.result = resultEarlier;
             List<Trip> trips = resultEarlier.trips;
             connection_items.clear();
-            connection_items.addAll(Utils.fillConnectionList(trips));
+            connection_items.addAll(UtilsList.fillConnectionList(trips));
 
             adapter.notifyDataSetChanged();
             layoutManager.smoothScrollToPosition(recyclerView, null, connection_items.size()-length);

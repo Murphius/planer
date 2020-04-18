@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyAdapter;
 
 /**
@@ -66,7 +67,7 @@ class ConnectionViewHolder extends RecyclerView.ViewHolder {
         arrivalView.setText(item.getTimeOfArrival());
         departureView.setText(item.getTimeOfDeparture());
         durationView.setText(item.getDurationString());
-        numChangesView.setText(Utils.setNumChanges(item.getNumChanges()));
+        numChangesView.setText(UtilsString.setNumChanges(item.getNumChanges()));
         preisstufeView.setText(item.getPreisstufe());
 
         //TODO -> auskommentiertes entfernen ?

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
 import com.example.lkjhgf.activites.MainMenu;
 import com.example.lkjhgf.activites.multipleTrips.ShowAllPossibleConnections;
@@ -40,12 +40,12 @@ public class MultipleTrip extends Form {
         this.numChildren = numChildren;
         text.numChildrenView.setText(setText);
         selectedDate.setTime(trip.getFirstDepartureTime());
-        text.date_view.setText(Utils.setDate(trip.getFirstDepartureTime()));
-        text.arrival_departure_view.setText(Utils.setTime(trip.getFirstDepartureTime()));
+        text.date_view.setText(UtilsString.setDate(trip.getFirstDepartureTime()));
+        text.arrival_departure_view.setText(UtilsString.setTime(trip.getFirstDepartureTime()));
         startLocation = trip.from;
         destinationLocation = trip.to;
-        text.start_view.setText(Utils.setLocationName(startLocation));
-        text.destination_view.setText(Utils.setLocationName(destinationLocation));
+        text.start_view.setText(UtilsString.setLocationName(startLocation));
+        text.destination_view.setText(UtilsString.setLocationName(destinationLocation));
 
     }
 

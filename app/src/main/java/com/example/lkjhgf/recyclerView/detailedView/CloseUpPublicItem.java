@@ -1,7 +1,9 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
 import com.example.lkjhgf.helper.Utils;
-import com.example.lkjhgf.recyclerView.detailedView.components.Stopover_item;
+import com.example.lkjhgf.helper.UtilsString;
+import com.example.lkjhgf.helper.UtilsList;
+import com.example.lkjhgf.recyclerView.detailedView.components.StopoverItem;
 
 import java.util.ArrayList;
 
@@ -13,7 +15,7 @@ import de.schildbach.pte.dto.Trip;
 public class CloseUpPublicItem extends CloseUpItem {
 
     private int delayDeparture, delayArrival;
-    private ArrayList<Stopover_item> stopoverItems;
+    private ArrayList<StopoverItem> stopoverItems;
     private String number, destination_of_number;
 
     private  String departure_platform, destination_platform;
@@ -27,24 +29,24 @@ public class CloseUpPublicItem extends CloseUpItem {
         super(publicTrip);
 
         //Gleise
-        departure_platform = Utils.platform(publicTrip.departureStop, false);
-        destination_platform = Utils.platform(publicTrip.arrivalStop, true);
+        departure_platform = UtilsString.platform(publicTrip.departureStop, false);
+        destination_platform = UtilsString.platform(publicTrip.arrivalStop, true);
 
         //Linienname
         number = publicTrip.line.label;
         //Endhaltestelle der Linie
         if(publicTrip.destination != null){
-            destination_of_number = Utils.setLocationName(publicTrip.destination);
+            destination_of_number = UtilsString.setLocationName(publicTrip.destination);
         }
         // Icon
-        image_resource = Utils.iconPublic(publicTrip.line.product);
+        image_resource = UtilsList.iconPublic(publicTrip.line.product);
 
         // Verspätungen
-        delayDeparture = Utils.longToMinutes(publicTrip.getDepartureDelay());
-        delayArrival = Utils.longToMinutes(publicTrip.getArrivalDelay());
+        delayDeparture = Utils.longToInt(publicTrip.getDepartureDelay());
+        delayArrival = Utils.longToInt(publicTrip.getArrivalDelay());
 
         //Zwischenhalte
-        stopoverItems = Utils.createStopoverList(publicTrip);
+        stopoverItems = UtilsList.createStopoverList(publicTrip);
     }
 
     public int getDelayDeparture(){
@@ -65,7 +67,7 @@ public class CloseUpPublicItem extends CloseUpItem {
     public String getDestinationPlatform(){
         return destination_platform;
     }
-    public ArrayList<Stopover_item> getStopoverItems(){
+    public ArrayList<StopoverItem> getStopoverItems(){
         return stopoverItems;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.lkjhgf.recyclerView.possibleConnections;
 
 import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
@@ -54,12 +55,12 @@ public class ConnectionItem implements Serializable {
 
         //Die Zeit als String speichern, um später die Ansicht damit zu füllen
         if(arrival != null){
-            time_of_arrival = Utils.setTime(arrival);
+            time_of_arrival = UtilsString.setTime(arrival);
         }else{
             time_of_arrival = " ? ";
         }
         if(departure != null){
-            time_of_departure = Utils.setTime(departure);
+            time_of_departure = UtilsString.setTime(departure);
         }else{
             time_of_departure = " ? ";
         }
@@ -83,8 +84,8 @@ public class ConnectionItem implements Serializable {
         }
 
         // Verspätung bei der Abfahrt / Ankunft
-        delayDeparture = Utils.longToMinutes(delayDepartureL);
-        delayArrival = Utils.longToMinutes(arrivalDelayL);
+        delayDeparture = Utils.longToInt(delayDepartureL);
+        delayArrival = Utils.longToInt(arrivalDelayL);
     }
 
     public Trip getTrip(){
@@ -104,7 +105,7 @@ public class ConnectionItem implements Serializable {
     }
 
     public String getDurationString(){
-       return Utils.durationString(duration_hours, duration_minutes);
+       return UtilsString.durationString(duration_hours, duration_minutes);
     }
 
     public int getNumChanges(){

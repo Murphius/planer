@@ -5,12 +5,12 @@ package com.example.lkjhgf.recyclerView.detailedView.components;
  *
  * Eventuell auch eleganter mit einem kompakteren Konstruktor lösbar
  */
-public class Stopover_item {
+public class StopoverItem {
     private String timeOfDeparture;
     private String nameOfStop;
     private int delay;
 
-    public Stopover_item(String timeOfDeparture, String nameOfStop, int delay){
+    public StopoverItem(String timeOfDeparture, String nameOfStop, int delay){
         this.nameOfStop = nameOfStop;
         this.timeOfDeparture = timeOfDeparture;
         this.delay = delay;

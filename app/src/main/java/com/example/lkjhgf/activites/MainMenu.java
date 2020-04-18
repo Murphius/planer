@@ -10,8 +10,8 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activites.futureTrips.Complete;
-import com.example.lkjhgf.helper.Utils;
 import com.example.lkjhgf.activites.singleTrip.UserForm;
+import com.example.lkjhgf.helper.UtilsString;
 
 /**
  * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet
@@ -57,7 +57,7 @@ public class MainMenu extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        System.out.println(Utils.setLocationName("Münster",
+        System.out.println(UtilsString.setLocationName("Münster",
                 "Münster(Westf)") + "------------------------------------------");
         super.onCreate(savedInstanceState);
         TypefaceProvider.registerDefaultIconSets();

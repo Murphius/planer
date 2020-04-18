@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsList;
 import com.google.android.gms.maps.model.LatLng;
 
 import de.schildbach.pte.dto.Trip;
@@ -16,7 +16,7 @@ public class CloseUpPrivateItem extends CloseUpItem {
      */
     public CloseUpPrivateItem(Trip.Individual individualTrip){
         super(individualTrip);
-        image_resource = Utils.iconIndividual(individualTrip.type);
+        image_resource = UtilsList.iconIndividual(individualTrip.type);
     }
 
     /**

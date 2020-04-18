@@ -20,11 +20,11 @@ public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
     /**
      * Liste mit allen Zwischenhalten
      */
-    private ArrayList<Stopover_item> stopovers;
+    private ArrayList<StopoverItem> stopovers;
 
 
 
-    public Stopover_adapter(ArrayList<Stopover_item> stopovers) {
+    public Stopover_adapter(ArrayList<StopoverItem> stopovers) {
         this.stopovers = stopovers;
     }
 
@@ -48,7 +48,7 @@ public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
      */
     @Override
     public void onBindViewHolder(@NonNull DetailViewHolder holder, int position) {
-        Stopover_item stopover = stopovers.get(position);
+        StopoverItem stopover = stopovers.get(position);
 
         String time = stopover.getTimeOfDeparture();
         String name = stopover.getNameOfStop();

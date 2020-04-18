@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -73,15 +74,15 @@ public class TextViewClass {
      */
     public void fillTextView(Trip trip, Resources resources) {
         // Datum, Ankunfts, Abfahrtszeit
-        userDate.setText(Utils.setDate(trip.getFirstDepartureTime()));
-        timeOfDeparture.setText(Utils.setTime(trip.getFirstDepartureTime()));
-        timeOfArrival.setText(Utils.setTime(trip.getLastArrivalTime()));
+        userDate.setText(UtilsString.setDate(trip.getFirstDepartureTime()));
+        timeOfDeparture.setText(UtilsString.setTime(trip.getFirstDepartureTime()));
+        timeOfArrival.setText(UtilsString.setTime(trip.getLastArrivalTime()));
 
         // Verspätung bei der Abfahrt
         int delay = 0;
         if (trip.getFirstPublicLeg() != null) {
             if (trip.getFirstPublicLeg().getDepartureDelay() != null) {
-                delay = Utils.longToMinutes(trip.getFirstPublicLeg().getDepartureDelay());
+                delay = Utils.longToInt(trip.getFirstPublicLeg().getDepartureDelay());
             }
         }
         Utils.setDelayView(delayDeparture, delay, resources);
@@ -90,7 +91,7 @@ public class TextViewClass {
         delay = 0;
         if (trip.getLastPublicLeg() != null) {
             if (trip.getLastPublicLeg().getArrivalDelay() != null) {
-                delay = Utils.longToMinutes(trip.getLastPublicLeg().getArrivalDelay());
+                delay = Utils.longToInt(trip.getLastPublicLeg().getArrivalDelay());
             }
         }
         Utils.setDelayView(delayArrival, delay, resources);
@@ -98,16 +99,16 @@ public class TextViewClass {
         // Dauer der Fahrt
         long durationHour = Utils.durationToHour(trip.getDuration());
         long durationMinute = Utils.durationToMinutes(trip.getDuration());
-        duration.setText(Utils.durationString(durationHour, durationMinute));
+        duration.setText(UtilsString.durationString(durationHour, durationMinute));
 
         //Umstiege
-        numChanges.setText(Utils.setNumChanges(trip));
+        numChanges.setText(UtilsString.setNumChanges(trip));
 
         // Preisstufe
         preisstufe.setText(trip.fares.get(0).units);
 
         // Start- und Zielpunkt
-        startLocation.setText(Utils.setLocationName(trip.from));
-        destinationLocation.setText(Utils.setLocationName(trip.to));
+        startLocation.setText(UtilsString.setLocationName(trip.from));
+        destinationLocation.setText(UtilsString.setLocationName(trip.to));
     }
 }

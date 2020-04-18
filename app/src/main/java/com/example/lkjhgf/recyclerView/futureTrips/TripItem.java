@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsList;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class TripItem {
         this.isComplete = isComplete;
         numAdult = 0;
         numChildren = 0;
-        journeyItems = Utils.journeyItems(trip.legs);
+        journeyItems = UtilsList.journeyItems(trip.legs);
     }
 
     /**

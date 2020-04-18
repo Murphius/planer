@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.adapter.MyArrayAdapter;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -58,14 +58,14 @@ class Form_Text {
 
     void fillTextViews(Trip trip){
         form.selectedDate.setTime(trip.getFirstDepartureTime());
-        date_view.setText(Utils.setDate(form.selectedDate.getTime()));
-        arrival_departure_view.setText(Utils.setTime(form.selectedDate.getTime()));
+        date_view.setText(UtilsString.setDate(form.selectedDate.getTime()));
+        arrival_departure_view.setText(UtilsString.setTime(form.selectedDate.getTime()));
 
         form.startLocation = trip.from;
-        start_view.setText(Utils.setLocationName(trip.from));
+        start_view.setText(UtilsString.setLocationName(trip.from));
 
         form.destinationLocation = trip.to;
-        destination_view.setText(Utils.setLocationName(trip.to));
+        destination_view.setText(UtilsString.setLocationName(trip.to));
     }
 
 }

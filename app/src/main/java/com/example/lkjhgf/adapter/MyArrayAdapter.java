@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -232,7 +232,7 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
         @Override
         @NonNull
         public String toString() {
-            return Utils.setLocationName(location);
+            return UtilsString.setLocationName(location);
         }
     }
 }

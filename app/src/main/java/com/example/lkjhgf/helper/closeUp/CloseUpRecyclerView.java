@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsList;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpAdapter;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
@@ -26,7 +26,7 @@ public class CloseUpRecyclerView {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
 
-        items = Utils.fillDetailedConnectonList(closeUp.trip.legs);
+        items = UtilsList.fillDetailedConnectionList(closeUp.trip.legs);
 
         adapter = new CloseUpAdapter(items, activity);
         recyclerView.setLayoutManager(layoutManager);

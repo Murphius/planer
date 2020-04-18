@@ -1,6 +1,6 @@
 package com.example.lkjhgf.recyclerView.detailedView;
 
-import com.example.lkjhgf.helper.Utils;
+import com.example.lkjhgf.helper.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -35,11 +35,11 @@ public abstract class CloseUpItem {
      */
     CloseUpItem(Trip.Leg leg) {
         this.leg = leg;
-        time_of_departure = Utils.setTime(leg.getDepartureTime());
-        time_of_arrival = Utils.setTime(leg.getArrivalTime());
+        time_of_departure = UtilsString.setTime(leg.getDepartureTime());
+        time_of_arrival = UtilsString.setTime(leg.getArrivalTime());
 
-        departure = Utils.setLocationName(leg.departure);
-        destination = Utils.setLocationName(leg.arrival);
+        departure = UtilsString.setLocationName(leg.departure);
+        destination = UtilsString.setLocationName(leg.arrival);
 
         showDetails = false;
     }
