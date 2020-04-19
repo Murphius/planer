@@ -43,7 +43,7 @@
         <item name="android:selectableItemBackgroundBorderless">@color/mr_and_mrs_jones</item> <!-- < > Buttons -->
     </style>
 
-    <style name="UhrStyle" parent="ThemeOverlay.AppCompat.Dialog">
+    <style name="ClockStyle" parent="ThemeOverlay.AppCompat.Dialog">
         <item name="colorAccent">@color/mr_and_mrs_jones</item>
     </style>
 

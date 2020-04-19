@@ -11,29 +11,44 @@ import com.example.lkjhgf.helper.util.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Handhabung der TextViews in der Formularansicht
+ */
 class Form_Text {
 
     private View view;
     private Context context;
     private Form form;
 
-    TextView date_view, arrival_departure_view;
+    TextView date_view, arrivalDepartureView;
     AutoCompleteTextView start_view, destination_view, stopover_view;
     TextView numChildren, numChildrenView;
     TextView numAdult, numAdultView;
 
-
-
-    Form_Text(View view, Context context, Form form){
+    /**
+     * Initialisierung der Attribute <br/>
+     * <p>
+     * Initialisierung der TextViews in {@link #findTextViews()}
+     *
+     * @param view    Layout
+     * @param context für die Adapter / Vorschläge möglicher Haltestellen
+     * @param form    zugehlriges Formular
+     */
+    Form_Text(View view, Context context, Form form) {
         this.view = view;
         this.context = context;
         this.form = form;
         findTextViews();
     }
 
-    private void findTextViews(){
+    /**
+     * Initialisierung der Textviews <br/>
+     * <p>
+     * Zuoordnung Attribut <-> ID für eine einfachere Handhabung
+     */
+    private void findTextViews() {
         date_view = view.findViewById(R.id.editText1);
-        arrival_departure_view = view.findViewById(R.id.editText2);
+        arrivalDepartureView = view.findViewById(R.id.editText2);
         start_view = view.findViewById(R.id.editText3);
         stopover_view = view.findViewById(R.id.editText4);
         destination_view = view.findViewById(R.id.editText5);
@@ -44,7 +59,18 @@ class Form_Text {
         numAdultView = view.findViewById(R.id.editText13);
     }
 
-    void setAdapter(){
+    /**
+     * Die Textfelder für die Punkte mit Vorschlägen benötigen "Filter" mit Vorschlägen <br/>
+     * <p>
+     * Die Orts-Vorschläge werden vom Provider erzeugt, passend zur Nutzereingabe.
+     * Dies geschieht in der Klasse {@link MyArrayAdapter}.
+     *
+     * @preconditions Der Nutzer klickt auf eins der drei Textfelder, und tippt eine Adresse ein,
+     * anschließend wählt er einen der Vorschläge aus
+     * @postconditions die gewählte Adresse ist gespeichert und wird bei der Suche nach Verbindungen
+     * berücksichtigt, sowie in der Ansicht angezeigt
+     */
+    void setAdapter() {
         start_view.setAdapter(new MyArrayAdapter(context, start_view.getThreshold()));
         start_view.setOnItemClickListener((parent, view, position, id) -> form.startLocation = ((MyArrayAdapter.LocationHolder) parent.getItemAtPosition(
                 position)).location);
@@ -56,10 +82,17 @@ class Form_Text {
                 position)).location);
     }
 
-    void fillTextViews(Trip trip){
+    /**
+     * Füllt die Ansicht mit den Informationen aus dem Trip
+     *
+     * @param trip die kopierte Fahrt
+     * @preconditions Der Nutzer editiert oder kopiert eine Fahrt
+     * @postconditions Die Ansicht enthält die gleichen Informationen, wie die in der Fahrt hinterlegten
+     */
+    void fillTextViews(Trip trip) {
         form.selectedDate.setTime(trip.getFirstDepartureTime());
         date_view.setText(UtilsString.setDate(form.selectedDate.getTime()));
-        arrival_departure_view.setText(UtilsString.setTime(form.selectedDate.getTime()));
+        arrivalDepartureView.setText(UtilsString.setTime(form.selectedDate.getTime()));
 
         form.startLocation = trip.from;
         start_view.setText(UtilsString.setLocationName(trip.from));
