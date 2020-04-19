@@ -11,7 +11,10 @@ import com.example.lkjhgf.helper.util.UtilsString;
 
 import de.schildbach.pte.dto.Trip;
 
-public class TextViews {
+/**
+ * Handling aller Textfelder in der Detailansicht von einer Fahrt
+ */
+public class TextViewClass {
 
     private CloseUp closeUp;
 
@@ -26,7 +29,17 @@ public class TextViews {
     TextView ticket, useTicket;
     View view;
 
-    TextViews(View view, Resources resources, CloseUp closeUp) {
+    /**
+     * Initialiserung der Attribute und füllen der Textfelder <br/>
+     * <p>
+     * Die initialisierung der Attribute: {@link #findViews(View)} <br/>
+     * Das füllen der Textfelder: {@link #fillTextView()}
+     *
+     * @param view      Layout
+     * @param resources für die Textfarbe bei Verspätungen
+     * @param closeUp   um auf die Fahrt zugreifen zu können
+     */
+    TextViewClass(View view, Resources resources, CloseUp closeUp) {
         this.closeUp = closeUp;
         this.resources = resources;
 
@@ -34,6 +47,13 @@ public class TextViews {
         fillTextView();
     }
 
+    /**
+     * Initialisierung der Attribute <br/>
+     * <p>
+     * Zuordnung Attribut <-> ID für eine einfachere Handhabung <br/>
+     *
+     * @param view Layout
+     */
     private void findViews(View view) {
         date = view.findViewById(R.id.textView56);
         time_of_departure = view.findViewById(R.id.textView6);
@@ -52,34 +72,42 @@ public class TextViews {
         this.view = view.findViewById(R.id.view5);
     }
 
+    /**
+     * Füllt die Ansicht, mit den Informationen der Fahrt <br/>
+     * <p>
+     * Dabei werden die wesentlichen Informationen zur Fahrt angezeigt: <br/>
+     * #Umsteige, Preisstufe, Dauer, Abfahrtszeit, Ankunftszeit, (ggf. Verspätungen), Datum
+     */
     private void fillTextView() {
-        String text = closeUp.trip.getNumChanges() + "x";
-        num_changes.setText(text);
+        //#Umstiege
+        num_changes.setText(UtilsString.setNumChanges(closeUp.trip));
 
+        //Preisstufe
         if (closeUp.trip.fares != null) {
             preisstufe.setText(closeUp.trip.fares.get(0).units);
         } else {
             preisstufe.setText(" ? ");
         }
 
+        //Dauer
         duration.setText(UtilsString.durationString(Utils.durationToHour(closeUp.trip.getDuration()),
                 Utils.durationToMinutes(closeUp.trip.getDuration())));
 
         //TODO ueberpruefen
+        //Datum + Abfahrtszeit + Ankunftszeit
         date.setText(UtilsString.setDate(closeUp.trip.getFirstDepartureTime()));
         time_of_departure.setText(UtilsString.setTime(closeUp.trip.getFirstDepartureTime()));
         time_of_arrival.setText(UtilsString.setTime(closeUp.trip.getLastArrivalTime()));
 
         //TODO ueberpruefen
+        //Falls es sich um ÖPNV Verbindungen handelt, ggf. die Verspätung anzeigen
         Trip.Leg firstLeg = closeUp.trip.legs.get(0);
-        Trip.Leg lastLeg = closeUp.trip.legs.get(closeUp.trip.legs.size()-1);
-
-        if(firstLeg instanceof Trip.Public){
-            Utils.setDelayView(delay_departure, Utils.longToInt(((Trip.Public)firstLeg).getDepartureDelay()), resources);
+        Trip.Leg lastLeg = closeUp.trip.legs.get(closeUp.trip.legs.size() - 1);
+        if (firstLeg instanceof Trip.Public) {
+            Utils.setDelayView(delay_departure, Utils.longToInt(((Trip.Public) firstLeg).getDepartureDelay()), resources);
         }
-        if(lastLeg instanceof  Trip.Public){
-            Utils.setDelayView(delay_arrival, Utils.longToInt(((Trip.Public)lastLeg).getArrivalDelay()), resources);
+        if (lastLeg instanceof Trip.Public) {
+            Utils.setDelayView(delay_arrival, Utils.longToInt(((Trip.Public) lastLeg).getArrivalDelay()), resources);
         }
-
     }
 }

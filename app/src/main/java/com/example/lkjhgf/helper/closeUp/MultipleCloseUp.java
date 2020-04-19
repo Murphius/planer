@@ -11,6 +11,14 @@ import com.example.lkjhgf.helper.service.MultiplePossibleConnections;
 
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Detaillierte Ansicht einer einzelnen "zu optimierenden" Fahrt <br/>
+ * <p>
+ * Die Fahrscheine, die für diese Fahrt benötigt werden sind noch unbekannt -> keine Anzeige <br/>
+ * <p>
+ * Zusätzlich zu den Informationen in {@link CloseUp} ist in dieser Ansicht noch die Fahrtennummer
+ * und die Anzahl reisender Personen enthalten
+ */
 public class MultipleCloseUp extends CloseUp {
 
     public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.helper.closeUp.EXTRA_NUM_ADULT";
@@ -20,10 +28,22 @@ public class MultipleCloseUp extends CloseUp {
     private int numTrip;
     private int numAdult, numChildren;
 
+    /**
+     * Layout mit weiteren Informationen füllen <br/>
+     * <p>
+     * Zusätzliche Informationen sind die "Fahrtennummer" und die anzahl der reisenden Personen <br/>
+     * In dieser Ansicht ist die Anzeige der Fahrscheine unsichtbar, denn die benötigten Fahrscheine
+     * sind noch unbekannt
+     *
+     * @see CloseUp#CloseUp(Activity, View, Trip)
+     */
     public MultipleCloseUp(Activity activity,
-                    View view,
-                    Trip trip) {
+                           View view,
+                           Trip trip) {
         super(activity, view, trip);
+
+        textViewClass.useTicket.setVisibility(View.GONE);
+        textViewClass.ticket.setVisibility(View.GONE);
 
         Intent intent = activity.getIntent();
         numTrip = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_TRIP, 1);
@@ -35,13 +55,23 @@ public class MultipleCloseUp extends CloseUp {
         TextView viewTitle = view.findViewById(R.id.textView);
         viewTitle.setText(setText);
 
-        setText = numAdult +"";
-        textViews.numAdult.setText(setText);
+        setText = numAdult + "";
+        textViewClass.numAdult.setText(setText);
 
         setText = numChildren + "";
-        textViews.numChildren.setText(setText);
+        textViewClass.numChildren.setText(setText);
     }
 
+    /**
+     * Wechselt in die Ansicht aller geplanten Fahrten <br/>
+     * <p>
+     * Zusätzlich zu der Fahrt, die übergeben wird, wird bei mehreren Fahrten auch die
+     * Fahrtennummer, die #reisende Personen übergeben
+     *
+     * @preconditions Der Nutzer hat den Button "pinnen" gedrückt
+     * @postconditions Die Fahrt wird in die Liste der aktuell geplanten Fahrten eingefügt (außer sie ist bereits
+     * enthalten); Anzeigen aller aktuell geplanten Fahrten inklusive der aktuell betrachteten Fahrt
+     */
     @Override
     public void onAcceptClicked() {
         Intent newIntent = new Intent(activity, Incomplete.class);
