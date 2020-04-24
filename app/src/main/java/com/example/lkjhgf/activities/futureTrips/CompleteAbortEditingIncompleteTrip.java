@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.futureTrips;
+package com.example.lkjhgf.activities.futureTrips;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,30 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.futureTrip.MyTrip;
 import com.example.lkjhgf.helper.futureTrip.TripComplete;
-import com.example.lkjhgf.activites.MainMenu;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import de.schildbach.pte.dto.Trip;
 
-import static com.example.lkjhgf.helper.closeUp.CloseUp.EXTRA_TRIP;
-
-/**
- * Diese Aktivität handhabt die Übersicht über alle zukünftigen geplanten Fahrten <br/>
- * <p>
- * Wird diese Aktivität ausgeführt, nach dem der Nutzer sich für eine Fahrt entschieden hat, so wird
- * diese Fahrt mittels Intent übergeben und in {@link TripComplete} in die Liste aller Fahrten eingefügt.
- * <br/>
- * <p>
- * Wird diese Aktivität hingegen aus dem Hauptemü aus gestartet, werden in {@link TripComplete} nur die bereits
- * vorhandenen Fahrten geladen
- * <br/></p>
- * Unabhängig von der vorherigen Aktivität kommt der Nutzer zurück in das Hauptmenü {@link #onBackPressed()}
- */
-
-
-public class Complete extends Activity {
+public class CompleteAbortEditingIncompleteTrip extends Activity {
 
     private MyTrip myTrip;
 
@@ -42,14 +26,13 @@ public class Complete extends Activity {
         View view = findViewById(R.id.constraintLayout3);
 
         Intent intent = getIntent();
-        Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
+        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
-        if (trip != null) {
-            TripItem newTripItem = new TripItem(trip, true);
-            myTrip = new TripComplete(this, view, newTripItem);
-        } else {
-            myTrip = new TripComplete(this, view, null);
-        }
+        TripItem newTripItem = new TripItem(trip, false, numAdult, numChildren);
+
+        myTrip = new TripComplete(this, view, newTripItem);
     }
 
     /**
@@ -68,4 +51,5 @@ public class Complete extends Activity {
         finishAffinity();
         startActivity(intent);
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.singleTrip;
+package com.example.lkjhgf.activities.singleTrip;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,14 +7,13 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.futureTrips.Complete;
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
 
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
-
-import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_TRIP;
 
 /**
  * Editieren einer einzelnen geplanten Fahrt, die nicht bei der Ermittlung der günstigsten
@@ -37,6 +36,7 @@ import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_TRIP;
 public class EditTrip extends Activity {
 
     Form form;
+    Trip trip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +48,20 @@ public class EditTrip extends Activity {
 
         Intent intent = getIntent();
 
-        Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
+        trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
 
         form = new SingleTrip(this, layout, new VrrProvider(), trip);
 
         form.setOnClickListener();
 
         form.setAdapter();
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, Complete.class);
+        intent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        startActivity(intent);
     }
 
 

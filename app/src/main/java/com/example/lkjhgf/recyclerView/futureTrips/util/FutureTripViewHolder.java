@@ -53,9 +53,4 @@ public class FutureTripViewHolder extends RecyclerView.ViewHolder {
         });
 
     }
-
-    //TODO entfernen??
-    /*public void setTrip(Trip trip){
-        this.trip = trip;
-    }*/
 }

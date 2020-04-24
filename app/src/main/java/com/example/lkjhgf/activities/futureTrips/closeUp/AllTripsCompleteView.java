@@ -1,15 +1,10 @@
-package com.example.lkjhgf.activites.futureTrips.closeUp;
+package com.example.lkjhgf.activities.futureTrips.closeUp;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.closeUp.FutureSingleCloseUp;
-
-import de.schildbach.pte.dto.Trip;
-
-import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_TRIP;
 
 /**
  * Öffnet die Detailansicht für eine einzelne Fahrt <br/>
@@ -27,18 +22,14 @@ import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_TRIP;
  * Das Füllen der Ansicht erfolgt in der Klasse {@link FutureSingleCloseUp}.
  */
 
-public class Complete extends Activity {
+public class AllTripsCompleteView extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_connection_view_detail);
+        setContentView(R.layout.detailed_view);
 
-        Intent intent = getIntent();
-
-        Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
-
-        new FutureSingleCloseUp(this, findViewById(R.id.constraintLayout2), trip);
+        new FutureSingleCloseUp(this, findViewById(R.id.constraintLayout2));
     }
 }

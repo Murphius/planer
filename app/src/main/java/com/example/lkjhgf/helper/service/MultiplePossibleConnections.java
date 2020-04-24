@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.form.MultipleTrip;
-import com.example.lkjhgf.activites.multipleTrips.DetailedView;
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.multipleTrips.DetailedView;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
@@ -21,10 +21,6 @@ public class MultiplePossibleConnections extends PossibleConnections {
 
     private int numTrip;
     private int numAdult, numChildren;
-
-    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.helper.service.EXTRA_NUM_TRIP";
-    public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.helper.service.EXTRA_NUM_ADULT";
-    public static String EXTRA_NUM_CHILDREN = "com.example.lkjhgf.helper.service.EXTRA_NUM_CHILDREN";
 
     /**
      * Neben den Attributen der Oberklasse gibt es noch weitere Attribute welche initialisiert werden <br/>
@@ -46,14 +42,14 @@ public class MultiplePossibleConnections extends PossibleConnections {
         super(activity, view, intent, provider);
 
         //#Fahrt
-        numTrip = intent.getIntExtra(MultipleTrip.EXTRA_NUM_TRIP, 1);
+        numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
         String numTripString = numTrip + ". Fahrt \n mögliche Verbindungen";
         TextView numTripView = view.findViewById(R.id.app_name_3);
         numTripView.setText(numTripString);
         //#reisende Personen
         TextViewClass textViews = getTextViews();
-        numAdult = intent.getIntExtra(MultipleTrip.EXTRA_NUM_ADULT, 0);
-        numChildren = intent.getIntExtra(MultipleTrip.EXTRA_NUM_CHILDREN, 0);
+        numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+        numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
         String putText = numAdult + "";
         textViews.numAdult.setText(putText);
         putText = numChildren + "";
@@ -71,9 +67,9 @@ public class MultiplePossibleConnections extends PossibleConnections {
     @Override
     public void changeViewConnectionDetail(Trip trip) {
         Intent newIntent = new Intent(context, DetailedView.class);
-        newIntent.putExtra(EXTRA_NUM_TRIP, numTrip);
-        newIntent.putExtra(EXTRA_NUM_ADULT, numAdult);
-        newIntent.putExtra(EXTRA_NUM_CHILDREN, numChildren);
+        newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
+        newIntent.putExtra(MainMenu.NUM_ADULT, numAdult);
+        newIntent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
         super.changeViewConnectionDetail(trip, newIntent);
     }
 }

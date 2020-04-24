@@ -62,11 +62,20 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull FutureTripViewHolder holder, int position) {
         TripItem currentItem = tripItems.get(position);
+
+        // Recycler View für die Abfolge von Verkehrsmitteln
+        RecyclerView.Adapter journey_adapter = new JourneyAdapter(currentItem.getJourneyItems());
+        Context context = holder.itemView.getContext();
+        RecyclerView.LayoutManager journey_layout = new LinearLayoutManager(context,
+                LinearLayoutManager.HORIZONTAL,
+                false);
+        holder.recyclerView.setLayoutManager(journey_layout);
+        holder.recyclerView.setAdapter(journey_adapter);
+
         // einzelne Fahrt
         if(currentItem.isComplete()){
             // zur Unterscheidung wird die Farbe anders gesetzt
             holder.view.setBackgroundColor(activity.getResources().getColor(R.color.mr_and_mrs_jones_25,null));
-            holder.recyclerView.setBackgroundColor(activity.getResources().getColor(R.color.mr_and_mrs_jones_25, null));
             // diese Fahrten haben keine Personenanzahl
             holder.textViewClass.numAdult.setVisibility(View.GONE);
             holder.textViewClass.userNumAdult.setVisibility(View.GONE);
@@ -79,17 +88,16 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             holder.textViewClass.userNumAdult.setText(text);
             text = currentItem.getNumChildren() + "";
             holder.textViewClass.userNumChildren.setText(text);
+
+            //Ticket anzeigen, wenn kein Ticket vorhanden -> keine Anzeige
+            if(currentItem.getTicket() != null){
+                //TODO
+                holder.textViewClass.ticketInformationHolder.setText("Ticket entwerten");
+            }else{
+                holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
+                holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
+            }
         }
-        //TODO entfernen ??
-        //holder.setTrip(currentItem.getTrip());
-        // Recycler View für die Abfolge von Verkehrsmitteln
-        RecyclerView.Adapter journey_adapter = new JourneyAdapter(currentItem.getJourneyItems());
-        Context context = holder.itemView.getContext();
-        RecyclerView.LayoutManager journey_layout = new LinearLayoutManager(context,
-                LinearLayoutManager.HORIZONTAL,
-                false);
-        holder.recyclerView.setLayoutManager(journey_layout);
-        holder.recyclerView.setAdapter(journey_adapter);
 
         holder.textViewClass.fillTextView(currentItem.getTrip(), activity.getResources());
     }

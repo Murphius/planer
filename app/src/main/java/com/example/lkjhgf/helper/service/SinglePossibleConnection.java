@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.activites.singleTrip.ThirdView_CloseUp;
+import com.example.lkjhgf.activities.singleTrip.ThirdView_CloseUp;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;

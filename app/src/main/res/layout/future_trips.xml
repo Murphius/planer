@@ -7,17 +7,15 @@
 
     <TextView
         android:id="@+id/textView2"
-        style="@style/textViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
         android:background="@color/mr_and_mrs_jones"
+        android:fontFamily="serif"
         android:gravity="center"
         android:text="@string/zukunftige_fahrten"
-        android:textColor="#9EC1D4"
+        android:textColor="@color/mr_and_mrs_jones_25"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,8 +30,7 @@
             android:id="@+id/recyclerView5"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.92"
-            android:padding="4dp"
+            android:layout_weight="0.85"
             android:scrollbars="vertical">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -41,7 +38,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.08"
+            android:layout_weight="0.15"
             android:gravity="center"
             android:orientation="horizontal">
 

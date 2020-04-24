@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:backgroundTint="#FFFFFF">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.32"
+                    android:layout_weight="0.4"
                     android:orientation="vertical">
 
                     <TextView
@@ -57,7 +56,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.68"
+                    android:layout_weight="0.6"
                     android:orientation="vertical">
 
                     <TextView
@@ -107,7 +106,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.32"
+                    android:layout_weight="0.4"
                     android:orientation="horizontal">
 
                     <com.beardedhen.androidbootstrap.BootstrapButton
@@ -141,7 +140,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_weight="0.68"
+                    android:layout_weight="0.6"
                     android:orientation="vertical">
 
                     <TextView
@@ -198,11 +197,11 @@
                 android:layout_height="2dp"
                 android:background="@color/mr_and_mrs_jones" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
 
 
             <View
@@ -210,69 +209,69 @@
                 android:layout_height="2dp"
                 android:background="@color/mr_and_mrs_jones" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_weight="0.4"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/textView60"
+                        style="@style/textViewStyle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.32"
-                        android:orientation="vertical">
+                        android:fontFamily="serif"
+                        android:text="Ankunftszeit"
+                        android:textColor="@color/mr_and_mrs_jones"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/textView60"
-                            style="@style/textViewStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="serif"
-                            android:text="Ankunftszeit"
-                            android:textColor="@color/mr_and_mrs_jones"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/textView69"
-                            style="@style/textViewStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            tools:text="Verspätung" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/textView69"
+                        style="@style/textViewStyle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.68"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView63"
-                            style="@style/textViewStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:fontFamily="serif"
-                            android:textColor="@color/mr_and_mrs_jones"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:text="Zielort" />
-
-                        <TextView
-                            android:id="@+id/textView59"
-                            style="@style/textViewStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="serif"
-                            android:textColor="@color/mr_and_mrs_jones"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:text="Gleis" />
-                    </LinearLayout>
-
+                        android:textColor="@color/black"
+                        tools:text="Verspätung" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView63"
+                        style="@style/textViewStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:fontFamily="serif"
+                        android:textColor="@color/mr_and_mrs_jones"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Zielort" />
+
+                    <TextView
+                        android:id="@+id/textView59"
+                        style="@style/textViewStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="serif"
+                        android:textColor="@color/mr_and_mrs_jones"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Gleis" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

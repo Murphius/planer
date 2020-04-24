@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncompleteView;
+import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
+import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
+import com.example.lkjhgf.activities.singleTrip.EditTrip;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
-import com.example.lkjhgf.activites.singleTrip.UserForm;
+import com.example.lkjhgf.activities.singleTrip.UserForm;
 
 /**
  * Ansicht nach der Planung einer Fahrt, die nicht Optimiert werden muss <br/>
@@ -30,6 +35,59 @@ public class TripComplete extends MyTrip {
 
         setOnClickListener();
         setRecyclerView();
+    }
+
+    /**
+     * Klickt der Nutzer auf die Fahrt, wird die Detailansicht dieser Fahrt geöffnet <br/>
+     * <p>
+     * @see MyTrip#onItemClick(int position)
+     *
+     * Wenn der Nutzer in der Übersicht aller gespeicherten Fahrten ist, muss zwischen den Fahrtypen
+     * unterschieden werden, da davon abhängig das Layout anders gestaltet werden muss. <br/>
+     * Ein zusammenlegen mit {@link TripIncomplete#onItemClick(int position)} ist nicht möglich,
+     * da in der Klasse {@link TripIncomplete} das Ticket für die jeweilige Fahrt noch nicht bekannt ist.
+     */
+    @Override
+    void onItemClick(int position) {
+        TripItem current = tripItems.get(position);
+        Intent newIntent;
+        //Abhängig von der Fahrt wird eine andere Aktivität gestartet
+        if (current.isComplete()) {
+            newIntent = new Intent(activity.getApplicationContext(), AllTripsCompleteView.class);
+        } else {
+            //TODO #Trip??
+            newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
+            //#Fahrt und #reisende Personen ebenfalls übergeben
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position);
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
+            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
+        }
+        newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+        startNextActivity(newIntent);
+    }
+
+    /**
+     * @see MyTrip#startEdit(int position)
+     */
+    @Override
+    void startEdit(int position) {
+        TripItem current = tripItems.get(position);
+
+        tripItems.remove(position);
+        adapter.notifyItemRemoved(position);
+        Intent newIntent;
+
+        if (current.isComplete()) {
+            newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
+        } else {
+            newIntent = new Intent(activity.getApplicationContext(),
+                    EditIncompleteTripFromCompleteList.class);
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
+            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+        }
+        newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+        startNextActivity(newIntent);
     }
 
     /**

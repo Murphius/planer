@@ -13,7 +13,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.32"
+                android:layout_weight="0.4"
                 android:orientation="horizontal">
 
                 <TextView
@@ -37,7 +37,7 @@
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.68"
+                android:layout_weight="0.6"
                 tools:text="Station
     " />
         </LinearLayout>

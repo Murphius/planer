@@ -54,7 +54,7 @@ public final class UtilsString {
         if (isArrivalTime) {
             return "Ankunftszeit";
         } else {
-            return "Abfahrtszeit:";
+            return "Abfahrtszeit";
         }
     }
 

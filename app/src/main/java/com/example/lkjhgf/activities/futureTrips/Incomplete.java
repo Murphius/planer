@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.futureTrips;
+package com.example.lkjhgf.activities.futureTrips;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,13 +9,9 @@ import android.view.View;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
-import com.example.lkjhgf.activites.MainMenu;
+import com.example.lkjhgf.activities.MainMenu;
 
 import de.schildbach.pte.dto.Trip;
-
-import static com.example.lkjhgf.helper.closeUp.CloseUp.EXTRA_TRIP;
-import static com.example.lkjhgf.helper.closeUp.MultipleCloseUp.EXTRA_NUM_ADULT;
-import static com.example.lkjhgf.helper.closeUp.MultipleCloseUp.EXTRA_NUM_CHILDREN;
 
 /**
  * Diese Aktivität handhabt die Übersicht über aller aktuell geplanten Fahrten,
@@ -46,9 +42,9 @@ public class Incomplete extends Activity {
         View view = findViewById(R.id.constraintLayout3);
 
         Intent intent = getIntent();
-        Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
-        int numAdult = intent.getIntExtra(EXTRA_NUM_ADULT, 0);
-        int numChildren = intent.getIntExtra(EXTRA_NUM_CHILDREN, 0);
+        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
         TripItem newTripItem = new TripItem(trip, false, numAdult, numChildren);
 

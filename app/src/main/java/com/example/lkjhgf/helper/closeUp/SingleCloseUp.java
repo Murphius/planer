@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.lkjhgf.activites.futureTrips.Complete;
+import com.example.lkjhgf.activities.futureTrips.Complete;
 
 import java.util.Calendar;
-
-import de.schildbach.pte.dto.Trip;
 
 /**
  * Detaillierte Ansicht einer einzelnen "normalen" Fahrt <br/>
@@ -24,19 +22,18 @@ public class SingleCloseUp extends CloseUp {
      * Anpassung des Layouts: keine Fahrscheine, keine reisenden Personen <br/>
      * Speicherung nur von Fahrten, die in der Zukunft liegen <br/>
      *
-     * @see CloseUp#CloseUp(Activity, View, Trip)
+     * @see CloseUp#CloseUp(Activity, View)
      */
     public SingleCloseUp(Activity activity,
-                         View view,
-                         Trip trip) {
-        super(activity, view, trip);
+                         View view) {
+        super(activity, view);
         textViewClass.numChildrenView.setVisibility(View.GONE);
         textViewClass.numChildren.setVisibility(View.GONE);
         textViewClass.numAdultView.setVisibility(View.GONE);
         textViewClass.numAdult.setVisibility(View.GONE);
         textViewClass.view.setVisibility(View.GONE);
         textViewClass.useTicket.setVisibility(View.GONE);
-        textViewClass.ticket.setVisibility(View.GONE);
+        textViewClass.ticketView.setVisibility(View.GONE);
 
         //Nur Fahrten, die in der Zukunft liegen, können "gespeichert" werden
         buttons.button_accept.setOnClickListener(v -> {

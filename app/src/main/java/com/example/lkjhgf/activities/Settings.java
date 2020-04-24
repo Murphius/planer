@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites;
+package com.example.lkjhgf.activities;
 
 import android.app.Activity;
 

@@ -39,14 +39,23 @@ class ButtonClass {
 
     /**
      * Setzt den RecyclerView, in dem die möglichen Verbindungen enthalten sind <br/>
-     *
+     * <p>
      * Da bei der Suche nach weiteren Verbindungen die Liste des RecyclerViews sich ändert, werden die
-     * Funktionen dieser Klasse aufgerufen
-     * @see #setOnClickListener()
+     * Funktionen dieser Klasse aufgerufen <br/>
+     * <p>
+     * Sollten keine Verbindungen gefunden werden, kann der Nutzer auch keine früheren oder späteren
+     * Verbindungen suchen, deshalb werden diese Buttons für den Nutzer nicht nutzbar <br/>
+     *
      * @param recyclerViewService stellt die Funktionen für frühere / spätere Fahrten zur Verfügung
+     * @see #setOnClickListener()
      */
     void setRecyclerView(RecyclerViewService recyclerViewService) {
         this.recyclerViewService = recyclerViewService;
+        //Falls keine Verbindungen gefunden wurden
+        if (recyclerViewService.isConnectionListEmpty()) {
+            earlierButton.setClickable(false);
+            laterButton.setClickable(false);
+        }
     }
 
     /**

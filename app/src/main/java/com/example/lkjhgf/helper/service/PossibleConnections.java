@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.publicTransport.QueryTask;
 import com.example.lkjhgf.helper.form.Form;
 
@@ -40,8 +41,6 @@ public abstract class PossibleConnections {
     Location start, destination, stopover;
     boolean isArrivalTime;
     QueryTripsResult result;
-
-    public static String EXTRA_TRIP = "com.example.lkjhgf.helper.service.EXTRA_ITEM";
 
     /**
      * Initialisiert die Attribute, welche in beiden Formularen enthalten sind <br/>
@@ -89,7 +88,7 @@ public abstract class PossibleConnections {
      *                  enthalten, welche Aktivität als nächstes gestartet werden soll
      */
     void changeViewConnectionDetail(Trip trip, Intent newIntent) {
-        newIntent.putExtra(EXTRA_TRIP, trip);
+        newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
         activity.startActivity(newIntent);
     }
 

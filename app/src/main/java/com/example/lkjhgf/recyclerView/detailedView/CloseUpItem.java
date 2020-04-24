@@ -77,9 +77,4 @@ public abstract class CloseUpItem {
         showDetails = !showDetails;
     }
 
-    //TODO hier soll das Ticket zuruckgegeben werden
-    public Object getTicket() {
-        return null;
-    }
-
 }

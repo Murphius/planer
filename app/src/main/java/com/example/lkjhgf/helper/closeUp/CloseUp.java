@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.lkjhgf.activities.MainMenu;
+
 import de.schildbach.pte.dto.Trip;
 
 /**
  * Handhabung von der detaillierten Ansicht einer Fahrt
  */
 public abstract class CloseUp {
-
-    public static String EXTRA_TRIP = "com.example.lkjhgf.helper.closeUp.EXTRA_TRIP";
 
     TextViewClass textViewClass;
     ButtonClass buttons;
@@ -22,14 +22,16 @@ public abstract class CloseUp {
 
     /**
      * Initialisierung der Attribute <br/>
+     * <p>
+     * Mittels Intent wird die Fahrt geladen, welche aktuell betrachtet werden soll
      *
      * @param activity - wird für die Textfarbe von Verspätungen benötigt, sowie für das Starten von Aktivitäten
      * @param view     - Layout
-     * @param trip     - Fahrt die detailliert betrachtet werden soll
      */
-    CloseUp(Activity activity, View view, Trip trip) {
+    CloseUp(Activity activity, View view) {
         this.activity = activity;
-        this.trip = trip;
+        // Fahrt die betrachtet werden soll
+        this.trip = (Trip) activity.getIntent().getSerializableExtra(MainMenu.EXTRA_TRIP);
 
         textViewClass = new TextViewClass(view, activity.getResources(), this);
         buttons = new ButtonClass(activity, view, this);
@@ -59,7 +61,7 @@ public abstract class CloseUp {
      * Fahrt noch nicht enthalten ist, so soll diese in der Liste enthalten sein
      */
     void onAcceptClicked(Intent newIntent) {
-        newIntent.putExtra(EXTRA_TRIP, trip);
+        newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
         activity.startActivity(newIntent);
     }
 

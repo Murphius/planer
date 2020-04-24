@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites;
+package com.example.lkjhgf.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,17 +9,17 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.futureTrips.Complete;
-import com.example.lkjhgf.activites.singleTrip.UserForm;
-import com.example.lkjhgf.helper.util.UtilsString;
+import com.example.lkjhgf.activities.futureTrips.Complete;
+import com.example.lkjhgf.activities.singleTrip.UserForm;
 
 /**
  * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet
  */
-
 public class MainMenu extends Activity {
-
-    public static String EXTRA_NUMBER = "com.example.lkjhgf.main_menu.EXTRA_NUMBER";
+    public static String NUM_CHILDREN = "com.example.lkjhgf.main_menu.NUM_CHILDREN";
+    public static String NUM_ADULT = "com.example.lkjhgf.main_menu.NUM_ADULT";
+    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.main_menu.EXTRA_NUM_TRIP";
+    public static String EXTRA_TRIP = "com.example.lkjhgf.main_menu.EXTRA_TRIP";
 
     /**
      * Planen einer einzelnen Fahrt, keine Fahrkostenoptimierung
@@ -49,16 +49,13 @@ public class MainMenu extends Activity {
      * Planen mehrerer Fahrten, diese werden jeweils bei der Fahrkostenoptimierung berücksichtigt
      */
     public void change_view_to_multiple_routes() {
-        Intent intent = new Intent(this, com.example.lkjhgf.activites.multipleTrips.UserForm.class);
-        intent.putExtra(EXTRA_NUMBER, 1);
+        Intent intent = new Intent(this, com.example.lkjhgf.activities.multipleTrips.UserForm.class);
+        intent.putExtra(EXTRA_NUM_TRIP, 1);
         startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        System.out.println(UtilsString.setLocationName("Münster",
-                "Münster(Westf)") + "------------------------------------------");
         super.onCreate(savedInstanceState);
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_start_view);

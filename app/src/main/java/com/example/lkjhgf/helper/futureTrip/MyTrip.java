@@ -10,16 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.adapter.InterfaceAdapter;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.futureTrips.closeUp.Complete;
-import com.example.lkjhgf.activites.futureTrips.closeUp.Incomplete;
 import com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener;
 import com.example.lkjhgf.recyclerView.futureTrips.TripAdapter;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
-import com.example.lkjhgf.activites.singleTrip.CopyTrip;
-import com.example.lkjhgf.activites.singleTrip.EditTrip;
+import com.example.lkjhgf.activities.singleTrip.CopyTrip;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -43,17 +41,12 @@ public abstract class MyTrip {
     static String SAVED_TRIPS = "com.example.lkjhgf.futureTrips.SAVED_TRIPS";
     private static String SAVED_TRIPS_TASK = "com.example.lkjhgf.futureTrips.SAVED_TRIPS_TASK";
 
-    public static String EXTRA_TRIP = "com.example.lkjhgf.futureTrips.EXTRA_TRIP";
-    public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.futureTrips.EXTRA_NUM_ADULT";
-    public static String EXTRA_NUM_CHILDREN = "com.example.lkjhgf.futureTrips.EXTRA_NUM_CHILDREN";
-    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.helper.futureTrip.EXTRA_NUM_TRIP";
-
     Activity activity;
     ArrayList<TripItem> tripItems;
 
     private RecyclerView recyclerView;
 
-    private TripAdapter adapter;
+    TripAdapter adapter;
 
     BootstrapButton abort, addTrip, calculateTickets;
 
@@ -157,14 +150,14 @@ public abstract class MyTrip {
             newIntent = new Intent(activity.getApplicationContext(), CopyTrip.class);
         } else {
             newIntent = new Intent(activity.getApplicationContext(),
-                    com.example.lkjhgf.activites.multipleTrips.CopyTrip.class);
+                    com.example.lkjhgf.activities.multipleTrips.CopyTrip.class);
             // bei einer zu optimierenden Fahrt, müssen noch die #Fahrt und #reisende Personen
             // mit übergeben werden
-            newIntent.putExtra(EXTRA_NUM_TRIP, position);
-            newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumChildren());
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
+            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
         }
-        newIntent.putExtra(EXTRA_TRIP, current.getTrip());
+        newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
     }
 
@@ -197,22 +190,7 @@ public abstract class MyTrip {
      * @postconditions Detaillierte Anzeige der gewählten Fahrt, jedoch ist der hinzufügen Knopf nicht
      * sichtbar
      */
-    private void onItemClick(int position) {
-        TripItem current = tripItems.get(position);
-        Intent newIntent;
-        //Abhängig von der Fahrt wird eine andere Aktivität gestartet
-        if (tripItems.get(position).isComplete()) {
-            newIntent = new Intent(activity.getApplicationContext(), Complete.class);
-        } else {
-            //TODO #Trip??
-            newIntent = new Intent(activity.getApplicationContext(), Incomplete.class);
-            //#Fahrt und #reisende Personen ebenfalls übergeben
-            newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumAdult());
-        }
-        newIntent.putExtra(EXTRA_TRIP, tripItems.get(position).getTrip());
-        startNextActivity(newIntent);
-    }
+    abstract void onItemClick(int position);
 
     /**
      * Sicherheitsabfrage an den Nutzer, ob dieser wirklich die Fahrt editieren will <br/>
@@ -225,9 +203,7 @@ public abstract class MyTrip {
      */
     private void editClickMethod(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(
-                "Beim Editieren wird diese Fahrt gelöscht und über zurück NICHT wieder hergestellt!" +
-                        "\nWirklich fortfahren ?");
+        builder.setMessage("Diese Fahrt editieren?");
         builder.setCancelable(false);
         builder.setNegativeButton("Nein", ((dialog, which) -> dialog.cancel()));
         builder.setPositiveButton("Ja", (dialog, which) -> startEdit(position));
@@ -243,22 +219,7 @@ public abstract class MyTrip {
      * @postconditions Die Fahrt ist nicht mehr in der Liste enthalten, Öffnung der entsprechenden Ansicht
      * mit allen Angaben der gewählten Fahrt
      */
-    private void startEdit(int position) {
-        TripItem current = tripItems.get(position);
-        tripItems.remove(position);
-        adapter.notifyItemRemoved(position);
-        Intent newIntent;
-        if (current.isComplete()) {
-            newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
-        } else {
-            newIntent = new Intent(activity.getApplicationContext(),
-                    com.example.lkjhgf.activites.multipleTrips.EditTrip.class);
-            newIntent.putExtra(EXTRA_NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(EXTRA_NUM_CHILDREN, current.getNumChildren());
-        }
-        newIntent.putExtra(EXTRA_TRIP, current.getTrip());
-        startNextActivity(newIntent);
-    }
+    abstract void startEdit(int position);
 
     /**
      * Initialiseriung der Attribute <br/>
@@ -287,7 +248,7 @@ public abstract class MyTrip {
      * dass er die Fahrt wirklich löschen will
      * @postconditions die Fahrt ist aus der Liste gelöscht
      */
-    void removeItemAtPosition(int position) {
+    private void removeItemAtPosition(int position) {
         tripItems.remove(position);
         adapter.notifyItemRemoved(position);
     }
@@ -343,9 +304,9 @@ public abstract class MyTrip {
      * Laden der Daten <br/>
      * <p>
      * Abhängig vom Datenpfad, werden entweder alle Fahrten geladen, oder nur die zu Optimierenden <br/>
-     *
+     * <p>
      * Manuelle deserialisierung von Trip.leg -> Public und Individual
-     *
+     * <p>
      * Aus den gespeicherten Verbindungen, werden die Fahrten gelöscht, deren Ankunftszeitpunkt mehr als 24h
      * in der Vergangenheit liegen.
      */

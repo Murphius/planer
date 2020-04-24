@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.lkjhgf.activites.Settings;
+import com.example.lkjhgf.activities.Settings;
 import com.example.lkjhgf.publicTransport.QueryParameter;
 import com.example.lkjhgf.publicTransport.QueryTask;
 
@@ -146,9 +146,18 @@ public abstract class Form {
     }
 
     /**
-     * Wenn die Fahrt kopiert wurde, müssen abhängig von der "Situation" andere Parameter geändert werden
+     * Wenn eine Fahrt kopiert wurde, bleiben alle Parameter unverändert, bis auf
+     * das Datum. <br/>
+     * <p>
+     * Das Datum wird default mäßig auf das aktuelle Datum gesetzt. Die entsprechenden Textfelder
+     * hingegen werden geleert.
      */
-    public abstract void copy();
+    public void copy() {
+        selectedDate = Calendar.getInstance();
+        text.arrivalDepartureView.setText("");
+        text.date_view.setText("");
+
+    }
 
     /**
      * Packt in den Intent die Nutzereingaben <br/>

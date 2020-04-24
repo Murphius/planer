@@ -1,13 +1,8 @@
-package com.example.lkjhgf.activites;
+package com.example.lkjhgf.activities;
 
 import android.app.Activity;
 
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.lkjhgf.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,18 +13,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Informationpage extends Activity implements OnMapReadyCallback{
 

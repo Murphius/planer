@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.multipleTrips;
+package com.example.lkjhgf.activities.multipleTrips;
 
 import android.app.Activity;
 import android.os.Bundle;

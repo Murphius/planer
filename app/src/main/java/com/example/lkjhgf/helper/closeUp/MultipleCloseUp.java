@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.futureTrips.Incomplete;
-import com.example.lkjhgf.helper.service.MultiplePossibleConnections;
-
-import de.schildbach.pte.dto.Trip;
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.futureTrips.Incomplete;
 
 /**
  * Detaillierte Ansicht einer einzelnen "zu optimierenden" Fahrt <br/>
@@ -21,12 +19,8 @@ import de.schildbach.pte.dto.Trip;
  */
 public class MultipleCloseUp extends CloseUp {
 
-    public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.helper.closeUp.EXTRA_NUM_ADULT";
-    public static String EXTRA_NUM_CHILDREN = "com.example.lkjhgf.helper.closeUp.EXTRA_NUM_CHILDREN";
-    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.helper.closeUp.EXTRA_NUM_TRIP";
-
-    private int numTrip;
-    private int numAdult, numChildren;
+    protected int numTrip;
+    protected int numAdult, numChildren;
 
     /**
      * Layout mit weiteren Informationen füllen <br/>
@@ -35,20 +29,19 @@ public class MultipleCloseUp extends CloseUp {
      * In dieser Ansicht ist die Anzeige der Fahrscheine unsichtbar, denn die benötigten Fahrscheine
      * sind noch unbekannt
      *
-     * @see CloseUp#CloseUp(Activity, View, Trip)
+     * @see CloseUp#CloseUp(Activity, View)
      */
     public MultipleCloseUp(Activity activity,
-                           View view,
-                           Trip trip) {
-        super(activity, view, trip);
+                           View view) {
+        super(activity, view);
 
         textViewClass.useTicket.setVisibility(View.GONE);
-        textViewClass.ticket.setVisibility(View.GONE);
+        textViewClass.ticketView.setVisibility(View.GONE);
 
         Intent intent = activity.getIntent();
-        numTrip = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_TRIP, 1);
-        numAdult = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_ADULT, 0);
-        numChildren = intent.getIntExtra(MultiplePossibleConnections.EXTRA_NUM_CHILDREN, 0);
+        numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
+        numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+        numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
         String setText = numTrip + ". Fahrt \n Detaillierte Fahrt";
 
@@ -75,9 +68,9 @@ public class MultipleCloseUp extends CloseUp {
     @Override
     public void onAcceptClicked() {
         Intent newIntent = new Intent(activity, Incomplete.class);
-        newIntent.putExtra(EXTRA_NUM_ADULT, numAdult);
-        newIntent.putExtra(EXTRA_NUM_CHILDREN, numChildren);
-        newIntent.putExtra(EXTRA_NUM_TRIP, numTrip);
+        newIntent.putExtra(MainMenu.NUM_ADULT, numAdult);
+        newIntent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
+        newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         super.onAcceptClicked(newIntent);
     }
 

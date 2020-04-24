@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.multipleTrips;
+package com.example.lkjhgf.activities.multipleTrips;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,17 +7,14 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.futureTrips.Complete;
-import com.example.lkjhgf.activites.futureTrips.Incomplete;
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.futureTrips.Complete;
+import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
-
-import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_NUM_ADULT;
-import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_NUM_CHILDREN;
-import static com.example.lkjhgf.helper.futureTrip.MyTrip.EXTRA_TRIP;
 
 /**
  * Kopieren einer Fahrt, die bei der Ermittlung der günstigsten Fahrscheine
@@ -51,12 +48,12 @@ public class CopyTrip extends Activity {
 
         Intent intent = getIntent();
 
-        Trip trip = (Trip) intent.getSerializableExtra(EXTRA_TRIP);
+        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
+        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+        int numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
-        int numChildren = intent.getIntExtra(EXTRA_NUM_CHILDREN, 0);
-        int numAdult = intent.getIntExtra(EXTRA_NUM_ADULT, 0);
-
-        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numChildren, numAdult);
+        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numChildren, numAdult, numTrip);
 
         form.setOnClickListener();
 

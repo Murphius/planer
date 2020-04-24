@@ -26,6 +26,7 @@ public class TextViewClass {
     public View line;
     public TextView numAdult, userNumAdult;
     public TextView numChildren, userNumChildren;
+    public TextView ticketInformationHolder, ticketInformationView;
 
     /**
      * Initialisierung der Varibalen in der Funktion {@link #findTextView(View)}
@@ -62,6 +63,9 @@ public class TextViewClass {
 
         numChildren = view.findViewById(R.id.textView85);
         userNumChildren = view.findViewById(R.id.textView86);
+
+        ticketInformationHolder = view.findViewById(R.id.textView94);
+        ticketInformationView = view.findViewById(R.id.textView93);
 
         line = view.findViewById(R.id.view6);
     }
@@ -105,7 +109,12 @@ public class TextViewClass {
         numChanges.setText(UtilsString.setNumChanges(trip));
 
         // Preisstufe
-        preisstufe.setText(trip.fares.get(0).units);
+        if(trip.fares == null){
+            String text = "?";
+            preisstufe.setText(text);
+        }else{
+            preisstufe.setText(trip.fares.get(0).units);
+        }
 
         // Start- und Zielpunkt
         startLocation.setText(UtilsString.setLocationName(trip.from));

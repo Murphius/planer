@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activites.singleTrip.ShowAllPossibleConnections;
-
-import java.util.Calendar;
+import com.example.lkjhgf.activities.singleTrip.ShowAllPossibleConnections;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
@@ -66,14 +64,4 @@ public class SingleTrip extends Form {
         super.changeViewToPossibleConnections();
     }
 
-    /**
-     * Wenn eine Fahrt kopiert werden soll, wird der Zeitpunkt default mäßig auf den aktuellen
-     * Zeitpunkt gesetzt und die Textfelder geleert
-     */
-    @Override
-    public void copy(){
-        text.date_view.setText("");
-        text.arrivalDepartureView.setText("");
-        selectedDate = Calendar.getInstance();
-    }
 }

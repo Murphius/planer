@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        android:backgroundTint="#FFFFFF">
+        android:layout_margin="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +48,7 @@
                     android:textColor="@color/mr_and_mrs_jones"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:text="geplante"/>
+                    tools:text="geplante" />
 
                 <TextView
                     android:id="@+id/textView72"
@@ -57,7 +56,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    tools:text="verspätung"/>
+                    tools:text="verspätung" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,7 +89,7 @@
                     android:textColor="@color/mr_and_mrs_jones"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:text="geplante"/>
+                    tools:text="geplante" />
 
                 <TextView
                     android:id="@+id/textView73"
@@ -98,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    tools:text="Verspätung"/>
+                    tools:text="Verspätung" />
             </LinearLayout>
 
             <View
@@ -213,9 +212,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/sommer_mom"
-                android:padding="4dp"
                 android:orientation="horizontal"
-                android:scrollbars="horizontal"/>
+                android:padding="4dp"
+                android:scrollbars="horizontal" />
 
             <View
                 android:layout_width="match_parent"

@@ -8,9 +8,8 @@ import android.widget.Toast;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
-import com.example.lkjhgf.activites.MainMenu;
-import com.example.lkjhgf.activites.multipleTrips.ShowAllPossibleConnections;
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.multipleTrips.ShowAllPossibleConnections;
 
 import java.util.Calendar;
 
@@ -25,9 +24,7 @@ public class MultipleTrip extends Form {
     private int numTrip;
     private int numAdult, numChildren;
 
-    public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.helper.form.EXTRA_NUM_TRIP";
-    public static String EXTRA_NUM_ADULT = "com.example.lkjhgf.helper.form.EXTRA_NUM_ADULT";
-    public static String EXTRA_NUM_CHILDREN = "com.example.lkjhgf.helper.form.EXTRA_NUM_CHILDREN";
+    private TextView titleView;
 
     /**
      * Wenn eine Fahrt editiert oder kopiert werden soll, sollen die zugehörigen Informationen
@@ -44,7 +41,8 @@ public class MultipleTrip extends Form {
                         NetworkProvider provider,
                         Trip trip,
                         int numChildren,
-                        int numAdult) {
+                        int numAdult,
+                        int numTrip) {
         // "Normale" Ansicht herstellen
         this(activity, view, provider);
 
@@ -55,6 +53,11 @@ public class MultipleTrip extends Form {
         setText = numChildren + "";
         this.numChildren = numChildren;
         text.numChildrenView.setText(setText);
+
+        this.numTrip = numTrip;
+        String titleString = numTrip + ". Fahrt";
+        titleView.setText(titleString);
+
 
         //Informationen der Verbindung den Attributen zuweisen
         startLocation = trip.from;
@@ -78,15 +81,11 @@ public class MultipleTrip extends Form {
                         View view,
                         NetworkProvider provider) {
         super(activity, view, provider);
-        TextView titleView = view.findViewById(R.id.app_name2);
+        titleView = view.findViewById(R.id.app_name2);
         Intent intent = activity.getIntent();
 
         // Die Nr. des Tripps
-        int numTrip1 = intent.getIntExtra(MainMenu.EXTRA_NUMBER, 1);
-        int numTrip2 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
-        int numTrip3 = intent.getIntExtra(TripIncomplete.EXTRA_NUM_TRIP, 1);
-        numTrip = Integer.max(numTrip1, numTrip2);
-        numTrip = Integer.max(numTrip3, numTrip);
+        numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
         String titleString = numTrip + ". Fahrt";
         titleView.setText(titleString);
     }
@@ -135,23 +134,10 @@ public class MultipleTrip extends Form {
      */
     void changeViewToPossibleConnections() {
         intent = new Intent(context, ShowAllPossibleConnections.class);
-        intent.putExtra(EXTRA_NUM_TRIP, numTrip);
-        intent.putExtra(EXTRA_NUM_ADULT, numAdult);
-        intent.putExtra(EXTRA_NUM_CHILDREN, numChildren);
+        intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
+        intent.putExtra(MainMenu.NUM_ADULT, numAdult);
+        intent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
         super.changeViewToPossibleConnections();
     }
 
-    /**
-     * Wenn eine Fahrt kopiert wurde, bleiben alle Parameter unverändert, bis auf
-     * das Datum. <br/>
-     * <p>
-     * Das Datum wird default mäßig auf das aktuelle Datum gesetzt. Die entsprechenden Textfelder
-     * hingegen werden geleert.
-     */
-    @Override
-    public void copy() {
-        selectedDate = Calendar.getInstance();
-        text.arrivalDepartureView.setText("");
-        text.date_view.setText("");
-    }
 }

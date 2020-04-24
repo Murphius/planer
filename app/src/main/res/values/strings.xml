@@ -41,8 +41,8 @@
     <string name="eine_fahrt">Eine Fahrt</string>
 
     <string name="datum">Datum:</string>
-    <string name="ankunft">Ankunftszeit:</string>
-    <string name="abfahrt">Abfahrtszeit:</string>
+    <string name="ankunft">Ankunftszeit</string>
+    <string name="abfahrt">Abfahrtszeit</string>
     <string name="start">Start:</string>
     <string name="zwischenhalt">Über:</string>
     <string name="ziel">Ziel:</string>

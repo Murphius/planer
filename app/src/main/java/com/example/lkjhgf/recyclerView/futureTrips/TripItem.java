@@ -14,6 +14,7 @@ public class TripItem {
     private Trip trip;
     private boolean isComplete;
     private int numAdult, numChildren;
+    private Integer ticket;
     /**
      * Kurze Zusammenfassung der Abfolge von Verkehrsmitteln
      */
@@ -69,6 +70,11 @@ public class TripItem {
         return journeyItems;
     }
 
+    //TODO
+    public Integer getTicket(){
+        return ticket;
+    }
+
     /**
      * Zwei Fahrten sind identisch, wenn sie die gleiche ID besitzen <br/>
      * Die Erzeugung von IDs erfolgt in {@link Trip#buildSubstituteId()} <br/>
@@ -83,5 +89,10 @@ public class TripItem {
         }
         TripItem otherTripItem = (TripItem) o;
         return otherTripItem.trip.getId().equals(this.trip.getId());
+    }
+
+    //TODO
+    public void setTicket(Integer integer) {
+        ticket = new Integer(integer);
     }
 }

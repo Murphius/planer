@@ -26,7 +26,7 @@ public class TextViewClass {
     private TextView delay_departure, delay_arrival;
     TextView numChildren, numChildrenView;
     TextView numAdult, numAdultView;
-    TextView ticket, useTicket;
+    TextView ticketView, useTicket;
     View view;
 
     /**
@@ -67,9 +67,9 @@ public class TextViewClass {
         numAdultView = view.findViewById(R.id.textView82);
         numChildren = view.findViewById(R.id.textView81);
         numChildrenView = view.findViewById(R.id.textView41);
-        ticket = view.findViewById(R.id.textView89);
-        useTicket = view.findViewById(R.id.textView90);
         this.view = view.findViewById(R.id.view5);
+        ticketView = view.findViewById(R.id.textView89);
+        useTicket = view.findViewById(R.id.textView90);
     }
 
     /**

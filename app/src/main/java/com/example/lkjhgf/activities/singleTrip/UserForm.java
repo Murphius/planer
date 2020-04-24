@@ -1,4 +1,4 @@
-package com.example.lkjhgf.activites.singleTrip;
+package com.example.lkjhgf.activities.singleTrip;
 
 import android.app.Activity;
 

@@ -75,15 +75,6 @@ public class CloseUpAdapter extends RecyclerView.Adapter<DetailedConnectionViewH
 
         holder.closeUpItemSetUpView(current);
 
-        if (current.getTicket() == null) {
-            //TODO
-            //holder.useTicket.setVisibility(View.GONE);
-            //holder.ticketView.setVisibility(View.GONE);
-        } else {
-            //TODO
-            //holder.useTicket.setText(current.getTicket.toString());
-        }
-
         if (current instanceof CloseUpPublicItem) {
             holder.publicItemSetUpView((CloseUpPublicItem) current);
         } else {// instance of IndividualItem

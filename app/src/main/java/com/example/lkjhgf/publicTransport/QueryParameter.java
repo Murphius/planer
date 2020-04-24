@@ -10,7 +10,7 @@ import de.schildbach.pte.dto.TripOptions;
  * Anfrage beantworten kann <br/>
  * <p>
  * Benötigt werden Start, Ziel, Zeitpunkt (Abfahrts- oder Ankunftszeit -> hinterlegt im Boolean),
- * sowie die Routenoptionen ({@link com.example.lkjhgf.activites.Settings})
+ * sowie die Routenoptionen ({@link com.example.lkjhgf.activities.Settings})
  *
  * @preconditions der Nutzer hat das Formular ({@link com.example.lkjhgf.helper.form.Form}) ausgefüllt,
  * und auf weiter geklickt

@@ -69,7 +69,7 @@ class RecyclerViewService {
         this.provider = provider;
 
         //Keine passenden Verbindugnen gefunden -> Nachricht an den Nutzer
-        if (possibleConnections.result == null) {
+        if (possibleConnections.result == null || possibleConnections.result.status == QueryTripsResult.Status.NO_TRIPS) {
             Toast.makeText(activity, "Keine passenden Verbindungen gefunden", Toast.LENGTH_SHORT).show();
             adapter = new ConnectionAdapter(new ArrayList<>());
         } else {
@@ -197,5 +197,9 @@ class RecyclerViewService {
             // Scrollen an die Position des ersten neuen Elements
             layoutManager.smoothScrollToPosition(recyclerView, null, connection_items.size() - length);
         }
+    }
+
+    public boolean isConnectionListEmpty(){
+        return connection_items == null;
     }
 }

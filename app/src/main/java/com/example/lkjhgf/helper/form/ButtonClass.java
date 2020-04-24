@@ -11,7 +11,7 @@ import com.example.lkjhgf.color.ButtonBootstrapBrandInvisible;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.Utils;
-import com.example.lkjhgf.activites.Settings;
+import com.example.lkjhgf.activities.Settings;
 import com.example.lkjhgf.helper.util.UtilsString;
 
 import java.util.Calendar;

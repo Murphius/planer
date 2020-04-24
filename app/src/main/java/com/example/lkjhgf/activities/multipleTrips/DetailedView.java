@@ -1,15 +1,11 @@
-package com.example.lkjhgf.activites.multipleTrips;
+package com.example.lkjhgf.activities.multipleTrips;
 
 import android.app.Activity;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
+import android.widget.RelativeLayout;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.closeUp.MultipleCloseUp;
-import com.example.lkjhgf.helper.service.MultiplePossibleConnections;
-
-import de.schildbach.pte.dto.Trip;
 
 /**
  * Planung mehrerer Fahrten <br/>
@@ -26,13 +22,11 @@ public class DetailedView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection_view_detail);
+        setContentView(R.layout.detailed_view);
 
-        Trip trip = (Trip) getIntent().getSerializableExtra(MultiplePossibleConnections.EXTRA_TRIP);
+        RelativeLayout layout = findViewById(R.id.constraintLayout2);
 
-        ConstraintLayout layout = findViewById(R.id.constraintLayout2);
-
-        new MultipleCloseUp(this, layout, trip);
+        new MultipleCloseUp(this, layout);
     }
 
 }
