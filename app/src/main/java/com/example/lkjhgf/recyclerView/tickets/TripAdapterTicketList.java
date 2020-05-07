@@ -10,8 +10,8 @@ import com.example.lkjhgf.recyclerView.futureTrips.util.FutureTripViewHolder;
 
 import java.util.ArrayList;
 
-public class TripView extends TripAdapter {
-    public TripView(ArrayList<TripItem> tripItems, Activity activity) {
+public class TripAdapterTicketList extends TripAdapter {
+    public TripAdapterTicketList(ArrayList<TripItem> tripItems, Activity activity) {
         super(tripItems, activity);
     }
 

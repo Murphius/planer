@@ -12,7 +12,7 @@ import com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener;
 /**
  * Enthält alle Buttons der Ansicht für eine geplante Fahrt
  */
-class ButtonClass {
+public class ButtonClass {
 
     private FutureTripViewHolder futureTripViewHolder;
 
@@ -81,5 +81,11 @@ class ButtonClass {
                 }
             }
         });
+    }
+
+    public void hideButtons(){
+        edit.setVisibility(View.GONE);
+        copy.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
     }
 }

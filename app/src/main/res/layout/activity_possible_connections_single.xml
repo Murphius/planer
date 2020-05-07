@@ -30,13 +30,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -267,78 +267,80 @@
 
                 </LinearLayout>
             </ScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/BootstrapButton23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:bootstrapText="{ty_media_play_reverse} Früher "
+                    app:roundedCorners="true" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/BootstrapButton24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:bootstrapText="Fahrt anpassen"
+                    app:roundedCorners="true" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/BootstrapButton25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:bootstrapText="Später {ty_media_play}"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/mr_and_mrs_jones" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:backgroundTint="@color/sommer_mom"
+                android:scrollbars="vertical" />
+
         </LinearLayout>
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/mr_and_mrs_jones" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/BootstrapButton23"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:bootstrapText="{ty_media_play_reverse} Früher "
-                app:roundedCorners="true" />
-
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/BootstrapButton24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:bootstrapText="Fahrt anpassen"
-                app:roundedCorners="true" />
-
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/BootstrapButton25"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:bootstrapText="Später {ty_media_play}"
-                app:roundedCorners="true" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/mr_and_mrs_jones" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:backgroundTint="@color/sommer_mom"
-            android:scrollbars="vertical" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

@@ -13,6 +13,7 @@ import com.example.lkjhgf.activities.futureTrips.CompleteAbortEditingIncompleteT
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
@@ -24,7 +25,7 @@ import de.schildbach.pte.dto.Trip;
  * <p>
  * Vorbedingung: Der Nutzer hat unter den zukünftigen Fahrten bei einer Fahrt den editieren-Button gedrückt
  * und bestätigt, dass er die Fahrt bearbeiten will <br/>
- * Aufruf in {@link com.example.lkjhgf.helper.futureTrip.MyTrip} <br/>
+ * Aufruf in {@link MyTripList} <br/>
  * Zugehörige Aktivitäten:
  * {@link Complete} oder
  * {@link Incomplete} <br/>

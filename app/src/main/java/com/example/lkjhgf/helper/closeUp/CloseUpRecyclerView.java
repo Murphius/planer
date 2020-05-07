@@ -50,9 +50,6 @@ public class CloseUpRecyclerView {
         adapter.setOnItemClickListener(position -> {
             items.get(position).setShowDetails();
             adapter.notifyDataSetChanged();
-            if (items.get(position) instanceof CloseUpPrivateItem) {
-                //activity.recreate();
-            }
         });
         recyclerView.setFocusable(false);
     }

@@ -1,5 +1,7 @@
 package com.example.lkjhgf.adapter;
 
+import com.example.lkjhgf.optimisation.NumTicket;
+import com.example.lkjhgf.optimisation.Ticket;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -53,6 +55,13 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static final String EXTRA_ARRIVAL = "com.example.lkjhgf.EXTRA_ARRIVAL";
     private static final String EXTRA_ARRIVAL_TIME = "com.example.lkjhgf.EXTRA_ARRIVAL_TIME";
     private static final String EXTRA_DISTANCE = "com.example.lkjhgf.EXTRA_DISTANCE";
+
+    //Ticket
+
+    //NumTicket
+    private static final String EXTRA_INT_NUM_TRIPS = "com.example.lkjhgf.EXTRA_INT_NUM_TRIPS";
+    private static final String EXTRA_NAME_TICKET = "com.example.lkjhgf.EXTRA_NAME_TICKET";
+    private static final String EXTRA_ARRAY_PRICE = "com.example.lkjhgf.EXTRA_ARRAY_PRICE";
 
     /**
      * Deserialisierung eines JsonElements
@@ -117,13 +126,18 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                     arrivalTime,
                     path,
                     distance);
+        }else if(className.equals(NumTicket.class.getName())){ //Erzeugen eines neuen NumTickets
+            String name = context.deserialize(jsonObject.get(EXTRA_NAME_TICKET), String.class);
+            int numTrips = context.deserialize(jsonObject.get(EXTRA_INT_NUM_TRIPS), Integer.class);
+            int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
+            return new NumTicket(numTrips, prices, name);
         }
         return null;
     }
 
     /**
-     * Serialisierung des Objekts, mit manueller serialisierung für die Klassen Trip.Public und
-     * Trip.Individual <br/>
+     * Serialisierung des Objekts, mit manueller serialisierung für die Klassen Trip.Public,
+     * Trip.Individual und Ticket <br/>
      * <p>
      * Serialisiert die einzelnen Attribute der Klassen mit "Speicheradressen"
      *
@@ -160,7 +174,15 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                 jsonObject.add(EXTRA_PATH, context.serialize(individualTrip.path));
                 jsonObject.add(EXTRA_DISTANCE, context.serialize(individualTrip.distance));
             }
-        } else {
+        }else if(src instanceof Ticket){
+            if(src instanceof NumTicket){
+                NumTicket numTicket = (NumTicket) src;
+                jsonObject.add(EXTRA_INT_NUM_TRIPS, context.serialize(numTicket.getNumTrips()));
+                jsonObject.add(EXTRA_NAME_TICKET, context.serialize(numTicket.getName()));
+                jsonObject.add(EXTRA_ARRAY_PRICE, context.serialize(numTicket.getPrices()));
+            }
+            //TODO Zeitticket
+        }else {
             JsonElement element = context.serialize(src);
             jsonObject.add(DATA, element);
         }

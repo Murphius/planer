@@ -16,7 +16,7 @@ import com.example.lkjhgf.activities.singleTrip.UserForm;
  * Ansicht nach der Planung einer Fahrt, die nicht Optimiert werden muss <br/>
  * Ansicht, wenn aus dem Hauptmenü aufgerufen
  */
-public class TripComplete extends MyTrip {
+public class TripListComplete extends MyTripList {
 
     /**
      * Layout der Ansicht modifizieren <br/>
@@ -25,10 +25,10 @@ public class TripComplete extends MyTrip {
      * den Nutzer nicht sichrbar <br/>
      * Auch  kann der Nutzer nicht abbrechen, sondern nur zurück ins Hauptmenü <br/>
      *
-     * @see MyTrip#MyTrip(Activity activity, View view, TripItem tripItem, String DataPath)
+     * @see MyTripList#MyTripList(Activity activity, View view, TripItem tripItem, String DataPath)
      */
-    public TripComplete(Activity activity, View view, TripItem tripItem) {
-        super(activity, view, tripItem, MyTrip.ALL_SAVED_TRIPS);
+    public TripListComplete(Activity activity, View view, TripItem tripItem) {
+        super(activity, view, tripItem, MyTripList.ALL_SAVED_TRIPS);
 
         abort.setVisibility(View.GONE);
         calculateTickets.setVisibility(View.GONE);
@@ -40,12 +40,12 @@ public class TripComplete extends MyTrip {
     /**
      * Klickt der Nutzer auf die Fahrt, wird die Detailansicht dieser Fahrt geöffnet <br/>
      * <p>
-     * @see MyTrip#onItemClick(int position)
+     * @see MyTripList#onItemClick(int position)
      *
      * Wenn der Nutzer in der Übersicht aller gespeicherten Fahrten ist, muss zwischen den Fahrtypen
      * unterschieden werden, da davon abhängig das Layout anders gestaltet werden muss. <br/>
-     * Ein zusammenlegen mit {@link TripIncomplete#onItemClick(int position)} ist nicht möglich,
-     * da in der Klasse {@link TripIncomplete} das Ticket für die jeweilige Fahrt noch nicht bekannt ist.
+     * Ein zusammenlegen mit {@link TripListIncomplete#onItemClick(int position)} ist nicht möglich,
+     * da in der Klasse {@link TripListIncomplete} das Ticket für die jeweilige Fahrt noch nicht bekannt ist.
      */
     @Override
     void onItemClick(int position) {
@@ -67,7 +67,7 @@ public class TripComplete extends MyTrip {
     }
 
     /**
-     * @see MyTrip#startEdit(int position)
+     * @see MyTripList#startEdit(int position)
      */
     @Override
     void startEdit(int position) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
+import com.example.lkjhgf.activities.ticketOverview.TicketOverview;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.futureTrips.Complete;
@@ -90,7 +91,8 @@ public class MainMenu extends Activity {
         });
 
         ticket_overwiew.setOnClickListener(v -> {
-            //TODO
+            Intent intent = new Intent(this, TicketOverview.class);
+            startActivity(intent);
         });
 
         information_page.setOnClickListener(v -> change_view_to_information_page());

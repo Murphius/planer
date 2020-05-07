@@ -199,7 +199,7 @@ class RecyclerViewService {
         }
     }
 
-    public boolean isConnectionListEmpty(){
+    boolean isConnectionListEmpty(){
         return connection_items == null;
     }
 }

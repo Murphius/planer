@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bvg"
     tools:context=".activities.MainMenu">
 
 
@@ -46,6 +47,7 @@
             android:id="@+id/BootstrapButton1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
             android:backgroundTintMode="src_over"
             android:clickable="true"
             android:fontFamily="serif"
@@ -68,7 +70,7 @@
             android:id="@+id/BootstrapButton2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10pt"
+            android:layout_marginVertical="5dp"
             android:backgroundTintMode="src_over"
             android:fontFamily="serif"
             android:minWidth="@android:dimen/thumbnail_width"
@@ -85,7 +87,7 @@
             android:id="@+id/BootstrapButton3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10pt"
+            android:layout_marginVertical="5dp"
             android:backgroundTintMode="src_over"
             android:fontFamily="serif"
             android:minWidth="@android:dimen/thumbnail_width"
@@ -102,7 +104,7 @@
             android:id="@+id/BootstrapButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10pt"
+            android:layout_marginVertical="5dp"
             android:width="245dp"
             android:backgroundTintMode="src_atop"
             android:clickable="true"

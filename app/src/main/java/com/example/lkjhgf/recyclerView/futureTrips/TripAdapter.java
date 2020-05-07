@@ -82,6 +82,8 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             holder.textViewClass.numChildren.setVisibility(View.GONE);
             holder.textViewClass.userNumChildren.setVisibility(View.GONE);
             holder.textViewClass.line.setVisibility(View.GONE);
+            holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
+            holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
         }else{
             // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt
             String text = currentItem.getNumAdult() + "";
@@ -90,9 +92,9 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             holder.textViewClass.userNumChildren.setText(text);
 
             //Ticket anzeigen, wenn kein Ticket vorhanden -> keine Anzeige
-            if(currentItem.getTicket() != null){
+            if(currentItem.getTicketList().size() != 0){
                 //TODO
-                holder.textViewClass.ticketInformationHolder.setText("Ticket entwerten");
+                holder.textViewClass.ticketInformationHolder.setText(currentItem.getTicketListAsString());
             }else{
                 holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
                 holder.textViewClass.ticketInformationView.setVisibility(View.GONE);

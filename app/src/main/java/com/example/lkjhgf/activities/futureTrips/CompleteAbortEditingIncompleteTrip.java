@@ -7,15 +7,15 @@ import android.view.View;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.helper.futureTrip.MyTrip;
-import com.example.lkjhgf.helper.futureTrip.TripComplete;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
+import com.example.lkjhgf.helper.futureTrip.TripListComplete;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import de.schildbach.pte.dto.Trip;
 
 public class CompleteAbortEditingIncompleteTrip extends Activity {
 
-    private MyTrip myTrip;
+    private MyTripList myTripList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
 
         TripItem newTripItem = new TripItem(trip, false, numAdult, numChildren);
 
-        myTrip = new TripComplete(this, view, newTripItem);
+        myTripList = new TripListComplete(this, view, newTripItem);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this.getApplicationContext(), MainMenu.class);
-        myTrip.saveData();
+        myTripList.saveData();
         //Sorgt dafür, dass der Aktivitäten Stack geleert wird
         finishAffinity();
         startActivity(intent);

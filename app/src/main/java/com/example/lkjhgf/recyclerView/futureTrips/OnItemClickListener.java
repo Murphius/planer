@@ -1,12 +1,12 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
-import com.example.lkjhgf.helper.futureTrip.MyTrip;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
 /**
  * Interface mit den Methoden, die bei dem jeweiligen Click auf das Item beziehungsweise den Button
  * ausgeführt werden soll<br/>
  * <p>
- *  Implementierung in {@link MyTrip#recyclerViewBlah()}
+ *  Implementierung in {@link MyTripList#recyclerViewBlah()}
  * </p>
  */
 public interface OnItemClickListener {

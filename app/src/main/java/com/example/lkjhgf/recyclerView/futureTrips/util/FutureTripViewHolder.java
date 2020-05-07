@@ -16,11 +16,10 @@ import com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener;
  */
 public class FutureTripViewHolder extends RecyclerView.ViewHolder {
 
+    public ButtonClass buttonClass;
     public TextViewClass textViewClass;
     public RecyclerView recyclerView;
     public View view;
-    //TODO entfernenen??
-    //public Trip trip;
 
     /**
      * Konstruktor, in dem die einzelnen Klassen für die Textfelder und Buttons initialisiert werden,
@@ -32,7 +31,7 @@ public class FutureTripViewHolder extends RecyclerView.ViewHolder {
     public FutureTripViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
         super(itemView);
         textViewClass = new TextViewClass(itemView);
-        ButtonClass buttonClass = new ButtonClass(itemView, this);
+        buttonClass = new ButtonClass(itemView, this);
 
         //RecyclerView
         view = itemView.findViewById(R.id.CardView1);

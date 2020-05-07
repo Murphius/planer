@@ -55,7 +55,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionViewHolder
     @Override
     public void onBindViewHolder(ConnectionViewHolder holder, int position) {
         ConnectionItem connectionItem = connectionList.get(position);
-
         holder.fillView(connectionItem);
     }
 

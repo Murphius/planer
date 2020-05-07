@@ -70,16 +70,9 @@ class ConnectionViewHolder extends RecyclerView.ViewHolder {
         numChangesView.setText(UtilsString.setNumChanges(item.getNumChanges()));
         preisstufeView.setText(item.getPreisstufe());
 
-        //TODO -> auskommentiertes entfernen ?
-        //int delayArrival = item.getDelayArrival();
-        //int delayDeparture = item.getDelayDeparture();
-
-        //if(delayArrival != 0){
         Utils.setDelayView(delayArrivalView, item.getDelayArrival(), resources);
-        //}
-        //if(delayDeparture != 0){
+
         Utils.setDelayView(delayDepartureView, item.getDelayDeparture(), resources);
-        //}
 
         //Erzeugen / Füllen des recyclerViews mit der kompakten Ansicht des zweiten
         RecyclerView.Adapter journeyAdapter = new JourneyAdapter(item.getJourneyItems());

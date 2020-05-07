@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
-import com.example.lkjhgf.helper.futureTrip.TripIncomplete;
+import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
 import com.example.lkjhgf.activities.MainMenu;
 
 import de.schildbach.pte.dto.Trip;
@@ -20,7 +20,7 @@ import de.schildbach.pte.dto.Trip;
  * D.h. die Fahrten wurden alle in einem Schritt geplant
  * </p>
  * Wird diese Aktivität ausgeführt, nach dem der Nutzer sich für eine Fahrt entschieden hat, so wird
- * diese Fahrt mittels Intent übergeben und in {@link TripIncomplete} in die Liste der bisher
+ * diese Fahrt mittels Intent übergeben und in {@link TripListIncomplete} in die Liste der bisher
  * geplanten Fahrten eingefügt. Zusätzlich wird die anzahl der reisenden Personen, sowie die Nummer
  * des Trips übergeben.
  * <br/>
@@ -48,7 +48,7 @@ public class Incomplete extends Activity {
 
         TripItem newTripItem = new TripItem(trip, false, numAdult, numChildren);
 
-        new TripIncomplete(this, view, newTripItem);
+        new TripListIncomplete(this, view, newTripItem);
     }
 
     /**

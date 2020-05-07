@@ -11,6 +11,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
@@ -20,7 +21,7 @@ import de.schildbach.pte.dto.Trip;
  * <p>
  *
  * Der Nutzer hat für eine Fahrt den Button "Fahrt kopieren" gedürckt <br/>
- * Event in der Klasse {@link com.example.lkjhgf.helper.futureTrip.MyTrip} <br/>
+ * Event in der Klasse {@link MyTripList} <br/>
  * Dazugehörige Aktivität:
  * {@link Complete}
  * <br/>

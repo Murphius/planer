@@ -1,7 +1,9 @@
 package com.example.lkjhgf.helper.util;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
@@ -192,5 +194,17 @@ public final class UtilsString {
             }
         }
         return platform + "?";
+    }
+
+    /**
+     * Wandelt einen Cent Betrag in € um, mit korrektor Formatierung
+     *
+     * @return String Cent-Betrag in Euro mit deutscher Formatierung
+     * @param costs Kosten in Cent, welche angezeigt werden sollen
+     */
+    public static String centToString(int costs){
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+        double currencyAmmount = (costs/100) + (double)(costs%100)/100;
+        return currencyFormatter.format(currencyAmmount);
     }
 }

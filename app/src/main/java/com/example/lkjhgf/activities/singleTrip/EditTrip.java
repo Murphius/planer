@@ -11,6 +11,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
@@ -22,7 +23,7 @@ import de.schildbach.pte.dto.Trip;
  *
  * Vorbedingung: Der Nutzer hat unter den zukünftigen Fahrten bei einer Fahrt den editieren-Button gedrückt
  * und bestätigt, dass er die Fahrt bearbeiten will <br/>
- * Aufruf in {@link com.example.lkjhgf.helper.futureTrip.MyTrip} <br/>
+ * Aufruf in {@link MyTripList} <br/>
  * Zugehörige Aktivität:
  * {@link Complete}<br/>
  * <p>

@@ -1,5 +1,6 @@
 package com.example.lkjhgf.recyclerView.possibleConnections;
 
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.util.Utils;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -129,7 +130,7 @@ public class ConnectionItem implements Serializable {
      * Trips überprüft, ob eine Fahrt schon enthalten ist <br/>
      *
      * Erzeugung der IDs: {@link Trip#buildSubstituteId()} <br/>
-     * Nutzung der Funktion in: {@link com.example.lkjhgf.helper.futureTrip.MyTrip#insertTrip(TripItem)}
+     * Nutzung der Funktion in: {@link MyTripList#insertTrip(TripItem)}
      * @param o zu vergleichendes Objekt
      * @return true - wenn die ID der Fahrten übereinstimmt
      * @return  false - wenn das zu vergleichende Objekt kein ConnectionItem ist

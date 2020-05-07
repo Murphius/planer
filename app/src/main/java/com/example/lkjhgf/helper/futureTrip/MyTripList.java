@@ -14,6 +14,8 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.adapter.InterfaceAdapter;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.optimisation.NumTicket;
+import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener;
 import com.example.lkjhgf.recyclerView.futureTrips.TripAdapter;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 import de.schildbach.pte.dto.Trip;
 
@@ -35,7 +38,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Übersicht über alle (bisher) geplanten Fahrten
  */
-public abstract class MyTrip {
+public abstract class MyTripList {
 
     static String ALL_SAVED_TRIPS = "com.example.lkjhgf.futureTrips.ALL_SAVED_TRIPS";
     static String SAVED_TRIPS = "com.example.lkjhgf.futureTrips.SAVED_TRIPS";
@@ -63,7 +66,7 @@ public abstract class MyTrip {
      * @param tripItem neue Fahrt, die in die Liste von zukünftigen Fahrten eingefügt werden soll
      * @param dataPath gibt an, welche Fahrten geladen werden sollen
      */
-    MyTrip(Activity activity, View view, TripItem tripItem, String dataPath) {
+    MyTripList(Activity activity, View view, TripItem tripItem, String dataPath) {
         this.activity = activity;
         this.dataPath = dataPath;
         loadData();
@@ -111,12 +114,12 @@ public abstract class MyTrip {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                MyTrip.this.onItemClick(position);
+                MyTripList.this.onItemClick(position);
             }
 
             @Override
             public void onDeleteClicked(int position) {
-                MyTrip.this.onDeleteClicked(position);
+                MyTripList.this.onDeleteClicked(position);
             }
 
             public void onCopyClicked(int position) {
@@ -294,6 +297,8 @@ public abstract class MyTrip {
         InterfaceAdapter adapter = new InterfaceAdapter();
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
+        builder.registerTypeAdapter(NumTicket.class, adapter);
+        //TODO Zeitticket
         Gson gson = builder.create();
         String json = gson.toJson(tripItems);
         editor.putString(SAVED_TRIPS_TASK, json);
@@ -320,6 +325,8 @@ public abstract class MyTrip {
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
         builder.registerTypeAdapter(Trip.Leg.class, adapter);
+        builder.registerTypeAdapter(Ticket.class, adapter);
+        builder.registerTypeAdapter(NumTicket.class, adapter);
         Gson gson = builder.create();
         Type type = new TypeToken<ArrayList<TripItem>>() {
         }.getType();
@@ -329,15 +336,10 @@ public abstract class MyTrip {
         } else {
             Date today = Calendar.getInstance().getTime();
             long oneDay = 86400000; // 24h = 86 400 000 ms
-            for (TripItem item : tripItems) {
-                // Löschen von Trips die mehr als 24h in der Vergangenheit liegen
+            for (Iterator<TripItem> it = tripItems.iterator(); it.hasNext();) {
+                TripItem item = it.next();
                 if (item.getTrip().getLastArrivalTime().getTime() + oneDay - today.getTime() <= 0) {
-                    tripItems.remove(item);
-                    // wenn dadurch die liste leer wird -> neu setzen & Funktion "abbrechen"
-                    if (tripItems.isEmpty()) {
-                        tripItems = new ArrayList<>();
-                        return;
-                    }
+                    it.remove();
                 }
             }
         }

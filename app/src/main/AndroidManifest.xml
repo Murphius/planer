@@ -40,6 +40,8 @@
             android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.futureTrips.Complete"
             android:parentActivityName=".activities.MainMenu"/>
+        <activity android:name=".activities.ticketOverview.TicketOverview"
+            android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.Settings" />
         <activity android:name=".activities.MainMenu">
             <intent-filter>
