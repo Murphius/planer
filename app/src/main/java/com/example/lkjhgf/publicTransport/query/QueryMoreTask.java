@@ -1,6 +1,8 @@
-package com.example.lkjhgf.publicTransport;
+package com.example.lkjhgf.publicTransport.query;
 
 import android.os.AsyncTask;
+
+import com.example.lkjhgf.activities.MainMenu;
 
 import java.io.IOException;
 
@@ -25,7 +27,7 @@ public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTrip
      */
     @Override
     protected QueryTripsResult doInBackground(QueryMoreParameter... queryMoreParameters) {
-        provider = queryMoreParameters[0].getProvider();
+        provider = MainMenu.myProvider.getNetworkProvider();
         QueryMoreParameter parameter = queryMoreParameters[0];
         QueryTripsResult result = null;
 

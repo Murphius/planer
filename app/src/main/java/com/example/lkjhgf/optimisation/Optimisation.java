@@ -1,5 +1,6 @@
 package com.example.lkjhgf.optimisation;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ public class Optimisation {
     public static void removeTrips(ArrayList<TripItem> tripItems) {
         for(TripItem tripItem : tripItems){
             if(!tripItem.isComplete()){
-                if(!VRRpreisstufenComparator.checkContains(tripItem.getPreisstufe())){
+                if(!MainMenu.myProvider.checkContains(tripItem.getPreisstufe())){
                     tripItems.remove(tripItem);
                 }
             }
         }
     }
 
-    public static ArrayList<TripItem> createAdultTripList(ArrayList<TripItem> allTrips, PreisProvider preisProvider) {
+    public static ArrayList<TripItem> createAdultTripList(ArrayList<TripItem> allTrips) {
         ArrayList<TripItem> adultList = new ArrayList<>();
         for (TripItem tripItem : allTrips) {
             System.out.println(tripItem.getNumAdult());
@@ -37,8 +38,8 @@ public class Optimisation {
     /**
      * Optimierungszauber
      */
-    public static TicketInformationHolder optimisation(PreisProvider preisProvider, ArrayList<TripItem> tripsToOptimise) {
-        int maxNumTripTicket = preisProvider.getMaxNumTrip();
+    public static TicketInformationHolder optimisation(ArrayList<Ticket> tickets, ArrayList<TripItem> tripsToOptimise) {
+        int maxNumTripTicket = MainMenu.myProvider.getMaxNumTrip();
 
         //größeres Array, um keine IndexOutOfBounce Fehler zu bekommen, wenn das Minimum gesucht wird -> - maxNumTripTicket viele Fahrten
         TicketInformationHolder[] allPossibleTicketCombinationHolder = new TicketInformationHolder[maxNumTripTicket + tripsToOptimise.size()];
@@ -52,19 +53,19 @@ public class Optimisation {
             //Enthält alle mögliche Kosten für den jeglichen Trip
             ArrayList<Integer> costs = new ArrayList<>();
             //Alle Tickets ausprobieren
-            for (Ticket ticket : preisProvider.getAllTickets()) {
+            for (Ticket ticket : tickets) {
                 //Mehrere Fahrtenschein
                 if (ticket instanceof NumTicket) {
                     NumTicket numTicket = (NumTicket) ticket;
                     //Kosten für diesen Fahrschein ermitteln
                     costs.add(allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()].getCosts()
-                            + preisProvider.getPrice(numTicket, tripsToOptimise.get(index).getPreisstufe()));
+                            + MainMenu.myProvider.getTicketPrice(numTicket, tripsToOptimise.get(index).getPreisstufe()));
                 }
             }
             //Suche für diese Fahrt den günstigsten Preis
             int indexOfBestTicket = getMinCostsIndex(costs);
             //Das Ticket, dass diesen Preis erzeugt
-            Ticket bestTicket = preisProvider.getAllTickets().get(indexOfBestTicket);
+            Ticket bestTicket = tickets.get(indexOfBestTicket);
             if (bestTicket instanceof NumTicket) {
                 NumTicket numTicket = (NumTicket) bestTicket;
                 // Alle Informationen zum Fahrschein hinzufügen

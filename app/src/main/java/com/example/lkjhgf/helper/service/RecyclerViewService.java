@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.UtilsList;
-import com.example.lkjhgf.publicTransport.QueryMoreParameter;
-import com.example.lkjhgf.publicTransport.QueryMoreTask;
+import com.example.lkjhgf.publicTransport.query.QueryMoreParameter;
+import com.example.lkjhgf.publicTransport.query.QueryMoreTask;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionAdapter;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 
@@ -118,7 +118,7 @@ class RecyclerViewService {
         int pos = connection_items.size();
 
         //Provider -> suche nach weiteren Verbindungen
-        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, true, provider);
+        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, true);
         AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
 
         QueryTripsResult resultLater = null;
@@ -169,7 +169,7 @@ class RecyclerViewService {
         int length = connection_items.size();
 
         // Suche nach neuen Verbindungen
-        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false, provider);
+        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false);
         AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(
                 query);
 

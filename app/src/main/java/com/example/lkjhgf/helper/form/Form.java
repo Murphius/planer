@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.lkjhgf.activities.Settings;
-import com.example.lkjhgf.publicTransport.QueryParameter;
-import com.example.lkjhgf.publicTransport.QueryTask;
+import com.example.lkjhgf.publicTransport.query.QueryParameter;
+import com.example.lkjhgf.publicTransport.query.QueryTask;
 
 import java.util.Calendar;
 
@@ -142,7 +142,7 @@ public abstract class Form {
         TripOptions tripOptions = Settings.getTripOptions(activity);
 
         QueryParameter queryParameter = new QueryParameter(startLocation, stopoverLocation, destinationLocation, selectedDate.getTime(), !isArrivalTime, tripOptions);
-        new QueryTask(provider, activity, intent).execute(queryParameter);
+        new QueryTask(activity, intent).execute(queryParameter);
     }
 
     /**

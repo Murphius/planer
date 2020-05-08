@@ -9,13 +9,9 @@ import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
-import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Optimisation;
-import com.example.lkjhgf.optimisation.PreisProvider;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketInformationHolder;
-import com.example.lkjhgf.optimisation.VRRadultPreisProvider;
-import com.example.lkjhgf.optimisation.VRRpreisstufenComparator;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.multipleTrips.UserForm;
 
@@ -98,19 +94,13 @@ public class TripListIncomplete extends MyTripList {
         abort.setOnClickListener(v -> activity.onBackPressed());
 
         //TODO Kalkulierung der Tickets
+        /**
+         * Wichtig hierbei: Nutzerklassenindex Ticketliste = Nutzerklassenindex Fahrten!
+         */
         calculateTickets.setOnClickListener(v -> {
-            //Preise hinterlegen
-            Ticket einzelTicketE = new NumTicket(1, new int[] { 170, 280, 280, 290, 600, 1280, 1570 }, "Einzelticket");
-            Ticket viererTicketE = new NumTicket(4, new int[] { 610, 1070, 1070, 1070, 2250, 4690, 5710 },
-                    "4er-Ticket");
-            Ticket zehnerTicketE = new NumTicket(10, new int[] { 1420, 2290, 2290, 2290, 4600, 9315, 10485 },
-                    "10er-Ticket");
-            ArrayList<Ticket> adultTickets = new ArrayList<>();
-            adultTickets.add(einzelTicketE);
-            adultTickets.add(viererTicketE);
-            adultTickets.add(zehnerTicketE);
 
-            PreisProvider vrrAdultPreisProvider = new VRRadultPreisProvider(adultTickets);
+
+            //PreisProvider vrrAdultPreisProvider = new VRRadultPreisProvider(MainMenu.myProvider.getTicketList);
 
             //Kopieren aller geplanten Fahrten
             ArrayList<TripItem> copy = new ArrayList<>(tripItems);
@@ -135,14 +125,22 @@ public class TripListIncomplete extends MyTripList {
 
 
             // Fahrten nach den Preisstufen sortieren
-            Collections.sort(copy, new VRRpreisstufenComparator());
+            Collections.sort(copy, MainMenu.myProvider);
             //Erwachsenen Fahrt:
-            ArrayList<TripItem> tripsToOptimiseAdult = Optimisation.createAdultTripList(copy, vrrAdultPreisProvider);
+            ArrayList<TripItem> tripsToOptimiseAdult = Optimisation.createAdultTripList(copy);
             //TODO Kinder
+            ArrayList<ArrayList<TripItem>> allSortedTrips = new ArrayList<>();
+            allSortedTrips.add(tripsToOptimiseAdult);
 
+            ArrayList<TicketInformationHolder> lastBestTickets = new ArrayList<>();
+            //TODO über die Nutzerklassen iterieren
+            ArrayList<ArrayList<Ticket>> allTicketsList = MainMenu.myProvider.getAllTickets();
+            for(int i = 0; i < allTicketsList.size(); i++){
+                lastBestTickets.add(Optimisation.optimisation(allTicketsList.get(i), allSortedTrips.get(i)));
+            }
 
             //Optimierungszauber
-            TicketInformationHolder lastBestTicket = Optimisation.optimisation(vrrAdultPreisProvider, tripsToOptimiseAdult);
+            //TicketInformationHolder lastBestTicket = Optimisation.optimisation( tripsToOptimiseAdult);
             //TODO Zusammenfügen von Fahrten
             /*for(int i = 0; i < tripsToOptimiseAdult.size() - 1; i++){
 
@@ -157,8 +155,11 @@ public class TripListIncomplete extends MyTripList {
             }*/
             //TicketListe Bauen
             //TODO
-            ArrayList<TicketInformationHolder> ticketList = Optimisation.createTicketList(lastBestTicket);
-            AllTickets.saveData(ticketList,activity);
+            for(TicketInformationHolder currentLastBestTicket : lastBestTickets ){
+                ArrayList<TicketInformationHolder> ticketList = Optimisation.createTicketList(currentLastBestTicket);
+                AllTickets.saveData(ticketList,activity);
+            }
+
             // Fahrten zu den Tickets packen
             /*for (TicketInformationHolder ticketHolder : ticketList) {
                 for (TripItem tripHolder : tripsToOptimiseAdult) {
@@ -167,13 +168,6 @@ public class TripListIncomplete extends MyTripList {
                     }
                 }
             }*/
-
-            //TODO
-            for (TicketInformationHolder ticketHolder : ticketList) {
-                System.out.print(ticketHolder.toString());
-            }
-
-
 
             //
             //TODO eigentlich anzeigen der Tickets statt aller Fahrten

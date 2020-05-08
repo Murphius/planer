@@ -1,4 +1,4 @@
-package com.example.lkjhgf.publicTransport;
+package com.example.lkjhgf.publicTransport.query;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.activities.MainMenu;
 
 import java.io.IOException;
 import java.util.Date;
@@ -27,8 +28,6 @@ import de.schildbach.pte.dto.TripOptions;
 public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
 
     // Konstanten fuer Intent
-    //private static final String EXTRA_CONNECTION_ITEMS = "com.example.lkjhgf.public_transport.EXTRA_CONNECTION_ITEMS";
-    //private static final String EXTRA_TRIP_CONTEXT = "com.example.lkjhgf.public_transport.EXTRA_TRIP_CONTEXT";
     public static final String EXTRA_QUERY_TRIPS_RESULT = "com.example.lkjhgf.public_transport.EXTRA_QUERYTRIPSRESULT";
 
     private NetworkProvider provider;
@@ -39,12 +38,11 @@ public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult>
     /**
      * Konstruktor mit allen im Verlauf benötigten Werte
      *
-     * @param provider - zuständiger Provider für die Anfrage (hier VRR)
      * @param context  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
      * @param intent   - zum Wechseln der Aktivität benötigt
      */
-    public QueryTask(NetworkProvider provider, Context context, Intent intent) {
-        this.provider = provider;
+    public QueryTask(Context context, Intent intent) {
+        this.provider = MainMenu.myProvider.getNetworkProvider();
         this.context = context;
         this.intent = intent;
     }

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.publicTransport.QueryTask;
+import com.example.lkjhgf.publicTransport.query.QueryTask;
 import com.example.lkjhgf.helper.form.Form;
 
 import java.util.Date;

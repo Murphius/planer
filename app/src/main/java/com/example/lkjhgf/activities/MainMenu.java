@@ -12,6 +12,8 @@ import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
+import com.example.lkjhgf.publicTransport.provider.MyProvider;
+import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
 
 /**
  * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet
@@ -21,6 +23,9 @@ public class MainMenu extends Activity {
     public static String NUM_ADULT = "com.example.lkjhgf.main_menu.NUM_ADULT";
     public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.main_menu.EXTRA_NUM_TRIP";
     public static String EXTRA_TRIP = "com.example.lkjhgf.main_menu.EXTRA_TRIP";
+
+    //An dieser Stelle -> ändern für andere Provider
+    public static MyProvider myProvider = new MyVRRprovider();
 
     /**
      * Planen einer einzelnen Fahrt, keine Fahrkostenoptimierung

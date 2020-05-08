@@ -1,8 +1,8 @@
 package com.example.lkjhgf.recyclerView.tickets;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
-import com.example.lkjhgf.optimisation.VRRpreisstufenComparator;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class TicketItem implements Comparable<TicketItem>{
     @Override
     public int compareTo(TicketItem o) {
         if(ticket.equals(o.ticket)){
-            return VRRpreisstufenComparator.getPreisstufenIndex(preisstufe) - VRRpreisstufenComparator.getPreisstufenIndex(o.preisstufe);
+            return MainMenu.myProvider.getPreisstufenIndex(preisstufe) - MainMenu.myProvider.getPreisstufenIndex(o.preisstufe);
         }else{
             if(ticket instanceof NumTicket && o.ticket instanceof NumTicket){
                 Integer thisNumTrip = ((NumTicket)ticket).getNumTrips();

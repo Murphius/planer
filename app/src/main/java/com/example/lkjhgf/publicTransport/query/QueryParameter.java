@@ -1,4 +1,4 @@
-package com.example.lkjhgf.publicTransport;
+package com.example.lkjhgf.publicTransport.query;
 
 import java.util.Date;
 

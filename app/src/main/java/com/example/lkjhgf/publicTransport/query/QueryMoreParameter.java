@@ -1,4 +1,4 @@
-package com.example.lkjhgf.publicTransport;
+package com.example.lkjhgf.publicTransport.query;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.QueryTripsContext;
@@ -13,12 +13,10 @@ import de.schildbach.pte.dto.QueryTripsContext;
 public class QueryMoreParameter {
     private QueryTripsContext context;
     private boolean later;
-    private NetworkProvider provider;
 
-    public QueryMoreParameter(QueryTripsContext context, boolean later, NetworkProvider provider){
+    public QueryMoreParameter(QueryTripsContext context, boolean later){
         this.context = context;
         this.later = later;
-        this.provider = provider;
     }
 
     public QueryTripsContext getContext(){
@@ -26,8 +24,5 @@ public class QueryMoreParameter {
     }
     boolean getLater(){
         return later;
-    }
-    public NetworkProvider getProvider(){
-        return provider;
     }
 }

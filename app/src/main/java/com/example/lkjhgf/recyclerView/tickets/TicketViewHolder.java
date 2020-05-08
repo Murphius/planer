@@ -15,8 +15,6 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncompleteView;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.optimisation.VRRpreisstufenComparator;
-import com.example.lkjhgf.recyclerView.futureTrips.TripAdapter;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
         quantity.setText(text);
         ticketName.setText(currentItem.getTicket().getName());
         preisstufeView.setText(currentItem.getPreisstufe());
-        int costsValue = currentItem.getQuantity() * currentItem.getTicket().getPrice(VRRpreisstufenComparator.getPreisstufenIndex(currentItem.getPreisstufe()));
+        int costsValue = currentItem.getQuantity() * currentItem.getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(currentItem.getPreisstufe()));
         costs.setText(UtilsString.centToString(costsValue));
 
         if (currentItem.getShowDetails()) {
