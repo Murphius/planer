@@ -30,6 +30,9 @@ public class SinglePossibleConnection extends PossibleConnections {
         text.numAdult.setVisibility(View.GONE);
         text.numChildrenView.setVisibility(View.GONE);
         text.numAdultView.setVisibility(View.GONE);
+
+        RecyclerViewService recyclerViewService = new RecyclerViewSingleService(view, activity, this, super.getButtons());
+        super.getButtons().setRecyclerView(recyclerViewService);
     }
 
     /**

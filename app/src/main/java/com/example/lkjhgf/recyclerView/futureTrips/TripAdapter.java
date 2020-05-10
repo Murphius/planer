@@ -15,6 +15,7 @@ import com.example.lkjhgf.recyclerView.futureTrips.util.FutureTripViewHolder;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Adapter zwischen Verbindungsdaten und Ansicht
@@ -24,9 +25,9 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
     /**
      * Liste aller gespeicherten Trips, welche angezeigt werden sollen
      */
-    private ArrayList<TripItem> tripItems;
+    protected ArrayList<TripItem> tripItems;
     private OnItemClickListener onItemClickListener;
-    private Activity activity;
+    protected Activity activity;
 
 
     public TripAdapter(ArrayList<TripItem> tripItems, Activity activity){
@@ -85,6 +86,9 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
             holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
         }else{
+            if(currentItem.getTrip().getLastArrivalTime().before(Calendar.getInstance().getTime())){
+                holder.view.setBackgroundColor(activity.getResources().getColor(R.color.un_graceful, null));
+            }
             // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt
             String text = currentItem.getNumAdult() + "";
             holder.textViewClass.userNumAdult.setText(text);

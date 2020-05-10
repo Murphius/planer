@@ -77,6 +77,13 @@ public abstract class MyProvider implements Comparator<TripItem> {
         return maxNumTrip;
     }
 
+    /**
+     * Umwandlung der Liste aller Fahrten in die entsprechenden Klassen
+     * @param allTrips Liste aller Fahrten
+     * @return Liste mit Listen, die den Fahrten einer jeweiligen Nutzerklasse entsprechen
+     */
+    public abstract ArrayList<ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips);
+
     public int getMaxNumTrip(){
         return maxNumTrip;
     }

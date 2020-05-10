@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.optimisation.Ticket;
-import com.example.lkjhgf.optimisation.TicketInformationHolder;
-import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.tickets.TicketAdapter;
 import com.example.lkjhgf.recyclerView.tickets.TicketItem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RecyclerViewTicketOverview {
 
@@ -25,7 +24,6 @@ public class RecyclerViewTicketOverview {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    //TODO Adapter spezifizieren
     private TicketAdapter adapter;
 
     public RecyclerViewTicketOverview(Activity activity, View view, AllTickets allTickets) {
@@ -35,50 +33,46 @@ public class RecyclerViewTicketOverview {
 
         recyclerView = view.findViewById(R.id.recyclerView7);
 
-        ArrayList<TicketInformationHolder> ticketInformationHolders = allTickets.getTickets();
-        ArrayList<Ticket> tickets = new ArrayList<>();
-        ArrayList<String> preisstufe = new ArrayList<>();
+        ArrayList<ArrayList<TicketToBuy>> allTicketsToBuy = allTickets.getTickets();
+        ArrayList<TicketToBuy> ticketsToBuy = new ArrayList<>();
+        for(ArrayList<TicketToBuy> current : allTicketsToBuy){
+            ticketsToBuy.addAll(current);
+        }
+        ArrayList<TicketToBuy> tickets = new ArrayList<>();
         ArrayList<Integer> quantity = new ArrayList<>();
-        ArrayList<ArrayList<TripItem>> tripItems = new ArrayList<>();
-
-        tickets.add(ticketInformationHolders.get(0).getTicket());
-        preisstufe.add(ticketInformationHolders.get(0).getPreisstufe());
-        quantity.add(1);
-        tripItems.add(ticketInformationHolders.get(0).getTripList());
-
-        for (int i = 1; i < ticketInformationHolders.size(); i++) {
-            boolean contains = false;
-            Ticket currentTicket = ticketInformationHolders.get(i).getTicket();
-            String currentPreisstufe = ticketInformationHolders.get(i).getPreisstufe();
-            currentPreisstufe = currentPreisstufe.replaceAll(" ", "");
-            for (int j = 0; j < tickets.size() && !contains; j++) {
-                if (currentTicket.equals(tickets.get(j))) {
-                    if (currentPreisstufe.equals(preisstufe.get(j))) {
-                        quantity.set(j, quantity.get(j) + 1);
-                        tripItems.get(j).addAll(ticketInformationHolders.get(i).getTripList());
-                        contains = true;
-                    } else {
-                        tickets.add(j + 1, currentTicket);
-                        preisstufe.add(j + 1, currentPreisstufe);
-                        quantity.add(j + 1, 1);
-                        tripItems.add(j+1,ticketInformationHolders.get(i).getTripList());
-                        contains = true;
-                    }
-                }
-            }
-            if (!contains) {
-                tickets.add(currentTicket);
-                preisstufe.add(currentPreisstufe);
-                quantity.add(1);
-                tripItems.add(ticketInformationHolders.get(i).getTripList());
-            }
-        }
-
         ticketItems = new ArrayList<>();
-        for (int i = 0; i < tickets.size(); i++) {
-            ticketItems.add(new TicketItem(tickets.get(i), preisstufe.get(i), quantity.get(i), tripItems.get(i)));
+
+        if(! ticketsToBuy.isEmpty()){
+            Iterator<TicketToBuy> it = ticketsToBuy.iterator();
+            TicketToBuy current = it.next();
+            tickets.add(current);
+            quantity.add(1);
+            while (it.hasNext()){
+                TicketToBuy next = it.next();
+                if(current.equals(next)){
+                    tickets.get(tickets.size()-1).getTripList().addAll(next.getTripList());
+                    quantity.set(quantity.size()-1, quantity.get(quantity.size()-1)+1);
+                }else{
+                    tickets.add(next);
+                    quantity.add(1);
+                }
+                current = next;
+            }
+
+            ticketItems = new ArrayList<>();
+            for (int i = 0; i < quantity.size(); i++) {
+                tickets.get(i).getTripList().sort((o1, o2) -> {
+                    if(o1.getTrip().getFirstDepartureTime().before(o2.getTrip().getFirstDepartureTime())){
+                        return -1;
+                    }else if(o1.getTrip().getFirstDepartureTime().getTime() == o2.getTrip().getFirstDepartureTime().getTime()){
+                        return 0;
+                    }else{
+                        return 1;
+                    }
+                });
+                ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i)));
+            }
         }
-        ticketItems.sort((o1, o2) -> o1.compareTo(o2));
 
         adapter = new TicketAdapter(activity, ticketItems);
         buildRecyclerView();

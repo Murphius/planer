@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
 
@@ -29,18 +28,19 @@ import de.schildbach.pte.dto.Trip;
  * <p>
  * Die Ansicht der möglichen Verbindungen erfolgt im groben Überblick
  */
-class RecyclerViewService {
+abstract class RecyclerViewService {
 
     private ArrayList<ConnectionItem> connection_items;
 
     private RecyclerView recyclerView;
-    private Context context;
-    private NetworkProvider provider;
+    protected Context context;
+    private Activity activity;
 
-    private PossibleConnections possibleConnections;
+    protected PossibleConnections possibleConnections;
 
     private ConnectionAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ButtonClass buttons;
 
     /**
      * Initialisierung der Attribute <br/>
@@ -53,20 +53,19 @@ class RecyclerViewService {
      * @param view                - Layout
      * @param activity            - benötigt, um ggf. eine Nachricht anzuzeigen, wenn keine passenden Verbindungen gefunden wurden
      * @param possibleConnections - enthält das QueryTripsResult
-     * @param provider            - benötigt für das Suchen nach weiteren Verbindungen
      */
     RecyclerViewService(View view,
                         Activity activity,
-                        PossibleConnections possibleConnections,
-                        NetworkProvider provider) {
+                        PossibleConnections possibleConnections, ButtonClass buttons) {
         //Attribut <-> ID
         recyclerView = view.findViewById(R.id.recyclerView1);
 
+        this.activity = activity;
         context = activity.getApplicationContext();
+        this.buttons = buttons;
 
         // enthält QueryTripsResult
         this.possibleConnections = possibleConnections;
-        this.provider = provider;
 
         //Keine passenden Verbindugnen gefunden -> Nachricht an den Nutzer
         if (possibleConnections.result == null || possibleConnections.result.status == QueryTripsResult.Status.NO_TRIPS) {
@@ -74,11 +73,21 @@ class RecyclerViewService {
             adapter = new ConnectionAdapter(new ArrayList<>());
         } else {
             // Liste mit den möglichen Verbindungen füllen
-            connection_items = UtilsList.fillConnectionList(possibleConnections.result.trips);
+            connection_items = fillConnectionList(possibleConnections.result.trips);
             adapter = new ConnectionAdapter(connection_items);
         }
         buildRecyclerView();
     }
+
+    /**
+     * Füllt die Liste mit den anzuzeigenden Elementen <br/>
+     *
+     * Abhängig davon, ob mehrere Farhten geplant werden, oder nur eine, können nur zukünftige Verbindungen oder auch
+     * vergangene Verbindungen betrachtet werden.
+     * @param trips Alle Verbindungen vom Server
+     * @return Anzuzeigende Elemente für den Nutzer
+     */
+    abstract ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips);
 
     /**
      * Setzt den Adapter und Layout Manager für den RecyclerView, sowie einen OnItemClickListerner <br/>
@@ -119,7 +128,7 @@ class RecyclerViewService {
 
         //Provider -> suche nach weiteren Verbindungen
         QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, true);
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(query);
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(query);
 
         QueryTripsResult resultLater = null;
 
@@ -170,7 +179,7 @@ class RecyclerViewService {
 
         // Suche nach neuen Verbindungen
         QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false);
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask().execute(
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(
                 query);
 
         QueryTripsResult resultEarlier = null;
@@ -191,7 +200,15 @@ class RecyclerViewService {
             possibleConnections.result = resultEarlier;
             List<Trip> trips = resultEarlier.trips;
             connection_items.clear();
-            connection_items.addAll(UtilsList.fillConnectionList(trips));
+            connection_items.addAll(fillConnectionList(trips));
+            //Wenn die Liste mit zukünftigen Verbindungen kürzer oder gleich lang ist, gibt es keinen neuen Verbindungen
+            //dies ist besonders wichtig für die Planung mehrerer Fahrten, denn dann wurden keine Fahrten gefunden, die
+            //früher sind, aber dennoch nicht vor dem aktuellen Zeitpunkt
+            if (connection_items.size() - length <= 0) {
+                Toast.makeText(context.getApplicationContext(), "Keine frühere zukünftige Verbindung gefunden.", Toast.LENGTH_SHORT).show();
+                //In diesem Fall kann der Nutzer nicht nach weiteren früheren Verbindungen suchen
+                buttons.earlierButton.setEnabled(false);
+            }
 
             adapter.notifyDataSetChanged();
             // Scrollen an die Position des ersten neuen Elements
@@ -199,7 +216,7 @@ class RecyclerViewService {
         }
     }
 
-    boolean isConnectionListEmpty(){
+    boolean isConnectionListEmpty() {
         return connection_items == null;
     }
 }

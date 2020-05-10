@@ -17,7 +17,10 @@
 
     <color name="lucky_one">#BAE1F2</color>
 
+    <!-- text color small delay -->
     <color name="my_green">#009933</color>
 
+    <!-- text color big delay -->
     <color name="maroon">#800000</color>
+
 </resources>

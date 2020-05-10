@@ -20,6 +20,8 @@ public class FutureTripViewHolder extends RecyclerView.ViewHolder {
     public TextViewClass textViewClass;
     public RecyclerView recyclerView;
     public View view;
+    public View itemView;
+    public View separatorLine;
 
     /**
      * Konstruktor, in dem die einzelnen Klassen für die Textfelder und Buttons initialisiert werden,
@@ -30,7 +32,11 @@ public class FutureTripViewHolder extends RecyclerView.ViewHolder {
      */
     public FutureTripViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
         super(itemView);
+        this.itemView = itemView;
         textViewClass = new TextViewClass(itemView);
+
+        separatorLine = itemView.findViewById(R.id.view8);
+
         buttonClass = new ButtonClass(itemView, this);
 
         //RecyclerView

@@ -18,21 +18,41 @@ public class MyVRRprovider extends MyProvider {
         String[] preisstufen = {"K", "A1", "A2", "A3", "B", "C", "D"};
 
         ArrayList<Ticket> adultTickets = new ArrayList<>();
-        adultTickets.add(new NumTicket(1, new int[] { 170, 280, 280, 290, 600, 1280, 1570 }, "Einzelticket"));
+        adultTickets.add(new NumTicket(1, new int[] { 170, 280, 280, 290, 600, 1280, 1570 }, "Einzelticket E"));
         adultTickets.add(new NumTicket(4, new int[] { 610, 1070, 1070, 1070, 2250, 4690, 5710 },
-                "4er-Ticket"));
+                "4er-Ticket E"));
        adultTickets.add(new NumTicket(10, new int[] { 1420, 2290, 2290, 2290, 4600, 9315, 10485 },
-                "10er-Ticket"));
+                "10er-Ticket E"));
 
-        //ArrayList<Ticket> childrenTickets = new ArrayList<>();
+        ArrayList<Ticket> childrenTickets = new ArrayList<>();
+        childrenTickets.add(new NumTicket(1, new int[]{170,170,170,170, 170, 170, 170}, "Einzelticket K"));
+        childrenTickets.add(new NumTicket(4, new int[]{610, 610, 610, 610, 610, 610, 610}, "4er-Ticket K"));
 
         ArrayList<ArrayList<Ticket>> allTickets = new ArrayList<>();
         allTickets.add(adultTickets);
-        //allTickets.add(childrenTickets);
+        allTickets.add(childrenTickets);
 
         NetworkProvider provider = new VrrProvider();
 
         initialise(preisstufen, allTickets, provider);
+    }
+
+    @Override
+    public ArrayList<ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips) {
+        ArrayList<TripItem> adultList = new ArrayList<>();
+        ArrayList<TripItem> chidrenList = new ArrayList<>();
+        for (TripItem tripItem : allTrips) {
+            for (int i = 1; i <= tripItem.getNumAdult(); i++) {
+                adultList.add(tripItem);
+            }
+            for(int i = 1; i <= tripItem.getNumChildren(); i++){
+                chidrenList.add(tripItem);
+            }
+        }
+        ArrayList<ArrayList<TripItem>> sortedTripList = new ArrayList<>();
+        sortedTripList.add(adultList);
+        sortedTripList.add(chidrenList);
+        return sortedTripList;
     }
 
     /**

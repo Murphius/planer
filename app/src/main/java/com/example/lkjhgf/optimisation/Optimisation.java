@@ -4,41 +4,40 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 
 public class Optimisation {
 
     /**
-     * Entfernt alle Fahrten, die keine gültige Preisstufe haben, oder die ein "angefangenes"
-     * Ticket benutzen vor der Optimierung
+     * Erzeugt eine neue Liste mit allen Fahrten, die optimiert werden sollen <br/>
+     * <p>
+     * Enthalten sind nur Fahrten mit einer gültigen Preisstufe und deren
+     * Fahrschein noch nicht "angefangen" ist
      *
-     * @param tripItems Liste an Fahrten die bearbeitet werden soll
+     * @param tripItems Liste mit allen Fahrten
+     * @return Liste mit allen Fahrten die optimiert werden können
      */
-    public static void removeTrips(ArrayList<TripItem> tripItems) {
-        for(TripItem tripItem : tripItems){
-            if(!tripItem.isComplete()){
-                if(!MainMenu.myProvider.checkContains(tripItem.getPreisstufe())){
-                    tripItems.remove(tripItem);
+    public static ArrayList<TripItem> removeTrips(ArrayList<TripItem> tripItems) {
+        ArrayList<TripItem> newTripList = new ArrayList<>();
+        for (TripItem tripItem : tripItems) {
+            if (!tripItem.isComplete()) {
+                if (MainMenu.myProvider.checkContains(tripItem.getPreisstufe())) {
+                    //TODO Ticketliste prüfen
+                    if(tripItem.getTrip().getFirstDepartureTime().after(Calendar.getInstance().getTime())){
+                        tripItem.removeTickets();
+                        newTripList.add(tripItem);
+                    }
                 }
             }
         }
-    }
-
-    public static ArrayList<TripItem> createAdultTripList(ArrayList<TripItem> allTrips) {
-        ArrayList<TripItem> adultList = new ArrayList<>();
-        for (TripItem tripItem : allTrips) {
-            System.out.println(tripItem.getNumAdult());
-            for (int i = 1; i <= tripItem.getNumAdult(); i++) {
-                adultList.add(tripItem);
-            }
-        }
-        System.out.println(adultList.size());
-        return adultList;
+        return newTripList;
     }
 
     /**
      * Optimierungszauber
      */
-    public static TicketInformationHolder optimisation(ArrayList<Ticket> tickets, ArrayList<TripItem> tripsToOptimise) {
+    public static TicketInformationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets, ArrayList<TripItem> tripsToOptimise) {
         int maxNumTripTicket = MainMenu.myProvider.getMaxNumTrip();
 
         //größeres Array, um keine IndexOutOfBounce Fehler zu bekommen, wenn das Minimum gesucht wird -> - maxNumTripTicket viele Fahrten
@@ -58,7 +57,7 @@ public class Optimisation {
                 if (ticket instanceof NumTicket) {
                     NumTicket numTicket = (NumTicket) ticket;
                     //Kosten für diesen Fahrschein ermitteln
-                    costs.add(allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()].getCosts()
+                    costs.add(allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()].getAllCosts()
                             + MainMenu.myProvider.getTicketPrice(numTicket, tripsToOptimise.get(index).getPreisstufe()));
                 }
             }
@@ -110,12 +109,46 @@ public class Optimisation {
         return index;
     }
 
-    public static ArrayList<TicketInformationHolder> createTicketList(TicketInformationHolder lastBestTicket) {
-        ArrayList<TicketInformationHolder> ticketList = new ArrayList<>();
+    public static ArrayList<TicketToBuy> createTicketList(TicketInformationHolder lastBestTicket) {
+        ArrayList<TicketToBuy> ticketList = new ArrayList<>();
         while (lastBestTicket.getTicket() != null) {
-            ticketList.add(lastBestTicket);
+            ticketList.add(new TicketToBuy(lastBestTicket.getTicket(), lastBestTicket.getPreisstufe(), lastBestTicket.getTripList()));
             lastBestTicket = lastBestTicket.getPrevious();
         }
         return ticketList;
+    }
+
+    public static void optimisationWithOldTickets(ArrayList<TicketToBuy> oldTickets, ArrayList<TripItem> tripItems){
+        ArrayList<TicketToBuy> inverseOldTickets = new ArrayList<>();
+        for(int i = oldTickets.size() -1; i> -1; i--){
+            inverseOldTickets.add(oldTickets.get(i));
+        }
+        ArrayList<TripItem> inverseTripItems = new ArrayList<>();
+        for(int i = tripItems.size() -1; i > -1; i--){
+            inverseTripItems.add(tripItems.get(i));
+        }
+
+        Iterator<TicketToBuy> it = inverseOldTickets.iterator();
+
+        while (it.hasNext()){
+            TicketToBuy currentTicket = it.next();
+            for(Iterator<TripItem> itemIterator = inverseTripItems.iterator(); itemIterator.hasNext() && currentTicket != null;){
+                TripItem currentTripItem = itemIterator.next();
+                if(MainMenu.myProvider.getPreisstufenIndex(currentTripItem.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(currentTicket.getPreisstufe())){
+                    currentTripItem.addTicket(currentTicket.getTicket(), currentTicket.getPreisstufe());
+                    currentTicket.addTripItem(currentTripItem);
+                    if(currentTicket.getFreeTrips() == 0 ){
+                        it.remove();
+                        if(it.hasNext()){
+                            currentTicket = it.next();
+                        }else{
+                            currentTicket = null;
+                        }
+                    }
+                    tripItems.remove(currentTripItem);
+                }
+            }
+        }
+
     }
 }

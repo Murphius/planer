@@ -159,6 +159,11 @@ public class TripItem implements Serializable {
         return ticketList;
     }
 
+    public void removeTickets(){
+        ticketList.clear();
+        ticketPreisstufenList.clear();
+    }
+
     /**
      * Zwei Fahrten sind identisch, wenn sie die gleiche ID besitzen <br/>
      * Die Erzeugung von IDs erfolgt in {@link Trip#buildSubstituteId()} <br/>

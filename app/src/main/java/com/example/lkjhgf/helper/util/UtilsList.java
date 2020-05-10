@@ -9,6 +9,8 @@ import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import de.schildbach.pte.dto.Product;
@@ -38,12 +40,38 @@ public final class UtilsList {
             return new ArrayList<>();
         }
         ArrayList<ConnectionItem> connection_items = new ArrayList<>();
-        for (Trip trip : trips) { //TODO hier Liste & add außerhalb des ifs gewesen
+        for (Trip trip : trips) {
             if (trip.isTravelable()) {
                 connection_items.add(new ConnectionItem(trip, journeyItems(trip.legs)));
             }
         }
         return connection_items;
+    }
+    /**
+     * Wandelt eine Liste an Trips in eine Liste von ConnectionItems um, deren Fahrten alle in der Zukunft liegen <br/>
+     * <p>
+     * Die Umwandlung erfolgt, um den RecyclierView ({@link com.example.lkjhgf.helper.service.PossibleConnections})
+     * zu füllen. <br/>
+     * <p>
+     * Ruft {@link #journeyItems(List Trip.Legs)} auf -> Kompakte Ansicht der Abfolge von Verkehrsmitteln
+     *
+     * @param trips Liste an möglichen Verbindungen
+     * @return Liste mit {@link ConnectionItem}, für die Service Ansicht, welche Fahrten in der Zukunft liegen
+     */
+    public static ArrayList<ConnectionItem> fillFutureConnectionList(List<Trip> trips){
+        if (trips == null){
+            return new ArrayList<>();
+        }
+        ArrayList<ConnectionItem> connectionItems = new ArrayList<>();
+        for(Iterator<Trip> iterator = trips.iterator(); iterator.hasNext(); ){
+            Trip trip = iterator.next();
+            if(trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
+                iterator.remove();
+            }else if(trip.isTravelable()){
+                connectionItems.add(new ConnectionItem(trip, journeyItems(trip.legs)));
+            }
+        }
+        return connectionItems;
     }
 
     /**

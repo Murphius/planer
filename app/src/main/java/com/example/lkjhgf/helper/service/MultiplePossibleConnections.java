@@ -54,6 +54,9 @@ public class MultiplePossibleConnections extends PossibleConnections {
         textViews.numAdult.setText(putText);
         putText = numChildren + "";
         textViews.numChildren.setText(putText);
+
+        RecyclerViewService recyclerViewService = new RecyclerViewMultipleService(view, activity, this, super.getButtons());
+        super.getButtons().setRecyclerView(recyclerViewService);
     }
 
     /**

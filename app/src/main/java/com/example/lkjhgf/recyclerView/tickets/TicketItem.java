@@ -1,32 +1,27 @@
 package com.example.lkjhgf.recyclerView.tickets;
 
-import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TicketItem implements Comparable<TicketItem>{
+public class TicketItem  implements Comparable<TicketItem>{
 
     private boolean showDetails;
-    private Ticket ticket;
-    private String preisstufe;
+    private TicketToBuy ticket;
     private int quantity;
-    private ArrayList<TripItem> tripItems;
 
 
-    public TicketItem(Ticket ticket, String preisstufe, int quantity, ArrayList<TripItem> tripItems){
+    public TicketItem (TicketToBuy ticket, int quantity){
         this.ticket = ticket;
-        this.preisstufe = preisstufe;
         this.quantity = quantity;
-        this.tripItems = tripItems;
         removeDuplicatedTrips();
     }
 
     private void removeDuplicatedTrips(){
-        Iterator<TripItem> it = tripItems.iterator();
+        Iterator<TripItem> it = ticket.getTripList().iterator();
         TripItem current = it.next();
         while (it.hasNext()){
             TripItem next = it.next();
@@ -47,11 +42,11 @@ public class TicketItem implements Comparable<TicketItem>{
     }
 
     public String getPreisstufe() {
-        return preisstufe;
+        return ticket.getPreisstufe();
     }
 
     public Ticket getTicket() {
-        return ticket;
+        return ticket.getTicket();
     }
 
     public int getQuantity(){
@@ -59,23 +54,12 @@ public class TicketItem implements Comparable<TicketItem>{
     }
 
     public ArrayList<TripItem> getTripItems(){
-        return tripItems;
+        return ticket.getTripList();
     }
 
     @Override
-    public int compareTo(TicketItem o) {
-        if(ticket.equals(o.ticket)){
-            return MainMenu.myProvider.getPreisstufenIndex(preisstufe) - MainMenu.myProvider.getPreisstufenIndex(o.preisstufe);
-        }else{
-            if(ticket instanceof NumTicket && o.ticket instanceof NumTicket){
-                Integer thisNumTrip = ((NumTicket)ticket).getNumTrips();
-                Integer otherNumTrip = ((NumTicket) o.ticket).getNumTrips();
-                //TODO ggf. Reihenfolge ändern
-                return  thisNumTrip.compareTo(otherNumTrip);
-            }else{
-                //TODO Zeittickets
-                return ticket.getName().compareTo(o.ticket.getName());
-            }
-        }
+    public int compareTo(TicketItem o){
+        return ticket.compareTo(o.ticket);
     }
+
 }

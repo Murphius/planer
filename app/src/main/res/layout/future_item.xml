@@ -72,6 +72,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view8"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/mr_and_mrs_jones" />

@@ -43,17 +43,17 @@ public class ButtonBootstrapBrandVisible implements BootstrapBrand {
 
     @Override
     public int disabledFill(Context context) {
-        return 0xff6C829A;
+        return 0xffa8b5c3;
     }
 
     @Override
     public int disabledEdge(Context context) {
-        return 0xff6C829A;
+        return 0xffa8b5c3;
     }
 
     @Override
     public int disabledTextColor(Context context) {
-        return 0xff6C829A;
+        return 0xffffffff;
     }
 
     @Override

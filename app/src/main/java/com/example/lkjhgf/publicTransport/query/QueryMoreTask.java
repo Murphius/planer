@@ -1,7 +1,11 @@
 package com.example.lkjhgf.publicTransport.query;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 
 import java.io.IOException;
@@ -15,7 +19,38 @@ import de.schildbach.pte.dto.QueryTripsResult;
  */
 public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTripsResult> {
 
+    private Context context;
     private NetworkProvider provider;
+    private AlertDialog dialog;
+
+    /**
+     * Konstruktor mit allen im Verlauf benötigten Werte
+     *
+     * @param context  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
+     */
+    public QueryMoreTask(Context context) {
+        this.provider = MainMenu.myProvider.getNetworkProvider();
+        this.context = context;
+    }
+
+    /**
+     * Während / vor der Ausführung, soll der Nutzer informiert werden, dass nach möglichen Verbindungen
+     * gesucht wird. <br/>
+     * <p>
+     * Der Vorgang kann nicht unterbrochen werden <br/>
+     * Anzeigen eines Ladebalkens (sich drehender Kreis) und zugehöriger Text <br/>
+     * So gelöst, da ProgressDialog deprecated ist <br/>
+     * <p>
+     * Nutzer über das Suchen der Verbindung informieren mittels Fragment
+     */
+    @Override
+    protected void onPreExecute() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(R.layout.fragment);
+        builder.setCancelable(false);
+        dialog = builder.create();
+        dialog.show();
+    }
 
     /**
      * Nach späteren / früheren Verbindungen suchen <br/>
@@ -49,5 +84,14 @@ public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTrip
     private QueryTripsResult queryMoreTrips(final QueryTripsContext context, final boolean later)
             throws IOException {
         return provider.queryMoreTrips(context, later);
+    }
+
+    /**
+     *Schließt die Anzeige
+     * @param result Ergebnis der Provider Anfrage
+     */
+    @Override
+    protected void onPostExecute(QueryTripsResult result) {
+        dialog.dismiss();
     }
 }

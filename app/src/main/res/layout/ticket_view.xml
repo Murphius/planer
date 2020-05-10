@@ -94,6 +94,11 @@
                 app:typicon="ty_arrow_down" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/mr_and_mrs_jones" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView8"
             android:layout_width="match_parent"

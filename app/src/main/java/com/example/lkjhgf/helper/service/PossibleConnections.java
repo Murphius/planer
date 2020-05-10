@@ -35,6 +35,7 @@ public abstract class PossibleConnections {
     protected Intent intent;
 
     private TextViewClass textViews;
+    private ButtonClass buttons;
 
     // Aus dem Formular
     Date user_date_time;
@@ -70,8 +71,8 @@ public abstract class PossibleConnections {
 
         textViews = new TextViewClass(view, this);
 
-        RecyclerViewService recyclerViewService = new RecyclerViewService(view, activity, this, provider);
-        new ButtonClass(view, activity).setRecyclerView(recyclerViewService);
+
+        buttons = new ButtonClass(view, activity);
     }
 
     /**
@@ -95,4 +96,6 @@ public abstract class PossibleConnections {
     TextViewClass getTextViews() {
         return textViews;
     }
+
+    ButtonClass getButtons(){return buttons;}
 }
