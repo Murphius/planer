@@ -19,6 +19,8 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 
+import de.schildbach.pte.dto.Fare;
+
 public class TicketViewHolder extends RecyclerView.ViewHolder {
 
     private Activity activity;
@@ -102,8 +104,9 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
 
     private void onItemClick(TripItem currentItem) {
         Intent intent = new Intent(activity, AllConnectionsIncompleteView.class);
-        intent.putExtra(MainMenu.NUM_CHILDREN, currentItem.getNumChildren());
-        intent.putExtra(MainMenu.NUM_ADULT, currentItem.getNumAdult());
+        //ToDo erweitern für weitere Personenklassen
+        intent.putExtra(MainMenu.NUM_ADULT, currentItem.getNumUserClass(Fare.Type.ADULT));
+        intent.putExtra(MainMenu.NUM_ADULT, currentItem.getNumUserClass(Fare.Type.CHILD));
         intent.putExtra(MainMenu.EXTRA_TRIP, currentItem.getTrip());
         activity.startActivity(intent);
     }

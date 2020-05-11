@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Line;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.Point;
@@ -57,11 +58,13 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static final String EXTRA_DISTANCE = "com.example.lkjhgf.EXTRA_DISTANCE";
 
     //Ticket
-
-    //NumTicket
-    private static final String EXTRA_INT_NUM_TRIPS = "com.example.lkjhgf.EXTRA_INT_NUM_TRIPS";
     private static final String EXTRA_NAME_TICKET = "com.example.lkjhgf.EXTRA_NAME_TICKET";
     private static final String EXTRA_ARRAY_PRICE = "com.example.lkjhgf.EXTRA_ARRAY_PRICE";
+    private static final String EXTRA_FARE_TYPE = "com.example.lkjhgf.EXTRA_FARE_TYPE";
+    
+    //NumTicket
+    private static final String EXTRA_INT_NUM_TRIPS = "com.example.lkjhgf.EXTRA_INT_NUM_TRIPS";
+
 
     /**
      * Deserialisierung eines JsonElements
@@ -130,7 +133,8 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
             String name = context.deserialize(jsonObject.get(EXTRA_NAME_TICKET), String.class);
             int numTrips = context.deserialize(jsonObject.get(EXTRA_INT_NUM_TRIPS), Integer.class);
             int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
-            return new NumTicket(numTrips, prices, name);
+            Fare.Type type = context.deserialize(jsonObject.get(EXTRA_FARE_TYPE), Fare.Type.class);
+            return new NumTicket(numTrips, prices, name,type);
         }
         return null;
     }
@@ -175,11 +179,13 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                 jsonObject.add(EXTRA_DISTANCE, context.serialize(individualTrip.distance));
             }
         }else if(src instanceof Ticket){
+            Ticket ticket = (Ticket) src;
+            jsonObject.add(EXTRA_FARE_TYPE, context.serialize(ticket.getType()));
+            jsonObject.add(EXTRA_NAME_TICKET, context.serialize(ticket.getName()));
+            jsonObject.add(EXTRA_ARRAY_PRICE, context.serialize(ticket.getPrices()));
             if(src instanceof NumTicket){
                 NumTicket numTicket = (NumTicket) src;
                 jsonObject.add(EXTRA_INT_NUM_TRIPS, context.serialize(numTicket.getNumTrips()));
-                jsonObject.add(EXTRA_NAME_TICKET, context.serialize(numTicket.getName()));
-                jsonObject.add(EXTRA_ARRAY_PRICE, context.serialize(numTicket.getPrices()));
             }
             //TODO Zeitticket
         }else {

@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -157,8 +158,8 @@ public abstract class MyTripList {
             // bei einer zu optimierenden Fahrt, müssen noch die #Fahrt und #reisende Personen
             // mit übergeben werden
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);

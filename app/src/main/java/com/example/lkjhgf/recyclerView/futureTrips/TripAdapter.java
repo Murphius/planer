@@ -17,6 +17,8 @@ import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyAda
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Adapter zwischen Verbindungsdaten und Ansicht
  */
@@ -89,14 +91,15 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             if(currentItem.getTrip().getLastArrivalTime().before(Calendar.getInstance().getTime())){
                 holder.view.setBackgroundColor(activity.getResources().getColor(R.color.un_graceful, null));
             }
+            //TODO Erweiterung für weitere Nutzerklassen
             // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt
-            String text = currentItem.getNumAdult() + "";
+            String text = currentItem.getNumUserClass(Fare.Type.ADULT) + "";
             holder.textViewClass.userNumAdult.setText(text);
-            text = currentItem.getNumChildren() + "";
+            text = currentItem.getNumUserClass(Fare.Type.CHILD) + "";
             holder.textViewClass.userNumChildren.setText(text);
 
             //Ticket anzeigen, wenn kein Ticket vorhanden -> keine Anzeige
-            if(currentItem.getTicketList().size() != 0){
+            if(!currentItem.hasNoTicket()){
                 //TODO
                 holder.textViewClass.ticketInformationHolder.setText(currentItem.getTicketListAsString());
             }else{

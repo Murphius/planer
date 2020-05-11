@@ -12,6 +12,8 @@ import com.example.lkjhgf.activities.singleTrip.EditTrip;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
 
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Ansicht nach der Planung einer Fahrt, die nicht Optimiert werden muss <br/>
  * Ansicht, wenn aus dem Hauptmenü aufgerufen
@@ -58,9 +60,10 @@ public class TripListComplete extends MyTripList {
             //TODO #Trip??
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
             //#Fahrt und #reisende Personen ebenfalls übergeben
+            //TODO erweitern für weitere Personenklassen
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position);
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
@@ -82,8 +85,9 @@ public class TripListComplete extends MyTripList {
         } else {
             newIntent = new Intent(activity.getApplicationContext(),
                     EditIncompleteTripFromCompleteList.class);
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumAdult());
-            newIntent.putExtra(MainMenu.NUM_CHILDREN, current.getNumChildren());
+            //TODO erweitern für weitere Personenklassen
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
+            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());

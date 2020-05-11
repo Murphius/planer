@@ -11,6 +11,9 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
 import com.example.lkjhgf.activities.MainMenu;
 
+import java.util.HashMap;
+
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -43,10 +46,15 @@ public class Incomplete extends Activity {
 
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        //TODO für weitere Nutzerklassen
         int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
         int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
-        TripItem newTripItem = new TripItem(trip, false, numAdult, numChildren);
+        HashMap<Fare.Type, Integer> numUserClasses = new HashMap<>();
+        numUserClasses.put(Fare.Type.ADULT, numAdult);
+        numUserClasses.put(Fare.Type.CHILD, numChildren);
+
+        TripItem newTripItem = new TripItem(trip, false, numUserClasses);
 
         new TripListIncomplete(this, view, newTripItem);
     }

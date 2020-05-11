@@ -5,32 +5,34 @@ import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.VrrProvider;
+import de.schildbach.pte.dto.Fare;
 
 public class MyVRRprovider extends MyProvider {
 
 
-    public MyVRRprovider(){
+    public MyVRRprovider() {
         super();
 
         String[] preisstufen = {"K", "A1", "A2", "A3", "B", "C", "D"};
 
         ArrayList<Ticket> adultTickets = new ArrayList<>();
-        adultTickets.add(new NumTicket(1, new int[] { 170, 280, 280, 290, 600, 1280, 1570 }, "Einzelticket E"));
-        adultTickets.add(new NumTicket(4, new int[] { 610, 1070, 1070, 1070, 2250, 4690, 5710 },
-                "4er-Ticket E"));
-       adultTickets.add(new NumTicket(10, new int[] { 1420, 2290, 2290, 2290, 4600, 9315, 10485 },
-                "10er-Ticket E"));
+        adultTickets.add(new NumTicket(1, new int[]{170, 280, 280, 290, 600, 1280, 1570}, "Einzelticket E", Fare.Type.ADULT));
+        adultTickets.add(new NumTicket(4, new int[]{610, 1070, 1070, 1070, 2250, 4690, 5710},
+                "4er-Ticket E", Fare.Type.ADULT));
+        adultTickets.add(new NumTicket(10, new int[]{1420, 2290, 2290, 2290, 4600, 9315, 10485},
+                "10er-Ticket E", Fare.Type.ADULT));
 
         ArrayList<Ticket> childrenTickets = new ArrayList<>();
-        childrenTickets.add(new NumTicket(1, new int[]{170,170,170,170, 170, 170, 170}, "Einzelticket K"));
-        childrenTickets.add(new NumTicket(4, new int[]{610, 610, 610, 610, 610, 610, 610}, "4er-Ticket K"));
+        childrenTickets.add(new NumTicket(1, new int[]{170, 170, 170, 170, 170, 170, 170}, "Einzelticket K", Fare.Type.CHILD));
+        childrenTickets.add(new NumTicket(4, new int[]{610, 610, 610, 610, 610, 610, 610}, "4er-Ticket K", Fare.Type.CHILD));
 
-        ArrayList<ArrayList<Ticket>> allTickets = new ArrayList<>();
-        allTickets.add(adultTickets);
-        allTickets.add(childrenTickets);
+        HashMap<Fare.Type, ArrayList<Ticket>> allTickets = new HashMap<>();
+        allTickets.put(Fare.Type.ADULT, adultTickets);
+        allTickets.put(Fare.Type.CHILD, childrenTickets);
 
         NetworkProvider provider = new VrrProvider();
 
@@ -38,21 +40,21 @@ public class MyVRRprovider extends MyProvider {
     }
 
     @Override
-    public ArrayList<ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips) {
-        ArrayList<TripItem> adultList = new ArrayList<>();
-        ArrayList<TripItem> chidrenList = new ArrayList<>();
+    public HashMap<Fare.Type, ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips) {
+        HashMap<Fare.Type, ArrayList<TripItem>> userClassTrips = new HashMap<>();
         for (TripItem tripItem : allTrips) {
-            for (int i = 1; i <= tripItem.getNumAdult(); i++) {
-                adultList.add(tripItem);
-            }
-            for(int i = 1; i <= tripItem.getNumChildren(); i++){
-                chidrenList.add(tripItem);
+            for (Fare.Type type : Fare.Type.values()) {
+                for (int i = 1; i <= tripItem.getNumUserClass(type); i++) {
+                    ArrayList<TripItem> oldTripItems = userClassTrips.get(type);
+                    if (oldTripItems == null) {
+                        oldTripItems = new ArrayList<>();
+                    }
+                    oldTripItems.add(tripItem);
+                    userClassTrips.put(type, oldTripItems);
+                }
             }
         }
-        ArrayList<ArrayList<TripItem>> sortedTripList = new ArrayList<>();
-        sortedTripList.add(adultList);
-        sortedTripList.add(chidrenList);
-        return sortedTripList;
+        return userClassTrips;
     }
 
     /**

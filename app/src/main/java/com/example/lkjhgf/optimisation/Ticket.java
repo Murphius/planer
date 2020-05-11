@@ -2,6 +2,8 @@ package com.example.lkjhgf.optimisation;
 
 import java.io.Serializable;
 
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Ein Fahrschein mit allen Preisen die dieser Fahrschein haben kann sowie dem Namen des
  * Fahrscheins
@@ -12,15 +14,17 @@ public abstract class Ticket implements Serializable {
      */
     private int[] prices;
     private String name;
+    private Fare.Type type;
 
     /**
      * Liefert einen neuen Fahrschein
      * @param prices Preisliste
      * @param name des Fahrscheins
      */
-    public Ticket(int[] prices, String name) {
+    public Ticket(int[] prices, String name, Fare.Type type) {
         this.prices = prices;
         this.name = name;
+        this.type = type;
     }
 
     /**
@@ -44,6 +48,10 @@ public abstract class Ticket implements Serializable {
         return name;
     }
 
+    public Fare.Type getType() {
+        return type;
+    }
+
     @Override
     public String toString(){
         return name;
@@ -54,6 +62,6 @@ public abstract class Ticket implements Serializable {
         if(!(o instanceof Ticket)){
             return false;
         }
-        return name.equals(((Ticket) o).name);
+        return name.equals(((Ticket) o).name) && type.equals(((Ticket) o).type);
     }
 }

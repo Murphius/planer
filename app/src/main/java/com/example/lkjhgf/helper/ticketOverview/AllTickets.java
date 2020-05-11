@@ -12,14 +12,17 @@ import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -35,7 +38,7 @@ public class AllTickets {
     private TextView fullpriceHolder;
     private View separatorLine;
 
-    private static ArrayList<ArrayList<TicketToBuy>> allTickets;
+    private static HashMap<Fare.Type, ArrayList<TicketToBuy>> allTickets;
     private static int fullPrice;
 
 
@@ -67,7 +70,7 @@ public class AllTickets {
         builder.registerTypeAdapter(NumTicket.class, adapter);
         Gson gson = builder.create();
 
-        Type type = new TypeToken<ArrayList<ArrayList<TicketToBuy>>>() {
+        Type type = new TypeToken<HashMap<Fare.Type, ArrayList<TicketToBuy>>>() {
         }.getType();
 
         allTickets = gson.fromJson(json, type);
@@ -75,10 +78,10 @@ public class AllTickets {
         fullPrice = 0;
 
         if (allTickets == null) {
-            allTickets = new ArrayList<>();
+            allTickets = new HashMap<>();
         } else {
-            for (Iterator<ArrayList<TicketToBuy>> it1 = allTickets.iterator(); it1.hasNext(); ) {
-                for (Iterator<TicketToBuy> it = it1.next().iterator(); it.hasNext(); ) {
+            for (Iterator<Fare.Type> it1 = allTickets.keySet().iterator(); it1.hasNext(); ) {
+                for (Iterator<TicketToBuy> it = allTickets.get(it1.next()).iterator(); it.hasNext(); ) {
                     TicketToBuy current = it.next();
                     if (current.isPastTicket()) {
                         it.remove();
@@ -107,7 +110,7 @@ public class AllTickets {
         //TODO Zeitticket
         Gson gson = builder.create();
 
-        for (ArrayList<TicketToBuy> ticketList : allTickets) {
+        for (ArrayList<TicketToBuy> ticketList : allTickets.values()) {
             ticketList.sort((o1, o2) -> o1.compareTo(o2));
         }
 
@@ -116,32 +119,16 @@ public class AllTickets {
         editor.apply();
     }
 
-    public static void saveData(ArrayList<ArrayList<TicketToBuy>> newTickets, Activity activity) {
-        if (allTickets == null) {
-            allTickets = new ArrayList<>();
-        }
-        int i = 0;
-        if (allTickets.isEmpty()) {
-            allTickets.add(newTickets.get(0));
-            i++;
-        }
-        for (; i < newTickets.size(); i++) {
-            if (i >= allTickets.size()) {
-                allTickets.add(newTickets.get(i));
-            } else {
-                allTickets.get(i).addAll(newTickets.get(i));
-            }
-        }
-
-
+    public static void saveData(HashMap<Fare.Type, ArrayList<TicketToBuy>> newTickets, Activity activity) {
+        allTickets = newTickets;
         saveData(activity);
     }
 
-    public ArrayList<ArrayList<TicketToBuy>> getTickets() {
+    public HashMap<Fare.Type, ArrayList<TicketToBuy>> getTickets() {
         return allTickets;
     }
 
-    public static ArrayList<ArrayList<TicketToBuy>> loadTickets(Activity activity) {
+    public static HashMap<Fare.Type, ArrayList<TicketToBuy>> loadTickets(Activity activity) {
         loadData(activity);
         return allTickets;
     }

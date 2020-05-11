@@ -6,19 +6,22 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import de.schildbach.pte.NetworkProvider;
+import de.schildbach.pte.dto.Fare;
 
 public abstract class MyProvider implements Comparator<TripItem> {
 
     protected String[] preisstufen;
-    private ArrayList<ArrayList<Ticket>> allTicketsList;
+    private HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap;
     private NetworkProvider provider;
     private int maxNumTrip;
 
-    void initialise(String[] preisstufen, ArrayList<ArrayList<Ticket>> allTicketsList, NetworkProvider provider){
+    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsList, NetworkProvider provider){
         this.preisstufen = preisstufen;
-        this.allTicketsList = allTicketsList;
+        this.allTicketsMap = allTicketsList;
         this.provider = provider;
         maxNumTrip = calculateMaxNumTrip();
     }
@@ -61,14 +64,16 @@ public abstract class MyProvider implements Comparator<TripItem> {
         return provider;
     }
 
-    public ArrayList<ArrayList<Ticket>> getAllTickets(){
-        return allTicketsList;
+    public HashMap<Fare.Type, ArrayList<Ticket>> getAllTickets(){
+        return allTicketsMap;
     }
 
     private int calculateMaxNumTrip(){
         int maxNumTrip = 1;
-        for(ArrayList<Ticket> userClass : allTicketsList){
-            for(Ticket ticket : userClass){
+        for(Iterator<Fare.Type> iterator = allTicketsMap.keySet().iterator(); iterator.hasNext();){
+            Fare.Type key = iterator.next();
+            ArrayList<Ticket> tickets = allTicketsMap.get(key);
+            for(Ticket ticket : tickets){
                 if(ticket instanceof NumTicket){
                     maxNumTrip = Math.max(maxNumTrip, ((NumTicket) ticket).getNumTrips());
                 }
@@ -82,7 +87,7 @@ public abstract class MyProvider implements Comparator<TripItem> {
      * @param allTrips Liste aller Fahrten
      * @return Liste mit Listen, die den Fahrten einer jeweiligen Nutzerklasse entsprechen
      */
-    public abstract ArrayList<ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips);
+    public abstract HashMap<Fare.Type,ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips);
 
     public int getMaxNumTrip(){
         return maxNumTrip;

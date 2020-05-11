@@ -1,5 +1,7 @@
 package com.example.lkjhgf.optimisation;
 
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Fahrscheine, mit denen eine bestimme Anzahl an einzelnen Fahrten zurückgelegt werden kann
  */
@@ -15,8 +17,8 @@ public class NumTicket extends Ticket {
      * @param prices Preisliste
      * @param name Fahrscheinname
      */
-    public NumTicket(int numTrips, int[] prices, String name){
-        super(prices, name);
+    public NumTicket(int numTrips, int[] prices, String name, Fare.Type type){
+        super(prices, name, type);
         this.numTrips = numTrips;
     }
 

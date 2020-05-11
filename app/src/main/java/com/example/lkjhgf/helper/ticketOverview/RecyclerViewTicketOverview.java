@@ -12,7 +12,10 @@ import com.example.lkjhgf.recyclerView.tickets.TicketAdapter;
 import com.example.lkjhgf.recyclerView.tickets.TicketItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import de.schildbach.pte.dto.Fare;
 
 public class RecyclerViewTicketOverview {
 
@@ -33,10 +36,10 @@ public class RecyclerViewTicketOverview {
 
         recyclerView = view.findViewById(R.id.recyclerView7);
 
-        ArrayList<ArrayList<TicketToBuy>> allTicketsToBuy = allTickets.getTickets();
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketsToBuy = allTickets.getTickets();
         ArrayList<TicketToBuy> ticketsToBuy = new ArrayList<>();
-        for(ArrayList<TicketToBuy> current : allTicketsToBuy){
-            ticketsToBuy.addAll(current);
+        for(Fare.Type type : allTicketsToBuy.keySet()){
+            ticketsToBuy.addAll(allTicketsToBuy.get(type));
         }
         ArrayList<TicketToBuy> tickets = new ArrayList<>();
         ArrayList<Integer> quantity = new ArrayList<>();
