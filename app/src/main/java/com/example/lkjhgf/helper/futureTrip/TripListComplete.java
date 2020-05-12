@@ -62,8 +62,7 @@ public class TripListComplete extends MyTripList {
             //#Fahrt und #reisende Personen ebenfalls übergeben
             //TODO erweitern für weitere Personenklassen
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position);
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
+            newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
@@ -86,8 +85,7 @@ public class TripListComplete extends MyTripList {
             newIntent = new Intent(activity.getApplicationContext(),
                     EditIncompleteTripFromCompleteList.class);
             //TODO erweitern für weitere Personenklassen
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
-            newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
+            newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());

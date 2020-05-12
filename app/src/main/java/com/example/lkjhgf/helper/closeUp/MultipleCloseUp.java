@@ -9,6 +9,10 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
 
+import java.util.HashMap;
+
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Detaillierte Ansicht einer einzelnen "zu optimierenden" Fahrt <br/>
  * <p>
@@ -20,7 +24,7 @@ import com.example.lkjhgf.activities.futureTrips.Incomplete;
 public class MultipleCloseUp extends CloseUp {
 
     protected int numTrip;
-    protected int numAdult, numChildren;
+    protected  HashMap<Fare.Type, Integer> numPersonsPerClass;
 
     /**
      * Layout mit weiteren Informationen füllen <br/>
@@ -40,18 +44,17 @@ public class MultipleCloseUp extends CloseUp {
 
         Intent intent = activity.getIntent();
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
-        numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
-        numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
-
+        numPersonsPerClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
         String setText = numTrip + ". Fahrt \n Detaillierte Fahrt";
 
         TextView viewTitle = view.findViewById(R.id.textView);
         viewTitle.setText(setText);
 
-        setText = numAdult + "";
+        //ToDo Erweitern für anderen Provider
+        setText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
         textViewClass.numAdult.setText(setText);
 
-        setText = numChildren + "";
+        setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         textViewClass.numChildren.setText(setText);
     }
 
@@ -68,8 +71,7 @@ public class MultipleCloseUp extends CloseUp {
     @Override
     public void onAcceptClicked() {
         Intent newIntent = new Intent(activity, Incomplete.class);
-        newIntent.putExtra(MainMenu.NUM_ADULT, numAdult);
-        newIntent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
+        newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         super.onAcceptClicked(newIntent);
     }

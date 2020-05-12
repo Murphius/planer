@@ -30,13 +30,8 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
 
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        //TODO erweiteren für weitere Klassen
-        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
-        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
-        HashMap<Fare.Type, Integer> numUserClass = new HashMap<>();
-        numUserClass.put(Fare.Type.ADULT, numAdult);
-        numUserClass.put(Fare.Type.CHILD, numChildren);
+        HashMap<Fare.Type, Integer> numUserClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
         TripItem newTripItem = new TripItem(trip, false, numUserClass);
 

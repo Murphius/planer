@@ -14,7 +14,11 @@ import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 import de.schildbach.pte.VrrProvider;
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -50,11 +54,12 @@ public class CopyTrip extends Activity {
         Intent intent = getIntent();
 
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
-        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+
+        HashMap<Fare.Type, Integer> numPersonsPerClass = (HashMap<Fare.Type, Integer>)  intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
+
         int numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
-        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numChildren, numAdult, numTrip);
+        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
 

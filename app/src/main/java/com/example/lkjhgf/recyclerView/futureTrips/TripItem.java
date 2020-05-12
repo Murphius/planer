@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
@@ -89,8 +90,8 @@ public class TripItem implements Serializable {
         return preisstufe;
     }
 
-    public ArrayList<String> getTicketPreisstufenList(Fare.Type type) {
-        return ticketPreisstufenMap.get(type);
+    public Set<Fare.Type> getTypes(){
+        return numUserClasses.keySet();
     }
 
     public void addTicket(Ticket ticket, String ticketPreisstufe, Fare.Type type) {
@@ -202,12 +203,16 @@ public class TripItem implements Serializable {
         return otherTripItem.trip.getId().equals(this.trip.getId());
     }
 
-    public boolean hasNoTicket() {
+    boolean hasNoTicket() {
         for (Fare.Type key : ticketMap.keySet()) {
             if (!ticketMap.get(key).isEmpty()) {
                 return false;
             }
         }
         return true;
+    }
+
+    public HashMap<Fare.Type, Integer> getNumUserClasses() {
+        return numUserClasses;
     }
 }

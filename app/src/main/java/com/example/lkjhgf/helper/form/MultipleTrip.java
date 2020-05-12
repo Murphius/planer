@@ -11,9 +11,13 @@ import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.multipleTrips.ShowAllPossibleConnections;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.Calendar;
+import java.util.HashMap;
 
 import de.schildbach.pte.NetworkProvider;
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -22,7 +26,7 @@ import de.schildbach.pte.dto.Trip;
 public class MultipleTrip extends Form {
 
     private int numTrip;
-    private int numAdult, numChildren;
+    private HashMap<Fare.Type, Integer> numPersonsPerClass;
 
     private TextView titleView;
 
@@ -32,26 +36,30 @@ public class MultipleTrip extends Form {
      * <p>
      * Nutzt {@link #MultipleTrip(Activity, View, NetworkProvider)} als Basis für den View
      *
-     * @param trip        Trip der editiert oder kopiert werden soll
-     * @param numChildren #Kinder
-     * @param numAdult    #Erwachsene
+     * @param trip               Trip der editiert oder kopiert werden soll
+     * @param numPersonsPerClass gibt die Anzahl der reisenden Personen pro "Klasse" an zB Erwachsene - 5
+     * @param numTrip            #Trip
      */
     public MultipleTrip(Activity activity,
                         View view,
                         NetworkProvider provider,
                         Trip trip,
-                        int numChildren,
-                        int numAdult,
+                        HashMap<Fare.Type, Integer> numPersonsPerClass,
                         int numTrip) {
         // "Normale" Ansicht herstellen
         this(activity, view, provider);
+        if(numPersonsPerClass == null){
+            this.numPersonsPerClass = new HashMap<>();
+        }else{
+            this.numPersonsPerClass = numPersonsPerClass;
+        }
+
 
         //Informationen über die #reisender Personen anzeigen
-        String setText = numAdult + "";
-        this.numAdult = numAdult;
+        //ToDo bei anderen Providern müssen mehr Textfelder angelegt werden & diese anschließend mit den Werten befüllt werden
+        String setText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
         text.numAdultView.setText(setText);
-        setText = numChildren + "";
-        this.numChildren = numChildren;
+        setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         text.numChildrenView.setText(setText);
 
         this.numTrip = numTrip;
@@ -81,6 +89,9 @@ public class MultipleTrip extends Form {
                         View view,
                         NetworkProvider provider) {
         super(activity, view, provider);
+        if(numPersonsPerClass == null){
+            numPersonsPerClass = new HashMap<>();
+        }
         titleView = view.findViewById(R.id.app_name2);
         Intent intent = activity.getIntent();
 
@@ -107,17 +118,25 @@ public class MultipleTrip extends Form {
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        numAdult = 0;
-        numChildren = 0;
+        //ToDo Erweiterung bei anderem Provider
         String numAdultString = text.numAdultView.getText().toString();
         String numChildrenString = text.numChildrenView.getText().toString();
+
         if (!numAdultString.isEmpty()) {
-            numAdult = Integer.parseInt(numAdultString);
+            numPersonsPerClass.put(Fare.Type.ADULT, Integer.parseInt(numAdultString));
+        }else{
+            numPersonsPerClass.put(Fare.Type.ADULT, 0);
         }
         if (!numChildrenString.isEmpty()) {
-            numChildren = Integer.parseInt(numChildrenString);
+            numPersonsPerClass.put(Fare.Type.CHILD, Integer.parseInt(numChildrenString));
+        }else{
+            numPersonsPerClass.put(Fare.Type.CHILD, 0);
         }
-        if (numAdult + numChildren <= 0) {
+        int sumPersons = 0;
+        for(Fare.Type type : numPersonsPerClass.keySet()){
+            sumPersons += numPersonsPerClass.get(type);
+        }
+        if (sumPersons <= 0) {
             Toast.makeText(context,
                     "Die Personenanzahl muss mindestens eins sein",
                     Toast.LENGTH_SHORT).show();
@@ -135,8 +154,7 @@ public class MultipleTrip extends Form {
     void changeViewToPossibleConnections() {
         intent = new Intent(context, ShowAllPossibleConnections.class);
         intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
-        intent.putExtra(MainMenu.NUM_ADULT, numAdult);
-        intent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
+        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
         super.changeViewToPossibleConnections();
     }
 

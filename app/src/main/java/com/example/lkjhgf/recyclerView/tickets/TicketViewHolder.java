@@ -104,9 +104,7 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
 
     private void onItemClick(TripItem currentItem) {
         Intent intent = new Intent(activity, AllConnectionsIncompleteView.class);
-        //ToDo erweitern für weitere Personenklassen
-        intent.putExtra(MainMenu.NUM_ADULT, currentItem.getNumUserClass(Fare.Type.ADULT));
-        intent.putExtra(MainMenu.NUM_ADULT, currentItem.getNumUserClass(Fare.Type.CHILD));
+        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, currentItem.getNumUserClasses());
         intent.putExtra(MainMenu.EXTRA_TRIP, currentItem.getTrip());
         activity.startActivity(intent);
     }

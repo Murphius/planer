@@ -46,13 +46,8 @@ public class Incomplete extends Activity {
 
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        //TODO für weitere Nutzerklassen
-        int numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
-        int numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
 
-        HashMap<Fare.Type, Integer> numUserClasses = new HashMap<>();
-        numUserClasses.put(Fare.Type.ADULT, numAdult);
-        numUserClasses.put(Fare.Type.CHILD, numChildren);
+        HashMap<Fare.Type, Integer> numUserClasses = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
         TripItem newTripItem = new TripItem(trip, false, numUserClasses);
 

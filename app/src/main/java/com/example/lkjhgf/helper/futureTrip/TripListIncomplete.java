@@ -64,8 +64,7 @@ public class TripListIncomplete extends MyTripList {
         Intent newIntent = new Intent(activity, PlanIncompleteView.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, current.getTrip());
         //TODO erweitern für weitere Personenklassen
-        newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
-        newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
+        newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, current.getNumUserClasses());
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
     }
@@ -82,8 +81,7 @@ public class TripListIncomplete extends MyTripList {
         Intent newIntent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         //TODO erweitern für weitere Personenklassen
-        newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.ADULT));
-        newIntent.putExtra(MainMenu.NUM_ADULT, current.getNumUserClass(Fare.Type.CHILD));
+        newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         activity.startActivity(newIntent);
     }
@@ -167,7 +165,7 @@ public class TripListIncomplete extends MyTripList {
 
                         }
                         //Entfernen des zukünftigen Fahrscheins
-                        it.remove();
+                        it2.remove();
                     } else {
                         //Kein zukünftiges Ticket
                         //Ticket merken
@@ -202,18 +200,12 @@ public class TripListIncomplete extends MyTripList {
             //TODO dieser Teil funktioniert nur für NumTicket
             //Optimierung mit alten Fahrscheinen
             if (!freeTickets.isEmpty()) {
-                for (int i = 0; i < userClassTripLists.size(); i++) {
-                    if (!freeTickets.get(i).isEmpty()) {
-                        for (Fare.Type type : Fare.Type.values()) {
-                            Optimisation.optimisationWithOldTickets(freeTickets.get(i), userClassTripLists.get(type));
-                        }
+                for(Fare.Type type : freeTickets.keySet()){
+                    if(!freeTickets.get(type).isEmpty()){
+                        Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type));
                     }
                 }
             }
-
-            //if(freeTickets.size() != 0){
-            //    AllTickets.saveData(new ArrayList<>(), activity);
-            //}
 
             //Optimieren mit neuen Fahrscheinen
             HashMap<Fare.Type, TicketInformationHolder> lastBestTickets = new HashMap<>();

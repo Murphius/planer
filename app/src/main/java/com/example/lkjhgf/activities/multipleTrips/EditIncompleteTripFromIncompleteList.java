@@ -12,14 +12,18 @@ import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 
+import java.util.HashMap;
+
 import de.schildbach.pte.VrrProvider;
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 public class EditIncompleteTripFromIncompleteList extends Activity {
 
     Form form;
     Trip trip;
-    int numChildren, numAdult, numTrip;
+    HashMap<Fare.Type, Integer> numPersonsPerClass;
+    int numTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +36,13 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
         Intent intent = getIntent();
 
         trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
-        numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
+
+        numPersonsPerClass =  (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
+
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
 
-        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numChildren, numAdult, numTrip);
+        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
 
@@ -50,8 +55,7 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
 
         intent.putExtra(MainMenu.EXTRA_TRIP, trip);
         intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
-        intent.putExtra(MainMenu.NUM_ADULT, numAdult);
-        intent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
+        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
 
         startActivity(intent);
     }

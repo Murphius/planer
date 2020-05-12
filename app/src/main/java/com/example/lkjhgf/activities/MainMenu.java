@@ -19,8 +19,7 @@ import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
  * Hauptmenü, je nachdem, auf welchen Button der Nutzer klickt, wird die jeweilige Ansicht geöffnet
  */
 public class MainMenu extends Activity {
-    public static String NUM_CHILDREN = "com.example.lkjhgf.main_menu.NUM_CHILDREN";
-    public static String NUM_ADULT = "com.example.lkjhgf.main_menu.NUM_ADULT";
+    public static String NUM_PERSONS_PER_CLASS = "com.example.lkjhgf.main_menu.NUM_NUM_PERSONS_PER_CLASS";
     public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.main_menu.EXTRA_NUM_TRIP";
     public static String EXTRA_TRIP = "com.example.lkjhgf.main_menu.EXTRA_TRIP";
 

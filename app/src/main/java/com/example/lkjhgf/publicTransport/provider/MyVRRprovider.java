@@ -43,7 +43,7 @@ public class MyVRRprovider extends MyProvider {
     public HashMap<Fare.Type, ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips) {
         HashMap<Fare.Type, ArrayList<TripItem>> userClassTrips = new HashMap<>();
         for (TripItem tripItem : allTrips) {
-            for (Fare.Type type : Fare.Type.values()) {
+            for (Fare.Type type : getAllTickets().keySet()) {
                 for (int i = 1; i <= tripItem.getNumUserClass(type); i++) {
                     ArrayList<TripItem> oldTripItems = userClassTrips.get(type);
                     if (oldTripItems == null) {

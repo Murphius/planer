@@ -9,7 +9,10 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.multipleTrips.DetailedView;
 
+import java.util.HashMap;
+
 import de.schildbach.pte.NetworkProvider;
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -20,7 +23,7 @@ import de.schildbach.pte.dto.Trip;
 public class MultiplePossibleConnections extends PossibleConnections {
 
     private int numTrip;
-    private int numAdult, numChildren;
+    private HashMap<Fare.Type, Integer> numPersonsPerClass;
 
     /**
      * Neben den Attributen der Oberklasse gibt es noch weitere Attribute welche initialisiert werden <br/>
@@ -48,11 +51,11 @@ public class MultiplePossibleConnections extends PossibleConnections {
         numTripView.setText(numTripString);
         //#reisende Personen
         TextViewClass textViews = getTextViews();
-        numAdult = intent.getIntExtra(MainMenu.NUM_ADULT, 0);
-        numChildren = intent.getIntExtra(MainMenu.NUM_CHILDREN, 0);
-        String putText = numAdult + "";
+        //ToDo Erweitern für andere Verkehrsverbunde
+        numPersonsPerClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
+        String putText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
         textViews.numAdult.setText(putText);
-        putText = numChildren + "";
+        putText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         textViews.numChildren.setText(putText);
 
         RecyclerViewService recyclerViewService = new RecyclerViewMultipleService(view, activity, this, super.getButtons());
@@ -71,8 +74,7 @@ public class MultiplePossibleConnections extends PossibleConnections {
     public void changeViewConnectionDetail(Trip trip) {
         Intent newIntent = new Intent(context, DetailedView.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
-        newIntent.putExtra(MainMenu.NUM_ADULT, numAdult);
-        newIntent.putExtra(MainMenu.NUM_CHILDREN, numChildren);
+        newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
         super.changeViewConnectionDetail(trip, newIntent);
     }
 }
