@@ -4,7 +4,6 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 
 public class Optimisation {
@@ -24,10 +23,6 @@ public class Optimisation {
             if (!tripItem.isComplete()) {
                 if (MainMenu.myProvider.checkContains(tripItem.getPreisstufe())) {
                     newTripList.add(tripItem);
-                    //TODO Ticketliste prüfen
-                    //if(tripItem.getTrip().getFirstDepartureTime().after(Calendar.getInstance().getTime())){
-                     //   tripItem.removeTickets();
-                    //}
                 }
             }
         }
@@ -82,14 +77,14 @@ public class Optimisation {
 
         while (tripIndex > -1) {
             TripItem tripItem = tripsToOptimise.get(tripIndex);
-            tripItem.addTicket(allPossibleTicketCombinationHolder[ticketIndex].getTicket(), allPossibleTicketCombinationHolder[ticketIndex].getPreisstufe(),allPossibleTicketCombinationHolder[ticketIndex].getTicket().getType());
+            tripItem.addTicket(allPossibleTicketCombinationHolder[ticketIndex].getTicketToBuy());
             allPossibleTicketCombinationHolder[ticketIndex].addTripItem(tripItem);
             if (allPossibleTicketCombinationHolder[ticketIndex].getTicket() instanceof NumTicket) {
                 NumTicket numTicket = (NumTicket) allPossibleTicketCombinationHolder[ticketIndex].getTicket();
                 int numTrips = numTicket.getNumTrips();
                 while (numTrips > 1 && tripIndex > 0) { //TODO wirklich > 0 nötig ?
                     tripIndex -= 1;
-                    tripsToOptimise.get(tripIndex).addTicket(allPossibleTicketCombinationHolder[ticketIndex].getTicket(), allPossibleTicketCombinationHolder[ticketIndex].getPreisstufe(),allPossibleTicketCombinationHolder[ticketIndex].getTicket().getType());
+                    tripsToOptimise.get(tripIndex).addTicket(allPossibleTicketCombinationHolder[ticketIndex].getTicketToBuy());
                     allPossibleTicketCombinationHolder[ticketIndex].addTripItem(tripsToOptimise.get(tripIndex));
                     numTrips -= 1;
                 }
@@ -115,7 +110,7 @@ public class Optimisation {
     public static ArrayList<TicketToBuy> createTicketList(TicketInformationHolder lastBestTicket) {
         ArrayList<TicketToBuy> ticketList = new ArrayList<>();
         while (lastBestTicket.getTicket() != null) {
-            ticketList.add(new TicketToBuy(lastBestTicket.getTicket(), lastBestTicket.getPreisstufe(), lastBestTicket.getTripList()));
+            ticketList.add(lastBestTicket.getTicketToBuy());
             lastBestTicket = lastBestTicket.getPrevious();
         }
         return ticketList;
@@ -138,7 +133,7 @@ public class Optimisation {
             for(Iterator<TripItem> itemIterator = inverseTripItems.iterator(); itemIterator.hasNext() && currentTicket != null;){
                 TripItem currentTripItem = itemIterator.next();
                 if(MainMenu.myProvider.getPreisstufenIndex(currentTripItem.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(currentTicket.getPreisstufe())){
-                    currentTripItem.addTicket(currentTicket.getTicket(), currentTicket.getPreisstufe(), currentTicket.getTicket().getType());
+                    currentTripItem.addTicket(currentTicket);
                     currentTicket.addTripItem(currentTripItem);
                     if(currentTicket.getFreeTrips() == 0 ){
                         it.remove();

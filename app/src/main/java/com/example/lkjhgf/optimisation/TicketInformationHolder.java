@@ -14,7 +14,7 @@ public class TicketInformationHolder implements Serializable {
     /**
      * Benötigtes Ticket
      */
-    private TicketToBuy ticket;
+    private TicketToBuy ticketToBuy;
 
     /**
      * Kosten, bis zu dem jeweiligen Ticket, benötigt für die Optimierung
@@ -37,7 +37,7 @@ public class TicketInformationHolder implements Serializable {
      * @param previous   vorheriges Ticket
      */
     public TicketInformationHolder (Ticket ticket, String preisstufe, int allCosts, TicketInformationHolder previous) {
-        this.ticket = new TicketToBuy(ticket,preisstufe);
+        this.ticketToBuy = new TicketToBuy(ticket,preisstufe);
         this.allCosts = allCosts;
         this.previous = previous;
     }
@@ -48,16 +48,16 @@ public class TicketInformationHolder implements Serializable {
      * @param tripItem Fahrt die hinzugefügt werden soll
      */
     public void addTripItem(TripItem tripItem) {
-        ticket.addTripItem(tripItem);
-    }
-
-    public ArrayList<TripItem> getTripList() {
-        return ticket.getTripList();
+        ticketToBuy.addTripItem(tripItem);
     }
 
     public Ticket getTicket() {
-        return ticket.getTicket();
+        return ticketToBuy.getTicket();
     }
+    public TicketToBuy getTicketToBuy(){
+        return ticketToBuy;
+    }
+
 
     public int getAllCosts(){
         return allCosts;
@@ -68,12 +68,12 @@ public class TicketInformationHolder implements Serializable {
     }
 
     public String getPreisstufe(){
-        return ticket.getPreisstufe();
+        return ticketToBuy.getPreisstufe();
     }
 
     @Override
     public String toString() {
-        return ticket.toString() + ", Preisstufe: " + ticket.getPreisstufe();
+        return ticketToBuy.toString() + ", Preisstufe: " + ticketToBuy.getPreisstufe();
     }
 
 }

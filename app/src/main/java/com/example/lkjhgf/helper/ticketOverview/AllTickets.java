@@ -80,9 +80,13 @@ public class AllTickets {
         if (allTickets == null) {
             allTickets = new HashMap<>();
         } else {
+            System.out.println("---------------------------------------------------------------------------------------");
             for (Iterator<Fare.Type> it1 = allTickets.keySet().iterator(); it1.hasNext(); ) {
-                for (Iterator<TicketToBuy> it = allTickets.get(it1.next()).iterator(); it.hasNext(); ) {
+                Fare.Type type1 = it1.next();
+                System.out.println("Stufe: " + type1 + "\n");
+                for (Iterator<TicketToBuy> it = allTickets.get(type1).iterator(); it.hasNext(); ) {
                     TicketToBuy current = it.next();
+                    System.out.println("\t Ticket: " + current.toString() + "\n");
                     if (current.isPastTicket()) {
                         it.remove();
                     } else {

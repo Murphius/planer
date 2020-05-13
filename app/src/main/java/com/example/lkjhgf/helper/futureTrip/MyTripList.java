@@ -173,7 +173,7 @@ public abstract class MyTripList {
      * @postconditions wenn der Nutzer bestätigt, wird das Element gelöscht, lehnt der Nutzer
      * das Löschen hingegen ab, wird die Fahrt nicht gelöscht
      */
-    private void onDeleteClicked(int position) {
+    void onDeleteClicked(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage("Diese Fahrt wirklich löschen?");
         builder.setCancelable(false);
@@ -252,7 +252,7 @@ public abstract class MyTripList {
      * dass er die Fahrt wirklich löschen will
      * @postconditions die Fahrt ist aus der Liste gelöscht
      */
-    private void removeItemAtPosition(int position) {
+    void removeItemAtPosition(int position) {
         tripItems.remove(position);
         adapter.notifyItemRemoved(position);
     }

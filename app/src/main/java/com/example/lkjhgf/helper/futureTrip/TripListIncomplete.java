@@ -1,6 +1,7 @@
 package com.example.lkjhgf.helper.futureTrip;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.View;
 
@@ -80,7 +81,6 @@ public class TripListIncomplete extends MyTripList {
         tripItems.remove(position);
         Intent newIntent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
-        //TODO erweitern für weitere Personenklassen
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         activity.startActivity(newIntent);
@@ -107,8 +107,6 @@ public class TripListIncomplete extends MyTripList {
          * Wichtig hierbei: Nutzerklassenindex Ticketliste = Nutzerklassenindex Fahrten!
          */
         calculateTickets.setOnClickListener(v -> {
-            //PreisProvider vrrAdultPreisProvider = new VRRadultPreisProvider(MainMenu.myProvider.getTicketList);
-
             //Kopieren aller geplanten Fahrten
             ArrayList<TripItem> copy = new ArrayList<>(tripItems);
 
@@ -132,12 +130,12 @@ public class TripListIncomplete extends MyTripList {
 
             //Fahrscheine der letzten Optimierung
             HashMap<Fare.Type, ArrayList<TicketToBuy>> activeTickets = new HashMap(AllTickets.loadTickets(activity));
-            //Liste mit allen benötigten Fahrscheinen
+            //Allen benötigte Fahrscheine
             HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists = new HashMap<>();
-            //Liste mit Fahrscheinen, auf denen noch mindestens eine Fahrt frei ist
+            //Fahrscheine, mit mindestens einer freien Fahrt
             HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets = new HashMap<>();
 
-            for (Iterator<Fare.Type> it = activeTickets.keySet().iterator(); it.hasNext();) {
+            for (Iterator<Fare.Type> it = activeTickets.keySet().iterator(); it.hasNext(); ) {
                 //Die gespeicherten Fahrscheine der aktuellen Nutzerklasse
                 Fare.Type currentType = it.next();
                 ArrayList<TicketToBuy> userClassActiveTickets = activeTickets.get(currentType);
@@ -155,12 +153,15 @@ public class TripListIncomplete extends MyTripList {
                         //Falls ja, müssen zu erst die Fahrten des Tickets die Fahrscheine freigegeben bekommen
 
                         //Über alle zugeordneten Fahrten iterieren
-                        for (TripItem currentTrip : currentTicket.getTripList()) {
+                        for(Iterator<TripItem> tripItemIterator = currentTicket.getTripList().iterator(); tripItemIterator.hasNext();){
+                            TripItem currentTrip = tripItemIterator.next();
                             //Entfernen der zugeordneten Tickets
                             //TODO
-                            if(userClassTrips != null || !userClassTrips.isEmpty()){
+                            if (userClassTrips != null && !userClassTrips.isEmpty()) {
                                 int index = userClassTrips.indexOf(currentTrip);
-                                userClassTrips.get(index).removeTickets();
+                                if(index != -1){
+                                    userClassTrips.get(index).removeTickets(currentType, currentTicket.getTicketID());
+                                }
                             }
 
                         }
@@ -171,8 +172,12 @@ public class TripListIncomplete extends MyTripList {
                         //Ticket merken
                         allUserClassTickets.add(currentTicket);
                         //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
-                        for (TripItem currentTripItem : currentTicket.getTripList()) {
-                            userClassTrips.remove(currentTripItem);
+                        for (TicketToBuy.TripQuantity currentTripItem : currentTicket.getTripQuantities()) {
+                            int quantity = currentTripItem.getQuantity();
+                            while (quantity != 0){
+                                userClassTrips.remove(currentTripItem.getTrip());
+                                quantity--;
+                            }
                         }
                         //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
                         //hinzufügen
@@ -180,17 +185,6 @@ public class TripListIncomplete extends MyTripList {
                             freeUserClassTickets.add(currentTicket);
                         }
                     }
-
-
-                        /*for (TripItem t : currentTicket.getTripList()) {
-                            if (t.getTrip().getFirstDepartureTime().after(Calendar.getInstance().getTime())) {
-                                for (ArrayList<TripItem> current : userClassTripLists) {
-                                    // TODO: Hier weiter machen das klappt nicht
-                                    current.get(current.indexOf(t)).setTicketList(t.getTicketList(),t.getTicketPreisstufenList());
-                                    current.remove(t);
-                                }
-                            }
-                        }*/
                 }
                 allTicketLists.put(currentType, allUserClassTickets);
                 freeTickets.put(currentType, freeUserClassTickets);
@@ -200,8 +194,8 @@ public class TripListIncomplete extends MyTripList {
             //TODO dieser Teil funktioniert nur für NumTicket
             //Optimierung mit alten Fahrscheinen
             if (!freeTickets.isEmpty()) {
-                for(Fare.Type type : freeTickets.keySet()){
-                    if(!freeTickets.get(type).isEmpty()){
+                for (Fare.Type type : freeTickets.keySet()) {
+                    if (!freeTickets.get(type).isEmpty()) {
                         Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type));
                     }
                 }
@@ -214,7 +208,7 @@ public class TripListIncomplete extends MyTripList {
                 Fare.Type type = iterator.next();
                 if (allTicketsMap.containsKey(type)) {
                     lastBestTickets.put(type, Optimisation.optimisationBuyNewTickets(allTicketsMap.get(type), userClassTripLists.get(type)));
-                }else{
+                } else {
                     System.err.println("Fehler bei der Optimierung neuer Fahrscheine - unbekannter Tickettyp: " + type);
                 }
             }
@@ -235,4 +229,5 @@ public class TripListIncomplete extends MyTripList {
             startNextActivity(newIntent);
         });
     }
+
 }

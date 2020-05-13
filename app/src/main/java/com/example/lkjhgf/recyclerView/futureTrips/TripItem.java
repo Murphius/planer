@@ -3,13 +3,14 @@ package com.example.lkjhgf.recyclerView.futureTrips;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.UUID;
 
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
@@ -21,9 +22,22 @@ public class TripItem implements Serializable {
     private Trip trip;
     private String preisstufe;
     private boolean isComplete;
+
+    private class TripTicketInformationHolder {
+        Ticket ticket;
+        String ticketPreisstufe;
+        UUID ticketIdentifier;
+
+        private TripTicketInformationHolder(Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
+            this.ticket = ticket;
+            this.ticketPreisstufe = ticketPreisstufe;
+            this.ticketIdentifier = ticketIdentifier;
+        }
+    }
+
     private HashMap<Fare.Type, Integer> numUserClasses;
-    private HashMap<Fare.Type, ArrayList<Ticket>> ticketMap;
-    private HashMap<Fare.Type, ArrayList<String>> ticketPreisstufenMap;
+    private HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> allTicketInformations;
+
 
     /**
      * Kurze Zusammenfassung der Abfolge von Verkehrsmitteln
@@ -48,8 +62,7 @@ public class TripItem implements Serializable {
         numUserClasses = new HashMap<>();
         journeyItems = UtilsList.journeyItems(trip.legs);
 
-        ticketMap = new HashMap<>();
-        ticketPreisstufenMap = new HashMap<>();
+        allTicketInformations = new HashMap<>();
     }
 
     /**
@@ -90,22 +103,13 @@ public class TripItem implements Serializable {
         return preisstufe;
     }
 
-    public Set<Fare.Type> getTypes(){
-        return numUserClasses.keySet();
-    }
-
-    public void addTicket(Ticket ticket, String ticketPreisstufe, Fare.Type type) {
-        ArrayList<Ticket> oldTickets = ticketMap.get(type);
-        ArrayList<String> oldTicketPreisstufen = ticketPreisstufenMap.get(type);
-        if (oldTickets == null) {
-            oldTicketPreisstufen = new ArrayList<>();
-            oldTickets = new ArrayList<>();
-            ticketMap.put(type, oldTickets);
-            ticketPreisstufenMap.put(type, oldTicketPreisstufen);
+    public void addTicket(TicketToBuy ticket) {
+        ArrayList<TripTicketInformationHolder> c = allTicketInformations.get(ticket.getTicket().getType());
+        if (c == null) {
+            c = new ArrayList<>();
+            allTicketInformations.put(ticket.getTicket().getType(), c);
         }
-        oldTickets.add(ticket);
-        oldTicketPreisstufen.add(ticketPreisstufe);
-
+        c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
     }
 
     /**
@@ -121,32 +125,33 @@ public class TripItem implements Serializable {
         ArrayList<String> preisstufeToUse = new ArrayList<>();
         ArrayList<Integer> num = new ArrayList<>();
 
-        for (Fare.Type type : ticketPreisstufenMap.keySet()) {
-            ArrayList<Ticket> ticketList = ticketMap.get(type);
-            ArrayList<String> ticketPreisstufenList = ticketPreisstufenMap.get(type);
-            if (ticketList != null && ! ticketList.isEmpty()) {
-                ticketsToUse.add(ticketList.get(0));
-                preisstufeToUse.add(ticketPreisstufenList.get(0));
+        for (Fare.Type type : allTicketInformations.keySet()) {
+            ArrayList<TripTicketInformationHolder> ticketList = allTicketInformations.get(type);
+
+
+            if (ticketList != null && !ticketList.isEmpty()) {
+                ticketsToUse.add(ticketList.get(0).ticket);
+                preisstufeToUse.add(ticketList.get(0).ticketPreisstufe);
                 num.add(1);
 
                 for (int i = 1; i < ticketList.size(); i++) {
                     boolean contains = false;
                     for (int j = 0; j < ticketsToUse.size() && !contains; j++) {
-                        if (ticketList.get(i).getName().equals(ticketsToUse.get(j).getName())) {
-                            if (ticketPreisstufenList.get(i).equals(preisstufeToUse.get(j))) {
+                        if (ticketList.get(i).ticket.getName().equals(ticketsToUse.get(j).getName())) {
+                            if (ticketList.get(i).ticketPreisstufe.equals(preisstufeToUse.get(j))) {
                                 num.set(j, num.get(j) + 1);
                                 contains = true;
                             } else {
                                 ticketList.add(ticketList.get(i));
-                                preisstufeToUse.add(ticketPreisstufenList.get(i));
+                                preisstufeToUse.add(ticketList.get(i).ticketPreisstufe);
                                 num.add(1);
                                 contains = true;
                             }
                         }
                     }
                     if (!contains) {
-                        ticketsToUse.add(ticketList.get(i));
-                        preisstufeToUse.add(ticketPreisstufenList.get(i));
+                        ticketsToUse.add(ticketList.get(i).ticket);
+                        preisstufeToUse.add(ticketList.get(i).ticketPreisstufe);
                         num.add(1);
                     }
                 }
@@ -178,13 +183,22 @@ public class TripItem implements Serializable {
         return value.toString();
     }
 
-    ArrayList<Ticket> getTicketList(Fare.Type type) {
-        return ticketMap.get(type);
+    public ArrayList<UUID> getTicketIDs(Fare.Type type) {
+        ArrayList<UUID> ticketIDs = new ArrayList<>();
+        for (TripTicketInformationHolder t : allTicketInformations.get(type)) {
+            ticketIDs.add(t.ticketIdentifier);
+        }
+        return ticketIDs;
     }
 
-    public void removeTickets() {
-        ticketMap.clear();
-        ticketPreisstufenMap.clear();
+    public void removeTickets(Fare.Type type, UUID uuid) {
+        ArrayList<TripTicketInformationHolder> d = allTicketInformations.get(type);
+        for (Iterator<TripTicketInformationHolder> iterator = d.iterator(); iterator.hasNext(); ) {
+            TripTicketInformationHolder current = iterator.next();
+            if (current.ticketIdentifier.equals(uuid)) {
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -204,8 +218,8 @@ public class TripItem implements Serializable {
     }
 
     boolean hasNoTicket() {
-        for (Fare.Type key : ticketMap.keySet()) {
-            if (!ticketMap.get(key).isEmpty()) {
+        for (Fare.Type key : allTicketInformations.keySet()) {
+            if (!allTicketInformations.get(key).isEmpty()) {
                 return false;
             }
         }
@@ -215,4 +229,5 @@ public class TripItem implements Serializable {
     public HashMap<Fare.Type, Integer> getNumUserClasses() {
         return numUserClasses;
     }
+
 }

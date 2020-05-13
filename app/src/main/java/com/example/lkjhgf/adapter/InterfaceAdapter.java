@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
             // Deserialisierung der GPS-Koordinaten-Liste
             Type listType = new TypeToken<List<Point>>() {
             }.getType();
-            List<Point> path = context.deserialize(jsonObject.get(EXTRA_PATH), listType);
+            //List<Point> path = context.deserialize(jsonObject.get(EXTRA_PATH), listType);
 
             String message = context.deserialize(jsonObject.get(EXTRA_MESSAGE), String.class);
             return new Trip.Public(line,
@@ -105,7 +106,7 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                     departureStop,
                     arrivalStop,
                     intermediateStops,
-                    path,
+                    new ArrayList<>(),
                     message);
         } else if (className.equals(Trip.Individual.class.getName())) { // Erzeugen eines neuen Trip.Individual Objekts
             Trip.Individual.Type type = context.deserialize(jsonObject.get(EXTRA_TYPE),
@@ -165,7 +166,7 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                 jsonObject.add(EXTRA_ARRIVAL_STOP, context.serialize(publicTrip.arrivalStop));
                 jsonObject.add(EXTRA_INTERMEDIATE_STOPS,
                         context.serialize(publicTrip.intermediateStops));
-                jsonObject.add(EXTRA_PATH, context.serialize(publicTrip.path));
+                //jsonObject.add(EXTRA_PATH, context.serialize(publicTrip.path));
                 jsonObject.add(EXTRA_MESSAGE, context.serialize(publicTrip.message));
             } else if (src instanceof Trip.Individual) { // Serialisierung von Trip.Individual
                 Trip.Individual individualTrip = (Trip.Individual) src;
@@ -175,7 +176,7 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                         context.serialize(individualTrip.departureTime));
                 jsonObject.add(EXTRA_ARRIVAL, context.serialize(individualTrip.arrival));
                 jsonObject.add(EXTRA_ARRIVAL_TIME, context.serialize(individualTrip.arrivalTime));
-                jsonObject.add(EXTRA_PATH, context.serialize(individualTrip.path));
+                //jsonObject.add(EXTRA_PATH, context.serialize(individualTrip.path));
                 jsonObject.add(EXTRA_DISTANCE, context.serialize(individualTrip.distance));
             }
         }else if(src instanceof Ticket){
