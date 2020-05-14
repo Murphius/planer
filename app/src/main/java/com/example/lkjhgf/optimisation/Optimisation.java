@@ -35,15 +35,15 @@ public class Optimisation {
      *
      * ierungszauber
      */
-    public static TicketInformationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets, ArrayList<TripItem> tripsToOptimise) {
+    public static TicketOptimisationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets, ArrayList<TripItem> tripsToOptimise) {
         int maxNumTripTicket = MainMenu.myProvider.getMaxNumTrip();
 
         //größeres Array, um keine IndexOutOfBounce Fehler zu bekommen, wenn das Minimum gesucht wird -> - maxNumTripTicket viele Fahrten
-        TicketInformationHolder[] allPossibleTicketCombinationHolder = new TicketInformationHolder[maxNumTripTicket + tripsToOptimise.size()];
+        TicketOptimisationHolder[] allPossibleTicketCombinationHolder = new TicketOptimisationHolder[maxNumTripTicket + tripsToOptimise.size()];
 
         //Initialisierung der ersten Felder, mit ohne Kosten
         for (int index = 0; index < maxNumTripTicket; index++) {
-            allPossibleTicketCombinationHolder[index] = new TicketInformationHolder(null, "", 0, null);
+            allPossibleTicketCombinationHolder[index] = new TicketOptimisationHolder(null, "", 0, null);
         }
 
         for (int index = 0; index < tripsToOptimise.size(); index++) {
@@ -66,7 +66,7 @@ public class Optimisation {
             if (bestTicket instanceof NumTicket) {
                 NumTicket numTicket = (NumTicket) bestTicket;
                 // Alle Informationen zum Fahrschein hinzufügen
-                allPossibleTicketCombinationHolder[index + maxNumTripTicket] = new TicketInformationHolder(bestTicket, tripsToOptimise.get(index).getPreisstufe(),
+                allPossibleTicketCombinationHolder[index + maxNumTripTicket] = new TicketOptimisationHolder(bestTicket, tripsToOptimise.get(index).getPreisstufe(),
                         costs.get(indexOfBestTicket), allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()]);
             }
         }
@@ -107,7 +107,7 @@ public class Optimisation {
         return index;
     }
 
-    public static ArrayList<TicketToBuy> createTicketList(TicketInformationHolder lastBestTicket) {
+    public static ArrayList<TicketToBuy> createTicketList(TicketOptimisationHolder lastBestTicket) {
         ArrayList<TicketToBuy> ticketList = new ArrayList<>();
         while (lastBestTicket.getTicket() != null) {
             ticketList.add(lastBestTicket.getTicketToBuy());

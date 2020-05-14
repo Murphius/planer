@@ -3,14 +3,13 @@ package com.example.lkjhgf.optimisation;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Enthält alle Informationen zu einem benötigten Fahrschein <br/>
  * <p>
  * Den Fahrschein, die Preisstufe, die zugeordneten Fahrten
  */
-public class TicketInformationHolder implements Serializable {
+public class TicketOptimisationHolder implements Serializable {
     /**
      * Benötigtes Ticket
      */
@@ -23,7 +22,7 @@ public class TicketInformationHolder implements Serializable {
     /**
      * Vorhergehendes Ticket, benötigt für die Optimierung
      */
-    private TicketInformationHolder previous;
+    private TicketOptimisationHolder previous;
 
     /**
      * Enthält alle benötigten Informationen zum Fahrschein <br/>
@@ -36,7 +35,7 @@ public class TicketInformationHolder implements Serializable {
      * @param allCosts      gesamt Kosten bis zu der jeweilgen Fahrt
      * @param previous   vorheriges Ticket
      */
-    public TicketInformationHolder (Ticket ticket, String preisstufe, int allCosts, TicketInformationHolder previous) {
+    public TicketOptimisationHolder(Ticket ticket, String preisstufe, int allCosts, TicketOptimisationHolder previous) {
         this.ticketToBuy = new TicketToBuy(ticket,preisstufe);
         this.allCosts = allCosts;
         this.previous = previous;
@@ -63,7 +62,7 @@ public class TicketInformationHolder implements Serializable {
         return allCosts;
     }
 
-    public TicketInformationHolder getPrevious() {
+    public TicketOptimisationHolder getPrevious() {
         return previous;
     }
 

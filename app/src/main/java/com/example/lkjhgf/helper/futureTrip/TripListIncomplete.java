@@ -1,7 +1,6 @@
 package com.example.lkjhgf.helper.futureTrip;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.View;
 
@@ -11,20 +10,12 @@ import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsOptimisation;
-import com.example.lkjhgf.optimisation.Optimisation;
-import com.example.lkjhgf.optimisation.Ticket;
-import com.example.lkjhgf.optimisation.TicketInformationHolder;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.multipleTrips.UserForm;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.stream.Collectors;
 
 import de.schildbach.pte.dto.Fare;
 

@@ -6,7 +6,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.optimisation.Optimisation;
 import com.example.lkjhgf.optimisation.Ticket;
-import com.example.lkjhgf.optimisation.TicketInformationHolder;
+import com.example.lkjhgf.optimisation.TicketOptimisationHolder;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import de.schildbach.pte.dto.Fare;
-import de.schildbach.pte.dto.Trip;
 
 public final class UtilsOptimisation {
 
@@ -99,7 +98,7 @@ public final class UtilsOptimisation {
         }
 
         //Optimieren mit neuen Fahrscheinen
-        HashMap<Fare.Type, TicketInformationHolder> lastBestTickets = new HashMap<>();
+        HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = new HashMap<>();
         HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap = MainMenu.myProvider.getAllTickets();
         for (Iterator<Fare.Type> iterator = userClassTripLists.keySet().iterator(); iterator.hasNext(); ) {
             Fare.Type type = iterator.next();

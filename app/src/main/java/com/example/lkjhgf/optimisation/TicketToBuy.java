@@ -1,7 +1,5 @@
 package com.example.lkjhgf.optimisation;
 
-import androidx.annotation.Nullable;
-
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
@@ -9,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.UUID;
-
-import de.schildbach.pte.dto.Fare;
 
 public class TicketToBuy implements Comparable<TicketToBuy> {
     private Ticket ticket;
