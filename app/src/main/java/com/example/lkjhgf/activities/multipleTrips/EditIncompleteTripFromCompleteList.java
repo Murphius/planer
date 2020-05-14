@@ -14,7 +14,12 @@ import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
+import com.example.lkjhgf.helper.futureTrip.TripListComplete;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsOptimisation;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.schildbach.pte.VrrProvider;
@@ -41,10 +46,10 @@ import de.schildbach.pte.dto.Trip;
  */
 public class EditIncompleteTripFromCompleteList extends Activity {
 
-    Form form;
     Trip trip;
     HashMap<Fare.Type, Integer> numPersonsPerClass;
     int numTrip;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +63,11 @@ public class EditIncompleteTripFromCompleteList extends Activity {
 
         trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
         numPersonsPerClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
-
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
 
-        form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
+
+        Form form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
 

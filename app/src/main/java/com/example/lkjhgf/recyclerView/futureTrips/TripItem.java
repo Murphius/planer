@@ -28,7 +28,7 @@ public class TripItem implements Serializable {
         String ticketPreisstufe;
         UUID ticketIdentifier;
 
-        private TripTicketInformationHolder(Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
+        private TripTicketInformationHolder (Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
             this.ticket = ticket;
             this.ticketPreisstufe = ticketPreisstufe;
             this.ticketIdentifier = ticketIdentifier;
@@ -230,4 +230,7 @@ public class TripItem implements Serializable {
         return numUserClasses;
     }
 
+    public HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> getAllTicketInformations() {
+        return allTicketInformations;
+    }
 }

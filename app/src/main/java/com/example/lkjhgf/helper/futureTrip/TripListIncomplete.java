@@ -65,7 +65,8 @@ public class TripListIncomplete extends MyTripList {
         Intent newIntent = new Intent(activity, PlanIncompleteView.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, current.getTrip());
         //TODO erweitern für weitere Personenklassen
-        newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, current.getNumUserClasses());
+        newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
+        newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
     }

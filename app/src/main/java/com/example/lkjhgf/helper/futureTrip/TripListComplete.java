@@ -12,6 +12,7 @@ import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromComplet
 import com.example.lkjhgf.activities.singleTrip.EditTrip;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsOptimisation;
+import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
@@ -29,6 +30,8 @@ import de.schildbach.pte.dto.Fare;
  * Ansicht, wenn aus dem Hauptmenü aufgerufen
  */
 public class TripListComplete extends MyTripList {
+
+    public static String EXTRA_TICKET = "com.example.lkjhgf.helper.futureTrip.EXTRA_TICKET";
 
     /**
      * Layout der Ansicht modifizieren <br/>
@@ -71,8 +74,7 @@ public class TripListComplete extends MyTripList {
             //TODO #Trip??
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
             //#Fahrt und #reisende Personen ebenfalls übergeben
-            //TODO erweitern für weitere Personenklassen
-            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position);
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
             newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
@@ -85,105 +87,176 @@ public class TripListComplete extends MyTripList {
     @Override
     void startEdit(int position) {
         TripItem current = tripItems.get(position);
-
-        tripItems.remove(position);
-        adapter.notifyItemRemoved(position);
-        Intent newIntent;
-
         if (current.isComplete()) {
-            newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
+            System.out.println("--------------------------------------------------------------------+++");
+            tripItems.remove(position);
+            adapter.notifyItemRemoved(position);
+            Intent newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
+            newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+            startNextActivity(newIntent);
         } else {
-            newIntent = new Intent(activity.getApplicationContext(),
-                    EditIncompleteTripFromCompleteList.class);
-            newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
-            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+            System.out.println("--------------------------------------------------------------------++++");
+            if (checkTickets(position)) {
+                System.out.println("-------------------------------------------------------------+++++");
+                //Nur freie Fahrten
+                removeTripAndTicket(position);
+                Intent newIntent = new Intent(activity.getApplicationContext(),
+                        EditIncompleteTripFromCompleteList.class);
+                newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
+                newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+                newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+                startNextActivity(newIntent);
+            } else {
+                //Fahrt nutzt angefangene Tickets
+                AlertDialog.Builder secondBuilder = new AlertDialog.Builder(activity);
+                secondBuilder.setMessage("Diese Fahrt besitzt mindestens ein angefangenes Ticket, durch das editieren dieser Fahrt könnten die " +
+                        "Kosten nicht mehr minimal sein. \n Trotzdem editieren?");
+                secondBuilder.setCancelable(false);
+                secondBuilder.setPositiveButton("Ja", (secondDialog, which1) -> {
+                    //falls ja: bei den Fahrscheinen die Fahrt löschen & ggf. anzahl der freien Fahrten korrigieren
+                    removeTripSetTicketFree(position);
+                    Intent newIntent = new Intent(activity.getApplicationContext(),
+                            EditIncompleteTripFromCompleteList.class);
+                    newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
+                    newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+                    newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+                    startNextActivity(newIntent);
+                });
+                secondBuilder.setNegativeButton("Nein", (secondDialog, which1) -> secondDialog.cancel());
+                AlertDialog secondDialog = secondBuilder.create();
+                secondDialog.show();
+            }
+
         }
-        newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
-        startNextActivity(newIntent);
+
     }
+
 
     @Override
     void onDeleteClicked(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Diese Fahrt wirklich löschen?");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Ja", (dialog, which) -> {
+        AlertDialog.Builder firstBuilder = new AlertDialog.Builder(activity);
+        firstBuilder.setMessage("Diese Fahrt wirklich löschen?");
+        firstBuilder.setCancelable(false);
+        firstBuilder.setPositiveButton("Ja", (dialog, which) -> {
             if (tripItems.get(position).isComplete()) {
                 removeItemAtPosition(position);
             } else {
-                this.checkTickets(position);
+                if (this.checkTickets(position)) {
+                    //keine angefangenen Tickets
+                    removeTripAndTicket(position);
+                } else {
+                    //mindestens ein angefangenes Ticket
+                    //Nutzer abfrage -> eventuell Kosten nicht mehr minimal
+                    AlertDialog.Builder secondBuilder = new AlertDialog.Builder(activity);
+                    secondBuilder.setMessage("Diese Fahrt besitzt mindestens ein angefangenes Ticket, durch das löschen dieser Fahrt könnten die " +
+                            "Kosten nicht mehr minimal sein. \n Trotzdem löschen?");
+                    secondBuilder.setCancelable(false);
+                    secondBuilder.setPositiveButton("Ja", (secondDialog, which1) -> {
+                        //falls ja: bei den Fahrscheinen die Fahrt löschen & ggf. anzahl der freien Fahrten korrigieren
+                        removeTripSetTicketFree(position);
+                    });
+                    secondBuilder.setNegativeButton("Nein", (secondDialog, which1) -> dialog.cancel());
+                    AlertDialog secondDialog = secondBuilder.create();
+                    secondDialog.show();
+                }
             }
         });
-        builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
-        AlertDialog dialog = builder.create();
+        firstBuilder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
+        AlertDialog dialog = firstBuilder.create();
         dialog.show();
     }
 
+    private void removeTripAndTicket(int position) {
+        //Optimierung wie gehabt, ohne die gelöschte Fahrt
+        tripItems.remove(position);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
+        adapter.notifyDataSetChanged();
+        AllTickets.saveData(newTicketList, activity);
+        saveData();
+    }
 
-    private void checkTickets(int position) {
+    private void removeTripSetTicketFree(int position) {
         TripItem currentTrip = tripItems.get(position);
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
-        boolean futureTickets = true;
         Set<Fare.Type> keys = currentTrip.getNumUserClasses().keySet();
-        //prüfen, ob alle Tickets dieser Fahrt in der Fahrt noch nicht angefangen sind
-        for (Iterator<Fare.Type> iteratorType = keys.iterator(); iteratorType.hasNext() && futureTickets; ) {
-            Fare.Type type = iteratorType.next();
+        for (Fare.Type type : keys) {
             ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
             ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
-            for (Iterator<UUID> iteratorUUID = ticketUUIDs.iterator(); iteratorUUID.hasNext() && futureTickets; ) {
-                UUID currentTicketUUID = iteratorUUID.next();
-                for (Iterator<TicketToBuy> iteratorTicketToBuy = tickets.iterator(); iteratorTicketToBuy.hasNext() && futureTickets; ) {
+            for (UUID currentTicketUUID : ticketUUIDs) {
+                for (Iterator<TicketToBuy> iteratorTicketToBuy = tickets.iterator(); iteratorTicketToBuy.hasNext(); ) {
                     TicketToBuy currentTicketToBuy = iteratorTicketToBuy.next();
                     if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
-                        futureTickets = currentTicketToBuy.isFutureTicket();
+                        if (currentTicketToBuy.removeTrip(currentTrip.getTrip().getId())) {
+                            //Ticket entfernen, da dies keine weitenen Fahrten belegt hat -> kann gelöscht werden
+                            iteratorTicketToBuy.remove();
+                        }
                     }
                 }
             }
         }
-        //keine angefangenen Tickets
-        if (futureTickets) {
-            //Optimierung wie gehabt, ohne die gelöschte Fahrt
-            tripItems.remove(position);
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
-            adapter.notifyDataSetChanged();
-            AllTickets.saveData(newTicketList, activity);
-            saveData();
-        } else {
-            //mindestens ein angefangenes Ticket
-            //Nutzer abfrage -> eventuell Kosten nicht mehr minimal
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage("Diese Fahrt besitzt mindestens ein angefangenes Ticket, durch das löschen dieser Fahrt könnten die " +
-                    "Kosten nicht mehr minimal sein. \n Trotzdem löschen?");
-            builder.setCancelable(false);
-            builder.setPositiveButton("Ja", (dialog, which) -> {
-                //falls ja: bei den Fahrscheinen die Fahrt löschen & ggf. anzahl der freien Fahrten korrigieren
-                for (Iterator<Fare.Type> iteratorType = keys.iterator(); iteratorType.hasNext(); ) {
-                    Fare.Type type = iteratorType.next();
-                    ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
-                    ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
-                    for (Iterator<UUID> iteratorUUID = ticketUUIDs.iterator(); iteratorUUID.hasNext(); ) {
-                        UUID currentTicketUUID = iteratorUUID.next();
-                        for (Iterator<TicketToBuy> iteratorTicketToBuy = tickets.iterator(); iteratorTicketToBuy.hasNext(); ) {
-                            TicketToBuy currentTicketToBuy = iteratorTicketToBuy.next();
-                            if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
-                                if(currentTicketToBuy.removeTrip(currentTrip.getTrip().getId())){
-                                    //Ticket entfernen, da dies keine weitenen Fahrten belegt hat -> kann gelöscht werden
-                                    iteratorTicketToBuy.remove();
-                                }
-                            }
+        tripItems.remove(position);
+        adapter.notifyDataSetChanged();
+        AllTickets.saveData(allSavedTickets, activity);
+        saveData();
+    }
+
+    private boolean checkTickets(int position) {
+        TripItem currentTrip = tripItems.get(position);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
+        Set<Fare.Type> keys = currentTrip.getNumUserClasses().keySet();
+        //prüfen, ob alle Tickets dieser Fahrt in der Fahrt noch nicht angefangen sind
+        for (Fare.Type type : keys) {
+            ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
+            ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
+            for (UUID currentTicketUUID : ticketUUIDs) {
+                for (TicketToBuy currentTicketToBuy : tickets) {
+                    if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
+                        if (!currentTicketToBuy.isFutureTicket()) {
+                            return false;
                         }
                     }
                 }
-                tripItems.remove(position);
-                adapter.notifyDataSetChanged();
-                AllTickets.saveData(allSavedTickets, activity);
-                saveData();
-            });
-            builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            }
         }
+        return true;
     }
+
+    /*
+    private ArrayList<UUID> usedTickets(int position){
+        ArrayList<UUID> usedTickets = new ArrayList<>();
+        TripItem currentTrip = tripItems.get(position);
+
+        for(Fare.Type type : currentTrip.getNumUserClasses().keySet()){
+            usedTickets.addAll(currentTrip.getTicketIDs(type));
+        }
+
+        return usedTickets;
+    }
+
+    private void searchForTickets(ArrayList<UUID> uuids, int position){
+        //Laden der Fahrscheine
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
+        ArrayList<TicketToBuy> usedTickets = new ArrayList<>();
+        for(Fare.Type type : savedTickets.keySet()){
+            //gespeicherte Fahrscheine der Nutzerklasse
+            ArrayList<TicketToBuy> userClassSavedTickets = savedTickets.get(type);
+            //über dessen zugeordnete Fahrscheine iterieren
+            for(Iterator<TicketToBuy> ticketToBuyIterator = userClassSavedTickets.iterator(); ticketToBuyIterator.hasNext();){
+                TicketToBuy currentTicketToBuy = ticketToBuyIterator.next();
+                for(Iterator<UUID> uuidIterator = uuids.iterator(); uuidIterator.hasNext();){
+                    //Prüfen, ob die aktuelle TicketID in der Liste der Fahrscheine dieser Fahrt enthalten ist
+                    if(currentTicketToBuy.getTicketID().equals(uuidIterator.next())){
+                        //wenn ja -> speichern dieser Fahrt
+                        usedTickets.add(currentTicketToBuy);
+                        uuidIterator.remove();
+                        if(currentTicketToBuy.removeTrip(tripItems.get(position).getTrip().getId())){
+                            ticketToBuyIterator.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }*/
 
     /**
      * Neue Fahrt planen, die nicht in bei der Optimierung berücksichtigt wird <br/>

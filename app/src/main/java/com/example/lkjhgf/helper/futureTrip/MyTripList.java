@@ -74,6 +74,8 @@ public abstract class MyTripList {
         loadData();
 
         insertTrip(tripItem);
+        //TODO kann das hier stehen?
+        saveData();
 
         findID(view);
     }
