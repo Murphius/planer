@@ -27,11 +27,25 @@ public class TripItem implements Serializable {
         Ticket ticket;
         String ticketPreisstufe;
         UUID ticketIdentifier;
+        int quantity;
 
-        private TripTicketInformationHolder (Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
+        private TripTicketInformationHolder(Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
             this.ticket = ticket;
             this.ticketPreisstufe = ticketPreisstufe;
             this.ticketIdentifier = ticketIdentifier;
+            quantity = 1;
+        }
+
+        private boolean checkContains(UUID otherIdentifier) {
+            return ticketIdentifier.equals(otherIdentifier);
+        }
+
+        private void add() {
+            quantity++;
+        }
+
+        private void remove() {
+            quantity--;
         }
     }
 
@@ -105,11 +119,24 @@ public class TripItem implements Serializable {
 
     public void addTicket(TicketToBuy ticket) {
         ArrayList<TripTicketInformationHolder> c = allTicketInformations.get(ticket.getTicket().getType());
-        if (c == null) {
+        if (c == null || c.isEmpty()) {
             c = new ArrayList<>();
             allTicketInformations.put(ticket.getTicket().getType(), c);
         }
-        c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
+        if (c.isEmpty()) {
+            c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
+        } else {
+            boolean contains = false;
+            for (TripTicketInformationHolder t : c) {
+                if (t.checkContains(ticket.getTicketID())) {
+                    t.add();
+                    contains = true;
+                }
+            }
+            if(!contains){
+                c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
+            }
+        }
     }
 
     /**
@@ -132,19 +159,19 @@ public class TripItem implements Serializable {
             if (ticketList != null && !ticketList.isEmpty()) {
                 ticketsToUse.add(ticketList.get(0).ticket);
                 preisstufeToUse.add(ticketList.get(0).ticketPreisstufe);
-                num.add(1);
+                num.add(ticketList.get(0).quantity);
 
                 for (int i = 1; i < ticketList.size(); i++) {
                     boolean contains = false;
                     for (int j = 0; j < ticketsToUse.size() && !contains; j++) {
                         if (ticketList.get(i).ticket.getName().equals(ticketsToUse.get(j).getName())) {
                             if (ticketList.get(i).ticketPreisstufe.equals(preisstufeToUse.get(j))) {
-                                num.set(j, num.get(j) + 1);
+                                num.set(j, num.get(j) + ticketList.get(i).quantity);
                                 contains = true;
                             } else {
                                 ticketList.add(ticketList.get(i));
                                 preisstufeToUse.add(ticketList.get(i).ticketPreisstufe);
-                                num.add(1);
+                                num.add(ticketList.get(i).quantity);
                                 contains = true;
                             }
                         }
@@ -152,7 +179,7 @@ public class TripItem implements Serializable {
                     if (!contains) {
                         ticketsToUse.add(ticketList.get(i).ticket);
                         preisstufeToUse.add(ticketList.get(i).ticketPreisstufe);
-                        num.add(1);
+                        num.add(ticketList.get(i).quantity);
                     }
                 }
             }
@@ -185,8 +212,10 @@ public class TripItem implements Serializable {
 
     public ArrayList<UUID> getTicketIDs(Fare.Type type) {
         ArrayList<UUID> ticketIDs = new ArrayList<>();
-        for (TripTicketInformationHolder t : allTicketInformations.get(type)) {
-            ticketIDs.add(t.ticketIdentifier);
+        if (allTicketInformations.containsKey(type)) {
+            for (TripTicketInformationHolder t : allTicketInformations.get(type)) {
+                ticketIDs.add(t.ticketIdentifier);
+            }
         }
         return ticketIDs;
     }

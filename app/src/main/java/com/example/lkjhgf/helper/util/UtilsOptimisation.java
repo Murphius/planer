@@ -20,7 +20,7 @@ import de.schildbach.pte.dto.Trip;
 
 public final class UtilsOptimisation {
 
-    public static HashMap<Fare.Type, ArrayList<TicketToBuy>> brauchtEinenTollenNamen(ArrayList<TripItem> tripItems, Activity activity){
+    public static HashMap<Fare.Type, ArrayList<TicketToBuy>> brauchtEinenTollenNamen(ArrayList<TripItem> tripItems, Activity activity) {
         //Fahrten ohne Preisstufe sowie nicht zu optimierende Fahrten aussortieren
         ArrayList<TripItem> copy = Optimisation.removeTrips(tripItems);
         // Fahrten nach den Preisstufen sortieren
@@ -35,8 +35,7 @@ public final class UtilsOptimisation {
         //Liste mit Fahrscheinen, auf denen noch mindestens eine Fahrt frei ist
         HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets = new HashMap<>();
 
-        for (
-                Iterator<Fare.Type> it = activeTickets.keySet().iterator(); it.hasNext(); ) {
+        for (Iterator<Fare.Type> it = activeTickets.keySet().iterator(); it.hasNext(); ) {
             //Die gespeicherten Fahrscheine der aktuellen Nutzerklasse
             Fare.Type currentType = it.next();
             ArrayList<TicketToBuy> userClassActiveTickets = activeTickets.get(currentType);
@@ -54,11 +53,11 @@ public final class UtilsOptimisation {
                     //Falls ja, müssen zu erst die Fahrten des Tickets die Fahrscheine freigegeben bekommen
 
                     //Über alle zugeordneten Fahrten iterieren
-                    for(Iterator<TripItem> tripItemIterator = currentTicket.getTripList().iterator(); tripItemIterator.hasNext();){
+                    for (Iterator<TripItem> tripItemIterator = currentTicket.getTripList().iterator(); tripItemIterator.hasNext(); ) {
                         TripItem currentTrip = tripItemIterator.next();
                         if (userClassTrips != null && !userClassTrips.isEmpty()) {
                             int index = userClassTrips.indexOf(currentTrip);
-                            if(index != -1){
+                            if (index != -1) {
                                 userClassTrips.get(index).removeTickets(currentType, currentTicket.getTicketID());
                             }
                         }
@@ -70,9 +69,13 @@ public final class UtilsOptimisation {
                     //Ticket merken
                     allUserClassTickets.add(currentTicket);
                     //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
-                    for (TripItem currentTripItem : currentTicket.getTripList()) {
-                        userClassTrips.remove(currentTripItem);
+                    for(TicketToBuy.TripQuantity tripQuantity : currentTicket.getTripQuantities()){
+                        int quantity = tripQuantity.getQuantity();
+                        for(int i = 0; i < quantity; i++){
+                            userClassTrips.remove(tripQuantity.getTrip());
+                        }
                     }
+
                     //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
                     //hinzufügen
                     if (currentTicket.getFreeTrips() > 0) {

@@ -121,17 +121,27 @@ public class MultipleTrip extends Form {
         //ToDo Erweiterung bei anderem Provider
         String numAdultString = text.numAdultView.getText().toString();
         String numChildrenString = text.numChildrenView.getText().toString();
-
+        int numAdult = 0;
+        int numChildren = 0;
         if (!numAdultString.isEmpty()) {
-            numPersonsPerClass.put(Fare.Type.ADULT, Integer.parseInt(numAdultString));
-        }else{
-            numPersonsPerClass.put(Fare.Type.ADULT, 0);
+            try{
+               numAdult = Integer.parseInt(numAdultString);
+            }catch (NumberFormatException e){
+                Toast.makeText(context, "Die Zahl der reisenden Personen ist zu groß", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
+        numPersonsPerClass.put(Fare.Type.ADULT, numAdult);
+
         if (!numChildrenString.isEmpty()) {
-            numPersonsPerClass.put(Fare.Type.CHILD, Integer.parseInt(numChildrenString));
-        }else{
-            numPersonsPerClass.put(Fare.Type.CHILD, 0);
+            try{
+                numChildren = Integer.parseInt(numChildrenString);
+            }catch (NumberFormatException e){
+                Toast.makeText(context, "Die Zahl der reisenden Kinder ist zu groß", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
+        numPersonsPerClass.put(Fare.Type.CHILD, numChildren);
         int sumPersons = 0;
         for(Fare.Type type : numPersonsPerClass.keySet()){
             sumPersons += numPersonsPerClass.get(type);

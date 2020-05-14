@@ -88,16 +88,13 @@ public class TripListComplete extends MyTripList {
     void startEdit(int position) {
         TripItem current = tripItems.get(position);
         if (current.isComplete()) {
-            System.out.println("--------------------------------------------------------------------+++");
             tripItems.remove(position);
             adapter.notifyItemRemoved(position);
             Intent newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
             startNextActivity(newIntent);
         } else {
-            System.out.println("--------------------------------------------------------------------++++");
             if (checkTickets(position)) {
-                System.out.println("-------------------------------------------------------------+++++");
                 //Nur freie Fahrten
                 removeTripAndTicket(position);
                 Intent newIntent = new Intent(activity.getApplicationContext(),

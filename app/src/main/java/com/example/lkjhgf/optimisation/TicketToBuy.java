@@ -73,7 +73,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
                 return;
             }
         }
-        tripList.add(0, new TripQuantity(tripItem));
+        tripList.add(new TripQuantity(tripItem));
     }
 
     public ArrayList<TripItem> getTripList() {

@@ -10,6 +10,7 @@ import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.helper.util.UtilsOptimisation;
 import com.example.lkjhgf.optimisation.Optimisation;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketInformationHolder;
@@ -122,108 +123,10 @@ public class TripListIncomplete extends MyTripList {
             for (TripItem item : copy) {
                 insertTrip(item);
             }
-            //Fahrten ohne Preisstufe sowie nicht zu optimierende Fahrten aussortieren
-            copy = Optimisation.removeTrips(tripItems);
-            // Fahrten nach den Preisstufen sortieren
-            Collections.sort(copy, MainMenu.myProvider);
-            //Fahrten auf Nutzerklassen aufteilen
-            HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists = MainMenu.myProvider.createUserClassTripLists(copy);
-
-            //Fahrscheine der letzten Optimierung
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> activeTickets = new HashMap(AllTickets.loadTickets(activity));
-            //Allen benötigte Fahrscheine
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists = new HashMap<>();
-            //Fahrscheine, mit mindestens einer freien Fahrt
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets = new HashMap<>();
-
-            for (Iterator<Fare.Type> it = activeTickets.keySet().iterator(); it.hasNext(); ) {
-                //Die gespeicherten Fahrscheine der aktuellen Nutzerklasse
-                Fare.Type currentType = it.next();
-                ArrayList<TicketToBuy> userClassActiveTickets = activeTickets.get(currentType);
-                //Fahrscheine mit freien Fahrten dieser Nutzerklasse
-                ArrayList<TicketToBuy> freeUserClassTickets = new ArrayList<>();
-                //Alle neuen Fahrscheine dieser Nutzerklasse
-                ArrayList<TicketToBuy> allUserClassTickets = new ArrayList<>();
-                //Fahrten dieser Nutzerklasse
-                ArrayList<TripItem> userClassTrips = userClassTripLists.get(currentType);
-                //Für jedes Ticket der Nutzerklasse:
-                for (Iterator<TicketToBuy> it2 = userClassActiveTickets.iterator(); it2.hasNext(); ) {
-                    TicketToBuy currentTicket = it2.next();
-                    //Prüfen, ob es sich um ein zukünftiges Ticket handelt
-                    if (currentTicket.isFutureTicket()) {
-                        //Falls ja, müssen zu erst die Fahrten des Tickets die Fahrscheine freigegeben bekommen
-
-                        //Über alle zugeordneten Fahrten iterieren
-                        for(Iterator<TripItem> tripItemIterator = currentTicket.getTripList().iterator(); tripItemIterator.hasNext();){
-                            TripItem currentTrip = tripItemIterator.next();
-                            //Entfernen der zugeordneten Tickets
-                            //TODO
-                            if (userClassTrips != null && !userClassTrips.isEmpty()) {
-                                int index = userClassTrips.indexOf(currentTrip);
-                                if(index != -1){
-                                    userClassTrips.get(index).removeTickets(currentType, currentTicket.getTicketID());
-                                }
-                            }
-
-                        }
-                        //Entfernen des zukünftigen Fahrscheins
-                        it2.remove();
-                    } else {
-                        //Kein zukünftiges Ticket
-                        //Ticket merken
-                        allUserClassTickets.add(currentTicket);
-                        //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
-                        for (TicketToBuy.TripQuantity currentTripItem : currentTicket.getTripQuantities()) {
-                            int quantity = currentTripItem.getQuantity();
-                            while (quantity != 0){
-                                userClassTrips.remove(currentTripItem.getTrip());
-                                quantity--;
-                            }
-                        }
-                        //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
-                        //hinzufügen
-                        if (currentTicket.getFreeTrips() > 0) {
-                            freeUserClassTickets.add(currentTicket);
-                        }
-                    }
-                }
-                allTicketLists.put(currentType, allUserClassTickets);
-                freeTickets.put(currentType, freeUserClassTickets);
-            }
-
-            //Optimieren
-            //TODO dieser Teil funktioniert nur für NumTicket
-            //Optimierung mit alten Fahrscheinen
-            if (!freeTickets.isEmpty()) {
-                for (Fare.Type type : freeTickets.keySet()) {
-                    if (!freeTickets.get(type).isEmpty()) {
-                        Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type));
-                    }
-                }
-            }
-
-            //Optimieren mit neuen Fahrscheinen
-            HashMap<Fare.Type, TicketInformationHolder> lastBestTickets = new HashMap<>();
-            HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap = MainMenu.myProvider.getAllTickets();
-            for (Iterator<Fare.Type> iterator = userClassTripLists.keySet().iterator(); iterator.hasNext(); ) {
-                Fare.Type type = iterator.next();
-                if (allTicketsMap.containsKey(type)) {
-                    lastBestTickets.put(type, Optimisation.optimisationBuyNewTickets(allTicketsMap.get(type), userClassTripLists.get(type)));
-                } else {
-                    System.err.println("Fehler bei der Optimierung neuer Fahrscheine - unbekannter Tickettyp: " + type);
-                }
-            }
-            //TicketListe Bauen
-            for (Fare.Type type : lastBestTickets.keySet()) {
-                ArrayList<TicketToBuy> ticketList = Optimisation.createTicketList(lastBestTickets.get(type));
-                if (allTicketLists.containsKey(type)) {
-                    allTicketLists.get(type).addAll(ticketList);
-                } else {
-                    allTicketLists.put(type, ticketList);
-                }
-
-            }
-            AllTickets.saveData(allTicketLists, activity);
+            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
+            adapter.notifyDataSetChanged();
+            AllTickets.saveData(newTicketList, activity);
+            saveData();
 
             //TODO eigentlich anzeigen der Tickets statt aller Fahrten
             Intent newIntent = new Intent(activity.getApplicationContext(), Complete.class);
