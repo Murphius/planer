@@ -15,6 +15,9 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
     private int freeTrips;
     private UUID ticketID;
 
+    /**
+     *
+     */
     public class TripQuantity {
         private int quantity;
         private TripItem trip;

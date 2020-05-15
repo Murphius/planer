@@ -1,5 +1,7 @@
 package com.example.lkjhgf.optimisation;
 
+import androidx.annotation.NonNull;
+
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.io.Serializable;
@@ -32,11 +34,14 @@ public class TicketOptimisationHolder implements Serializable {
      *
      * @param ticket     benötigter Fahrschein
      * @param preisstufe Preisstufe des Fahrscheins
-     * @param allCosts      gesamt Kosten bis zu der jeweilgen Fahrt
+     * @param allCosts   gesamt Kosten bis zu der jeweilgen Fahrt
      * @param previous   vorheriges Ticket
      */
-    public TicketOptimisationHolder(Ticket ticket, String preisstufe, int allCosts, TicketOptimisationHolder previous) {
-        this.ticketToBuy = new TicketToBuy(ticket,preisstufe);
+    TicketOptimisationHolder(Ticket ticket,
+                             String preisstufe,
+                             int allCosts,
+                             TicketOptimisationHolder previous) {
+        this.ticketToBuy = new TicketToBuy(ticket, preisstufe);
         this.allCosts = allCosts;
         this.previous = previous;
     }
@@ -46,30 +51,31 @@ public class TicketOptimisationHolder implements Serializable {
      *
      * @param tripItem Fahrt die hinzugefügt werden soll
      */
-    public void addTripItem(TripItem tripItem) {
+    void addTripItem(TripItem tripItem) {
         ticketToBuy.addTripItem(tripItem);
+    }
+
+    TicketOptimisationHolder getPrevious() {
+        return previous;
     }
 
     public Ticket getTicket() {
         return ticketToBuy.getTicket();
     }
-    public TicketToBuy getTicketToBuy(){
+
+    TicketToBuy getTicketToBuy() {
         return ticketToBuy;
     }
 
-
-    public int getAllCosts(){
+    int getAllCosts() {
         return allCosts;
     }
 
-    public TicketOptimisationHolder getPrevious() {
-        return previous;
-    }
-
-    public String getPreisstufe(){
+    public String getPreisstufe() {
         return ticketToBuy.getPreisstufe();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return ticketToBuy.toString() + ", Preisstufe: " + ticketToBuy.getPreisstufe();
