@@ -66,7 +66,6 @@ public class EditIncompleteTripFromCompleteList extends Activity {
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
 
-
         Form form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
@@ -74,6 +73,13 @@ public class EditIncompleteTripFromCompleteList extends Activity {
         form.setAdapter();
     }
 
+    /**
+     * Wenn der Nutzer das Editieren abbricht, soll die Fahrt und ihre Fahrscheine wieder in die jeweiligen Listen eingefügt werden sollen. <br/>
+     * <p>
+     * Dies geschieht in {@link CompleteAbortEditingIncompleteTrip}
+     * @preconditions Der Nutzer hat auf "zurück" geklickt
+     * @postconditions Die Fahrt ist wieder in der Liste der optimierten Fahrten eingetragen & besitzt die gleichen Fahrscheine wie vor dem Editieren
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, CompleteAbortEditingIncompleteTrip.class);

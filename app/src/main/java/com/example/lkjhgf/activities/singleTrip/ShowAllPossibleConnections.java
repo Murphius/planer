@@ -18,8 +18,8 @@ import de.schildbach.pte.VrrProvider;
  * Anzeigen aller möglichen Verbindungen
  * <p>
  *
- * Vorbedingung: Der Nutzer hat das Formular ausgefüllt
- * {@link  }<br/>
+ * @preconditions Der Nutzer hat das Formular ausgefüllt
+ * {@link com.example.lkjhgf.helper.form.SingleTrip }<br/>
  * Mittels Intent werden vom Provider (hier VRR-Provider) vorgeschlagene Fahrten,
  * sowie die vom Nutzer im Formular gemachten Eingaben an diese Ansicht übergeben.
  *

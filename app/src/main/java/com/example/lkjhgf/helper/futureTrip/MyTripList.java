@@ -338,7 +338,7 @@ public abstract class MyTripList {
             tripItems = new ArrayList<>();
         } else {
             Date today = Calendar.getInstance().getTime();
-            long oneDay = 86400000; // 24h = 86 400 000 ms
+            long oneDay = 24 * 60 * 60 * 1000;
             for (Iterator<TripItem> it = tripItems.iterator(); it.hasNext();) {
                 TripItem item = it.next();
                 if (item.getTrip().getLastArrivalTime().getTime() + oneDay - today.getTime() <= 0) {

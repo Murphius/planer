@@ -7,27 +7,47 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TicketItem  implements Comparable<TicketItem>{
+/**
+ * Die Informationen über ein mögliches Ticket <br/>
+ *
+ * @preconditions Der Nutzer hat (mehrere) Fahrten geplant die optimiert werden mussten, und für diese
+ * wurden die optimalen Fahrscheine berechnet. <br/>
+ * Information über die Antwort des Servers, keine Angaben vom Nutzer, die hier verwendet werden
+ */
+public class TicketItem implements Comparable<TicketItem> {
 
+    /**
+     * Gibt an, ob die zugehörigen Fahrten angezeigt werden sollen, oder nicht
+     */
     private boolean showDetails;
+    /**
+     * Zu kaufendes Ticket
+     */
     private TicketToBuy ticket;
+    /**
+     * Wie oft das Ticket gekauft werden soll
+     */
     private int quantity;
 
 
-    public TicketItem (TicketToBuy ticket, int quantity){
+    public TicketItem(TicketToBuy ticket, int quantity) {
         this.ticket = ticket;
         this.quantity = quantity;
         removeDuplicatedTrips();
     }
 
-    private void removeDuplicatedTrips(){
+    //TODO weg ?
+    /**
+     * Entfernt Fahrten, die die gleiche ID haben, damit jede Fahrt nur einmal angezeigt wird
+     */
+    private void removeDuplicatedTrips() {
         Iterator<TripItem> it = ticket.getTripList().iterator();
         TripItem current = it.next();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             TripItem next = it.next();
-            if(current.equals(next)){
+            if (current.equals(next)) {
                 it.remove();
-            }else{
+            } else {
                 current = next;
             }
         }
@@ -37,7 +57,7 @@ public class TicketItem  implements Comparable<TicketItem>{
         showDetails = !showDetails;
     }
 
-    public boolean getShowDetails(){
+    boolean getShowDetails() {
         return showDetails;
     }
 
@@ -49,16 +69,16 @@ public class TicketItem  implements Comparable<TicketItem>{
         return ticket.getTicket();
     }
 
-    public int getQuantity(){
+    int getQuantity() {
         return quantity;
     }
 
-    public ArrayList<TripItem> getTripItems(){
+    ArrayList<TripItem> getTripItems() {
         return ticket.getTripList();
     }
 
     @Override
-    public int compareTo(TicketItem o){
+    public int compareTo(TicketItem o) {
         return ticket.compareTo(o.ticket);
     }
 

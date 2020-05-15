@@ -8,6 +8,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 
+/**
+ * Anzeigen aller benötigten Fahrscheine <br/>
+ *
+ * Das Handling der Ansicht erfolgt in der Klasse {@link AllTickets}
+ */
 public class TicketOverview extends Activity {
 
     AllTickets myAllTickets;

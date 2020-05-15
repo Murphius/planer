@@ -12,7 +12,6 @@ import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +26,9 @@ import de.schildbach.pte.dto.Trip;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Handhabung aller Fahrscheine
+ */
 public class AllTickets {
 
     private static String dataPath = "com.example.lkjhgf.helper.ticketOverview.dataPath";
@@ -34,33 +36,46 @@ public class AllTickets {
 
     private Activity activity;
 
-    private TextView fullpriceView;
-    private TextView fullpriceHolder;
-    private View separatorLine;
-
+    /**
+     * Enthält alle Fahrscheine, gruppiert auf die Nutzerklassen
+     */
     private static HashMap<Fare.Type, ArrayList<TicketToBuy>> allTickets;
+    /**
+     * Gesamtpreis für die Preise
+     */
     private static int fullPrice;
 
 
+    /**
+     * Lädt die gespeicherten Fahrten und lagert das Management des RecyclerViews an die Klasse {@link RecyclerViewTicketOverview} aus.
+     * <br/>
+     * Berechnung des Gesamtpreises
+     *
+     * @param activity aufrufende Aktivität zum Laden & Speichern benötigt
+     * @param view Layout
+     */
     public AllTickets(Activity activity, View view) {
         this.activity = activity;
 
         loadData(activity);
 
-        separatorLine = view.findViewById(R.id.view7);
-        fullpriceView = view.findViewById(R.id.textView97);
-        fullpriceHolder = view.findViewById(R.id.textView99);
+        TextView fullpriceHolder = view.findViewById(R.id.textView99);
 
         new RecyclerViewTicketOverview(activity, view, this);
         fullpriceHolder.setText(UtilsString.centToString(fullPrice));
-
     }
 
+    /**
+     * Lädt die gespeicherten Fahrscheine
+     * @param activity zum laden benötigt
+     */
     private static void loadData(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
         String json = sharedPreferences.getString(SAVED_TICKETS_TASK, null);
+        //Manuelles laden der Klassen -> abstrakte Oberklasse -> beim Laden nicht klar, welche
+        //Klasse die Objekte haben
         InterfaceAdapter adapter = new InterfaceAdapter();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Trip.Public.class, adapter);
@@ -68,6 +83,7 @@ public class AllTickets {
         builder.registerTypeAdapter(Trip.Leg.class, adapter);
         builder.registerTypeAdapter(Ticket.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
+        //TODO Zeitfahrscheine
         Gson gson = builder.create();
 
         Type type = new TypeToken<HashMap<Fare.Type, ArrayList<TicketToBuy>>>() {
@@ -80,13 +96,10 @@ public class AllTickets {
         if (allTickets == null) {
             allTickets = new HashMap<>();
         } else {
-            System.out.println("---------------------------------------------------------------------------------------");
-            for (Iterator<Fare.Type> it1 = allTickets.keySet().iterator(); it1.hasNext(); ) {
-                Fare.Type type1 = it1.next();
-                System.out.println("Stufe: " + type1 + "\n");
+            //Entfernen von "abgelaufenen" Tickets und Berechnung des aktuellen Gesamtpreises
+            for (Fare.Type type1 : allTickets.keySet()) {
                 for (Iterator<TicketToBuy> it = allTickets.get(type1).iterator(); it.hasNext(); ) {
                     TicketToBuy current = it.next();
-                    System.out.println("\t Ticket: " + current.toString() + "\n");
                     if (current.isPastTicket()) {
                         it.remove();
                     } else {
@@ -101,10 +114,15 @@ public class AllTickets {
         saveData(activity);
     }
 
+    /**
+     * Speichern der Daten
+     * @param activity zum Speichern benötigt
+     */
     private static void saveData(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
+        //Manuelles Speichern
         SharedPreferences.Editor editor = sharedPreferences.edit();
         GsonBuilder builder = new GsonBuilder();
         InterfaceAdapter adapter = new InterfaceAdapter();
@@ -123,6 +141,11 @@ public class AllTickets {
         editor.apply();
     }
 
+    /**
+     * Die bei der Optimierung ermittelten optimalen Fahrscheine speichern ({@link com.example.lkjhgf.helper.util.UtilsOptimisation#brauchtEinenTollenNamen(ArrayList zu optimierende Fahrten, Activity)}
+     * @param newTickets neue Fahrscheine die gespeichert werden sollen
+     * @param activity
+     */
     public static void saveData(HashMap<Fare.Type, ArrayList<TicketToBuy>> newTickets, Activity activity) {
         allTickets = newTickets;
         saveData(activity);
@@ -132,6 +155,11 @@ public class AllTickets {
         return allTickets;
     }
 
+    /**
+     * Lädt die aktuell gespeicherten Daten
+     * @param activity zum Laden benötigt
+     * @return die gespeicherten Fahrten
+     */
     public static HashMap<Fare.Type, ArrayList<TicketToBuy>> loadTickets(Activity activity) {
         loadData(activity);
         return allTickets;

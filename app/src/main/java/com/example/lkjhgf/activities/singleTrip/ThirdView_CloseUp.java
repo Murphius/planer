@@ -6,6 +6,13 @@ import android.os.Bundle;
 import com.example.lkjhgf.helper.closeUp.SingleCloseUp;
 import com.example.lkjhgf.R;
 
+/**
+ * Detailansicht einer einzelnen Fahrt, welche nicht optimiert werden soll <br/>
+ *
+ * @preconditions Der Nutzer hat eine Fahrt in der Ansicht {@link ShowAllPossibleConnections} angeklickt
+ * <p>
+ * Das Füllen der Ansicht, sowie die Handhabung von Klicks, erfolgt in der Klasse {@link SingleCloseUp}
+ */
 public class ThirdView_CloseUp extends Activity {
 
     @Override
@@ -15,9 +22,6 @@ public class ThirdView_CloseUp extends Activity {
 
         new SingleCloseUp(this, findViewById(R.id.constraintLayout2));
     }
-
-
-
 
 
 }

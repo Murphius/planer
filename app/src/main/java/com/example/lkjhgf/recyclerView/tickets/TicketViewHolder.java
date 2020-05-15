@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import de.schildbach.pte.dto.Fare;
 
-public class TicketViewHolder extends RecyclerView.ViewHolder {
+class TicketViewHolder extends RecyclerView.ViewHolder {
 
     private Activity activity;
 
@@ -33,7 +33,7 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
     private RecyclerView recyclerView;
 
 
-    public TicketViewHolder(Activity activity, View view, OnItemClickListener listener) {
+    TicketViewHolder(Activity activity, View view, OnItemClickListener listener) {
         super(view);
         this.activity = activity;
 
@@ -57,7 +57,12 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
     }
 
     //TODO
-    public void fillView(TicketItem currentItem) {
+    /**
+     * Füllt die Ansicht mit den Werten des Parameters
+     *
+     * @param currentItem enthält die Informationen, welche in der Ansicht angezeigt werden sollen
+     */
+    void fillView(TicketItem currentItem) {
         String text = currentItem.getQuantity() + "x";
         quantity.setText(text);
         ticketName.setText(currentItem.getTicket().getName());
@@ -77,6 +82,7 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
 
             showDetails.setTypicon(Typicon.TY_ARROW_UP);
 
+            //Keine Buttons die geklickt werden können -> keine Funktionen die aufgerufen werden müssen
             adapter.setOnItemClickListener(new com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
@@ -102,6 +108,10 @@ public class TicketViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    /**
+     * Bei dem Klick auf das Element an der jeweiligen Position, wird die Detailansicht geöffnet
+     * @param currentItem Item, dessen Detailansicht geöffnet werden soll
+     */
     private void onItemClick(TripItem currentItem) {
         Intent intent = new Intent(activity, AllConnectionsIncompleteView.class);
         intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, currentItem.getNumUserClasses());

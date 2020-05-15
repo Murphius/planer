@@ -17,45 +17,63 @@ import java.util.Iterator;
 
 import de.schildbach.pte.dto.Fare;
 
-public class RecyclerViewTicketOverview {
+/**
+ * Handhabung des RecyclerViews, in dem die Tickets angezeigt werden
+ */
+class RecyclerViewTicketOverview {
 
     private Activity activity;
-    private View view;
-    private AllTickets allTickets;
 
+    /**
+     * Liste der anzuzeigenden Elemente
+     */
     private ArrayList<TicketItem> ticketItems;
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+    /**
+     * Managed die Klicks und das Anzeigen der Liste an TicketItems
+     */
     private TicketAdapter adapter;
 
-    public RecyclerViewTicketOverview(Activity activity, View view, AllTickets allTickets) {
+    /**
+     * Erzeugt aus den gespeicherten Fahrten ({@link TicketToBuy}) eine Liste mit Objekten der
+     * Klasse {@link TicketItem}, welche im Adapter verarbeitet werden um angezeigt zu werden
+     *
+     * @param activity   für Farben... benötigt
+     * @param view       Layout
+     * @param allTickets enthält alle gespeicherten Fahrten
+     */
+    RecyclerViewTicketOverview(Activity activity, View view, AllTickets allTickets) {
         this.activity = activity;
-        this.view = view;
-        this.allTickets = allTickets;
 
         recyclerView = view.findViewById(R.id.recyclerView7);
 
+        //gespeicherte Tickets holen
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketsToBuy = allTickets.getTickets();
         ArrayList<TicketToBuy> ticketsToBuy = new ArrayList<>();
-        for(Fare.Type type : allTicketsToBuy.keySet()){
+        for (Fare.Type type : allTicketsToBuy.keySet()) {
             ticketsToBuy.addAll(allTicketsToBuy.get(type));
         }
+
+        //Gesamte Ticketliste
         ArrayList<TicketToBuy> tickets = new ArrayList<>();
+        //jeweilige Häufigkeit
         ArrayList<Integer> quantity = new ArrayList<>();
+        //Liste mit den Items zum anzeigen
         ticketItems = new ArrayList<>();
 
-        if(! ticketsToBuy.isEmpty()){
+        //Umwandlung TicketToBuy -> TicketItem
+        if (!ticketsToBuy.isEmpty()) {
             Iterator<TicketToBuy> it = ticketsToBuy.iterator();
             TicketToBuy current = it.next();
             tickets.add(current);
             quantity.add(1);
-            while (it.hasNext()){
+            while (it.hasNext()) {
                 TicketToBuy next = it.next();
-                if(current.equals(next)){
-                    tickets.get(tickets.size()-1).getTripList().addAll(next.getTripList());
-                    quantity.set(quantity.size()-1, quantity.get(quantity.size()-1)+1);
-                }else{
+                if (current.equals(next)) {
+                    tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
+                    quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                } else {
                     tickets.add(next);
                     quantity.add(1);
                 }
@@ -65,11 +83,11 @@ public class RecyclerViewTicketOverview {
             ticketItems = new ArrayList<>();
             for (int i = 0; i < quantity.size(); i++) {
                 tickets.get(i).getTripList().sort((o1, o2) -> {
-                    if(o1.getTrip().getFirstDepartureTime().before(o2.getTrip().getFirstDepartureTime())){
+                    if (o1.getTrip().getFirstDepartureTime().after(o2.getTrip().getFirstDepartureTime())) {
                         return -1;
-                    }else if(o1.getTrip().getFirstDepartureTime().getTime() == o2.getTrip().getFirstDepartureTime().getTime()){
+                    } else if (o1.getTrip().getFirstDepartureTime().getTime() == o2.getTrip().getFirstDepartureTime().getTime()) {
                         return 0;
-                    }else{
+                    } else {
                         return 1;
                     }
                 });
@@ -81,9 +99,12 @@ public class RecyclerViewTicketOverview {
         buildRecyclerView();
     }
 
+    /**
+     * Initialiserung des RecyclerViews
+     */
     private void buildRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(activity.getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 

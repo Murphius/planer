@@ -12,16 +12,36 @@ import java.util.Iterator;
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Fare;
 
+/**
+ * Enthält alle Informationen zu einem Provider
+ */
 public abstract class MyProvider implements Comparator<TripItem> {
-
-    protected String[] preisstufen;
+    /**
+     * Preisstufen des Providers
+     */
+    String[] preisstufen;
+    /**
+     * Für jede Nutzerklasse die Liste aller zugehörigen Tickets
+     */
     private HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap;
+    /**
+     * zugehöriger Provider
+     */
     private NetworkProvider provider;
+    /**
+     * Gibt an, wie viele Fahrten, das maximale NumTicket erlaubt
+     */
     private int maxNumTrip;
 
-    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsList, NetworkProvider provider){
+    /**
+     * Initialisiert alle Attribute der Klasse
+     * @param preisstufen Preisstufen des Providers
+     * @param allTicketsHashMap Alle Tickets je Preisstufe
+     * @param provider NetworkProvider für den Verkehrsverbund
+     */
+    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsHashMap, NetworkProvider provider){
         this.preisstufen = preisstufen;
-        this.allTicketsMap = allTicketsList;
+        this.allTicketsMap = allTicketsHashMap;
         this.provider = provider;
         maxNumTrip = calculateMaxNumTrip();
     }
@@ -52,6 +72,24 @@ public abstract class MyProvider implements Comparator<TripItem> {
     }
 
     /**
+     * Sucht die maximale Fahrtenanzahl die ein NumTicket erlaubt
+     * @return maximale Fahrtenanzahl
+     */
+    private int calculateMaxNumTrip(){
+        int maxNumTrip = 1;
+        for(Iterator<Fare.Type> iterator = allTicketsMap.keySet().iterator(); iterator.hasNext();){
+            Fare.Type key = iterator.next();
+            ArrayList<Ticket> tickets = allTicketsMap.get(key);
+            for(Ticket ticket : tickets){
+                if(ticket instanceof NumTicket){
+                    maxNumTrip = Math.max(maxNumTrip, ((NumTicket) ticket).getNumTrips());
+                }
+            }
+        }
+        return maxNumTrip;
+    }
+
+    /**
      * @preconditions Index innerhalb der Größe
      * @param index
      * @return
@@ -66,20 +104,6 @@ public abstract class MyProvider implements Comparator<TripItem> {
 
     public HashMap<Fare.Type, ArrayList<Ticket>> getAllTickets(){
         return allTicketsMap;
-    }
-
-    private int calculateMaxNumTrip(){
-        int maxNumTrip = 1;
-        for(Iterator<Fare.Type> iterator = allTicketsMap.keySet().iterator(); iterator.hasNext();){
-            Fare.Type key = iterator.next();
-            ArrayList<Ticket> tickets = allTicketsMap.get(key);
-            for(Ticket ticket : tickets){
-                if(ticket instanceof NumTicket){
-                    maxNumTrip = Math.max(maxNumTrip, ((NumTicket) ticket).getNumTrips());
-                }
-            }
-        }
-        return maxNumTrip;
     }
 
     /**

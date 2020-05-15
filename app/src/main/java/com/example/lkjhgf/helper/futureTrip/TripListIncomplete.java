@@ -95,10 +95,7 @@ public class TripListIncomplete extends MyTripList {
 
         abort.setOnClickListener(v -> activity.onBackPressed());
 
-        //TODO Kalkulierung der Tickets
-        /**
-         * Wichtig hierbei: Nutzerklassenindex Ticketliste = Nutzerklassenindex Fahrten!
-         */
+
         calculateTickets.setOnClickListener(v -> {
             //Kopieren aller geplanten Fahrten
             ArrayList<TripItem> copy = new ArrayList<>(tripItems);
@@ -114,6 +111,7 @@ public class TripListIncomplete extends MyTripList {
             for (TripItem item : copy) {
                 insertTrip(item);
             }
+            //Optimieren der Fahrten
             HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
             adapter.notifyDataSetChanged();
             AllTickets.saveData(newTicketList, activity);

@@ -13,7 +13,9 @@ import de.schildbach.pte.dto.Fare;
 
 public class MyVRRprovider extends MyProvider {
 
-
+    /**
+     * Verkehrsverbund Rhein Ruhr
+     */
     public MyVRRprovider() {
         super();
 
@@ -39,6 +41,15 @@ public class MyVRRprovider extends MyProvider {
         initialise(preisstufen, allTickets, provider);
     }
 
+    /**
+     * Sortiert die Fahrten auf die Nutzerklassen <br/>
+     * <p>
+     * Wenn eine Nutzerklasse mehrfach vorkommt, wird die Fahrt entsprechend oft hinzugefügt <br/>
+     *
+     * @param allTrips Liste aller Fahrten
+     * @return HashMap mit den Fahrten aufgeteilt auf die Nutzerklassen, dabei entspricht einmal hinzufügen
+     * einer Person
+     */
     @Override
     public HashMap<Fare.Type, ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips) {
         HashMap<Fare.Type, ArrayList<TripItem>> userClassTrips = new HashMap<>();

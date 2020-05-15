@@ -12,7 +12,6 @@ import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromComplet
 import com.example.lkjhgf.activities.singleTrip.EditTrip;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsOptimisation;
-import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
@@ -30,8 +29,6 @@ import de.schildbach.pte.dto.Fare;
  * Ansicht, wenn aus dem Hauptmenü aufgerufen
  */
 public class TripListComplete extends MyTripList {
-
-    public static String EXTRA_TICKET = "com.example.lkjhgf.helper.futureTrip.EXTRA_TICKET";
 
     /**
      * Layout der Ansicht modifizieren <br/>
@@ -82,7 +79,24 @@ public class TripListComplete extends MyTripList {
     }
 
     /**
-     * @see MyTripList#startEdit(int position)
+     * @see MyTripList#startEdit(int position) <br/>
+     * <p>
+     * Wenn der Nutzer eine nicht zu optimierende Fahrt editiert, kommt der Nutzer direkt in das Formular, in
+     * welchem er diese Fahrt ändern kann <br/>
+     * Bei einer zu optimierenden Fahrt hingegen wird erst geprüft, ob die zugeordneten Fahrscheine ebenfalls
+     * für andere, bereits vergangene Fahrten genutzt wurden <br/>
+     * Falls ja, wird der Nutzer darauf hingewiesen, dass durch das editieren die Fahrscheine eventuell nicht
+     * mehr optimal sind <br/>
+     * -> Option zum Abbrechen
+     * <br/>
+     * Falls die Fahrt keine angefangenen Fahrscheine nutzt, wird die Fahrt aus der Liste der zu optimierenden
+     * Fahrten gelöscht und die Liste aller Fahrten wird optimiert. Anschließend wird die Ansicht mit dem
+     * bereits ausgefüllten Formular ({@link EditIncompleteTripFromCompleteList}) geöffnet. <br/>
+     * <br/>
+     * Falls die Fahrt mindestens ein angefangenes Ticket nutzt, werden die entsprechenden Fahrten freigegeben
+     * und anschließend die Fahrt aus der Liste der Fahrten gelöscht. Dann werden die verbliebenen zukünftigen
+     * Fahrten erneut optimiert. Anschließend wird das vorausgefüllte
+     * Formular ({@link EditIncompleteTripFromCompleteList}) geöffnet.
      */
     @Override
     void startEdit(int position) {
@@ -94,7 +108,7 @@ public class TripListComplete extends MyTripList {
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
             startNextActivity(newIntent);
         } else {
-            if (checkTickets(position)) {
+            if (checkTicketsIfFuture(position)) {
                 //Nur freie Fahrten
                 removeTripAndTicket(position);
                 Intent newIntent = new Intent(activity.getApplicationContext(),
@@ -123,12 +137,26 @@ public class TripListComplete extends MyTripList {
                 AlertDialog secondDialog = secondBuilder.create();
                 secondDialog.show();
             }
-
         }
 
     }
 
-
+    /**
+     * @see MyTripList#onDeleteClicked(int position) <br/>
+     * <p>
+     * Wenn der Nutzer eine nicht optimierte Fahrt löscht, wird diese einfach aus der Liste der Fahrten entfernt <br/>
+     * <p>
+     * Entfernt er hingegen eine optimierte Fahrt, wird unterschieden, ob diese Fahrt mindestens ein angefangenes Ticket
+     * nutzt oder nicht. <br/>
+     * Falls kein Ticket angefangen ist, wird die Fahrt aus der Liste aller Fahrten entfernt und alle zukünftigen Fahrten
+     * werden erneut optimiert. <br/>
+     * <br/>
+     * Ist jedoch hingegen mindestens ein Ticket angefangen, so wird der Nutzer darüber informiert, und hat die Option
+     * abzubrechen. <br/>
+     * Bestätigt der Nutzer diese Abfrage, werden die Fahrten auf den angefangenen Fahrscheinen freigegeben
+     * und die neuen Fahrscheine entfernt und die Fahrt aus der Liste der Fahrten entfernt und die zukünftigen Fahrten
+     * erneut optimiert.
+     */
     @Override
     void onDeleteClicked(int position) {
         AlertDialog.Builder firstBuilder = new AlertDialog.Builder(activity);
@@ -138,7 +166,7 @@ public class TripListComplete extends MyTripList {
             if (tripItems.get(position).isComplete()) {
                 removeItemAtPosition(position);
             } else {
-                if (this.checkTickets(position)) {
+                if (this.checkTicketsIfFuture(position)) {
                     //keine angefangenen Tickets
                     removeTripAndTicket(position);
                 } else {
@@ -163,6 +191,45 @@ public class TripListComplete extends MyTripList {
         dialog.show();
     }
 
+    /**
+     * Überprüft alle gespeicherten Fahrscheine, ob diese Fahrt diese nutzt und wenn ja, ob alle in
+     * der Zukunft liegen.
+     *
+     * @param position Listenindex des zu prüfenden Elements
+     * @return false - mindestens ein Ticket hat eine Fahrt, die nicht in der Zukunft liegt <br/>
+     * true - für alle zugeordneten Fahrscheine gilt, dass alle diesem zugeordneten Fahrten in der
+     * Zukunft liegen
+     */
+    private boolean checkTicketsIfFuture(int position) {
+        TripItem currentTrip = tripItems.get(position);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
+        Set<Fare.Type> keys = currentTrip.getNumUserClasses().keySet();
+        //prüfen, ob alle Tickets dieser Fahrt in der Fahrt noch nicht angefangen sind
+        for (Fare.Type type : keys) {
+            ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
+            ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
+            for (UUID currentTicketUUID : ticketUUIDs) {
+                for (TicketToBuy currentTicketToBuy : tickets) {
+                    if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
+                        if (!currentTicketToBuy.isFutureTicket()) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Entfernt die Fahrt an der jeweiligen Position und die zugehörigen Fahrscheine <br/>
+     * <p>
+     * Optimiert anschließend alle zukünftigen Fahrten neu
+     *
+     * @param position Die Postion des zu löschenden Elements
+     * @preconditions Alle der Fahrt zugeordneten Fahrten sind zukünftige Tickets ({@link #checkTicketsIfFuture(int position)} = true)
+     * @postconditions Die Fahrt & ihre Fahrscheine sind nicht in der neuen Ticket- und Fahrtenliste enthalten
+     */
     private void removeTripAndTicket(int position) {
         //Optimierung wie gehabt, ohne die gelöschte Fahrt
         tripItems.remove(position);
@@ -172,6 +239,17 @@ public class TripListComplete extends MyTripList {
         saveData();
     }
 
+    /**
+     * Löscht die Fahrt aus der Liste der Fahrten und gibt die entsprechende Anzahl an Fahrten bei angefangenen Fahrscheinen frei und
+     * löscht Tickets, wenn diese nur bei dieser Verbindung genutzt werden und optimiert anschließend die zukünftigen Fahrten erneut.
+     *
+     * @param position des zu löschenden Listenelements
+     * @preconditions Mindestens eins der Tickets besitzt eine zugeordnete Fahrt, deren Abfahrtszeit in der Vergangenheit liegt
+     * ({@link #checkTicketsIfFuture(int position)} = false)
+     * @postconditions Die Fahrt ist nicht mehr in der Fahrtenliste enthalten und auch keinem Fahrschein mehr zugeordnet.
+     * Wenn ein Fahrschein dadurch keine Fahrten mehr enthält, wird er ebenfalls aus der Liste der Fahrscheine entfernt.
+     * Andere Fahrten, die in der Zukunft liegen, werden anschließend erneut optimiert.
+     */
     private void removeTripSetTicketFree(int position) {
         TripItem currentTrip = tripItems.get(position);
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
@@ -193,67 +271,12 @@ public class TripListComplete extends MyTripList {
         }
         tripItems.remove(position);
         adapter.notifyDataSetChanged();
+        //TODO überprüfen
         AllTickets.saveData(allSavedTickets, activity);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
+        AllTickets.saveData(newTicketList, activity);
         saveData();
     }
-
-    private boolean checkTickets(int position) {
-        TripItem currentTrip = tripItems.get(position);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
-        Set<Fare.Type> keys = currentTrip.getNumUserClasses().keySet();
-        //prüfen, ob alle Tickets dieser Fahrt in der Fahrt noch nicht angefangen sind
-        for (Fare.Type type : keys) {
-            ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
-            ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
-            for (UUID currentTicketUUID : ticketUUIDs) {
-                for (TicketToBuy currentTicketToBuy : tickets) {
-                    if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
-                        if (!currentTicketToBuy.isFutureTicket()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    /*
-    private ArrayList<UUID> usedTickets(int position){
-        ArrayList<UUID> usedTickets = new ArrayList<>();
-        TripItem currentTrip = tripItems.get(position);
-
-        for(Fare.Type type : currentTrip.getNumUserClasses().keySet()){
-            usedTickets.addAll(currentTrip.getTicketIDs(type));
-        }
-
-        return usedTickets;
-    }
-
-    private void searchForTickets(ArrayList<UUID> uuids, int position){
-        //Laden der Fahrscheine
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
-        ArrayList<TicketToBuy> usedTickets = new ArrayList<>();
-        for(Fare.Type type : savedTickets.keySet()){
-            //gespeicherte Fahrscheine der Nutzerklasse
-            ArrayList<TicketToBuy> userClassSavedTickets = savedTickets.get(type);
-            //über dessen zugeordnete Fahrscheine iterieren
-            for(Iterator<TicketToBuy> ticketToBuyIterator = userClassSavedTickets.iterator(); ticketToBuyIterator.hasNext();){
-                TicketToBuy currentTicketToBuy = ticketToBuyIterator.next();
-                for(Iterator<UUID> uuidIterator = uuids.iterator(); uuidIterator.hasNext();){
-                    //Prüfen, ob die aktuelle TicketID in der Liste der Fahrscheine dieser Fahrt enthalten ist
-                    if(currentTicketToBuy.getTicketID().equals(uuidIterator.next())){
-                        //wenn ja -> speichern dieser Fahrt
-                        usedTickets.add(currentTicketToBuy);
-                        uuidIterator.remove();
-                        if(currentTicketToBuy.removeTrip(tripItems.get(position).getTrip().getId())){
-                            ticketToBuyIterator.remove();
-                        }
-                    }
-                }
-            }
-        }
-    }*/
 
     /**
      * Neue Fahrt planen, die nicht in bei der Optimierung berücksichtigt wird <br/>

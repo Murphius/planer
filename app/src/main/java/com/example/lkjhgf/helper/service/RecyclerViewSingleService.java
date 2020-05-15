@@ -12,6 +12,12 @@ import java.util.List;
 
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Handhabung des RecyclerViews, welcher die möglichen Verbindungen beeinhaltet für eine einzelne, nicht
+ * zu optimierende Fahrt<br/>
+ * <p>
+ * Die Ansicht der möglichen Verbindungen erfolgt im groben Überblick
+ */
 public class RecyclerViewSingleService extends RecyclerViewService {
 
     RecyclerViewSingleService(View view,

@@ -18,6 +18,12 @@ import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
+/**
+ * Ansicht des Formulars, mit den Angaben einer geplanten Fahrt, die optimiert werden soll </br>
+ *
+ * Die Handhabung erfolgt in der Klasse {@link MultipleTrip}. Dabei werden jedoch die Informationen des
+ * Intents übergeben, um das Formular vorzubereiten. <br/>
+ */
 public class EditIncompleteTripFromIncompleteList extends Activity {
 
     Form form;
@@ -49,6 +55,13 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
         form.setAdapter();
     }
 
+    /**
+     * Bricht der Nutzer das Editieren der Fahrt ab, muss diese wieder in die Liste
+     * eingefügt werden.
+     *
+     * @preconditions Der Nutzer hat auf "zurück" geklickt
+     * @postconditions Die Fahrt ist unverändert in der Liste der zu optimierenden Fahrten eingetragen
+     */
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, Incomplete.class);
