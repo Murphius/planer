@@ -59,6 +59,8 @@ class RecyclerViewTicketOverview {
         ArrayList<TicketToBuy> tickets = new ArrayList<>();
         //jeweilige Häufigkeit
         ArrayList<Integer> quantity = new ArrayList<>();
+        //jeweilige freie Fahrten
+        ArrayList<Integer> freeTrips = new ArrayList<>();
         //Liste mit den Items zum anzeigen
         ticketItems = new ArrayList<>();
 
@@ -67,15 +69,18 @@ class RecyclerViewTicketOverview {
             Iterator<TicketToBuy> it = ticketsToBuy.iterator();
             TicketToBuy current = it.next();
             tickets.add(current);
+            freeTrips.add(current.getFreeTrips());
             quantity.add(1);
             while (it.hasNext()) {
                 TicketToBuy next = it.next();
                 if (current.equals(next)) {
                     tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
                     quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                    freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
                 } else {
                     tickets.add(next);
                     quantity.add(1);
+                    freeTrips.add(next.getFreeTrips());
                 }
                 current = next;
             }
@@ -84,14 +89,14 @@ class RecyclerViewTicketOverview {
             for (int i = 0; i < quantity.size(); i++) {
                 tickets.get(i).getTripList().sort((o1, o2) -> {
                     if (o1.getTrip().getFirstDepartureTime().after(o2.getTrip().getFirstDepartureTime())) {
-                        return -1;
+                        return 1;
                     } else if (o1.getTrip().getFirstDepartureTime().getTime() == o2.getTrip().getFirstDepartureTime().getTime()) {
                         return 0;
                     } else {
-                        return 1;
+                        return -1;
                     }
                 });
-                ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i)));
+                ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i), freeTrips.get(i)));
             }
         }
 

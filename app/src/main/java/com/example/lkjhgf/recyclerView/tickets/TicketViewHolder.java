@@ -15,11 +15,10 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncompleteView;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.helper.util.UtilsString;
+import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
-
-import de.schildbach.pte.dto.Fare;
 
 class TicketViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,6 +28,7 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
     private TextView ticketName;
     private TextView preisstufeView;
     private TextView costs;
+    private  TextView freeTrips;
     private BootstrapButton showDetails;
     private RecyclerView recyclerView;
 
@@ -41,13 +41,14 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
         ticketName = view.findViewById(R.id.textView98);
         preisstufeView = view.findViewById(R.id.textView100);
         costs = view.findViewById(R.id.textView101);
+        freeTrips = view.findViewById(R.id.textView103);
 
         showDetails = view.findViewById(R.id.BootstrapButton37);
         showDetails.setBootstrapBrand(new ButtonBootstrapBrandVisible());
         showDetails.setOnClickListener(v -> {
-            if(listener != null){
+            if (listener != null) {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     listener.showDetails(position);
                 }
             }
@@ -57,6 +58,7 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
     }
 
     //TODO
+
     /**
      * Füllt die Ansicht mit den Werten des Parameters
      *
@@ -68,7 +70,17 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
         ticketName.setText(currentItem.getTicket().getName());
         preisstufeView.setText(currentItem.getPreisstufe());
         int costsValue = currentItem.getQuantity() * currentItem.getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(currentItem.getPreisstufe()));
-        costs.setText(UtilsString.centToString(costsValue));
+        text = currentItem.getQuantity() + " * "
+                + UtilsString.centToString(currentItem.getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(currentItem.getPreisstufe())))
+                + " = " + UtilsString.centToString(costsValue);
+        costs.setText(text);
+        if(currentItem.getTicket() instanceof NumTicket){
+            int allTrips = currentItem.getQuantity() * ((NumTicket) currentItem.getTicket()).getNumTrips();
+            int usedTrips = allTrips - currentItem.getFreeTrips();
+            text = "(" + usedTrips + " / " + allTrips + ")";
+            freeTrips.setText(text);
+        }
+
 
         if (currentItem.getShowDetails()) {
             recyclerView.setVisibility(View.VISIBLE);
@@ -102,7 +114,7 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
                 }
             });
 
-        }else{
+        } else {
             recyclerView.setVisibility(View.GONE);
             showDetails.setTypicon(Typicon.TY_ARROW_DOWN);
         }
@@ -110,6 +122,7 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Bei dem Klick auf das Element an der jeweiligen Position, wird die Detailansicht geöffnet
+     *
      * @param currentItem Item, dessen Detailansicht geöffnet werden soll
      */
     private void onItemClick(TripItem currentItem) {

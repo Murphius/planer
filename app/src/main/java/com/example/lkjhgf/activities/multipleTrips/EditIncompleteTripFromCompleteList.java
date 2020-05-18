@@ -14,12 +14,7 @@ import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
-import com.example.lkjhgf.helper.futureTrip.TripListComplete;
-import com.example.lkjhgf.helper.util.Utils;
-import com.example.lkjhgf.helper.util.UtilsOptimisation;
-import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.schildbach.pte.VrrProvider;

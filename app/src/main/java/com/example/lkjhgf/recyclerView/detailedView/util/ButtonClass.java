@@ -53,7 +53,7 @@ class ButtonClass {
             if (listener != null) {
                 int position = viewHolder.getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onShowDetails(position);
+                    listener.onOpenGoogleMaps(position);
                 }
             }
         });

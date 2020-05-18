@@ -35,7 +35,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
-                        android:gravity="right"
+                        android:gravity="end"
                         tools:text="Anz." />
 
                     <TextView
@@ -65,7 +65,7 @@
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_margin="2dp"
-                        android:layout_weight="0.2" />
+                        android:layout_weight="0.1" />
 
                     <TextView
                         android:id="@+id/textView101"
@@ -73,8 +73,16 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="0.5"
                         tools:text="Preis in €" />
+
+                    <TextView
+                        android:id="@+id/textView103"
+                        style="@style/textViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        tools:text="(genutzt/gesamt)"/>
                 </LinearLayout>
 
             </LinearLayout>

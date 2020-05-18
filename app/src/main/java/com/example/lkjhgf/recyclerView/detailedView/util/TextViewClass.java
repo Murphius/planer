@@ -13,6 +13,7 @@ class TextViewClass {
     TextView number_view, destination_of_number_view;
     TextView time_of_arrival_view, destination_view, destination_platform_view;
     TextView delay_departure, delay_arrival;
+    TextView ticket;
     /**
      * Initialisierung der Attribute <br/>
      *
@@ -32,5 +33,7 @@ class TextViewClass {
 
         delay_departure = view.findViewById(R.id.textView68);
         delay_arrival = view.findViewById(R.id.textView69);
+
+        ticket = view.findViewById(R.id.textView104);
     }
 }

@@ -6,28 +6,10 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+/**
+ * Jeweiligen Optimierungsfunktionen und Hilfsfunktionen
+ */
 public class Optimisation {
-
-    /**
-     * Erzeugt eine neue Liste mit allen Fahrten, die optimiert werden sollen <br/>
-     * <p>
-     * Enthalten sind nur Fahrten mit einer gültigen Preisstufe und deren
-     * Fahrschein noch nicht "angefangen" ist
-     *
-     * @param tripItems Liste mit allen Fahrten
-     * @return Liste mit allen Fahrten die optimiert werden können
-     */
-    public static ArrayList<TripItem> removeTrips(ArrayList<TripItem> tripItems) {
-        ArrayList<TripItem> newTripList = new ArrayList<>();
-        for (TripItem tripItem : tripItems) {
-            if (!tripItem.isComplete()) {
-                if (MainMenu.myProvider.checkContains(tripItem.getPreisstufe())) {
-                    newTripList.add(tripItem);
-                }
-            }
-        }
-        return newTripList;
-    }
 
     /**
      * Optimierung, bei der neue Fahrscheine gekauft werden können
@@ -43,7 +25,7 @@ public class Optimisation {
      * häufig in der Liste der zu optimierenden Fahrten enthalten. <br/>
      * Die Liste der Fahrten ist der gleichen Klasse zugeordnet, wie die Fahrscheine.
      */
-    public static TicketOptimisationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets,
+    static TicketOptimisationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets,
                                                                      ArrayList<TripItem> tripsToOptimise) {
         int maxNumTripTicket = MainMenu.myProvider.getMaxNumTrip();
 
@@ -61,15 +43,32 @@ public class Optimisation {
         for (int index = 0; index < tripsToOptimise.size(); index++) {
             //Enthält alle mögliche Kosten für den jeweiligen Trip
             ArrayList<Integer> costs = new ArrayList<>();
+            ArrayList<Integer> preisstufenindex = new ArrayList<>();
             //Alle Tickets ausprobieren
             for (Ticket ticket : tickets) {
+                //Ticket ist für die Preisstufe der Fahrt nicht nutzbar
+                if(MainMenu.myProvider.getTicketPrice(ticket, tripsToOptimise.get(index).getPreisstufe()) == Integer.MAX_VALUE){
+                    continue;
+                }
+                int preisstufenIndex = MainMenu.myProvider.getPreisstufenIndex(tripsToOptimise.get(index).getPreisstufe());
+                //Versuchen, die maximale Preisstufe zu finden, deren Preis gleich mit dem Preis für die aktuelle Preisstufe ist
+                //Je nach Provider auch auskommentierbar, beim VRR jedoch zB für Kindertickets nötig
+                while (preisstufenIndex < MainMenu.myProvider.getPreisstufenSize() - 1){
+                    String kleinePreisstufe = MainMenu.myProvider.getPreisstufe(preisstufenIndex);
+                    String groesserePreisstufe = MainMenu.myProvider.getPreisstufe(preisstufenIndex + 1);
+                    if(MainMenu.myProvider.getTicketPrice(ticket, kleinePreisstufe) >= MainMenu.myProvider.getTicketPrice(ticket, groesserePreisstufe)){
+                        preisstufenIndex = preisstufenIndex + 1;
+                    }else{
+                        break;
+                    }
+                }
+                preisstufenindex.add(preisstufenIndex);
                 //Mehrere Fahrtenschein
                 if (ticket instanceof NumTicket) {
                     NumTicket numTicket = (NumTicket) ticket;
                     //Kosten für diesen Fahrschein ermitteln
                     costs.add(allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()].getAllCosts()
-                            + MainMenu.myProvider.getTicketPrice(numTicket,
-                            tripsToOptimise.get(index).getPreisstufe()));
+                            + MainMenu.myProvider.getTicketPrice(numTicket, MainMenu.myProvider.getPreisstufe(preisstufenIndex)));
                 }
             }
             //Suche für diese Fahrt den günstigsten Preis
@@ -81,12 +80,54 @@ public class Optimisation {
                 // Alle Informationen zum Fahrschein hinzufügen
                 allPossibleTicketCombinationHolder[index + maxNumTripTicket] = new TicketOptimisationHolder(
                         bestTicket,
-                        tripsToOptimise.get(index).getPreisstufe(),
+                        MainMenu.myProvider.getPreisstufe(preisstufenindex.get(indexOfBestTicket)),
                         costs.get(indexOfBestTicket),
                         allPossibleTicketCombinationHolder[maxNumTripTicket + index - numTicket.getNumTrips()]);
             }
         }
         return addTicketToTrips(tripsToOptimise, allPossibleTicketCombinationHolder);
+    }
+
+    /**
+     * Zuweisen der alten Fahrscheine mit freien Fahrten auf die neuen Fahrten
+     * <p>
+     * Im Gegensatz zu {@link #optimisationBuyNewTickets(ArrayList tripsToOptimise, ArrayList Tickets die man kaufen kann)}
+     * wird hier "von oben" optimiert, d.h. die Fahrscheine werden von unten durchlaufen und die Fahrten von oben, um
+     * wenn möglich Fahrscheinpreisstufe = Fahrtenpreisstufe zu erreichen und falls dies nicht möglich ist, die kleinst
+     * mögliche größere Ticketpreisstufe zu wählen
+     *
+     * @param oldTickets bereits genutzte Fahrscheine mit mindestens einer freien Fahrt
+     * @param tripItems  zu optimierende Fahrten
+     * @preconditions Aufteilung der Fahrten in die Nutzerklassen, entsprechend häufig enthalten in
+     * der Liste <br/>
+     * Die Fahrten sind aufsteigend sortiert.
+     * @postconditions Für die noch nicht zugewiesenen Fahrten werden neue Fahrscheine optimiert
+     */
+    static void optimisationWithOldTickets(ArrayList<TicketToBuy> oldTickets,
+                                           ArrayList<TripItem> tripItems) {
+        //Fahrscheine -> kleinst möglichen wählen
+        ListIterator<TicketToBuy> ticketToBuyIterator = oldTickets.listIterator();
+        while (ticketToBuyIterator.hasNext()) {
+            TicketToBuy currentTicket = ticketToBuyIterator.next();
+            //Fahrten -> größt mögliche wählen
+            for (ListIterator<TripItem> tripItemIterator = tripItems.listIterator(tripItems.size()); tripItemIterator.hasPrevious();) {
+                TripItem currentTrip = tripItemIterator.previous();
+                //Wenn die Preisstufe der Fahrt <= der Preisstufe des Tickets ist
+                if (MainMenu.myProvider.getPreisstufenIndex(currentTrip.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(
+                        currentTicket.getPreisstufe())) {
+                    //weise die Fahrt dem Fahrschein zu & andersrum
+                    currentTrip.addTicket(currentTicket);
+                    currentTicket.addTripItem(currentTrip);
+                    //entferne die Fahrt aus den noch zu optimierenden Fahrten
+                    tripItemIterator.remove();
+                    //wenn das Ticket keine weiteren freien Fahrten mehr hat, entferne es aus der Liste der möglichen Fahrscheine
+                    if (currentTicket.getFreeTrips() == 0) {
+                        ticketToBuyIterator.remove();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -148,63 +189,4 @@ public class Optimisation {
         return index;
     }
 
-    /**
-     * Erzeugt die Liste der benötigten Fahrscheine anhand der Vorgänger des übergebenen Tickets
-     * <p>
-     * Mittels previous von lastBestTicket wird der Vorgänger des aktuellen Ticketets ermittelt.
-     * Diese werden solange der Liste hinzugefügt, bis der Vorgänger kein Ticket mehr besitzt
-     *
-     * @param lastBestTicket bester letzter Fahrschein
-     * @return Liste aller benötigten Fahrscheinen
-     */
-    public static ArrayList<TicketToBuy> createTicketList(TicketOptimisationHolder lastBestTicket) {
-        ArrayList<TicketToBuy> ticketList = new ArrayList<>();
-        while (lastBestTicket.getTicket() != null) {
-            ticketList.add(lastBestTicket.getTicketToBuy());
-            lastBestTicket = lastBestTicket.getPrevious();
-        }
-        return ticketList;
-    }
-
-    /**
-     * Zuweisen der alten Fahrscheine mit freien Fahrten auf die neuen Fahrten
-     * <p>
-     * Im Gegensatz zu {@link #optimisationBuyNewTickets(ArrayList tripsToOptimise, ArrayList Tickets die man kaufen kann)}
-     * wird hier "von oben" optimiert, d.h. die Fahrscheine werden von unten durchlaufen und die Fahrten von oben, um
-     * wenn möglich Fahrscheinpreisstufe = Fahrtenpreisstufe zu erreichen und falls dies nicht möglich ist, die kleinst
-     * mögliche größere Ticketpreisstufe zu wählen
-     *
-     * @param oldTickets bereits genutzte Fahrscheine mit mindestens einer freien Fahrt
-     * @param tripItems  zu optimierende Fahrten
-     * @preconditions Aufteilung der Fahrten in die Nutzerklassen, entsprechend häufig enthalten in
-     * der Liste <br/>
-     * Die Fahrten sind aufsteigend sortiert.
-     * @postconditions Für die noch nicht zugewiesenen Fahrten werden neue Fahrscheine optimiert
-     */
-    public static void optimisationWithOldTickets(ArrayList<TicketToBuy> oldTickets,
-                                                  ArrayList<TripItem> tripItems) {
-        //Fahrscheine -> kleinst möglichen wählen
-        ListIterator<TicketToBuy> ticketToBuyIterator = oldTickets.listIterator();
-        while (ticketToBuyIterator.hasNext()) {
-            TicketToBuy currentTicket = ticketToBuyIterator.next();
-            //Fahrten -> größt mögliche wählen
-            for (ListIterator<TripItem> tripItemIterator = tripItems.listIterator(tripItems.size()); tripItemIterator.hasPrevious();) {
-                TripItem currentTrip = tripItemIterator.previous();
-                //Wenn die Preisstufe der Fahrt <= der Preisstufe des Tickets ist
-                if (MainMenu.myProvider.getPreisstufenIndex(currentTrip.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(
-                        currentTicket.getPreisstufe())) {
-                    //weise die Fahrt dem Fahrschein zu & andersrum
-                    currentTrip.addTicket(currentTicket);
-                    currentTicket.addTripItem(currentTrip);
-                    //entferne die Fahrt aus den noch zu optimierenden Fahrten
-                    tripItemIterator.remove();
-                    //wenn das Ticket keine weiteren freien Fahrten mehr hat, entferne es aus der Liste der möglichen Fahrscheine
-                    if (currentTicket.getFreeTrips() == 0) {
-                        ticketToBuyIterator.remove();
-                        break;
-                    }
-                }
-            }
-        }
-    }
 }

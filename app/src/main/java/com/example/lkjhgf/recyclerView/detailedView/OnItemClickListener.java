@@ -11,4 +11,5 @@ import com.example.lkjhgf.helper.closeUp.CloseUpRecyclerView;
  */
 public interface OnItemClickListener {
     void onShowDetails(int position);
+    void onOpenGoogleMaps(int position);
 }

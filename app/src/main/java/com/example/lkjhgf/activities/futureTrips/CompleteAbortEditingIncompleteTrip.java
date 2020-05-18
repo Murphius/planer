@@ -10,13 +10,12 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.futureTrip.TripListComplete;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
-import com.example.lkjhgf.helper.util.UtilsOptimisation;
+import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
@@ -41,7 +40,7 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
         TripItem newTripItem = new TripItem(trip, false, numUserClass);
         ArrayList<TripItem> list = new ArrayList<>();
         list.add(newTripItem);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(list,this);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(list,this);
         AllTickets.saveData(newTicketList, this);
         myTripList = new TripListComplete(this, view, newTripItem);
     }

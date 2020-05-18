@@ -29,10 +29,13 @@ public class TicketItem implements Comparable<TicketItem> {
      */
     private int quantity;
 
+    private int freeTrips;
 
-    public TicketItem(TicketToBuy ticket, int quantity) {
+
+    public TicketItem(TicketToBuy ticket, int quantity, int freeTrips) {
         this.ticket = ticket;
         this.quantity = quantity;
+        this.freeTrips = freeTrips;
         removeDuplicatedTrips();
     }
 
@@ -77,9 +80,12 @@ public class TicketItem implements Comparable<TicketItem> {
         return ticket.getTripList();
     }
 
+    public int getFreeTrips() {
+        return freeTrips;
+    }
+
     @Override
     public int compareTo(TicketItem o) {
         return ticket.compareTo(o.ticket);
     }
-
 }

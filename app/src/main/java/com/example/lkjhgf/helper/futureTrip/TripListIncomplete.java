@@ -9,7 +9,7 @@ import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
-import com.example.lkjhgf.helper.util.UtilsOptimisation;
+import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.multipleTrips.UserForm;
@@ -112,7 +112,7 @@ public class TripListIncomplete extends MyTripList {
                 insertTrip(item);
             }
             //Optimieren der Fahrten
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = UtilsOptimisation.brauchtEinenTollenNamen(tripItems, activity);
+            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
             adapter.notifyDataSetChanged();
             AllTickets.saveData(newTicketList, activity);
             saveData();

@@ -7,7 +7,6 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Fare;
@@ -17,7 +16,7 @@ import de.schildbach.pte.dto.Fare;
  */
 public abstract class MyProvider implements Comparator<TripItem> {
     /**
-     * Preisstufen des Providers
+     * Preisstufen des Providers, aufsteigend sortierts
      */
     String[] preisstufen;
     /**
@@ -77,11 +76,10 @@ public abstract class MyProvider implements Comparator<TripItem> {
      */
     private int calculateMaxNumTrip(){
         int maxNumTrip = 1;
-        for(Iterator<Fare.Type> iterator = allTicketsMap.keySet().iterator(); iterator.hasNext();){
-            Fare.Type key = iterator.next();
+        for (Fare.Type key : allTicketsMap.keySet()) {
             ArrayList<Ticket> tickets = allTicketsMap.get(key);
-            for(Ticket ticket : tickets){
-                if(ticket instanceof NumTicket){
+            for (Ticket ticket : tickets) {
+                if (ticket instanceof NumTicket) {
                     maxNumTrip = Math.max(maxNumTrip, ((NumTicket) ticket).getNumTrips());
                 }
             }
@@ -119,5 +117,9 @@ public abstract class MyProvider implements Comparator<TripItem> {
 
     public int getTicketPrice(Ticket ticket, String preisstufe){
         return ticket.getPrice(getPreisstufenIndex(preisstufe));
+    }
+
+    public int getPreisstufenSize(){
+        return preisstufen.length;
     }
 }
