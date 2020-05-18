@@ -79,7 +79,7 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
 
         textViewClass.time_of_arrival_view.setText(item.getTime_of_arrival());
         textViewClass.time_of_departure_view.setText(item.getTime_of_departure());
-        textViewClass.ticket.setVisibility(View.INVISIBLE);
+        textViewClass.ticket.setVisibility(View.GONE);
     }
 
     /**
