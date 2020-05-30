@@ -12,6 +12,8 @@ import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
+import com.example.lkjhgf.helper.util.testUtil;
+import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.publicTransport.provider.MyProvider;
 import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
 
@@ -102,6 +104,8 @@ public class MainMenu extends Activity {
         information_page.setOnClickListener(v -> change_view_to_information_page());
 
         settings.setOnClickListener(v -> change_view_to_settings());
+
+        //TimeOptimisation.generateGraph();
     }
 
 }

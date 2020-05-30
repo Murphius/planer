@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
+import com.example.lkjhgf.helper.form.MultipleTrip;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.HashMap;
 
@@ -56,6 +58,32 @@ public class MultipleCloseUp extends CloseUp {
 
         setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         textViewClass.numChildren.setText(setText);
+    }
+
+    MultipleCloseUp(TripItem tripItem, Activity activity, View view){
+        super(tripItem.getTrip(), activity, view);
+        numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
+        numPersonsPerClass = tripItem.getNumUserClasses();
+        String setText = numTrip + ". Fahrt \n Detaillierte Fahrt";
+
+        TextView viewTitle = view.findViewById(R.id.textView);
+        viewTitle.setText(setText);
+
+        //ToDo Erweitern für anderen Provider
+        setText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
+        textViewClass.numAdult.setText(setText);
+
+        setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
+        textViewClass.numChildren.setText(setText);
+
+        if(tripItem.hasNoTicket()){
+            textViewClass.useTicket.setVisibility(View.GONE);
+            textViewClass.ticketView.setVisibility(View.GONE);
+        }else{
+            textViewClass.useTicket.setText(tripItem.getDetailedTicketListAsString());
+            textViewClass.useTicket.setVisibility(View.VISIBLE);
+            textViewClass.ticketView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**

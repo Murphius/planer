@@ -1,15 +1,22 @@
 package com.example.lkjhgf.publicTransport.provider;
 
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsString;
+import com.example.lkjhgf.helper.util.testAsyncTaskextends;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
+import de.schildbach.pte.dto.Location;
+import de.schildbach.pte.dto.Trip;
 
 public class MyVRRprovider extends MyProvider {
 
@@ -66,6 +73,71 @@ public class MyVRRprovider extends MyProvider {
             }
         }
         return userClassTrips;
+    }
+
+    @Override
+    public String getTicketInformation(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem) {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < tickets.size(); i++) {
+            if (tickets.get(i) instanceof NumTicket) {
+                int wholeTickets = quantity.get(i) / ((NumTicket) tickets.get(i)).getNumTrips();
+                int restTicket = quantity.get(i) % ((NumTicket) tickets.get(i)).getNumTrips();
+                if (wholeTickets != 0) {
+                    value.append(wholeTickets).append("x ").append(tickets.get(i).toString()).append("\n \tPreisstufe: ").append(preisstufe.get(i)).append("\n \talle Fahrten entwerten");
+                }
+                if (restTicket != 0) {
+                    value.append("1x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i)).append("\n \t").append(restTicket).append("x entwerten");
+                }
+            }
+
+            if (preisstufe.get(i).equals(preisstufen[0])) {
+                value.append("\n \tEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
+            }else if(preisstufe.get(i).equals(preisstufen[1]) || preisstufe.get(i).equals(preisstufen[2]) || preisstufe.get(i).equals(preisstufen[3])){
+                Location startLocation = tripItem.getTrip().from;
+                Location destinationLocation = tripItem.getTrip().to;
+                String startID = startLocation.id.substring(startLocation.id.length()-4);
+                String destinationID = destinationLocation.id.substring(destinationLocation.id.length()-4);
+                int startIDint = Integer.parseInt(startID);
+                int destinationIDint = Integer.parseInt(destinationID);
+
+                testAsyncTaskextends wabenTask = new testAsyncTaskextends();
+                wabenTask.execute(startIDint, destinationIDint);
+                ArrayList<Integer> waben = new ArrayList<>();
+                try {
+                    waben = wabenTask.get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(waben.size() == 2){
+                    if(waben.get(0) /10 == waben.get(1) / 10){
+                        value.append("\n \tEntwerten für das Tarifgebiet: ").append(waben.get(0));
+                    }else{
+                        value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
+                        value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
+                    }
+                }
+            }else{
+                Location startLocation = tripItem.getTrip().from;
+                String startID = startLocation.id.substring(startLocation.id.length()-4);
+                int startIDint = Integer.parseInt(startID);
+                testAsyncTaskextends wabenTask = new testAsyncTaskextends();
+                wabenTask.execute(startIDint);
+                ArrayList<Integer> waben = new ArrayList<>();
+                try {
+                    waben = wabenTask.get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(! waben.isEmpty()){
+                    value.append("\n\tEntwerten für das Tarifgebiet: ").append(waben.get(0)/10);
+                }
+
+            }
+            if (i != tickets.size() - 1) {
+                value.append("\n");
+            }
+        }
+        return value.toString();
     }
 
     /**

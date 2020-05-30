@@ -1,5 +1,6 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
@@ -13,6 +14,9 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import de.schildbach.pte.dto.Fare;
+
+import org.javatuples.Triplet;
+
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -23,11 +27,11 @@ public class TripItem implements Serializable {
     private String preisstufe;
     private boolean isComplete;
 
-    private class TripTicketInformationHolder {
-        Ticket ticket;
-        String ticketPreisstufe;
-        UUID ticketIdentifier;
-        int quantity;
+    private class TripTicketInformationHolder implements Serializable {
+        private Ticket ticket;
+        private String ticketPreisstufe;
+        private UUID ticketIdentifier;
+        private int quantity;
 
         private TripTicketInformationHolder(Ticket ticket, String ticketPreisstufe, UUID ticketIdentifier) {
             this.ticket = ticket;
@@ -44,9 +48,6 @@ public class TripItem implements Serializable {
             quantity++;
         }
 
-        private void remove() {
-            quantity--;
-        }
     }
 
     private HashMap<Fare.Type, Integer> numUserClasses;
@@ -109,14 +110,14 @@ public class TripItem implements Serializable {
         return 0;
     }
 
-    ArrayList<JourneyItem> getJourneyItems() {
-        return journeyItems;
-    }
-
-    public String getPreisstufe() {
-        return preisstufe;
-    }
-
+    /**
+     * Fügt der Fahrt ein weiteres Ticket hinzu <br/>
+     * <p>
+     * Wenn das Ticket bereits enthalten ist, dann wird nur die Häufigkeit des Tickets erhöht, sonst wird
+     * das Ticket neu in die Liste der zugeordneten Tickets eingefügt
+     *
+     * @param ticket Ticket, dass der Fahrt hinzugefügt werden soll
+     */
     public void addTicket(TicketToBuy ticket) {
         ArrayList<TripTicketInformationHolder> c = allTicketInformations.get(ticket.getTicket().getType());
         if (c == null || c.isEmpty()) {
@@ -133,7 +134,7 @@ public class TripItem implements Serializable {
                     contains = true;
                 }
             }
-            if(!contains){
+            if (!contains) {
                 c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
             }
         }
@@ -148,19 +149,26 @@ public class TripItem implements Serializable {
      * @return einen String, der alle Informationen zu den Fahrscheinen enthält
      */
     String getTicketListAsString() {
+        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformation();
+        return buildStringTicketList(allInformations.getValue0(), allInformations.getValue1(), allInformations.getValue2()).toString();
+    }
+
+    /**
+     * Fasst die Tickets nach Typen und Fahrscheinen zusammen, und zählt die entsprechende Häufigkeit
+     *
+     * @return Ein Triple mit den Tickets, der jeweiligen Häufigkeit und den Preisstufen
+     */
+    private Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> shortTicketInformation() {
         ArrayList<Ticket> ticketsToUse = new ArrayList<>();
         ArrayList<String> preisstufeToUse = new ArrayList<>();
         ArrayList<Integer> num = new ArrayList<>();
 
         for (Fare.Type type : allTicketInformations.keySet()) {
             ArrayList<TripTicketInformationHolder> ticketList = allTicketInformations.get(type);
-
-
             if (ticketList != null && !ticketList.isEmpty()) {
                 ticketsToUse.add(ticketList.get(0).ticket);
                 preisstufeToUse.add(ticketList.get(0).ticketPreisstufe);
                 num.add(ticketList.get(0).quantity);
-
                 for (int i = 1; i < ticketList.size(); i++) {
                     boolean contains = false;
                     for (int j = 0; j < ticketsToUse.size() && !contains; j++) {
@@ -184,30 +192,33 @@ public class TripItem implements Serializable {
                 }
             }
 
-
         }
+        return Triplet.with(ticketsToUse, num, preisstufeToUse);
+    }
 
-        StringBuilder value = new StringBuilder();
+    /**
+     * String in dem die Tickets, ihre Häufigkeit sowie Preisstufe enthalten ist. Zusätzlich ist auch der Ort
+     * des Entwertens angegeben
+     *
+     * @return Preisstufe, Ticket, Häufigkeit, Entwerten des Tickets als String
+     */
+    public String getDetailedTicketListAsString() {
+        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformation();
+        return MainMenu.myProvider.getTicketInformation(allInformations.getValue0(), allInformations.getValue1(), allInformations.getValue2(), this);
+    }
 
-        for (int i = 0; i < ticketsToUse.size(); i++) {
-            if (ticketsToUse.get(i) instanceof NumTicket) {
-                NumTicket numTicket = (NumTicket) ticketsToUse.get(i);
-                int wholeTickets = num.get(i) / numTicket.getNumTrips();
-                int restTicket = num.get(i) % numTicket.getNumTrips();
-                if (wholeTickets != 0) {
-                    value.append(wholeTickets).append("x ").append(numTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \talle Fahrten entwerten");
-                }
-                if (restTicket != 0) {
-                    value.append("1x ").append(numTicket.toString()).append(" \n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \t").append(restTicket).append("x entwerten");
-                }
-            }
-
-            if (i != ticketsToUse.size() - 1) {
-                value.append("\n");
+    /**
+     * Überprüft, ob mindestens ein Ticket der Fahrt zugeordnet ist
+     *
+     * @return true - keine Tickets zugeordnet, false - mindestens ein Ticket
+     */
+    public boolean hasNoTicket() {
+        for (Fare.Type key : allTicketInformations.keySet()) {
+            if (!allTicketInformations.get(key).isEmpty()) {
+                return false;
             }
         }
-
-        return value.toString();
+        return true;
     }
 
     public ArrayList<UUID> getTicketIDs(Fare.Type type) {
@@ -220,6 +231,12 @@ public class TripItem implements Serializable {
         return ticketIDs;
     }
 
+    /**
+     * Entfernt das Ticket mit der jeweiligen ID
+     *
+     * @param type gibt den Type des Tickets an, beschleunigt das Finden des Tickets
+     * @param uuid ID des zu löschenden Tickets
+     */
     public void removeTickets(Fare.Type type, UUID uuid) {
         ArrayList<TripTicketInformationHolder> d = allTicketInformations.get(type);
         for (Iterator<TripTicketInformationHolder> iterator = d.iterator(); iterator.hasNext(); ) {
@@ -246,20 +263,44 @@ public class TripItem implements Serializable {
         return otherTripItem.trip.getId().equals(this.trip.getId());
     }
 
-    boolean hasNoTicket() {
-        for (Fare.Type key : allTicketInformations.keySet()) {
-            if (!allTicketInformations.get(key).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public HashMap<Fare.Type, Integer> getNumUserClasses() {
         return numUserClasses;
     }
 
-    public HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> getAllTicketInformations() {
-        return allTicketInformations;
+    ArrayList<JourneyItem> getJourneyItems() {
+        return journeyItems;
+    }
+
+    public String getPreisstufe() {
+        return preisstufe;
+    }
+
+    /**
+     * Erzeugt den zusammenhängenden String aus den Parametern
+     *
+     * @param ticketsToUse    zu nutzende Fahrscheine
+     * @param num             wie oft dieses Ticket gebraucht wird
+     * @param preisstufeToUse Preisstufe des Tickets
+     * @return Stringbuilder zusammengebaut aus den Informationen
+     */
+    private StringBuilder buildStringTicketList(ArrayList<Ticket> ticketsToUse, ArrayList<Integer> num, ArrayList<String> preisstufeToUse) {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < ticketsToUse.size(); i++) {
+            if (ticketsToUse.get(i) instanceof NumTicket) {
+                NumTicket numTicket = (NumTicket) ticketsToUse.get(i);
+                int wholeTickets = num.get(i) / numTicket.getNumTrips();
+                int restTicket = num.get(i) % numTicket.getNumTrips();
+                if (wholeTickets != 0) {
+                    value.append(wholeTickets).append("x ").append(numTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \talle Fahrten entwerten");
+                }
+                if (restTicket != 0) {
+                    value.append("1x ").append(numTicket.toString()).append(" \n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \t").append(restTicket).append("x entwerten");
+                }
+            }
+            if (i != ticketsToUse.size() - 1) {
+                value.append("\n");
+            }
+        }
+        return value;
     }
 }

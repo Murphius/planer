@@ -34,11 +34,12 @@ public abstract class MyProvider implements Comparator<TripItem> {
 
     /**
      * Initialisiert alle Attribute der Klasse
-     * @param preisstufen Preisstufen des Providers
+     *
+     * @param preisstufen       Preisstufen des Providers
      * @param allTicketsHashMap Alle Tickets je Preisstufe
-     * @param provider NetworkProvider für den Verkehrsverbund
+     * @param provider          NetworkProvider für den Verkehrsverbund
      */
-    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsHashMap, NetworkProvider provider){
+    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsHashMap, NetworkProvider provider) {
         this.preisstufen = preisstufen;
         this.allTicketsMap = allTicketsHashMap;
         this.provider = provider;
@@ -47,23 +48,24 @@ public abstract class MyProvider implements Comparator<TripItem> {
 
     /**
      * Überprüft, ob ein String eine Preisstufe dieses Verkehrsverbundes ist
+     *
      * @param preisstufe zu überprüfende Zeichenfolge
      * @return true, wenn die Zeichenfolge in dem Array enthalten ist <br/>
      * false, falls nicht
      */
-    public boolean checkContains(String preisstufe){
-       return getPreisstufenIndex(preisstufe) != Integer.MAX_VALUE;
+    public boolean checkContains(String preisstufe) {
+        return getPreisstufenIndex(preisstufe) != Integer.MAX_VALUE;
     }
 
     /**
-     * @preconditions die Preisstufe ist gültig, oder es gilt die Postcondition
-     * @postconditions es wird abgefangen, dass die Preisstufe nicht gültig ist
      * @param preisstufe
      * @return
+     * @preconditions die Preisstufe ist gültig, oder es gilt die Postcondition
+     * @postconditions es wird abgefangen, dass die Preisstufe nicht gültig ist
      */
-    public int getPreisstufenIndex(String preisstufe){
-        for (int i = 0; i < preisstufen.length; i++){
-            if (preisstufe.contains(preisstufen[i])){
+    public int getPreisstufenIndex(String preisstufe) {
+        for (int i = 0; i < preisstufen.length; i++) {
+            if (preisstufe.contains(preisstufen[i])) {
                 return i;
             }
         }
@@ -72,9 +74,10 @@ public abstract class MyProvider implements Comparator<TripItem> {
 
     /**
      * Sucht die maximale Fahrtenanzahl die ein NumTicket erlaubt
+     *
      * @return maximale Fahrtenanzahl
      */
-    private int calculateMaxNumTrip(){
+    private int calculateMaxNumTrip() {
         int maxNumTrip = 1;
         for (Fare.Type key : allTicketsMap.keySet()) {
             ArrayList<Ticket> tickets = allTicketsMap.get(key);
@@ -88,38 +91,41 @@ public abstract class MyProvider implements Comparator<TripItem> {
     }
 
     /**
-     * @preconditions Index innerhalb der Größe
      * @param index
      * @return
+     * @preconditions Index innerhalb der Größe
      */
-    public String getPreisstufe(int index){
+    public String getPreisstufe(int index) {
         return preisstufen[index];
     }
 
-    public NetworkProvider getNetworkProvider(){
+    public NetworkProvider getNetworkProvider() {
         return provider;
     }
 
-    public HashMap<Fare.Type, ArrayList<Ticket>> getAllTickets(){
+    public HashMap<Fare.Type, ArrayList<Ticket>> getAllTickets() {
         return allTicketsMap;
     }
 
     /**
      * Umwandlung der Liste aller Fahrten in die entsprechenden Klassen
+     *
      * @param allTrips Liste aller Fahrten
      * @return Liste mit Listen, die den Fahrten einer jeweiligen Nutzerklasse entsprechen
      */
-    public abstract HashMap<Fare.Type,ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips);
+    public abstract HashMap<Fare.Type, ArrayList<TripItem>> createUserClassTripLists(ArrayList<TripItem> allTrips);
 
-    public int getMaxNumTrip(){
+    public abstract String getTicketInformation(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem);
+
+    public int getMaxNumTrip() {
         return maxNumTrip;
     }
 
-    public int getTicketPrice(Ticket ticket, String preisstufe){
+    public int getTicketPrice(Ticket ticket, String preisstufe) {
         return ticket.getPrice(getPreisstufenIndex(preisstufe));
     }
 
-    public int getPreisstufenSize(){
+    public int getPreisstufenSize() {
         return preisstufen.length;
     }
 }

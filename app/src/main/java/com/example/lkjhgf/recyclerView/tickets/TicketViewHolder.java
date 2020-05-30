@@ -127,8 +127,9 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
      */
     private void onItemClick(TripItem currentItem) {
         Intent intent = new Intent(activity, AllConnectionsIncompleteView.class);
-        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, currentItem.getNumUserClasses());
-        intent.putExtra(MainMenu.EXTRA_TRIP, currentItem.getTrip());
+        intent.putExtra(MainMenu.EXTRA_TRIP, currentItem);
+        //intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, currentItem.getNumUserClasses());
+        //intent.putExtra(MainMenu.EXTRA_TRIP, currentItem.getTrip());
         activity.startActivity(intent);
     }
 }

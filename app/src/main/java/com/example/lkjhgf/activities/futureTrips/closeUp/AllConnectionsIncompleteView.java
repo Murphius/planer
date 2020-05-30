@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.RelativeLayout;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.closeUp.FutureIncompleteAllTripsCloseUp;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 /**
  * Alle geplanten Fahrten <br/>
@@ -33,7 +35,9 @@ public class AllConnectionsIncompleteView extends Activity {
 
         RelativeLayout layout = findViewById(R.id.constraintLayout2);
 
-        new FutureIncompleteAllTripsCloseUp(this, layout);
+        TripItem tripItem = (TripItem) getIntent().getSerializableExtra(MainMenu.EXTRA_TRIP);
+
+        new FutureIncompleteAllTripsCloseUp(this, layout, tripItem);
     }
 
 }

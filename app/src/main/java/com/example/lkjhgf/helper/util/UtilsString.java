@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.schildbach.pte.dto.Location;
+import de.schildbach.pte.dto.LocationType;
 import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
@@ -76,7 +77,7 @@ public final class UtilsString {
     public static String setLocationName(Location location) {
         if (location.name != null && location.place != null) {
             //Aufteilen des Namens an den Leerzeichen
-            String[] splits = location.name.split(" ");
+            String[] splits = location.name.split(" |, ");
             //Ausgangslage ist der "Stadtname"
             StringBuilder placeName = new StringBuilder(location.place);
             // Für jeden Teil des Namens, wird überprüft, ob dieser im neuen Namen enthlaten ist
@@ -207,4 +208,5 @@ public final class UtilsString {
         double currencyAmmount = (costs/100) + (double)(costs%100)/100;
         return currencyFormatter.format(currencyAmmount);
     }
+
 }

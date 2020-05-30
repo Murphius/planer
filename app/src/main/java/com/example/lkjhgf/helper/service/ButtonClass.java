@@ -19,8 +19,8 @@ class ButtonClass {
 
     private RecyclerViewService recyclerViewService;
 
-    BootstrapButton earlierButton;
-    private BootstrapButton editButton, laterButton;
+    BootstrapButton earlierButton, laterButton;
+    private BootstrapButton editButton;
 
     /**
      * Ruft die Funktionen zur Initialisierung auf <br/>

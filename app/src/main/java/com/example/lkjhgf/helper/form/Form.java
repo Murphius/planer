@@ -47,7 +47,7 @@ public abstract class Form {
     protected Intent intent;
 
 
-    private ButtonClass buttons;
+    protected ButtonClass buttons;
     protected Form_Text text;
 
     /**

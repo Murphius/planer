@@ -3,6 +3,8 @@ package com.example.lkjhgf.helper.closeUp;
 import android.app.Activity;
 import android.view.View;
 
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+
 public class FutureIncompleteAllTripsCloseUp extends MultipleCloseUp {
     /**
      * @see MultipleCloseUp#MultipleCloseUp(Activity, View)
@@ -13,8 +15,8 @@ public class FutureIncompleteAllTripsCloseUp extends MultipleCloseUp {
      * Hier: aus der Liste ALLER geplanten Fahrten <br/>
      * {@link FutureIncompleteCloseUp}: Liste der aktuell geplanten Fahrten, welche anschließend optimiert werden sollen
      */
-    public FutureIncompleteAllTripsCloseUp(Activity activity, View view) {
-        super(activity, view);
+    public FutureIncompleteAllTripsCloseUp(Activity activity, View view, TripItem tripItem) {
+        super(tripItem, activity, view);
         //Anpassen des Layouts
         textViewClass.ticketView.setVisibility(View.VISIBLE);
         textViewClass.useTicket.setVisibility(View.VISIBLE);

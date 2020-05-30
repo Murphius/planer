@@ -38,6 +38,14 @@ public abstract class CloseUp {
         new CloseUpRecyclerView(activity, view, this);
     }
 
+    CloseUp(Trip trip,Activity activity, View view){
+        this.trip = trip;
+        this.activity = activity;
+        textViewClass = new TextViewClass(view, activity.getResources(), this);
+        buttons = new ButtonClass(activity, view, this);
+        new CloseUpRecyclerView(activity, view, this);
+    }
+
     /**
      * Der Nutzer will die Fahrt speichern  <br/>
      *

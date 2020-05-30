@@ -30,10 +30,11 @@ class ButtonClass {
 
     //Alle Buttons in der Ansicht
     private BootstrapButton dateButton, arrivalDepartureButton;
-    private BootstrapButton startButton, stopoverButton, destinationButton;
+    private BootstrapButton startButton, destinationButton;
     private BootstrapButton backButton, settingsButton;
     private BootstrapButton furtherButton;
-    private BootstrapButton clearStart, clearDestination, clearStopover;
+    private BootstrapButton clearStart, clearDestination;
+    BootstrapButton clearStopover,stopoverButton;
 
     // Jeweiliger Dialog für die Auswahl eines Datums bzw. einer Uhrzeit
     private DatePickerDialog.OnDateSetListener onDateSetListener;

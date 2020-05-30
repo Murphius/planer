@@ -67,14 +67,13 @@ public class TripListComplete extends MyTripList {
         //Abhängig von der Fahrt wird eine andere Aktivität gestartet
         if (current.isComplete()) {
             newIntent = new Intent(activity.getApplicationContext(), AllTripsCompleteView.class);
+            newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         } else {
-            //TODO #Trip??
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
             //#Fahrt und #reisende Personen ebenfalls übergeben
+            newIntent.putExtra(MainMenu.EXTRA_TRIP, current);
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
-            newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         }
-        newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         startNextActivity(newIntent);
     }
 

@@ -68,9 +68,11 @@ abstract class RecyclerViewService {
         this.possibleConnections = possibleConnections;
 
         //Keine passenden Verbindugnen gefunden -> Nachricht an den Nutzer
-        if (possibleConnections.result == null || possibleConnections.result.status == QueryTripsResult.Status.NO_TRIPS) {
+        if (possibleConnections.result == null || possibleConnections.result.status == QueryTripsResult.Status.NO_TRIPS || possibleConnections.result.trips == null) {
             Toast.makeText(activity, "Keine passenden Verbindungen gefunden", Toast.LENGTH_SHORT).show();
             adapter = new ConnectionAdapter(new ArrayList<>());
+            buttons.earlierButton.setEnabled(false);
+            buttons.laterButton.setEnabled(false);
         } else {
             // Liste mit den möglichen Verbindungen füllen
             connection_items = fillConnectionList(possibleConnections.result.trips);
@@ -143,6 +145,7 @@ abstract class RecyclerViewService {
             Toast.makeText(context,
                     "Es konnten keine späteren Verbindungen gefunden werden",
                     Toast.LENGTH_SHORT).show();
+            buttons.laterButton.setEnabled(false);
         } else {
             //Liste mit möglichen Verbindungen umwandeln und anschließen in den Adapter packen
             possibleConnections.result = resultLater;
