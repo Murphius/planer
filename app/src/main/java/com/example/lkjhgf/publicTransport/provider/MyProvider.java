@@ -2,6 +2,7 @@ package com.example.lkjhgf.publicTransport.provider;
 
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;

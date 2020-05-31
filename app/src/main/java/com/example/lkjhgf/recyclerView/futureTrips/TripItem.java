@@ -9,6 +9,7 @@ import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyIte
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public class TripItem implements Serializable {
     /**
      * Kurze Zusammenfassung der Abfolge von Verkehrsmitteln
      */
-    private ArrayList<JourneyItem> journeyItems;
+    //private ArrayList<JourneyItem> journeyItems;
 
     /**
      * Konstruktor für Fahrten, deren Fahrkosten nicht optimiert werden sollen<br/>
@@ -75,7 +76,7 @@ public class TripItem implements Serializable {
             preisstufe = "?";
         }
         numUserClasses = new HashMap<>();
-        journeyItems = UtilsList.journeyItems(trip.legs);
+        //journeyItems = UtilsList.journeyItems(trip.legs);
 
         allTicketInformations = new HashMap<>();
     }
@@ -268,11 +269,19 @@ public class TripItem implements Serializable {
     }
 
     ArrayList<JourneyItem> getJourneyItems() {
-        return journeyItems;
+        return UtilsList.journeyItems(trip.legs);
     }
 
     public String getPreisstufe() {
         return preisstufe;
+    }
+
+    public Date getFirstDepartureTime(){
+        return trip.getFirstDepartureTime();
+    }
+
+    public Date getLastArrivalTime(){
+        return trip.getLastArrivalTime();
     }
 
     /**

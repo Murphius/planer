@@ -7,6 +7,7 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -137,6 +138,19 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
     }
 
     /**
+     * Fügt mehrere Fahrten dem Ticket hinzu <br/>
+     * <p>
+     * Ruft für jedes Item das hinzugefügt werden soll {@link #addTripItem(TripItem)} auf
+     *
+     * @param tripItems Liste der Fahrten die hinzugefügt werden soll
+     */
+    void addTripItems(ArrayList<TripItem> tripItems) {
+        for (TripItem t : tripItems) {
+            addTripItem(t);
+        }
+    }
+
+    /**
      * Prüft, ob alle zugeordneten Fahrten in der Zukunft liegen oder nicht
      *
      * @return false - wenn mindestens eine Fahrt in der Vergangenheit liegt (VOR dem aktuellen Zeitpunkt) <br/>
@@ -208,6 +222,14 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         return tripItems;
     }
 
+    public Date getFirstDepartureTime(){
+        return tripQuantities.get(0).trip.getFirstDepartureTime();
+    }
+
+    public Date getLastArrivalTime(){
+        return tripQuantities.get(tripQuantities.size()-1).trip.getLastArrivalTime();
+    }
+
     public ArrayList<TripQuantity> getTripQuantities() {
         return tripQuantities;
     }
@@ -230,13 +252,14 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
 
     /**
      * Equals nicht anhand der ID sondern anhand der Namen und Preisstufen
+     *
      * @param o zu vergleichendes Objekt
      * @return true - Preisstufe und Ticket stimmen überein; <br/>
      * false - Preisstufe oder Ticket stimmen nicht überein
      */
     @Override
     public boolean equals(Object o) {
-        if(o == null){
+        if (o == null) {
             return false;
         }
         if (!(o instanceof TicketToBuy)) {
