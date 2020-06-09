@@ -21,6 +21,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      * Ticket(typ), der gekauft werden soll
      */
     private Ticket ticket;
+
     /**
      * Preisstufe des Fahrscheins
      */
@@ -43,10 +44,10 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      */
     public class TripQuantity {
         private int quantity;
-        private TripItem trip;
+        private TripItem tripItem;
 
         private TripQuantity(TripItem tripItem) {
-            trip = tripItem;
+            this.tripItem = tripItem;
             quantity = 1;
         }
 
@@ -69,15 +70,15 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
          * false - wenn die IDs nicht übereinstimmen
          */
         boolean checkContains(TripItem tripItem) {
-            return trip.getTrip().getId().equals(tripItem.getTrip().getId());
+            return this.tripItem.getTripID().equals(tripItem.getTripID());
         }
 
         public int getQuantity() {
             return quantity;
         }
 
-        public TripItem getTrip() {
-            return trip;
+        public TripItem getTripItem() {
+            return tripItem;
         }
     }
 
@@ -120,7 +121,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      *
      * @param tripItem Fahrt die hinzugefügt werden soll
      */
-    void addTripItem(TripItem tripItem) {
+    public void addTripItem(TripItem tripItem) {
         //Für Mengenfahrscheine -> eine Fahrt weniger möglich
         if (freeTrips != Integer.MAX_VALUE) {
             freeTrips--;
@@ -144,7 +145,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      *
      * @param tripItems Liste der Fahrten die hinzugefügt werden soll
      */
-    void addTripItems(ArrayList<TripItem> tripItems) {
+    public void addTripItems(ArrayList<TripItem> tripItems) {
         for (TripItem t : tripItems) {
             addTripItem(t);
         }
@@ -159,7 +160,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      */
     public boolean isFutureTicket() {
         for (TripQuantity tripItem : tripQuantities) {
-            if (tripItem.trip.getTrip().getFirstDepartureTime().before(Calendar.getInstance().getTime())) {
+            if (tripItem.tripItem.getFirstDepartureTime().before(Calendar.getInstance().getTime())) {
                 return false;
             }
         }
@@ -167,19 +168,31 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
     }
 
     /**
-     * Prüft ob alle Fahrten eines Fahrscheins mehr als 24h in der Vergangenheit liegen
+     * Prüft ob alle Fahrten eines Fahrscheins mehr als der Offset in der Vergangenheit liegen
      *
-     * @return false - mindestens eine Fahrt liegt innerhalb der letzten 24h (Ankunftszeit) <br/>
-     * ture - alle Fahrten sind mehr als 24h vorbei
+     * Der Offset soll 0 sein, beim laden für die Optimierung und 24h für das Anzeigen von Fahrscheinen
+     * @param offset gibt an, wie lange die Fahrten in der Vergangenheit liegen sollen
+     * @return false - das Ticket ist gültig, oder hat noch mindestens eine freie Fahrt
+     * true - das Ticket ist nicht mehr gültig oder alle Fahrten liegen in der Vergangenheit
      */
-    public boolean isPastTicket() {
-        for (TripQuantity tripItem : tripQuantities) {
-            if (tripItem.trip.getTrip().getLastArrivalTime().getTime() + (24 * 60 * 60 * 1000) > Calendar.getInstance().getTime().getTime()) {
+    public boolean isPastTicket(long offset) {
+        if (ticket instanceof TimeTicket) {
+            //TODO prüfen
+            return getFirstDepartureTime().getTime() + ((TimeTicket) ticket).getMaxDuration() + offset < Calendar.getInstance().getTime().getTime();
+        } else {
+            if (freeTrips != 0) {
                 return false;
+            } else {
+                for (TripQuantity tripItem : tripQuantities) {
+                    if (tripItem.tripItem.getLastArrivalTime().getTime() + offset > Calendar.getInstance().getTime().getTime()) {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
-        return true;
     }
+
 
     /**
      * Entfernt eine Fahrt aus der Liste der zugeorneten Fahrten
@@ -193,7 +206,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         for (Iterator<TripQuantity> tripQuantityIterator = tripQuantities.iterator(); tripQuantityIterator.hasNext(); ) {
             TripQuantity currentTrip = tripQuantityIterator.next();
             //prüfen, ob die IDs übereinstimmen
-            if (currentTrip.trip.getTrip().getId().equals(tripID)) {
+            if (currentTrip.tripItem.getTrip().getId().equals(tripID)) {
                 int quantity = currentTrip.quantity;
                 //Entfernen der Fahrt
                 tripQuantityIterator.remove();
@@ -205,6 +218,8 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
                     //Ticket besteht nur noch aus freien Fahrten
                     if (((NumTicket) ticket).getNumTrips() == freeTrips) {
                         return true;
+                    } else {
+                        return tripQuantities.size() == 0;
                     }
                 }
             }
@@ -217,17 +232,17 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
     public ArrayList<TripItem> getTripList() {
         ArrayList<TripItem> tripItems = new ArrayList<>();
         for (TripQuantity tripQuantity : tripQuantities) {
-            tripItems.add(tripQuantity.trip);
+            tripItems.add(tripQuantity.tripItem);
         }
         return tripItems;
     }
 
-    public Date getFirstDepartureTime(){
-        return tripQuantities.get(0).trip.getFirstDepartureTime();
+    public Date getFirstDepartureTime() {
+        return tripQuantities.get(0).tripItem.getFirstDepartureTime();
     }
 
-    public Date getLastArrivalTime(){
-        return tripQuantities.get(tripQuantities.size()-1).trip.getLastArrivalTime();
+    public Date getLastArrivalTime() {
+        return tripQuantities.get(tripQuantities.size() - 1).tripItem.getLastArrivalTime();
     }
 
     public ArrayList<TripQuantity> getTripQuantities() {

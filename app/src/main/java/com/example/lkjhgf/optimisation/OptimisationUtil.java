@@ -31,7 +31,7 @@ public final class OptimisationUtil {
         // Fahrten nach den Preisstufen sortieren
         Collections.sort(copy, MainMenu.myProvider);
         //Fahrten auf Nutzerklassen aufteilen
-        HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists = MainMenu.myProvider.createUserClassTripLists(copy);
+        //HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists = MainMenu.myProvider.createUserClassTripLists(copy);
         //Fahrscheine der letzten Optimierung
         HashMap activeTickets = new HashMap(AllTickets.loadTickets(activity));
         //Liste mit allen benötigten Fahrscheinen
@@ -39,13 +39,13 @@ public final class OptimisationUtil {
         //Liste mit Fahrscheinen, auf denen noch mindestens eine Fahrt frei ist
         HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets = new HashMap<>();
         //Entfernt zukünftige Tickets, bereits optimierte Fahrscheine
-        cleanUpTicketsAndTrips(activeTickets, userClassTripLists, freeTickets, allTicketLists);
+        //cleanUpTicketsAndTrips(activeTickets, userClassTripLists, freeTickets, allTicketLists);
 
         //Optimierung
-        optimisationWithOldTickets(freeTickets, userClassTripLists);
-        HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = optimisationWithNewTickets(userClassTripLists);
+        //optimisationWithOldTickets(freeTickets, userClassTripLists);
+        //HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = optimisationWithNewTickets(userClassTripLists);
 
-        buildTicketList(lastBestTickets, allTicketLists);
+        //buildTicketList(lastBestTickets, allTicketLists);
 
         return allTicketLists;
     }
@@ -62,10 +62,10 @@ public final class OptimisationUtil {
      * @param freeTickets        Liste mit Fahrscheinen, die mindestens eine freie Fahrt haben
      * @param allTicketLists     Liste mit Fahrscheinen, die für die Fahrten benötigt werden -> wird am Ende gespeichert
      */
-    private static void cleanUpTicketsAndTrips(HashMap<Fare.Type, ArrayList<TicketToBuy>> activeTickets,
-                                               HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists,
-                                               HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets,
-                                               HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists) {
+    public static void cleanUpTicketsAndTrips(HashMap<Fare.Type, ArrayList<TicketToBuy>> activeTickets,
+                                              HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists,
+                                              HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets,
+                                              HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists) {
         for (Fare.Type currentType : activeTickets.keySet()) {
             //Die gespeicherten Fahrscheine der aktuellen Nutzerklasse
             ArrayList<TicketToBuy> userClassActiveTickets = activeTickets.get(currentType);
@@ -76,14 +76,14 @@ public final class OptimisationUtil {
             //Fahrten dieser Nutzerklasse
             ArrayList<TripItem> userClassTrips = userClassTripLists.get(currentType);
             //Für jedes Ticket der Nutzerklasse:
-            for (Iterator<TicketToBuy> it2 = userClassActiveTickets.iterator(); it2.hasNext(); ) {
-                TicketToBuy currentTicket = it2.next();
+            for (Iterator<TicketToBuy> userClassActiveTicketsIterator = userClassActiveTickets.iterator(); userClassActiveTicketsIterator.hasNext(); ) {
+                TicketToBuy currentTicket = userClassActiveTicketsIterator.next();
                 //Prüfen, ob es sich um ein zukünftiges Ticket handelt
                 if (currentTicket.isFutureTicket()) {
-                    //Falls ja, müssen zu erst die Fahrten des Tickets die Fahrscheine freigegeben bekommen
+                    //Falls ja, müssen zu erst die Fahrten des Tickets diesen Fahrscheine entfernt bekommen
                     removeTicketFromTrips(currentTicket, userClassTrips);
                     //Entfernen des zukünftigen Fahrscheins
-                    it2.remove();
+                    userClassActiveTicketsIterator.remove();
                 } else {
                     //Kein zukünftiges Ticket
                     saveTicketRemoveTripFromTripList(allUserClassTickets, currentTicket, userClassTrips, freeUserClassTickets);
@@ -107,8 +107,17 @@ public final class OptimisationUtil {
         for (TripItem currentTrip : currentTicket.getTripList()) {
             if (userClassTrips != null && !userClassTrips.isEmpty()) {
                 int index = userClassTrips.indexOf(currentTrip);
-                if (index != -1) {
-                    userClassTrips.get(index).removeTickets(currentTicket.getTicket().getType(), currentTicket.getTicketID());
+                ArrayList<TicketToBuy.TripQuantity> tripQuantities = currentTicket.getTripQuantities();
+                int quantityIndex = -1;
+                for(int i = 0; i < tripQuantities.size(); i++){
+                    if(tripQuantities.get(i).getTripItem().getTripID().equals(currentTrip.getTripID())){
+                        quantityIndex = i;
+                        break;
+                    }
+                }
+                if(index != -1 && quantityIndex != -1){
+                    int quantity = currentTicket.getTripQuantities().get(quantityIndex).getQuantity();
+                    userClassTrips.get(index).removeTickets(currentTicket.getTicket().getType(), currentTicket.getTicketID(), quantity);
                 }
             }
         }
@@ -132,11 +141,27 @@ public final class OptimisationUtil {
         allUserClassTickets.add(currentTicket);
         //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
         for (TicketToBuy.TripQuantity tripQuantity : currentTicket.getTripQuantities()) {
-            int quantity = tripQuantity.getQuantity();
-            for (int i = 0; i < quantity; i++) {
-                userClassTrips.remove(tripQuantity.getTrip());
+            int index = userClassTrips.indexOf(tripQuantity.getTripItem());
+            if(index > -1){
+                boolean needsTicket = false;
+                for(Fare.Type type : tripQuantity.getTripItem().getNumUserClasses().keySet()){
+                    if(tripQuantity.getTripItem().getUserClassWithoutTicket(type) != 0){
+                        needsTicket = true;
+                    }
+                }
+                if(!needsTicket){
+                    userClassTrips.remove(index);
+                }
             }
         }
+        //    int quantity = tripQuantity.getQuantity();
+        //
+        //    if (index > -1) {
+         //       for (int i = 0; i < quantity; i++) {
+         //           userClassTrips.remove(tripQuantity.getTripItem())
+         //       }
+         //   }
+        //}
         //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
         //hinzufügen
         if (currentTicket.getFreeTrips() > 0) {
@@ -150,8 +175,8 @@ public final class OptimisationUtil {
      * @param lastBestTickets das letzte Ticket der Optimierung für alle Nutzerklassen
      * @param allTicketLists  Liste aller benötigten Fahrscheine
      */
-    private static void buildTicketList(HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets,
-                                        HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists) {
+    public static void buildTicketList(HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets,
+                                       HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists) {
         //TicketListe Bauen
         for (Fare.Type type : lastBestTickets.keySet()) {
             ArrayList<TicketToBuy> ticketList = createTicketList(lastBestTickets.get(type));
@@ -169,13 +194,13 @@ public final class OptimisationUtil {
      * @param freeTickets        Fahrscheine mit mindestens einer freien Fahrt
      * @param userClassTripLists zu optimierende Fahrscheine
      */
-    private static void optimisationWithOldTickets(HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets, HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
+    public static void optimisationWithOldTickets(HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets, HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
         //TODO dieser Teil funktioniert nur für NumTicket
         //Optimierung mit alten Fahrscheinen
         if (!freeTickets.isEmpty()) {
             for (Fare.Type type : freeTickets.keySet()) {
                 if (!freeTickets.get(type).isEmpty()) {
-                    Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type));
+                    Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type),type);
                 }
             }
         }
@@ -187,7 +212,7 @@ public final class OptimisationUtil {
      * @param userClassTripLists Zu optimierende Fahrten
      * @return für jede Nutzerklasse das beste letzte Ticket
      */
-    private static HashMap<Fare.Type, TicketOptimisationHolder> optimisationWithNewTickets(HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
+    public static HashMap<Fare.Type, TicketOptimisationHolder> optimisationWithNewTickets(HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
         //Optimieren mit neuen Fahrscheinen
         HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = new HashMap<>();
         HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap = MainMenu.myProvider.getAllTickets();
@@ -204,13 +229,12 @@ public final class OptimisationUtil {
     /**
      * Erzeugt eine neue Liste mit allen Fahrten, die optimiert werden sollen <br/>
      * <p>
-     * Enthalten sind nur Fahrten mit einer gültigen Preisstufe und deren
-     * Fahrschein noch nicht "angefangen" ist
+     * Enthalten sind nur Fahrten mit einer gültigen Preisstufe
      *
      * @param tripItems Liste mit allen Fahrten
      * @return Liste mit allen Fahrten die optimiert werden können
      */
-    static ArrayList<TripItem> removeTrips(ArrayList<TripItem> tripItems) {
+    public static ArrayList<TripItem> removeTrips(ArrayList<TripItem> tripItems) {
         ArrayList<TripItem> newTripList = new ArrayList<>();
         for (TripItem tripItem : tripItems) {
             if (!tripItem.isComplete()) {

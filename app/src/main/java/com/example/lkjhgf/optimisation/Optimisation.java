@@ -6,6 +6,8 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import de.schildbach.pte.dto.Fare;
+
 /**
  * Jeweiligen Optimierungsfunktionen und Hilfsfunktionen
  */
@@ -104,7 +106,8 @@ public class Optimisation {
      * @postconditions Für die noch nicht zugewiesenen Fahrten werden neue Fahrscheine optimiert
      */
     static void optimisationWithOldTickets(ArrayList<TicketToBuy> oldTickets,
-                                           ArrayList<TripItem> tripItems) {
+                                           ArrayList<TripItem> tripItems,
+                                           Fare.Type type) {
         //Fahrscheine -> kleinst möglichen wählen
         ListIterator<TicketToBuy> ticketToBuyIterator = oldTickets.listIterator();
         while (ticketToBuyIterator.hasNext()) {
@@ -112,14 +115,21 @@ public class Optimisation {
             //Fahrten -> größt mögliche wählen
             for (ListIterator<TripItem> tripItemIterator = tripItems.listIterator(tripItems.size()); tripItemIterator.hasPrevious();) {
                 TripItem currentTrip = tripItemIterator.previous();
+                if(currentTrip.getUserClassWithoutTicket(type) == 0) {
+                    continue;
+                }
                 //Wenn die Preisstufe der Fahrt <= der Preisstufe des Tickets ist
                 if (MainMenu.myProvider.getPreisstufenIndex(currentTrip.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(
                         currentTicket.getPreisstufe())) {
-                    //weise die Fahrt dem Fahrschein zu & andersrum
-                    currentTrip.addTicket(currentTicket);
-                    currentTicket.addTripItem(currentTrip);
-                    //entferne die Fahrt aus den noch zu optimierenden Fahrten
-                    tripItemIterator.remove();
+                    while(currentTrip.getUserClassWithoutTicket(type) > 0 && currentTicket.getFreeTrips() > 0) {
+                        //weise die Fahrt dem Fahrschein zu & andersrum
+                        currentTrip.addTicket(currentTicket);
+                        currentTicket.addTripItem(currentTrip);
+                        //entferne die Fahrt aus den noch zu optimierenden Fahrten
+                        //if(currentTrip.getUserClassWithoutTicket(type) == 0){
+                        //   tripItemIterator.remove();
+                        //}
+                    }
                     //wenn das Ticket keine weiteren freien Fahrten mehr hat, entferne es aus der Liste der möglichen Fahrscheine
                     if (currentTicket.getFreeTrips() == 0) {
                         ticketToBuyIterator.remove();

@@ -2,6 +2,7 @@ package com.example.lkjhgf.adapter;
 
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -66,6 +67,13 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     //NumTicket
     private static final String EXTRA_INT_NUM_TRIPS = "com.example.lkjhgf.EXTRA_INT_NUM_TRIPS";
 
+    //TimeTicket
+    private static final String EXTRA_MAXDURATION = "com.example.lkjhgf.EXTRA_MAX_DURATION";
+    private static final String EXTRA_MIN_NUM_TRIPS = "com.example.lkjhgf.EXTRA_MIN_NUM_TRIPS";
+    private static final String EXTRA_START_HOUR = "com.example.lkjhgf.EXTRA_START_HOUR";
+    private static final String EXTRA_END_HOUR = "com.example.lkjhgf.EXTRA_END_HOUR";
+    private static final String EXTRA_HAS_SPECIAL_RULE = "com.example.lkjhgf.EXTRA_HAS_SPECIAL_RULE";
+    private static final String EXTRA_NUM_PERSONS = "com.example.lkjhgf.EXTRA_NUM_PERSONS";
 
     /**
      * Deserialisierung eines JsonElements
@@ -132,10 +140,21 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                     distance);
         }else if(className.equals(NumTicket.class.getName())){ //Erzeugen eines neuen NumTickets
             String name = context.deserialize(jsonObject.get(EXTRA_NAME_TICKET), String.class);
-            int numTrips = context.deserialize(jsonObject.get(EXTRA_INT_NUM_TRIPS), Integer.class);
+            int numTrips = context.deserialize(jsonObject.get(EXTRA_INT_NUM_TRIPS), int.class);
             int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
             Fare.Type type = context.deserialize(jsonObject.get(EXTRA_FARE_TYPE), Fare.Type.class);
             return new NumTicket(numTrips, prices, name,type);
+        }else if(className.equals(TimeTicket.class.getName())){
+            String name = context.deserialize(jsonObject.get(EXTRA_NAME_TICKET), String.class);
+            int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
+            Fare.Type type = context.deserialize(jsonObject.get(EXTRA_FARE_TYPE), Fare.Type.class);
+            long maxDuration = context.deserialize(jsonObject.get(EXTRA_MAXDURATION), long.class);
+            int startHour = context.deserialize(jsonObject.get(EXTRA_START_HOUR), int.class);
+            int endHour = context.deserialize(jsonObject.get(EXTRA_END_HOUR), int.class);
+            int[] minNumTrips = context.deserialize(jsonObject.get(EXTRA_MIN_NUM_TRIPS), int[].class);
+            boolean hasSpecialRule = context.deserialize(jsonObject.get(EXTRA_HAS_SPECIAL_RULE), boolean.class);
+            int numPersons = context.deserialize(jsonObject.get(EXTRA_NUM_PERSONS), int.class);
+            return new TimeTicket(prices, name, type, maxDuration, minNumTrips, startHour, endHour, hasSpecialRule, numPersons);
         }
         return null;
     }
@@ -187,8 +206,15 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
             if(src instanceof NumTicket){
                 NumTicket numTicket = (NumTicket) src;
                 jsonObject.add(EXTRA_INT_NUM_TRIPS, context.serialize(numTicket.getNumTrips()));
+            }else{
+                TimeTicket timeTicket = (TimeTicket) src;
+                jsonObject.add(EXTRA_MAXDURATION, context.serialize(timeTicket.getMaxDuration()));
+                jsonObject.add(EXTRA_MIN_NUM_TRIPS, context.serialize(timeTicket.getMinNumTrips()));
+                jsonObject.add(EXTRA_START_HOUR, context.serialize(timeTicket.getStartHour()));
+                jsonObject.add(EXTRA_END_HOUR, context.serialize(timeTicket.getEndHour()));
+                jsonObject.add(EXTRA_HAS_SPECIAL_RULE, context.serialize(timeTicket.hasSpecialRule()));
+                jsonObject.add(EXTRA_NUM_PERSONS, context.serialize(timeTicket.getNumPersons()));
             }
-            //TODO Zeitticket
         }else {
             JsonElement element = context.serialize(src);
             jsonObject.add(DATA, element);

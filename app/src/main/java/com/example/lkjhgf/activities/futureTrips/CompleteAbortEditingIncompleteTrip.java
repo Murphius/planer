@@ -20,6 +20,8 @@ import java.util.HashMap;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
+import static com.example.lkjhgf.helper.futureTrip.MyTripList.ALL_SAVED_TRIPS;
+
 public class CompleteAbortEditingIncompleteTrip extends Activity {
 
     private MyTripList myTripList;
@@ -38,9 +40,9 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
         HashMap<Fare.Type, Integer> numUserClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
         TripItem newTripItem = new TripItem(trip, false, numUserClass);
-        ArrayList<TripItem> list = new ArrayList<>();
+        ArrayList<TripItem> list = MyTripList.loadTripList(this, ALL_SAVED_TRIPS);
         list.add(newTripItem);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(list,this);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(list, AllTickets.loadTickets(this), this);
         AllTickets.saveData(newTicketList, this);
         myTripList = new TripListComplete(this, view, newTripItem);
     }
@@ -56,7 +58,7 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this.getApplicationContext(), MainMenu.class);
-        myTripList.saveData();
+        myTripList.saveData(ALL_SAVED_TRIPS);
         //Sorgt dafür, dass der Aktivitäten Stack geleert wird
         finishAffinity();
         startActivity(intent);

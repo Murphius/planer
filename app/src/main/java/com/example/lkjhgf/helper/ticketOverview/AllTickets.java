@@ -12,6 +12,7 @@ import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -57,7 +58,7 @@ public class AllTickets {
     public AllTickets(Activity activity, View view) {
         this.activity = activity;
 
-        loadData(activity);
+        loadData(activity, 24*60*60*1000);
 
         TextView fullpriceHolder = view.findViewById(R.id.textView99);
 
@@ -69,7 +70,7 @@ public class AllTickets {
      * Lädt die gespeicherten Fahrscheine
      * @param activity zum laden benötigt
      */
-    private static void loadData(Activity activity) {
+    private static void loadData(Activity activity, long offset) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
@@ -83,6 +84,7 @@ public class AllTickets {
         builder.registerTypeAdapter(Trip.Leg.class, adapter);
         builder.registerTypeAdapter(Ticket.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
+        builder.registerTypeAdapter(TimeTicket.class, adapter);
         //TODO Zeitfahrscheine
         Gson gson = builder.create();
 
@@ -100,7 +102,7 @@ public class AllTickets {
             for (Fare.Type type1 : allTickets.keySet()) {
                 for (Iterator<TicketToBuy> it = allTickets.get(type1).iterator(); it.hasNext(); ) {
                     TicketToBuy current = it.next();
-                    if (current.isPastTicket()) {
+                    if (current.isPastTicket(offset)) {
                         it.remove();
                     } else {
                         fullPrice += MainMenu.myProvider.getTicketPrice(current.getTicket(), current.getPreisstufe());
@@ -129,7 +131,7 @@ public class AllTickets {
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
-        //TODO Zeitticket
+        builder.registerTypeAdapter(TimeTicket.class, adapter);
         Gson gson = builder.create();
 
         for (ArrayList<TicketToBuy> ticketList : allTickets.values()) {
@@ -161,7 +163,7 @@ public class AllTickets {
      * @return die gespeicherten Fahrten
      */
     public static HashMap<Fare.Type, ArrayList<TicketToBuy>> loadTickets(Activity activity) {
-        loadData(activity);
+        loadData(activity, 0);
         return allTickets;
     }
 

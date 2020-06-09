@@ -16,6 +16,7 @@ import com.example.lkjhgf.adapter.InterfaceAdapter;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener;
 import com.example.lkjhgf.recyclerView.futureTrips.TripAdapter;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -42,7 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public abstract class MyTripList {
 
-    static String ALL_SAVED_TRIPS = "com.example.lkjhgf.futureTrips.ALL_SAVED_TRIPS";
+    public static String ALL_SAVED_TRIPS = "com.example.lkjhgf.futureTrips.ALL_SAVED_TRIPS";
     static String SAVED_TRIPS = "com.example.lkjhgf.futureTrips.SAVED_TRIPS";
     private static String SAVED_TRIPS_TASK = "com.example.lkjhgf.futureTrips.SAVED_TRIPS_TASK";
 
@@ -60,7 +61,7 @@ public abstract class MyTripList {
     /**
      * Laden der alten Daten, einfügen der neuen Daten, Ansicht füllen <br/>
      * <p>
-     * Lädt die entsprechenden Fahrten, abhängig vom Datenpfad ({@link #loadData()}<br/>
+     * Lädt die entsprechenden Fahrten, abhängig vom Datenpfad ({@link #loadData(Activity, String dataPath)}<br/>
      * Fügt die übergebene Fahrt der Liste aller Fahrten hinzu ({@link #insertTrip(TripItem)}
      *
      * @param activity aufrufende Aktivität, zB zum starten der nächsten Aktivität
@@ -75,7 +76,7 @@ public abstract class MyTripList {
 
         insertTrip(tripItem);
         //TODO kann das hier stehen?
-        saveData();
+        saveData(dataPath);
 
         findID(view);
     }
@@ -257,6 +258,7 @@ public abstract class MyTripList {
     void removeItemAtPosition(int position) {
         tripItems.remove(position);
         adapter.notifyItemRemoved(position);
+        saveData(dataPath);
     }
 
     /**
@@ -267,7 +269,7 @@ public abstract class MyTripList {
      * @param newIntent enthält die Informationen, die an die nächste Aktivität übergeben werden sollen
      */
     void startNextActivity(Intent newIntent) {
-        saveData();
+        saveData(dataPath);
         activity.startActivity(newIntent);
     }
 
@@ -291,7 +293,7 @@ public abstract class MyTripList {
      * Speichern mittels Shared Preferences und GSON <br/>
      * Manuelle Serialisierung mittels {@link InterfaceAdapter} für Trip (Individual und Public) <br/>
      */
-    public void saveData() {
+    public void saveData(String dataPath) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
@@ -301,11 +303,16 @@ public abstract class MyTripList {
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
-        //TODO Zeitticket
+        builder.registerTypeAdapter(TimeTicket.class, adapter);
         Gson gson = builder.create();
         String json = gson.toJson(tripItems);
         editor.putString(SAVED_TRIPS_TASK, json);
         editor.apply();
+    }
+
+    private void loadData()
+    {
+        tripItems = loadData(activity, dataPath);
     }
 
     /**
@@ -318,7 +325,7 @@ public abstract class MyTripList {
      * Aus den gespeicherten Verbindungen, werden die Fahrten gelöscht, deren Ankunftszeitpunkt mehr als 24h
      * in der Vergangenheit liegen.
      */
-    void loadData() {
+    static ArrayList<TripItem> loadData(Activity activity, String dataPath) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
@@ -330,10 +337,11 @@ public abstract class MyTripList {
         builder.registerTypeAdapter(Trip.Leg.class, adapter);
         builder.registerTypeAdapter(Ticket.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
+        builder.registerTypeAdapter(TimeTicket.class, adapter);
         Gson gson = builder.create();
         Type type = new TypeToken<ArrayList<TripItem>>() {
         }.getType();
-        tripItems = gson.fromJson(json, type);
+        ArrayList<TripItem> tripItems = gson.fromJson(json, type);
         if (tripItems == null) {
             tripItems = new ArrayList<>();
         } else {
@@ -346,6 +354,11 @@ public abstract class MyTripList {
                 }
             }
         }
+        return tripItems;
+    }
+
+    public static ArrayList<TripItem> loadTripList(Activity activity, String dataPath){
+        return loadData(activity, dataPath);
     }
 
 }

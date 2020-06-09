@@ -75,6 +75,7 @@ public class TripListIncomplete extends MyTripList {
     void startEdit(int position) {
         TripItem current = tripItems.get(position);
         tripItems.remove(position);
+        saveData(SAVED_TRIPS);
         Intent newIntent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
@@ -106,32 +107,20 @@ public class TripListIncomplete extends MyTripList {
             //Liste leeren
             tripItems.clear();
             //Speichern, dass keine Fahrten geplant sind
-            saveData();
+            saveData(SAVED_TRIPS);
             //Laden aller gespeicherten Fahrten
-            dataPath = ALL_SAVED_TRIPS;
-            loadData();
+            tripItems = loadData(activity, ALL_SAVED_TRIPS);
             //Neue Fahrten hinzufügen
             for (TripItem item : copy) {
                 insertTrip(item);
             }
             //Optimieren der Fahrten
-            //Pair<Integer, Integer> test = TimeOptimisation.findBest24hInterval(tripItems, new TimeTicket(new int[]{720, 1470, 2530, 3040}, "24hTicket-1", Fare.Type.ADULT, 24*60*60*1000,2));
-            ArrayList<TimeTicket> timeTickets = new ArrayList<>();
-            timeTickets.add(new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, "24-StundenTicket-1", Fare.Type.ADULT, 24 * 60 * 60 * 1000, 2));
-            timeTickets.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, 5));
-            timeTickets.add(new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, "7-TageTicket", Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, 5));
-            timeTickets.add(new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, "30-TageTicket", Fare.Type.ADULT, 30 * 24 * 60 * 60 * 1000, 16));
-            ArrayList<TicketToBuy> ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(tripItems, timeTickets);
-            System.out.println("-------------------------------------------------------------------------------------------------");
-            System.out.println("#Tickets: " + ticketToBuyArrayList.size());
-            for (TicketToBuy t : ticketToBuyArrayList) {
-                System.out.println("\tTicketname:" + t.getTicket().getName() + " zugeordnete #Fahrten:" + t.getTripList().size());
-            }
-            System.out.println("-------------------------------------------------------------------------------------------------");
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
+            HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
+            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, savedTickets, activity);
+            //HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
             adapter.notifyDataSetChanged();
             AllTickets.saveData(newTicketList, activity);
-            saveData();
+            dataPath = ALL_SAVED_TRIPS;
 
             //TODO eigentlich anzeigen der Tickets statt aller Fahrten
             Intent newIntent = new Intent(activity.getApplicationContext(), Complete.class);

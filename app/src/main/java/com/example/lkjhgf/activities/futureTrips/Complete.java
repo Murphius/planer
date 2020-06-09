@@ -13,6 +13,8 @@ import com.example.lkjhgf.activities.MainMenu;
 
 import de.schildbach.pte.dto.Trip;
 
+import static com.example.lkjhgf.helper.futureTrip.MyTripList.ALL_SAVED_TRIPS;
+
 /**
  * Diese Aktivität handhabt die Übersicht über alle zukünftigen geplanten Fahrten <br/>
  * <p>
@@ -61,7 +63,7 @@ public class Complete extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this.getApplicationContext(), MainMenu.class);
-        myTripList.saveData();
+        myTripList.saveData(ALL_SAVED_TRIPS);
         //Sorgt dafür, dass der Aktivitäten Stack geleert wird
         finishAffinity();
         startActivity(intent);

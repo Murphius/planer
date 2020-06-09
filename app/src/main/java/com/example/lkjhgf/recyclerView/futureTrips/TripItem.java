@@ -5,6 +5,7 @@ import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.io.Serializable;
@@ -52,13 +53,8 @@ public class TripItem implements Serializable {
     }
 
     private HashMap<Fare.Type, Integer> numUserClasses;
+    private HashMap<Fare.Type, Integer> usersWithoutTicket;
     private HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> allTicketInformations;
-
-
-    /**
-     * Kurze Zusammenfassung der Abfolge von Verkehrsmitteln
-     */
-    //private ArrayList<JourneyItem> journeyItems;
 
     /**
      * Konstruktor für Fahrten, deren Fahrkosten nicht optimiert werden sollen<br/>
@@ -76,9 +72,16 @@ public class TripItem implements Serializable {
             preisstufe = "?";
         }
         numUserClasses = new HashMap<>();
-        //journeyItems = UtilsList.journeyItems(trip.legs);
-
+        usersWithoutTicket = new HashMap<>();
         allTicketInformations = new HashMap<>();
+    }
+
+    public TripItem(HashMap<Fare.Type, Integer> numUserClasses) {
+        trip = null;
+        preisstufe = "";
+        this.numUserClasses = new HashMap(numUserClasses);
+        allTicketInformations = new HashMap<>();
+        usersWithoutTicket = new HashMap(numUserClasses);
     }
 
     /**
@@ -87,11 +90,13 @@ public class TripItem implements Serializable {
      * @param trip           - enthält alle Informationen zur Reise, die unabhängig von der Optimierung sind
      * @param isComplete     - gibt an, ob die Fahrt bei der Optimierung berücksichtigt werdne soll <br/>
      *                       true - soll berücksichtigt werden
-     * @param numUserClasses gibt an, wie viele Personen einer Nutzerklasse reisen
+     * @param numUserClasses gibt an, wie viele Personen einer Nutzerklasse reisen - stimmt zu Beginn mit der Anzahl
+     *                       Personen ohne Ticket überein
      */
     public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses) {
         this(trip, isComplete);
-        this.numUserClasses = numUserClasses;
+        this.numUserClasses = new HashMap(numUserClasses);
+        this.usersWithoutTicket = new HashMap(numUserClasses);
     }
 
     public Trip getTrip() {
@@ -115,8 +120,8 @@ public class TripItem implements Serializable {
      * Fügt der Fahrt ein weiteres Ticket hinzu <br/>
      * <p>
      * Wenn das Ticket bereits enthalten ist, dann wird nur die Häufigkeit des Tickets erhöht, sonst wird
-     * das Ticket neu in die Liste der zugeordneten Tickets eingefügt
-     *
+     * das Ticket neu in die Liste der zugeordneten Tickets eingefügt <br/>
+     * Jedes Ticket verringert die Anzahl der Nutzer ohne Tickets um 1
      * @param ticket Ticket, dass der Fahrt hinzugefügt werden soll
      */
     public void addTicket(TicketToBuy ticket) {
@@ -138,6 +143,12 @@ public class TripItem implements Serializable {
             if (!contains) {
                 c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
             }
+        }
+        if(ticket.getTicket() instanceof TimeTicket){
+            int value = Math.max(0, usersWithoutTicket.get(ticket.getTicket().getType()) - ((TimeTicket)ticket.getTicket()).getNumPersons());
+            usersWithoutTicket.put(ticket.getTicket().getType(), value);
+        } else {
+            usersWithoutTicket.put(ticket.getTicket().getType(), usersWithoutTicket.get(ticket.getTicket().getType()) - 1);
         }
     }
 
@@ -176,13 +187,12 @@ public class TripItem implements Serializable {
                         if (ticketList.get(i).ticket.getName().equals(ticketsToUse.get(j).getName())) {
                             if (ticketList.get(i).ticketPreisstufe.equals(preisstufeToUse.get(j))) {
                                 num.set(j, num.get(j) + ticketList.get(i).quantity);
-                                contains = true;
                             } else {
                                 ticketList.add(ticketList.get(i));
                                 preisstufeToUse.add(ticketList.get(i).ticketPreisstufe);
                                 num.add(ticketList.get(i).quantity);
-                                contains = true;
                             }
+                            contains = true;
                         }
                     }
                     if (!contains) {
@@ -232,18 +242,35 @@ public class TripItem implements Serializable {
         return ticketIDs;
     }
 
+    public void removeTickets(Fare.Type type, UUID uuid)
+    {
+        removeTickets(type, uuid, 1);
+    }
+
     /**
      * Entfernt das Ticket mit der jeweiligen ID
      *
      * @param type gibt den Type des Tickets an, beschleunigt das Finden des Tickets
      * @param uuid ID des zu löschenden Tickets
      */
-    public void removeTickets(Fare.Type type, UUID uuid) {
+    public void removeTickets(Fare.Type type, UUID uuid, int quantity) {
         ArrayList<TripTicketInformationHolder> d = allTicketInformations.get(type);
         for (Iterator<TripTicketInformationHolder> iterator = d.iterator(); iterator.hasNext(); ) {
             TripTicketInformationHolder current = iterator.next();
             if (current.ticketIdentifier.equals(uuid)) {
-                iterator.remove();
+                current.quantity-= quantity;
+                if(current.quantity == 0){
+                    iterator.remove();
+                }
+                int numPersonsOnTicket;
+                if(current.ticket instanceof TimeTicket){
+                    numPersonsOnTicket = ((TimeTicket) current.ticket).getNumPersons();
+                }else{
+                    numPersonsOnTicket = quantity;
+                }
+                //TODO
+                int value = Math.min(numPersonsOnTicket + usersWithoutTicket.get(type), numUserClasses.get(type));
+                usersWithoutTicket.put(type, value);
             }
         }
     }
@@ -261,7 +288,7 @@ public class TripItem implements Serializable {
             return false;
         }
         TripItem otherTripItem = (TripItem) o;
-        return otherTripItem.trip.getId().equals(this.trip.getId());
+        return otherTripItem.getTripID().equals(this.getTripID());
     }
 
     public HashMap<Fare.Type, Integer> getNumUserClasses() {
@@ -276,12 +303,20 @@ public class TripItem implements Serializable {
         return preisstufe;
     }
 
-    public Date getFirstDepartureTime(){
+    public Date getFirstDepartureTime() {
         return trip.getFirstDepartureTime();
     }
 
-    public Date getLastArrivalTime(){
+    public Date getLastArrivalTime() {
         return trip.getLastArrivalTime();
+    }
+
+    public int getUserClassWithoutTicket(Fare.Type type){
+        return usersWithoutTicket.get(type);
+    }
+
+    public String getTripID() {
+        return trip.getId();
     }
 
     /**
@@ -305,6 +340,10 @@ public class TripItem implements Serializable {
                 if (restTicket != 0) {
                     value.append("1x ").append(numTicket.toString()).append(" \n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \t").append(restTicket).append("x entwerten");
                 }
+            }else{
+                TimeTicket timeTicket = (TimeTicket) ticketsToUse.get(i);
+                int wholeTickets = num.get(i);
+                value.append(wholeTickets).append("x ").append(timeTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i));
             }
             if (i != ticketsToUse.size() - 1) {
                 value.append("\n");

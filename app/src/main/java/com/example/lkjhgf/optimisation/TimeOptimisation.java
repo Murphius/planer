@@ -8,19 +8,17 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 public class TimeOptimisation {
 
-    public static Pair<Integer, Integer> findBest24hInterval(ArrayList<TripItem> tripItems, TimeTicket ticket) {
+    public static Pair<Integer, Integer> findBestTimeInterval(ArrayList<TripItem> tripItems, TimeTicket ticket) {
         int maxIndex = Integer.MAX_VALUE;
         int maxTrips = 0;
 
         for (int i = 0; i < tripItems.size(); i++) {
-            long startTime = tripItems.get(i).getFirstDepartureTime().getTime();
-            long endTime = tripItems.get(i).getLastArrivalTime().getTime();
-
-            if (endTime - startTime <= ticket.getMaxDuration()) {
+            if (ticket.isValidTrip(tripItems.get(i))) {
                 maxIndex = i;
                 maxTrips = 1;
                 break;
@@ -31,19 +29,19 @@ public class TimeOptimisation {
         if (maxIndex == Integer.MAX_VALUE) {
             return new Pair<>(0, 0);
         }
-        long startTime = tripItems.get(maxIndex).getTrip().getFirstDepartureTime().getTime();
-        long endTime = tripItems.get(tripItems.size() - 1).getTrip().getLastArrivalTime().getTime();
+        long startTime = tripItems.get(maxIndex).getFirstDepartureTime().getTime();
+        long endTime = tripItems.get(tripItems.size() - 1).getLastArrivalTime().getTime();
         //Zur Laufzeitoptimierung
-        if (endTime - startTime <= ticket.getMaxDuration()) {
+        if (ticket.isValidTrip(tripItems.get(tripItems.size() - 1)) && endTime - startTime <= ticket.getMaxDuration()) {
             return new Pair<>(maxIndex, tripItems.size() - maxIndex);
         }
 
         for (int i = maxIndex; i < tripItems.size(); i++) {
             int counter = 1;
             for (int k = i + 1; k < tripItems.size(); k++) {
-                startTime = tripItems.get(i).getTrip().getFirstDepartureTime().getTime();
-                endTime = tripItems.get(k).getTrip().getLastArrivalTime().getTime();
-                if (endTime - startTime <= ticket.getMaxDuration()) {
+                startTime = tripItems.get(i).getFirstDepartureTime().getTime();
+                endTime = tripItems.get(k).getLastArrivalTime().getTime();
+                if (ticket.isValidTrip(tripItems.get(k)) && endTime - startTime <= ticket.getMaxDuration()) {
                     counter++;
                 } else {
                     //TODO Überlappung von Fahrten verhindern
@@ -60,48 +58,49 @@ public class TimeOptimisation {
 
     public static ArrayList<TicketToBuy> optimierungPreisstufeD(ArrayList<TripItem> allTrips, ArrayList<TimeTicket> tickets) {
         int preisstufenIndex = MainMenu.myProvider.getPreisstufenSize() - 1;
-        ArrayList<TripItem> tripsD = collectTripsPreisstufeD(allTrips, preisstufenIndex);
+        ArrayList<TripItem> tripsD = collectTripsPreisstufe(allTrips, preisstufenIndex);
         if (tripsD.isEmpty()) {
             return new ArrayList<>();
         }
 
         ArrayList<TicketToBuy> toBuyArrayList = new ArrayList<>();
 
-        for(int ticketIndex = 0; ticketIndex < tickets.size(); ticketIndex++){
-            Pair<Integer, Integer> best24hIntervall = findBest24hInterval(tripsD, tickets.get(ticketIndex));
-
-            while (best24hIntervall.second >= tickets.get(ticketIndex).getMinNumTrips()) {
-                TicketToBuy ticketToBuy = new TicketToBuy(tickets.get(ticketIndex), MainMenu.myProvider.getPreisstufe(preisstufenIndex));
-                toBuyArrayList.add(ticketToBuy);
-                int i = 0;
-                for (ListIterator<TripItem> listIterator = tripsD.listIterator(); i < best24hIntervall.first + best24hIntervall.second; ) {
-                    TripItem current = listIterator.next();
-                    if (i >= best24hIntervall.first) {
-                        listIterator.remove();
-                        ticketToBuy.addTripItem(current);
-                        //TODO einkommentieren
-                        //allTrips.remove(current);
+        for (int ticketIndex = 0; ticketIndex < tickets.size(); ticketIndex++) {
+            if (allTrips.size() >= tickets.get(ticketIndex).getMinNumTrips(preisstufenIndex)) {
+                Pair<Integer, Integer> bestTicketInterval = findBestTimeInterval(tripsD, tickets.get(ticketIndex));
+                while (bestTicketInterval.second >= tickets.get(ticketIndex).getMinNumTrips(preisstufenIndex)) {
+                    TicketToBuy ticketToBuy = new TicketToBuy(tickets.get(ticketIndex), MainMenu.myProvider.getPreisstufe(preisstufenIndex));
+                    toBuyArrayList.add(ticketToBuy);
+                    int i = 0;
+                    for (ListIterator<TripItem> listIterator = tripsD.listIterator(); i < bestTicketInterval.first + bestTicketInterval.second; ) {
+                        TripItem current = listIterator.next();
+                        if (i >= bestTicketInterval.first) {
+                            listIterator.remove();
+                            ticketToBuy.addTripItem(current);
+                            allTrips.remove(current);
+                        }
+                        i++;
                     }
-                    i++;
+                    bestTicketInterval = findBestTimeInterval(tripsD, tickets.get(ticketIndex));
                 }
-                best24hIntervall = findBest24hInterval(tripsD, tickets.get(0));
+                if (toBuyArrayList.size() > 1) {
+                    Collections.sort(toBuyArrayList, (o1, o2) -> Math.toIntExact(o1.getFirstDepartureTime().getTime() - o2.getFirstDepartureTime().getTime()));
+                    sumUpTickets(toBuyArrayList, tickets, ticketIndex, preisstufenIndex);
+                }
             }
-            if (toBuyArrayList.size() > 1) {
-                Collections.sort(toBuyArrayList, (o1, o2) -> Math.toIntExact(o1.getFirstDepartureTime().getTime() - o2.getFirstDepartureTime().getTime()));
-                sumUpTickets(toBuyArrayList, tickets, ticketIndex, preisstufenIndex);
-            }
+
         }
         return toBuyArrayList;
     }
 
-    private static ArrayList<TripItem> collectTripsPreisstufeD(ArrayList<TripItem> allTrips, int preisstufenIndex) {
+    private static ArrayList<TripItem> collectTripsPreisstufe(ArrayList<TripItem> allTrips, int preisstufenIndex) {
         ArrayList<TripItem> trips = new ArrayList<>();
         for (ListIterator<TripItem> tripIterator = allTrips.listIterator(allTrips.size()); tripIterator.hasPrevious(); ) {
             TripItem current = tripIterator.previous();
-            if (MainMenu.myProvider.getPreisstufenIndex(current.getPreisstufe()) < preisstufenIndex) {
-                break;
-            } else {
+            if (MainMenu.myProvider.getPreisstufenIndex(current.getPreisstufe()) == preisstufenIndex) {
                 trips.add(0, current);
+            } else if (MainMenu.myProvider.getPreisstufenIndex(current.getPreisstufe()) < preisstufenIndex) {
+                break;
             }
         }
         return trips;
@@ -111,7 +110,7 @@ public class TimeOptimisation {
         for (int ticketIndex = startIndex; ticketIndex < timeTickets.size(); ticketIndex++) {
             TimeTicket currentTicket = timeTickets.get(ticketIndex);
             int price = currentTicket.getPrice(preisstufenIndex);
-            int duration = currentTicket.getMaxDuration();
+            long duration = currentTicket.getMaxDuration();
             ArrayList<TicketToBuy> newTickets = new ArrayList<>();
 
             //TODO i++??
@@ -148,4 +147,22 @@ public class TimeOptimisation {
             Collections.sort(oldTickets, (o1, o2) -> Math.toIntExact(o1.getFirstDepartureTime().getTime() - o2.getFirstDepartureTime().getTime()));
         }
     }
+
+    public static void checkTicketForOtherTrips(ArrayList<TripItem> tripItems, ArrayList<TicketToBuy> ticketsToBuy) {
+        for (TicketToBuy ticketToBuy : ticketsToBuy) {
+            TimeTicket timeTicket = (TimeTicket) ticketToBuy.getTicket();
+            for (Iterator<TripItem> tripItemIterator = tripItems.iterator(); tripItemIterator.hasNext(); ) {
+                TripItem current = tripItemIterator.next();
+                if (MainMenu.myProvider.getPreisstufenIndex(current.getPreisstufe()) <= MainMenu.myProvider.getPreisstufenIndex(ticketToBuy.getPreisstufe())) {
+                    if (current.getFirstDepartureTime().getTime() >= ticketToBuy.getFirstDepartureTime().getTime()
+                            && current.getLastArrivalTime().getTime() <= timeTicket.getMaxDuration() + ticketToBuy.getFirstDepartureTime().getTime()
+                            && timeTicket.isValidTrip(current)) {
+                        ticketToBuy.addTripItem(current);
+                        tripItemIterator.remove();
+                    }
+                }
+            }
+        }
+    }
+
 }

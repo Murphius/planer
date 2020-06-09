@@ -11,7 +11,6 @@ import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
 import com.example.lkjhgf.activities.singleTrip.EditTrip;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
-import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
@@ -232,10 +231,10 @@ public class TripListComplete extends MyTripList {
     private void removeTripAndTicket(int position) {
         //Optimierung wie gehabt, ohne die gelöschte Fahrt
         tripItems.remove(position);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, AllTickets.loadTickets(activity), activity);
         adapter.notifyDataSetChanged();
         AllTickets.saveData(newTicketList, activity);
-        saveData();
+        saveData(ALL_SAVED_TRIPS);
     }
 
     /**
@@ -254,13 +253,13 @@ public class TripListComplete extends MyTripList {
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allSavedTickets = AllTickets.loadTickets(activity);
         Set<Fare.Type> keys = currentTrip.getNumUserClasses().keySet();
         for (Fare.Type type : keys) {
-            ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
-            ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
-            for (UUID currentTicketUUID : ticketUUIDs) {
-                for (Iterator<TicketToBuy> iteratorTicketToBuy = tickets.iterator(); iteratorTicketToBuy.hasNext(); ) {
+            ArrayList<UUID> currentTicketUUIDs = currentTrip.getTicketIDs(type);
+            ArrayList<TicketToBuy> possibleTickets = allSavedTickets.get(type);
+            for (UUID currentTicketUUID : currentTicketUUIDs) {
+                for (Iterator<TicketToBuy> iteratorTicketToBuy = possibleTickets.iterator(); iteratorTicketToBuy.hasNext(); ) {
                     TicketToBuy currentTicketToBuy = iteratorTicketToBuy.next();
                     if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
-                        if (currentTicketToBuy.removeTrip(currentTrip.getTrip().getId())) {
+                        if (currentTicketToBuy.removeTrip(currentTrip.getTripID())) {
                             //Ticket entfernen, da dies keine weitenen Fahrten belegt hat -> kann gelöscht werden
                             iteratorTicketToBuy.remove();
                         }
@@ -272,9 +271,9 @@ public class TripListComplete extends MyTripList {
         adapter.notifyDataSetChanged();
         //TODO überprüfen
         AllTickets.saveData(allSavedTickets, activity);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems,AllTickets.loadTickets(activity), activity);
         AllTickets.saveData(newTicketList, activity);
-        saveData();
+        saveData(ALL_SAVED_TRIPS);
     }
 
     /**
