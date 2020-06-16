@@ -1,6 +1,7 @@
 package com.example.lkjhgf.helper.futureTrip;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Pair;
 import android.view.View;
@@ -10,6 +11,8 @@ import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.helper.util.Utils;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeOptimisation;
@@ -111,21 +114,35 @@ public class TripListIncomplete extends MyTripList {
             //Laden aller gespeicherten Fahrten
             tripItems = loadData(activity, ALL_SAVED_TRIPS);
             //Neue Fahrten hinzufügen
+            int size = tripItems.size();
             for (TripItem item : copy) {
                 insertTrip(item);
             }
-            //Optimieren der Fahrten
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
-            HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, savedTickets, activity);
-            //HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = OptimisationUtil.startOptimisation(tripItems, activity);
-            adapter.notifyDataSetChanged();
-            AllTickets.saveData(newTicketList, activity);
-            dataPath = ALL_SAVED_TRIPS;
-
-            //TODO eigentlich anzeigen der Tickets statt aller Fahrten
-            Intent newIntent = new Intent(activity.getApplicationContext(), Complete.class);
-            startNextActivity(newIntent);
+            UtilsList.removeOverlappingTrips(tripItems);
+            if (tripItems.size() != size + copy.size()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage("Nicht alle Fahrten konnten hinzugefügt werden \n Mögliche Ursachen: Fahrten sind bereits in der Liste, Fahrten haben sich überlappt, ...");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Ok", (dialog, which) -> startOptimierung());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }else{
+                startOptimierung();
+            }
         });
+    }
+
+    private void startOptimierung(){
+        //Optimieren der Fahrten
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, savedTickets, activity);
+        adapter.notifyDataSetChanged();
+        AllTickets.saveData(newTicketList, activity);
+        dataPath = ALL_SAVED_TRIPS;
+
+        //TODO eigentlich anzeigen der Tickets statt aller Fahrten
+        Intent newIntent = new Intent(activity.getApplicationContext(), Complete.class);
+        startNextActivity(newIntent);
     }
 
 }

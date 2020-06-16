@@ -6,6 +6,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.futureTrip.TripListComplete;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
@@ -468,6 +469,391 @@ public class optimierungsTestD {
         trips.add(tripItem03);
 
 
+
+    }
+
+    @Test
+    public void testNewOpti(){
+        ArrayList<TripItem> trips = new ArrayList<>();
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3));
+
+        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        Assert.assertEquals(tickets.size(), 1);
+        Assert.assertEquals(tickets.get(0).getTripList().size(), 3);
+        Assert.assertEquals(tickets.get(0).getTicket().getName(), "24-StundenTicket-1");
+
+        trips.clear();
+        tickets.clear();
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1));
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2));
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 4));
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 5));
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 6));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 26, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 26, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 7));
+
+        startCalendar.set(2020, Calendar.JUNE, 26, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 26, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 8));
+
+        startCalendar.set(2020, Calendar.JUNE, 26, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 26, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 9));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 10));
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 11));
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 12));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 30, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 30, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 13));
+
+        startCalendar.set(2020, Calendar.JUNE, 30, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 30, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 14));
+
+        startCalendar.set(2020, Calendar.JUNE, 30, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 30, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 15));
+
+        System.gc();
+        long start = System.currentTimeMillis();
+        tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        long ende = System.currentTimeMillis();
+        long sekunden = (ende-start) / 1000;
+        long msekunden = (ende-start)%1000;
+        Assert.assertFalse(tickets.isEmpty());
+        Assert.assertEquals(tickets.size(),2);
+        boolean case1 = (tickets.get(0).getTicket().getName().equals("7-TageTicket")) && (tickets.get(1).getTicket().getName().equals("24-StundenTicket-1"));
+        boolean case2 = (tickets.get(1).getTicket().getName().equals("7-TageTicket")) && (tickets.get(0).getTicket().getName().equals("24-StundenTicket-1"));
+        Assert.assertTrue(case1||case2);
+
+        trips.clear();
+        tickets.clear();
+        int i = 0;
+        startCalendar.set(2020, Calendar.JUNE, 1, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 1, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 1, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 1, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 1, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 1, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 3, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 3, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 3, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 3, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 3, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 3, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 5, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 5, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 5, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 5, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 5, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 5, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 15, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 15, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 15, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 15, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 15, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 15, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 22, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 22, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 24, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 24, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JUNE, 29, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 29, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JULY, 1, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 1, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 1, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 1, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 1, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 1, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JULY, 6, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 6, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 6, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 6, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 6, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 6, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JULY, 13, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 13, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 13, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 13, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 13, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 13, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JULY, 20, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 20, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 20, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 20, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 20, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 20, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 27, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 27, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 27, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 27, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 27, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 27, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+
+        startCalendar.set(2020, Calendar.JULY, 29, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 29, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 29, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 29, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 29, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 29, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 31, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 31, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 31, 11, 0);
+        endCalendar.set(2020, Calendar.JULY, 31, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        startCalendar.set(2020, Calendar.JULY, 31, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 31, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
+
+        System.out.println(i);
+        System.gc();
+        start = System.currentTimeMillis();
+        tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        ende = System.currentTimeMillis();
+        sekunden = (ende-start) / 1000;
+        msekunden = (ende-start)%1000;
+        Assert.assertFalse(tickets.isEmpty());
+    }
+
+    @Test
+    public void testRemoveOverlappingTrips(){
+        ArrayList<TripItem> trips = new ArrayList<>();
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        int id = 1;
+        startCalendar.set(2020, Calendar.JUNE, 20, 10, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 10,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 10, 5);
+        endCalendar.set(2020, Calendar.JUNE, 20, 10,35);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        UtilsList.removeOverlappingTrips(trips);
+        Assert.assertFalse(trips.isEmpty());
+        Assert.assertEquals(trips.size(), 1);
+        Assert.assertEquals(trips.get(0).getTripID(), "1");
+
+        trips.clear();
+        id = 1;
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        UtilsList.removeOverlappingTrips(trips);
+        Assert.assertFalse(trips.isEmpty());
+        Assert.assertEquals(trips.size(), 1);
+        Assert.assertEquals(trips.get(0).getTripID(), "1");
+
+        trips.clear();
+        id = 1;
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 12, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 13, 15);
+        endCalendar.set(2020, Calendar.JUNE, 20, 13,55);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 13, 20);
+        endCalendar.set(2020, Calendar.JUNE, 20, 13,54);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        UtilsList.removeOverlappingTrips(trips);
+        Assert.assertFalse(trips.isEmpty());
+        Assert.assertEquals(trips.size(), 3);
+        Assert.assertEquals(trips.get(0).getTripID(),"1");
+        Assert.assertEquals(trips.get(1).getTripID(),"3");
+        Assert.assertEquals(trips.get(2).getTripID(),"4");
+
+        trips.clear();
+        id = 1;
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
+        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 11, 20);
+        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 13, 15);
+        endCalendar.set(2020, Calendar.JUNE, 20, 13,55);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        startCalendar.set(2020, Calendar.JUNE, 20, 13, 20);
+        endCalendar.set(2020, Calendar.JUNE, 20, 13,54);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+
+        UtilsList.removeOverlappingTrips(trips);
+        Assert.assertFalse(trips.isEmpty());
+        Assert.assertEquals(trips.size(),2);
 
     }
 

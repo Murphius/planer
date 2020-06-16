@@ -36,6 +36,8 @@ public abstract class MyProvider implements Comparator<TripItem> {
      */
     private int maxNumTrip;
 
+    ArrayList<Farezone> farezones;
+
     /**
      * Initialisiert alle Attribute der Klasse
      *
@@ -43,11 +45,12 @@ public abstract class MyProvider implements Comparator<TripItem> {
      * @param allTicketsHashMap Alle Tickets je Preisstufe
      * @param provider          NetworkProvider für den Verkehrsverbund
      */
-    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsHashMap, NetworkProvider provider) {
+    void initialise(String[] preisstufen, HashMap<Fare.Type, ArrayList<Ticket>> allTicketsHashMap, NetworkProvider provider, ArrayList<Farezone> farezones) {
         this.preisstufen = preisstufen;
         this.allTicketsMap = allTicketsHashMap;
         this.provider = provider;
         maxNumTrip = calculateMaxNumTrip();
+        this.farezones = farezones;
     }
 
     /**
@@ -147,8 +150,8 @@ public abstract class MyProvider implements Comparator<TripItem> {
         return allTicketsMap;
     }
 
-    public Set<Fare.Type> getAllFareTypes(){
-        return allTicketsMap.keySet();
+    public ArrayList<Farezone> getFarezones(){
+        return farezones;
     }
 
     /**

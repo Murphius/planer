@@ -5,6 +5,7 @@ import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.components.StopoverItem;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
@@ -17,10 +18,12 @@ import de.schildbach.pte.dto.Product;
 import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
+import static com.example.lkjhgf.helper.util.Utils.isOverlapping;
+
 /**
- *   Enthält Funktionen, die in verschiednen Klassen verwendet werden <br/>
- *   <p>
- *   Das Erzeugen der Listen für die RecyclerViews findet hier statt
+ * Enthält Funktionen, die in verschiednen Klassen verwendet werden <br/>
+ * <p>
+ * Das Erzeugen der Listen für die RecyclerViews findet hier statt
  */
 public final class UtilsList {
     /**
@@ -47,6 +50,7 @@ public final class UtilsList {
         }
         return connection_items;
     }
+
     /**
      * Wandelt eine Liste an Trips in eine Liste von ConnectionItems um, deren Fahrten alle in der Zukunft liegen <br/>
      * <p>
@@ -58,16 +62,16 @@ public final class UtilsList {
      * @param trips Liste an möglichen Verbindungen
      * @return Liste mit {@link ConnectionItem}, für die Service Ansicht, welche Fahrten in der Zukunft liegen
      */
-    public static ArrayList<ConnectionItem> fillFutureConnectionList(List<Trip> trips){
-        if (trips == null){
+    public static ArrayList<ConnectionItem> fillFutureConnectionList(List<Trip> trips) {
+        if (trips == null) {
             return new ArrayList<>();
         }
         ArrayList<ConnectionItem> connectionItems = new ArrayList<>();
-        for(Iterator<Trip> iterator = trips.iterator(); iterator.hasNext(); ){
+        for (Iterator<Trip> iterator = trips.iterator(); iterator.hasNext(); ) {
             Trip trip = iterator.next();
-            if(trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
+            if (trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())) {
                 iterator.remove();
-            }else if(trip.isTravelable()){
+            } else if (trip.isTravelable()) {
                 connectionItems.add(new ConnectionItem(trip, journeyItems(trip.legs)));
             }
         }
@@ -268,5 +272,21 @@ public final class UtilsList {
             }
         }
         return items;
+    }
+
+    public static void removeOverlappingTrips(ArrayList<TripItem> tripItems) {
+        Iterator<TripItem> iterator = tripItems.iterator();
+        TripItem current = iterator.next();
+        while (iterator.hasNext()) {
+            while (iterator.hasNext()) {
+                TripItem next = iterator.next();
+                if (isOverlapping(current.getFirstDepartureTime(), current.getLastArrivalTime(), next.getFirstDepartureTime(), next.getLastArrivalTime())) {
+                    iterator.remove();
+                } else if (current.getLastArrivalTime().before(next.getFirstDepartureTime())) {
+                    current = next;
+                    break;
+                }
+            }
+        }
     }
 }

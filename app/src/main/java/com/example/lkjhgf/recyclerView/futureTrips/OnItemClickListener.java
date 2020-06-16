@@ -6,7 +6,7 @@ import com.example.lkjhgf.helper.futureTrip.MyTripList;
  * Interface mit den Methoden, die bei dem jeweiligen Click auf das Item beziehungsweise den Button
  * ausgeführt werden soll<br/>
  * <p>
- *  Implementierung in {@link MyTripList#recyclerViewBlah()}
+ *  Implementierung in {@link MyTripList#setRecyclerView()}
  * </p>
  */
 public interface OnItemClickListener {

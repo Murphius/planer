@@ -25,6 +25,8 @@ import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Location;
 
+import static com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.VRR_Farezones.createVRRFarezone;
+
 public class MyVRRprovider extends MyProvider {
 
     private static final String tagesTicket_1_s = "24-StundenTicket-1";
@@ -86,7 +88,7 @@ public class MyVRRprovider extends MyProvider {
 
         NetworkProvider provider = new VrrProvider();
 
-        initialise(preisstufen, allTickets, provider);
+        initialise(preisstufen, allTickets, provider, createVRRFarezone());
     }
 
     /**
@@ -202,7 +204,7 @@ public class MyVRRprovider extends MyProvider {
         MyVrrTimeOptimisationHelper.optimisationWithOldTickets(tripsPerUserClass, freeTickets);
         //Aufteilen der Fahrten jeder Nutzerklasse auf die jeweilige Personenanzahl
         HashMap<Fare.Type, HashMap<Integer, ArrayList<TripItem>>> sortedTrips = createUserClassHashMap(tripsPerUserClass);
-        //TODO derzeit nur ohne Löschen & editieren - keine berücksichtigung bereits angefangener optimierter fahrscheine
+
         HashMap<Fare.Type, ArrayList<TripItem>> tripsWithoutTimeTicket = new HashMap<>();
         //Zeitoptimierung
         for (Fare.Type type : sortedTrips.keySet()) {
@@ -249,7 +251,7 @@ public class MyVRRprovider extends MyProvider {
                 if (preisstufe.get(i).equals(preisstufen[0])) {
                     value.append("\n \tEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                 } else if (preisstufe.get(i).equals(preisstufen[1]) || preisstufe.get(i).equals(preisstufen[2]) || preisstufe.get(i).equals(preisstufen[3])) {
-                    String startID = startLocation.id.substring(1);
+                    /*String startID = startLocation.id.substring(1);
                     String destinationID = destinationLocation.id.substring(1);
                     int startIDint = Integer.parseInt(startID);
                     int destinationIDint = Integer.parseInt(destinationID);
@@ -269,9 +271,21 @@ public class MyVRRprovider extends MyProvider {
                             value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                             value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
                         }
+                    }*/
+                    int startID = tripItem.getStartID();
+                    int destinationID = tripItem.getDestinationID();
+                    if(startID/10 != destinationID/10){
+                        value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
+                        value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
+                    }else{
+                        for(int j = 0; j < farezones.size(); j++){
+                            if(farezones.get(j).getId()/10 == startID){
+                                value.append("\n \tEntwerten für das Tarifgebiet: ").append(farezones.get(j).getName());
+                            }
+                        }
                     }
                 } else {
-                    startLocation = tripItem.getTrip().from;
+                    /*startLocation = tripItem.getTrip().from;
                     String startID = startLocation.id.substring(1);
                     int startIDint = Integer.parseInt(startID);
                     testAsyncTaskextends wabenTask = new testAsyncTaskextends();
@@ -284,8 +298,12 @@ public class MyVRRprovider extends MyProvider {
                     }
                     if (!waben.isEmpty()) {
                         value.append("\n\tEntwerten für das Tarifgebiet: ").append(waben.get(0) / 10);
+                    }*/
+                    for(int j = 0; j < farezones.size(); j++) {
+                        if (farezones.get(j).getId() == tripItem.getStartID()/10) {
+                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(farezones.get(j).getName());
+                        }
                     }
-
                 }
             } else {
                 value.append(quantity + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));

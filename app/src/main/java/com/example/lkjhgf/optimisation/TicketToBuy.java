@@ -3,6 +3,7 @@ package com.example.lkjhgf.optimisation;
 import androidx.annotation.NonNull;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.publicTransport.provider.Farezone;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      * ID
      */
     private UUID ticketID;
+
+    private ArrayList<Farezone> validFarezones;
 
     /**
      * Enthält die Informationen zu einer Fahrt und wie oft dieser diesem Ticket zugeordnet ist
@@ -88,6 +91,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         tripQuantities = new ArrayList<>();
         calculateFreeTrips();
         ticketID = UUID.randomUUID();
+        validFarezones = new ArrayList<>();
     }
 
     /**
@@ -263,6 +267,23 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
 
     public UUID getTicketID() {
         return ticketID;
+    }
+
+    public void setValidFarezones(ArrayList<Farezone> validFarezones) {
+        this.validFarezones = validFarezones;
+    }
+
+    public ArrayList<Farezone> getValidFarezones() {
+        return validFarezones;
+    }
+
+    public boolean checkFarezone(int farezoneID){
+        for(Farezone f : validFarezones){
+            if(farezoneID == f.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

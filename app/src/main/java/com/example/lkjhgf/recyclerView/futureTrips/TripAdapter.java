@@ -74,7 +74,9 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
                 false);
         holder.recyclerView.setLayoutManager(journey_layout);
         holder.recyclerView.setAdapter(journey_adapter);
-
+        if(currentItem.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
+            holder.buttonClass.hideButtons();
+        }
         // einzelne Fahrt
         if(currentItem.isComplete()){
             // zur Unterscheidung wird die Farbe anders gesetzt
@@ -88,9 +90,8 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
             holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
         }else{
-            if(currentItem.getTrip().getLastArrivalTime().before(Calendar.getInstance().getTime())){
+            if(currentItem.getLastArrivalTime().before(Calendar.getInstance().getTime())){
                 holder.view.setBackgroundColor(activity.getResources().getColor(R.color.un_graceful, null));
-                holder.buttonClass.hideButtons();
             }
             //TODO Erweiterung für weitere Nutzerklassen
             // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt

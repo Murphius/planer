@@ -26,6 +26,7 @@ import de.schildbach.pte.dto.Trip;
  */
 public class TripItem implements Serializable {
     private Trip trip;
+    private int startID, destinationID;
     private String preisstufe;
     private boolean isComplete;
 
@@ -93,8 +94,10 @@ public class TripItem implements Serializable {
      * @param numUserClasses gibt an, wie viele Personen einer Nutzerklasse reisen - stimmt zu Beginn mit der Anzahl
      *                       Personen ohne Ticket überein
      */
-    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses) {
+    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses, int startID, int destinationID) {
         this(trip, isComplete);
+        this.startID = startID;
+        this.destinationID = destinationID;
         this.numUserClasses = new HashMap(numUserClasses);
         this.usersWithoutTicket = new HashMap(numUserClasses);
     }
@@ -105,6 +108,13 @@ public class TripItem implements Serializable {
 
     public boolean isComplete() {
         return isComplete;
+    }
+
+    public int getStartID(){
+        return startID;
+    }
+    public int getDestinationID(){
+        return destinationID;
     }
 
     public int getNumUserClass(Fare.Type type) {

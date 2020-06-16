@@ -1,5 +1,6 @@
 package com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
@@ -22,7 +23,7 @@ public final class MyVrrTimeOptimisationHelper {
                                          Fare.Type type){
         ArrayList<TicketToBuy> ticketToBuyArrayList = new ArrayList<>();
         for (Integer i : sortedUserClassTrips.keySet()) {
-            ArrayList<TicketToBuy> zws = TimeOptimisation.optimierungPreisstufeD(sortedUserClassTrips.get(i), timeTickets.get(type));
+            ArrayList<TicketToBuy> zws = TimeOptimisation.optimierungPreisstufeDNew(sortedUserClassTrips.get(i), timeTickets.get(type));
             TimeOptimisation.checkTicketForOtherTrips(sortedUserClassTrips.get(i), zws);
             ticketToBuyArrayList.addAll(zws);
         }
@@ -133,11 +134,14 @@ public final class MyVrrTimeOptimisationHelper {
                 for(TicketToBuy ticketToBuy : timeTickets){
                     TimeTicket t = (TimeTicket)ticketToBuy.getTicket();
                     if(t.isValidTrip(current)){
-                        //TODO hier müsste dann noch die Region überüft werden
                         if(current.getFirstDepartureTime().getTime() >= ticketToBuy.getFirstDepartureTime().getTime()
                                 && current.getLastArrivalTime().getTime() <= ticketToBuy.getFirstDepartureTime().getTime() + t.getMaxDuration()){
-                            ticketToBuy.addTripItem(current);
-                            current.addTicket(ticketToBuy);
+                            if(MainMenu.myProvider.getPreisstufenIndex(ticketToBuy.getPreisstufe()) <=3){
+                                //TODO hier auf Waben und Tarifgebiet eingehen für die Preisstufe A
+                            }else if(ticketToBuy.checkFarezone(current.getStartID()/10) && ticketToBuy.checkFarezone(current.getDestinationID()/10)){
+                                ticketToBuy.addTripItem(current);
+                                current.addTicket(ticketToBuy);
+                            }
                         }
                     }
                 }

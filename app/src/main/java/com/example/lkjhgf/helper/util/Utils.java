@@ -9,6 +9,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.R;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
@@ -86,5 +87,9 @@ public final class Utils {
         } else {
             textView.setTextColor(resources.getColor(R.color.maroon, null));
         }
+    }
+
+    public static boolean isOverlapping(Date start1, Date end1, Date start2, Date end2) {
+        return start1.before(end2) && start2.before(end1);
     }
 }
