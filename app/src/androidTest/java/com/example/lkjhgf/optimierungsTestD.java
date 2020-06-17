@@ -5,7 +5,6 @@ import android.app.Activity;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.helper.futureTrip.TripListComplete;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeOptimisation;

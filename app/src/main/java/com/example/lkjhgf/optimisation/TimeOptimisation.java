@@ -4,14 +4,23 @@ package com.example.lkjhgf.optimisation;
 import android.util.Pair;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.publicTransport.provider.Farezone;
+import com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.FarezoneTrips;
+import com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.VRR_Farezones;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
+import org.javatuples.Quartet;
 import org.javatuples.Triplet;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Set;
 
 public class TimeOptimisation {
 
@@ -145,12 +154,15 @@ public class TimeOptimisation {
                             return -1;
                         }
                     });
-                    sumUpTicketsNew(toBuyArrayList, tickets, ticketIndex, preisstufenIndex);
+                    //TODO prüfen ob mit +1 oder ohne
+                    sumUpTicketsNew(toBuyArrayList, tickets, ticketIndex + 1, preisstufenIndex);
+                    //TODO hier noch ggf. prüfen, ob Fahrten hinzugenommen werden können?
                 }
             }
         }
-        for(TicketToBuy ticket : toBuyArrayList){
-            ticket.setValidFarezones(MainMenu.myProvider.getFarezones());
+        ArrayList<Farezone> farezoneList = MainMenu.myProvider.getFarezones();
+        for (TicketToBuy ticket : toBuyArrayList) {
+            ticket.setValidFarezones(farezoneList, farezoneList.get(0));
         }
         return toBuyArrayList;
     }
@@ -206,9 +218,13 @@ public class TimeOptimisation {
                 }
             }
             if (isValidTicket) {
-                maxIndex = i;
-                maxTrips = 1;
-                break;
+                long startTime = ticketsToBuy.get(i).getFirstDepartureTime().getTime();
+                long endTime = ticketsToBuy.get(i).getLastArrivalTime().getTime();
+                if (endTime - startTime <= ticket.getMaxDuration()) {
+                    maxIndex = i;
+                    maxTrips = 1;
+                    break;
+                }
             }
         }
         if (maxIndex == Integer.MAX_VALUE) {
@@ -298,6 +314,7 @@ public class TimeOptimisation {
                     if (current.getFirstDepartureTime().getTime() >= ticketToBuy.getFirstDepartureTime().getTime()
                             && current.getLastArrivalTime().getTime() <= timeTicket.getMaxDuration() + ticketToBuy.getFirstDepartureTime().getTime()
                             && timeTicket.isValidTrip(current)) {
+                        //TODO Regionen überprüfen
                         ticketToBuy.addTripItem(current);
                         tripItemIterator.remove();
                     }
@@ -306,8 +323,8 @@ public class TimeOptimisation {
         }
     }
 
-    public static ArrayList<TicketToBuy> optimieriungPreisstufeC(ArrayList<TripItem> allTrips, ArrayList<TimeTicket> timeTickets){
-        int preisstufenIndex = MainMenu.myProvider.getPreisstufenSize()-2;
+    public static ArrayList<TicketToBuy> optimieriungPreisstufeC(ArrayList<TripItem> allTrips, ArrayList<TimeTicket> timeTickets) {
+        int preisstufenIndex = MainMenu.myProvider.getPreisstufenSize() - 2;
 
         ArrayList<TripItem> tripsC = collectTripsPreisstufe(allTrips, preisstufenIndex);
         if (tripsC.isEmpty()) {
@@ -343,6 +360,167 @@ public class TimeOptimisation {
         }
         return ticketsToBuy;
     }
+
+    public static ArrayList<TicketToBuy> optimierungPreisstufeB(ArrayList<TripItem> allTrips, ArrayList<TimeTicket> possibleTickets) {
+        int preisstufenIndex = MainMenu.myProvider.getPreisstufenSize() - 3;
+        ArrayList<TripItem> tripsB = collectTripsPreisstufe(allTrips, preisstufenIndex);
+        Graph<FarezoneTrips, DefaultEdge> vrr_farezone_graph = VRR_Farezones.create_vrr_farezone_graph();
+        HashMap<Farezone, ArrayList<TicketToBuy>> ticketsPerRegion = new HashMap<>();
+        HashMap<Farezone, Set<Farezone>> regionen = new HashMap<>();
+        for (int i = 0; i< possibleTickets.size(); i++) {
+            TimeTicket possibleTicket = possibleTickets.get(i);
+            //Laufzeitoptimierung: Egal wie die Fahrten über das Gebiet verteilt sind, wenn die gesamte Anzahl kleiner ist, als die
+            //Anzahl benötigter Fahrten, damit das Ticket sich lohnt, ist keine weitere Betrachtung nötig
+            boolean repeat = true;
+            while (repeat) {
+                //Laufzeitoptimierung: Egal wie die Fahrten über das Gebiet verteilt sind, wenn die gesamte Anzahl kleiner ist, als die
+                //Anzahl benötigter Fahrten, damit das Ticket sich lohnt, ist keine weitere Betrachtung nötig
+                if(tripsB.size() < possibleTicket.getMinNumTrips(preisstufenIndex)){
+                    break;
+                }
+                fahrtenKnotenZuweisen(vrr_farezone_graph, tripsB);
+                HashMap<Farezone, Quartet<Integer, Integer, ArrayList<TripItem>, Set<Farezone>>> bestTicketIntervalPerFarezone = new HashMap<>();
+                ArrayList<FarezoneTrips> unusedFarezones = new ArrayList<>();
+                for (Iterator<FarezoneTrips> iterator = vrr_farezone_graph.vertexSet().iterator(); iterator.hasNext();) {
+                    FarezoneTrips farezone = iterator.next();
+                    //D.h. das Tarifgebiet ist ein Zentralgebiet
+                    Set<DefaultEdge> edges = vrr_farezone_graph.outgoingEdgesOf(farezone);
+                    if (!edges.isEmpty()) {
+                        Set<FarezoneTrips> neighbourhood = new HashSet<>();
+                        neighbourhood.add(farezone);
+                        for (DefaultEdge e : edges) {
+                            neighbourhood.add(vrr_farezone_graph.getEdgeTarget(e));
+                        }
+                        ArrayList<TripItem> neighbourhoodTrips = checkNeighbourhood(neighbourhood);
+                        if(neighbourhoodTrips.isEmpty()){
+                            unusedFarezones.add(farezone);
+                        }else{
+                            Collections.sort(neighbourhoodTrips, (o1, o2) -> {
+                                long result = o1.getFirstDepartureTime().getTime() - o2.getFirstDepartureTime().getTime();
+                                if (result == 0) {
+                                    return 0;
+                                } else if (result > 0) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
+                            });
+                            Pair<Integer, Integer> bestTicketIntervall = findBestTimeInterval(neighbourhoodTrips, possibleTicket);
+                            //Nur Regionen mit mindestens einer Fahrt sind von Interesse
+                            if(bestTicketIntervall.second > 0){
+                                Set<Farezone> farezones = new HashSet<>();
+                                for(FarezoneTrips f : neighbourhood){
+                                    farezones.add(f.getFarezone());
+                                }
+                                bestTicketIntervalPerFarezone.put(farezone.getFarezone(), new Quartet(bestTicketIntervall.first, bestTicketIntervall.second, neighbourhoodTrips, farezones));
+                            }
+                        }
+
+                    }
+                }
+                for(FarezoneTrips f : unusedFarezones){
+                    vrr_farezone_graph.removeVertex(f);
+                }
+                unusedFarezones.clear();
+                int max = 0;
+                Farezone maxFarezone = null;
+                for (Farezone f : bestTicketIntervalPerFarezone.keySet()) {
+                    if (bestTicketIntervalPerFarezone.get(f).getValue1() > max) {
+                        max = bestTicketIntervalPerFarezone.get(f).getValue1();
+                        maxFarezone = f;
+                    }
+                }
+                if (maxFarezone != null) {
+                    if (bestTicketIntervalPerFarezone.get(maxFarezone).getValue1() >= possibleTicket.getMinNumTrips(preisstufenIndex)) {
+                        //Ticketerstellen mit den Fahrten
+                        TicketToBuy ticketToBuy = new TicketToBuy(possibleTicket, MainMenu.myProvider.getPreisstufe(preisstufenIndex));
+                        for(int j = bestTicketIntervalPerFarezone.get(maxFarezone).getValue0(); j < bestTicketIntervalPerFarezone.get(maxFarezone).getValue0()+bestTicketIntervalPerFarezone.get(maxFarezone).getValue1(); j++){
+                            TripItem tripItem = bestTicketIntervalPerFarezone.get(maxFarezone).getValue2().get(j);
+                            ticketToBuy.addTripItem(tripItem);
+                            //Fahrten aus der Liste der zu optimierenden Fahrten entfernen
+                            tripsB.remove(tripItem);
+                            allTrips.remove(tripItem);
+
+                        }
+
+                        Set<Farezone> regionenSet = regionen.get(maxFarezone);
+                        if(regionenSet == null){
+                            regionenSet = bestTicketIntervalPerFarezone.get(maxFarezone).getValue3();
+                            regionen.put(maxFarezone, regionenSet);
+                        }
+                        //Speichern des Tickets
+                        ArrayList<TicketToBuy> ticketToBuyArrayList = ticketsPerRegion.get(maxFarezone);
+                        if(ticketToBuyArrayList == null){
+                            ticketToBuyArrayList = new ArrayList<>();
+                            ticketsPerRegion.put(maxFarezone, ticketToBuyArrayList);
+                        }
+                        ticketToBuyArrayList.add(ticketToBuy);
+                    }
+                }else{
+                    repeat = false;
+                }
+            }
+            //Zusammenfassen der Tickets
+            for(Farezone farezone : ticketsPerRegion.keySet()){
+                if(ticketsPerRegion.get(farezone).size() > 1){
+                        Collections.sort(ticketsPerRegion.get(farezone), (o1, o2) -> {
+                            long result = o1.getFirstDepartureTime().getTime() - o2.getFirstDepartureTime().getTime();
+                            if (result == 0) {
+                                return 0;
+                            } else if (result > 0) {
+                                return 1;
+                            } else {
+                                return -1;
+                            }
+                        });
+                    //TODO prüfen ob mit +1 oder ohne
+                    if(ticketsPerRegion.get(farezone).size() > 1)
+                        sumUpTicketsNew(ticketsPerRegion.get(farezone), possibleTickets, i+1, preisstufenIndex);
+                }
+                //Ticket -> Geltungsbereich zuweisen
+                for(TicketToBuy ticket : ticketsPerRegion.get(farezone)){
+                    ticket.setValidFarezones(new ArrayList<>(regionen.get(farezone)), farezone);
+                }
+            }
+        }
+
+        ArrayList<TicketToBuy> result = new ArrayList<>();
+
+        for (ArrayList t : ticketsPerRegion.values())
+        {
+            result.addAll(t);
+        }
+        return result;
+    }
+
+    private static void fahrtenKnotenZuweisen(Graph<FarezoneTrips, DefaultEdge> graph, ArrayList<TripItem> tripItems) {
+        for (TripItem item : tripItems) {
+            for (FarezoneTrips farezone : graph.vertexSet()) {
+                if (item.getStartID()/10 == farezone.getID()) {
+                    farezone.add(item);
+                    break;
+                }
+            }
+        }
+    }
+
+    private static ArrayList<TripItem> checkNeighbourhood(Set<FarezoneTrips> neighbourhood) {
+        ArrayList<TripItem> tripsToOptimise = new ArrayList<>();
+        for (FarezoneTrips farezoneTrips : neighbourhood) {
+            for (Iterator<TripItem> itemIterator = farezoneTrips.getTripItems().iterator(); itemIterator.hasNext(); ) {
+                TripItem item = itemIterator.next();
+                for (FarezoneTrips f : neighbourhood) {
+                    if (f.getID() == item.getDestinationID() / 10) {
+                        tripsToOptimise.add(item);
+                        break;
+                    }
+                }
+            }
+        }
+        return tripsToOptimise;
+    }
+
+
 
 
 }

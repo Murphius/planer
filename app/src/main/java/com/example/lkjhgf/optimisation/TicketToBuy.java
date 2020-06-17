@@ -41,6 +41,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
     private UUID ticketID;
 
     private ArrayList<Farezone> validFarezones;
+    private Farezone mainRegion;
 
     /**
      * Enthält die Informationen zu einer Fahrt und wie oft dieser diesem Ticket zugeordnet ist
@@ -269,8 +270,9 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         return ticketID;
     }
 
-    public void setValidFarezones(ArrayList<Farezone> validFarezones) {
+    public void setValidFarezones(ArrayList<Farezone> validFarezones, Farezone mainRegion) {
         this.validFarezones = validFarezones;
+        this.mainRegion = mainRegion;
     }
 
     public ArrayList<Farezone> getValidFarezones() {

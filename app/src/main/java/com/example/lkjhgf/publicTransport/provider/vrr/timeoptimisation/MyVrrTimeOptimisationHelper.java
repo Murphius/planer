@@ -25,9 +25,14 @@ public final class MyVrrTimeOptimisationHelper {
         for (Integer i : sortedUserClassTrips.keySet()) {
             ArrayList<TicketToBuy> zws = TimeOptimisation.optimierungPreisstufeDNew(sortedUserClassTrips.get(i), timeTickets.get(type));
             TimeOptimisation.checkTicketForOtherTrips(sortedUserClassTrips.get(i), zws);
+            MyVRRprovider.sumUpTickets(zws);
+            ticketToBuyArrayList.addAll(zws);
+            zws.clear();
+            zws.addAll(TimeOptimisation.optimierungPreisstufeB(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            MyVRRprovider.sumUpTickets(zws);
             ticketToBuyArrayList.addAll(zws);
         }
-        MyVRRprovider.sumUpTickets(ticketToBuyArrayList);
+
         for (TicketToBuy ticket : ticketToBuyArrayList) {
             for (TripItem tripItem : ticket.getTripList()) {
                 tripItem.addTicket(ticket);
