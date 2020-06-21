@@ -2,6 +2,7 @@ package com.example.lkjhgf.recyclerView.futureTrips;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.UtilsList;
+import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 import de.schildbach.pte.dto.Fare;
@@ -26,7 +28,8 @@ import de.schildbach.pte.dto.Trip;
  */
 public class TripItem implements Serializable {
     private Trip trip;
-    private int startID, destinationID;
+    private int startID;
+    private Set<Integer> crossedFarezones;
     private String preisstufe;
     private boolean isComplete;
 
@@ -67,22 +70,23 @@ public class TripItem implements Serializable {
     public TripItem(Trip trip, boolean isComplete) {
         this.trip = trip;
         this.isComplete = isComplete;
-        if (trip.fares != null) {
-            preisstufe = trip.fares.get(0).units;
-        } else {
-            preisstufe = "?";
-        }
+        preisstufe = UtilsString.setPreisstufenName(trip);
         numUserClasses = new HashMap<>();
         usersWithoutTicket = new HashMap<>();
         allTicketInformations = new HashMap<>();
     }
-
+    //Nur zum Testen
     public TripItem(HashMap<Fare.Type, Integer> numUserClasses) {
         trip = null;
         preisstufe = "";
         this.numUserClasses = new HashMap(numUserClasses);
         allTicketInformations = new HashMap<>();
         usersWithoutTicket = new HashMap(numUserClasses);
+    }
+    //Nur zum Testen
+    public  TripItem(Set<Integer> crossedFarezones){
+        this(new HashMap<>());
+        this.crossedFarezones = crossedFarezones;
     }
 
     /**
@@ -94,10 +98,10 @@ public class TripItem implements Serializable {
      * @param numUserClasses gibt an, wie viele Personen einer Nutzerklasse reisen - stimmt zu Beginn mit der Anzahl
      *                       Personen ohne Ticket überein
      */
-    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses, int startID, int destinationID) {
+    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses, int startID, Set<Integer> crossedFarezones) {
         this(trip, isComplete);
         this.startID = startID;
-        this.destinationID = destinationID;
+        this.crossedFarezones = crossedFarezones;
         this.numUserClasses = new HashMap(numUserClasses);
         this.usersWithoutTicket = new HashMap(numUserClasses);
     }
@@ -113,8 +117,9 @@ public class TripItem implements Serializable {
     public int getStartID(){
         return startID;
     }
-    public int getDestinationID(){
-        return destinationID;
+
+    public Set<Integer> getCrossedFarezones(){
+        return crossedFarezones;
     }
 
     public int getNumUserClass(Fare.Type type) {

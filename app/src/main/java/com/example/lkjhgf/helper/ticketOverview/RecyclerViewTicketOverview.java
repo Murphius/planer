@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.util.TripItemTimeComparator;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.tickets.TicketAdapter;
 import com.example.lkjhgf.recyclerView.tickets.TicketItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -87,15 +89,7 @@ class RecyclerViewTicketOverview {
 
             ticketItems = new ArrayList<>();
             for (int i = 0; i < quantity.size(); i++) {
-                tickets.get(i).getTripList().sort((o1, o2) -> {
-                    if (o1.getTrip().getFirstDepartureTime().after(o2.getTrip().getFirstDepartureTime())) {
-                        return 1;
-                    } else if (o1.getTrip().getFirstDepartureTime().getTime() == o2.getTrip().getFirstDepartureTime().getTime()) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                });
+                Collections.sort(tickets.get(i).getTripList(), new TripItemTimeComparator());
                 ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i), freeTrips.get(i)));
             }
         }

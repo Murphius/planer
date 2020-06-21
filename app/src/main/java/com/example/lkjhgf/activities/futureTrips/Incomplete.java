@@ -4,20 +4,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.helper.util.testAsyncTaskextends;
+import com.example.lkjhgf.helper.util.WabenTask;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
 import com.example.lkjhgf.activities.MainMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.dto.Fare;
+import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -52,21 +56,30 @@ public class Incomplete extends Activity {
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
 
         HashMap<Fare.Type, Integer> numUserClasses = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
-        String startID = trip.getFirstPublicLeg().departureStop.location.id.substring(1);
-        String destinationID = trip.getLastPublicLeg().arrivalStop.location.id.substring(1);
-        int startIDint = Integer.parseInt(startID);
-        int destinationIDint = Integer.parseInt(destinationID);
 
-        testAsyncTaskextends wabenTask = new testAsyncTaskextends();
-        wabenTask.execute(startIDint, destinationIDint);
-        ArrayList<Integer> waben = new ArrayList<>();
+        String preisstufe = UtilsString.setPreisstufenName(trip);
+
+        ArrayList<Integer> stopIDs = new ArrayList<>();
+        for(Trip.Leg leg : trip.legs){
+            if(leg instanceof Trip.Public){
+                Trip.Public publicLeg = (Trip.Public) leg;
+                stopIDs.add(Integer.parseInt(((Trip.Public) leg).departureStop.location.id.substring(1)));
+                for(Stop stop : publicLeg.intermediateStops){
+                    stopIDs.add(Integer.parseInt(stop.location.id.substring(1)));
+                }
+                stopIDs.add(Integer.parseInt(((Trip.Public) leg).arrivalStop.location.id.substring(1)));
+            }
+        }
+        WabenTask wabenTask = new WabenTask(MainMenu.myProvider.getPreisstufenIndex(preisstufe) < MainMenu.myProvider.getPreisstufenIndex("B"), stopIDs);
+        wabenTask.execute();
+        Pair<Integer, Set<Integer>> waben = new Pair<>(0, new HashSet<>());
         try {
             waben = wabenTask.get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.get(0), waben.get(1));
+        TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.first, waben.second);
 
         new TripListIncomplete(this, view, newTripItem);
     }

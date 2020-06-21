@@ -9,7 +9,9 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -40,8 +42,8 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
      */
     private UUID ticketID;
 
-    private ArrayList<Farezone> validFarezones;
-    private Farezone mainRegion;
+    private Set<Farezone> validFarezones;
+    private int mainRegionID;
 
     /**
      * Enthält die Informationen zu einer Fahrt und wie oft dieser diesem Ticket zugeordnet ist
@@ -92,7 +94,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         tripQuantities = new ArrayList<>();
         calculateFreeTrips();
         ticketID = UUID.randomUUID();
-        validFarezones = new ArrayList<>();
+        validFarezones = new HashSet<>();
     }
 
     /**
@@ -174,8 +176,9 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
 
     /**
      * Prüft ob alle Fahrten eines Fahrscheins mehr als der Offset in der Vergangenheit liegen
-     *
+     * <p>
      * Der Offset soll 0 sein, beim laden für die Optimierung und 24h für das Anzeigen von Fahrscheinen
+     *
      * @param offset gibt an, wie lange die Fahrten in der Vergangenheit liegen sollen
      * @return false - das Ticket ist gültig, oder hat noch mindestens eine freie Fahrt
      * true - das Ticket ist nicht mehr gültig oder alle Fahrten liegen in der Vergangenheit
@@ -270,22 +273,29 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         return ticketID;
     }
 
-    public void setValidFarezones(ArrayList<Farezone> validFarezones, Farezone mainRegion) {
+    public void setValidFarezones(Set<Farezone> validFarezones, int mainRegion) {
         this.validFarezones = validFarezones;
-        this.mainRegion = mainRegion;
+        this.mainRegionID = mainRegion;
     }
 
-    public ArrayList<Farezone> getValidFarezones() {
+    public Set<Farezone> getValidFarezones() {
         return validFarezones;
     }
 
-    public boolean checkFarezone(int farezoneID){
-        for(Farezone f : validFarezones){
-            if(farezoneID == f.getId()){
-                return true;
+    public boolean checkFarezone(TripItem tripItem) {
+        for (Integer crossedFarezone : tripItem.getCrossedFarezones()) {
+            boolean contains = false;
+            for (Farezone f : validFarezones) {
+                if (f.getId() == crossedFarezone / 10) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     /**

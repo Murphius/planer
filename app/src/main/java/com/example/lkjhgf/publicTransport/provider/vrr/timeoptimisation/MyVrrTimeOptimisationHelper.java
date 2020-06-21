@@ -28,6 +28,10 @@ public final class MyVrrTimeOptimisationHelper {
             MyVRRprovider.sumUpTickets(zws);
             ticketToBuyArrayList.addAll(zws);
             zws.clear();
+            zws.addAll(TimeOptimisation.optimieriungPreisstufeC(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            MyVRRprovider.sumUpTickets(zws);
+            ticketToBuyArrayList.addAll(zws);
+            zws.clear();
             zws.addAll(TimeOptimisation.optimierungPreisstufeB(sortedUserClassTrips.get(i), timeTickets.get(type)));
             MyVRRprovider.sumUpTickets(zws);
             ticketToBuyArrayList.addAll(zws);
@@ -143,7 +147,7 @@ public final class MyVrrTimeOptimisationHelper {
                                 && current.getLastArrivalTime().getTime() <= ticketToBuy.getFirstDepartureTime().getTime() + t.getMaxDuration()){
                             if(MainMenu.myProvider.getPreisstufenIndex(ticketToBuy.getPreisstufe()) <=3){
                                 //TODO hier auf Waben und Tarifgebiet eingehen für die Preisstufe A
-                            }else if(ticketToBuy.checkFarezone(current.getStartID()/10) && ticketToBuy.checkFarezone(current.getDestinationID()/10)){
+                            }else if(ticketToBuy.checkFarezone(current)){
                                 ticketToBuy.addTripItem(current);
                                 current.addTicket(ticketToBuy);
                             }

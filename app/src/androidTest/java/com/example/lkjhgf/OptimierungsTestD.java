@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 import de.schildbach.pte.dto.Fare;
 
-public class optimierungsTestD {
+public class OptimierungsTestD {
 
     public class TestTripItem extends TripItem {
         Date start;

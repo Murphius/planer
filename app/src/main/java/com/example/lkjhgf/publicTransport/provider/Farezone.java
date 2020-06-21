@@ -9,6 +9,11 @@ public class Farezone {
         this.name = name;
     }
 
+    public Farezone(Farezone farezone){
+        this.id = farezone.getId();
+        this.name = farezone.getName();
+    }
+
     public int getId() {
         return id;
     }

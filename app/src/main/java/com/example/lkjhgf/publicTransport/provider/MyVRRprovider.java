@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.helper.util.testAsyncTaskextends;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.Ticket;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.VrrProvider;
@@ -273,14 +271,14 @@ public class MyVRRprovider extends MyProvider {
                         }
                     }*/
                     int startID = tripItem.getStartID();
-                    int destinationID = tripItem.getDestinationID();
-                    if(startID/10 != destinationID/10){
+                    //TODO
+                    if(startID/10 != 10){
                         value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                         value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
                     }else{
-                        for(int j = 0; j < farezones.size(); j++){
-                            if(farezones.get(j).getId()/10 == startID){
-                                value.append("\n \tEntwerten für das Tarifgebiet: ").append(farezones.get(j).getName());
+                        for(Farezone f : farezones){
+                            if(f.getId()/10 == startID){
+                                value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getName());
                             }
                         }
                     }
@@ -299,14 +297,27 @@ public class MyVRRprovider extends MyProvider {
                     if (!waben.isEmpty()) {
                         value.append("\n\tEntwerten für das Tarifgebiet: ").append(waben.get(0) / 10);
                     }*/
-                    for(int j = 0; j < farezones.size(); j++) {
-                        if (farezones.get(j).getId() == tripItem.getStartID()/10) {
-                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(farezones.get(j).getName());
+                    for(Farezone f : farezones) {
+                        if (f.getId() == tripItem.getStartID()/10) {
+                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getName());
                         }
                     }
                 }
             } else {
-                value.append(quantity + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
+                if(preisstufe.get(i).equals(preisstufen[preisstufen.length-1])){
+                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
+                }else if(preisstufe.get(i).equals(preisstufen[preisstufen.length-2])){
+                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
+                    value.append("entwerten für die Region: ");
+                    //TODO
+                }else if(preisstufe.get(i).equals(preisstufen[preisstufen.length-3])){
+                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
+                    value.append("entwerten mit dem Zentralgebiet: ");
+                    //TODO
+                }else{
+                    //TODO Preisstufe K/A1/A2/A3
+                }
+
                 //TODO für andere Preisstufen als D muss die Region festgelegt werden
             }
 

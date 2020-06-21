@@ -35,4 +35,8 @@ public class FarezoneTrips {
     public Farezone getFarezone() {
         return farezone;
     }
+
+    public void clearTrips(){
+        tripItems.clear();
+    }
 }

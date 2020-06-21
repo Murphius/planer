@@ -15,8 +15,8 @@ import java.util.Set;
 
 public class VRR_Farezones {
 
-    public static ArrayList<Farezone> createVRRFarezone(){
-        ArrayList<Farezone> farezones = new ArrayList<>();
+    public static Set<Farezone> createVRRFarezone(){
+        Set<Farezone> farezones = new HashSet<>();
 
         farezones.add(new Farezone(1,"Kerken/Wachtendonk"));
         farezones.add(new Farezone(2,"Kamp-Lintfort"));

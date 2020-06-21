@@ -209,4 +209,12 @@ public final class UtilsString {
         return currencyFormatter.format(currencyAmmount);
     }
 
+    public static String setPreisstufenName(Trip trip){
+        if (trip.fares != null) {
+            return trip.fares.get(0).units;
+        } else {
+            return  "?";
+        }
+    }
+
 }
