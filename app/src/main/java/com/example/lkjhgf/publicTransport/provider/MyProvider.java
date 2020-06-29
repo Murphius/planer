@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -175,4 +176,5 @@ public abstract class MyProvider implements Comparator<TripItem> {
     public int getPreisstufenSize() {
         return preisstufen.length;
     }
+
 }

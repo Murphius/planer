@@ -298,6 +298,10 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         return true;
     }
 
+    public int getMainRegionID(){
+        return mainRegionID;
+    }
+
     /**
      * Equals nicht anhand der ID sondern anhand der Namen und Preisstufen
      *

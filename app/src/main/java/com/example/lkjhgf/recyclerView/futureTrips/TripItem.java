@@ -84,9 +84,10 @@ public class TripItem implements Serializable {
         usersWithoutTicket = new HashMap(numUserClasses);
     }
     //Nur zum Testen
-    public  TripItem(Set<Integer> crossedFarezones){
+    public  TripItem(Set<Integer> crossedFarezones, int startID){
         this(new HashMap<>());
         this.crossedFarezones = crossedFarezones;
+        this.startID = startID;
     }
 
     /**

@@ -29,15 +29,13 @@ public class OptimierungsTestC {
         Date end;
         String preisstufe;
         int id;
-        int startID;
 
         TestTripItem(Date start, Date end, String preisstufe, int id, int startID, Set<Integer> crossedRegions) {
-            super(crossedRegions);
+            super(crossedRegions, startID);
             this.start = start;
             this.end = end;
             this.preisstufe = preisstufe;
             this.id = id;
-            this.startID = startID;
         }
 
         @Override
@@ -60,10 +58,6 @@ public class OptimierungsTestC {
             return id + "";
         }
 
-        @Override
-        public int getStartID() {
-            return startID;
-        }
     }
 
     @Rule
@@ -75,9 +69,9 @@ public class OptimierungsTestC {
     public static void oneTimeSetUp() {
         timeTickets = new ArrayList<>();
         timeTickets.add(new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, "24-StundenTicket-1", Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{5, 3, 3, 3, 3, 2, 2}, 0, 24, false, 1));
-        timeTickets.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1));
         timeTickets.add(new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, "7-TageTicket", Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1));
         timeTickets.add(new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, "30-TageTicket", Fare.Type.ADULT, 30L * 24L * 60L * 60L * 1000L, new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1));
+        timeTickets.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1));
     }
 
     @Test
@@ -113,6 +107,7 @@ public class OptimierungsTestC {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertEquals(tickets.size(), 1);
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "24-StundenTicket-1");
+        //Lösung: 24h Ticket Region 7, alle Fahrten zugeordnet
     }
 
     @Test
@@ -162,8 +157,10 @@ public class OptimierungsTestC {
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
         Assert.assertFalse(tickets.isEmpty());
+        Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.size(), 1);
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "48-StundenTicket-1");
+        //Lösung: 48h Ticket mit der Region 7, alle Fahrten zugeordnet
     }
 
     @Test
@@ -228,10 +225,11 @@ public class OptimierungsTestC {
         Assert.assertFalse(ticketList.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 1);
+        //Lösung: 7 Tage Ticket Region 7, alle Fahrten zugeordnet
     }
 
     @Test
-    public void oneRegion7DayTicketRestTrips2(){
+    public void oneRegion7DayTicketNoRestTrips2(){
         ArrayList<TripItem> trips = new ArrayList<>();
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
@@ -292,10 +290,12 @@ public class OptimierungsTestC {
         Assert.assertFalse(ticketList.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 1);
+        //Lösung: 7 Tage Ticket Region 7, alle Fahrten zugeordnet
     }
 
     @Test
     public void twoRegion7DayTicketOneRestTrip(){
+        //Wochenticket innerhalb einer Region, einzelne Fahrt außerhalb dieser Region
         ArrayList<TripItem> trips = new ArrayList<>();
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
@@ -363,9 +363,6 @@ public class OptimierungsTestC {
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
-        for(int i = 0; i < 10000; i++){
-            Assert.assertFalse(integers1 == null);
-        }
         Assert.assertFalse(ticketList.isEmpty());
         Assert.assertFalse(trips.isEmpty());
         Assert.assertEquals(trips.size(), 1);

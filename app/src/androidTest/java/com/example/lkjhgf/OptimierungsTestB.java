@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,15 +29,13 @@ public class OptimierungsTestB {
         Date end;
         String preisstufe;
         int id;
-        int startID;
 
         TestTripItem(Date start, Date end, String preisstufe, int id, int startID, Set<Integer> crossedFarezones) {
-            super(crossedFarezones);
+            super(crossedFarezones, startID);
             this.start = start;
             this.end = end;
             this.preisstufe = preisstufe;
             this.id = id;
-            this.startID = startID;
         }
 
         @Override
@@ -61,10 +58,6 @@ public class OptimierungsTestB {
             return id + "";
         }
 
-        @Override
-        public int getStartID() {
-            return startID;
-        }
     }
 
     @Rule
@@ -76,9 +69,9 @@ public class OptimierungsTestB {
     public static void oneTimeSetUp() {
         timeTickets = new ArrayList<>();
         timeTickets.add(new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, "24-StundenTicket-1", Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{5, 3, 3, 3, 3, 2, 2}, 0, 24, false, 1));
-        timeTickets.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1));
         timeTickets.add(new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, "7-TageTicket", Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1));
         timeTickets.add(new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, "30-TageTicket", Fare.Type.ADULT, 30L * 24L * 60L * 60L * 1000L, new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1));
+        timeTickets.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1));
     }
 
     @Test
@@ -525,7 +518,8 @@ public class OptimierungsTestB {
     }
 
     @Test
-    public void testx(){
+    public void testOneRegionDayTicketTripWithLowerFarezone(){
+        //24h Fahrten mit der Preisstufe B, sowie einer Fahrt der Preisstufe A2 in diesem Geltungsbereich
         ArrayList<TripItem> trips = new ArrayList<>();
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
