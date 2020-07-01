@@ -11,6 +11,7 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import de.schildbach.pte.dto.Fare;
@@ -22,19 +23,58 @@ public final class MyVrrTimeOptimisationHelper {
                                          HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists,
                                          Fare.Type type){
         ArrayList<TicketToBuy> ticketToBuyArrayList = new ArrayList<>();
+        HashMap<String, ArrayList<TicketToBuy>> ticketsPerFarezone = new HashMap<>();
         for (Integer i : sortedUserClassTrips.keySet()) {
+            int indexOfHappyHourTicket = timeTickets.get(type).indexOf(MyVRRprovider.happyHourTicket);
+            if(indexOfHappyHourTicket > -1){
+                timeTickets.get(type).remove(indexOfHappyHourTicket);
+            }
+            int indexOfVierStundenTicket = timeTickets.get(type).indexOf(MyVRRprovider.vierStundenTicket);
+            if(indexOfVierStundenTicket > -1){
+                timeTickets.get(type).remove(indexOfVierStundenTicket);
+            }
             ArrayList<TicketToBuy> zws = TimeOptimisation.optimierungPreisstufeDNew(sortedUserClassTrips.get(i), timeTickets.get(type));
             TimeOptimisation.checkTicketForOtherTrips(sortedUserClassTrips.get(i), zws);
-            MyVRRprovider.sumUpTickets(zws);
-            ticketToBuyArrayList.addAll(zws);
+            ArrayList<TicketToBuy> e = ticketsPerFarezone.get("D");
+            if(e == null){
+                e = new ArrayList<>();
+                ticketsPerFarezone.put("D", e);
+            }
+            e.addAll(zws);
             zws.clear();
             zws.addAll(TimeOptimisation.optimieriungPreisstufeC(sortedUserClassTrips.get(i), timeTickets.get(type)));
-            MyVRRprovider.sumUpTickets(zws);
-            ticketToBuyArrayList.addAll(zws);
+            e = ticketsPerFarezone.get("C");
+            if(e == null){
+                e = new ArrayList<>();
+                ticketsPerFarezone.put("C", e);
+            }
+            e.addAll(zws);
             zws.clear();
             zws.addAll(TimeOptimisation.optimierungPreisstufeB(sortedUserClassTrips.get(i), timeTickets.get(type)));
-            MyVRRprovider.sumUpTickets(zws);
-            ticketToBuyArrayList.addAll(zws);
+            e = ticketsPerFarezone.get("B");
+            if(e == null){
+                e = new ArrayList<>();
+                ticketsPerFarezone.put("B", e);
+            }
+            e.addAll(zws);
+            zws.clear();
+            if(indexOfVierStundenTicket > -1){
+                timeTickets.get(type).add(indexOfVierStundenTicket, MyVRRprovider.vierStundenTicket);
+            }
+            if(indexOfHappyHourTicket > -1){
+                timeTickets.get(type).add(indexOfHappyHourTicket, MyVRRprovider.happyHourTicket);
+            }
+            zws.addAll(TimeOptimisation.optimierungPreisstufeA(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            e = ticketsPerFarezone.get("A");
+            if(e == null){
+                e = new ArrayList<>();
+                ticketsPerFarezone.put("A", e);
+            }
+            e.addAll(zws);
+        }
+        for(String s : ticketsPerFarezone.keySet()){
+            MyVRRprovider.sumUpTickets(ticketsPerFarezone.get(s));
+            ticketToBuyArrayList.addAll(ticketsPerFarezone.get(s));
         }
 
         for (TicketToBuy ticket : ticketToBuyArrayList) {
@@ -170,7 +210,8 @@ public final class MyVrrTimeOptimisationHelper {
             collectedTickets.add(current);
             while (iterator.hasNext() && collectedTickets.size() < 5) {
                 TicketToBuy next = iterator.next();
-                if (next.getLastArrivalTime().getTime() - current.getFirstDepartureTime().getTime() <= ((TimeTicket) current.getTicket()).getMaxDuration()) {
+                if (next.getLastArrivalTime().getTime() - current.getFirstDepartureTime().getTime() <= ((TimeTicket) current.getTicket()).getMaxDuration()
+                && current.checkFarezones(next.getTripList())) {
                     collectedTickets.add(next);
                     iterator.remove();
                 } else {
@@ -185,6 +226,9 @@ public final class MyVrrTimeOptimisationHelper {
             }
             for (TicketToBuy t : collectedTickets) {
                 newTicket.addTripItems(t.getTripList());
+            }
+            if(collectedTickets.size() > 0){
+                newTicket.setValidFarezones(collectedTickets.get(0).getValidFarezones(), collectedTickets.get(0).getMainRegionID(), collectedTickets.get(0).isZweiWabenTarif());
             }
             allTickets.add(newTicket);
         }

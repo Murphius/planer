@@ -57,17 +57,19 @@ public class TimeTicket extends Ticket {
         }
 
         int tripStartHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
         calendar.setTimeInMillis(tripItem.getLastArrivalTime().getTime());
-        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
         int tripEndHour = calendar.get(Calendar.HOUR_OF_DAY);
         if (calendar.get(Calendar.MINUTE) != 0) {
             tripEndHour++;
         }
-        if (startDay == endDay) {
-            return startHour <= tripStartHour;
-        } else {
-            return startHour <= tripStartHour && tripEndHour <= endHour;
+        if (tripStartHour >= startHour && tripEndHour >= endHour) {
+            return true;
+        } else if(tripStartHour >= startHour && tripEndHour <= endHour){
+            return true;
+        }else if(tripStartHour <= endHour && tripEndHour <= endHour){
+            return true;
+        }else{
+            return false;
         }
     }
 

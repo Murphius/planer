@@ -27,28 +27,41 @@ import static com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.V
 
 public class MyVRRprovider extends MyProvider {
 
+    private static final String vierStundenTicket_s = "4-StundenTicket";
+    private static final String happyHourTicket_s = "Happy Hour Ticket";
+
     private static final String tagesTicket_1_s = "24-StundenTicket-1";
     private static final String tagesTicket_2_s = "24-StundenTicket-2";
     private static final String tagesTicket_3_s = "24-StundenTicket-3";
     private static final String tagesTicket_4_s = "24-StundenTicket-4";
     private static final String tagesTicket_5_s = "24-StundenTicket-5";
+
     private static final String zweiTagesTicket_1_s = "48-StundenTicket-1";
     private static final String zweiTagesTicket_2_s = "48h-StundenTicket-2";
     private static final String zweiTagesTicket_3_s = "48h-StundenTicket-3";
     private static final String zweiTagesTicket_4_s = "48h-StundenTicket-4";
     private static final String zweiTagesTicket_5_s = "48h-StundenTicket-5";
 
+    private static final String siebenTagesTicket_s = "7-TageTicket";
+    private static final String dreissigTagesTicket_s = "30-TageTicket";
+
+    public static final TimeTicket vierStundenTicket = new TimeTicket(new int[]{420, 420, 420, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, vierStundenTicket_s, Fare.Type.ADULT, 4 * 60 * 60 * 1000, new int[]{3,2,2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 9, 3, true, 1);
+    public static final TimeTicket happyHourTicket = new TimeTicket(new int[]{319, 319, 319, 319, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, happyHourTicket_s , Fare.Type.ADULT, 12 * 60 * 60 * 1000, new int[]{3, 2, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 18, 6, false, 1);
+
     public static final TimeTicket tagesTicket_5 = new TimeTicket(new int[]{2120, 2120, 2120, 2120, 3070, 4410, 5200}, tagesTicket_5_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 5);
     public static final TimeTicket tagesTicket_4 = new TimeTicket(new int[]{1710, 1710, 1710, 1710, 2670, 3940, 4660}, tagesTicket_4_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 4);
     public static final TimeTicket tagesTicket_3 = new TimeTicket(new int[]{1420, 1420, 1420, 1420, 2270, 3470, 4120}, tagesTicket_3_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 3);
     public static final TimeTicket tagesTicket_2 = new TimeTicket(new int[]{1070, 1070, 1070, 1070, 1870, 3000, 3580}, tagesTicket_2_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 2);
-    public static final TimeTicket tagesTicket_1 = new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, tagesTicket_1_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 1);
+    public static final TimeTicket tagesTicket_1 = new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, tagesTicket_1_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{5, 3, 3, 3, 3, 2, 2}, 0, 24, false, 1);
 
-    public static final TimeTicket zweiTagesTicket_1 = new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, zweiTagesTicket_1_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 1);
+    public static final TimeTicket zweiTagesTicket_1 = new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, zweiTagesTicket_1_s, Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1);
     public static final TimeTicket zweiTagesTicket_2 = new TimeTicket(new int[]{2030, 2030, 2030, 2030, 3550, 5700, 6800}, zweiTagesTicket_2_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 2);
     public static final TimeTicket zweiTagesTicket_3 = new TimeTicket(new int[]{2690, 2690, 2690, 2690, 4310, 6590, 7820}, zweiTagesTicket_3_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 3);
     public static final TimeTicket zweiTagesTicket_4 = new TimeTicket(new int[]{3350, 3350, 3350, 3350, 5070, 7480, 8840}, zweiTagesTicket_4_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 4);
     public static final TimeTicket zweiTagesTicket_5 = new TimeTicket(new int[]{4010, 4010, 4010, 4010, 5830, 8370, 9860}, zweiTagesTicket_5_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 5);
+
+    public static final TimeTicket siebenTagesTicket = new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, siebenTagesTicket_s , Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1);
+    public static final TimeTicket dreissigTagesTicket = new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, dreissigTagesTicket_s , Fare.Type.ADULT, Math.multiplyExact((long) 30, (long) 24 * 60 * 60 * 1000), new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1);
 
 
     private HashMap<Fare.Type, ArrayList<TimeTicket>> timeTickets;
@@ -78,10 +91,12 @@ public class MyVRRprovider extends MyProvider {
 
         timeTickets = new HashMap<>();
         ArrayList<TimeTicket> timeTicketsAdult = new ArrayList<>();
-        timeTicketsAdult.add(new TimeTicket(new int[]{720, 720, 720, 720, 1470, 2530, 3040}, "24-StundenTicket-1", Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{5, 3, 3, 3, 3, 2, 2}, 0, 24, false, 1));
-        timeTicketsAdult.add(new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, "7-TageTicket", Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1));
-        timeTicketsAdult.add(new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, "30-TageTicket", Fare.Type.ADULT, Math.multiplyExact((long) 30, (long) 24 * 60 * 60 * 1000), new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1));
-        timeTicketsAdult.add(new TimeTicket(new int[]{1370, 1370, 1370, 1370, 2790, 4810, 5780}, "48-StundenTicket-1", Fare.Type.ADULT, 48 * 60 * 60 * 1000, new int[]{9, 6, 6, 6, 5, 5, 5}, 0, 24, false, 1));
+        timeTicketsAdult.add(happyHourTicket);
+        timeTicketsAdult.add(vierStundenTicket);
+        timeTicketsAdult.add(tagesTicket_1);
+        timeTicketsAdult.add(siebenTagesTicket);
+        timeTicketsAdult.add(dreissigTagesTicket);
+        timeTicketsAdult.add(zweiTagesTicket_1);
         timeTickets.put(Fare.Type.ADULT, timeTicketsAdult);
 
         NetworkProvider provider = new VrrProvider();

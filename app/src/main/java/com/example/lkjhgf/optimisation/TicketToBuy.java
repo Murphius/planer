@@ -44,6 +44,7 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
 
     private Set<Farezone> validFarezones;
     private int mainRegionID;
+    private boolean isZweiWabenTarif;
 
     /**
      * Enthält die Informationen zu einer Fahrt und wie oft dieser diesem Ticket zugeordnet ist
@@ -278,6 +279,15 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         this.mainRegionID = mainRegion;
     }
 
+    public void setValidFarezones(Set<Farezone> validFarezones, int mainRegionID, boolean isZweiWabenTarif){
+        setValidFarezones(validFarezones, mainRegionID);
+        this.isZweiWabenTarif = isZweiWabenTarif;
+    }
+
+    public boolean isZweiWabenTarif() {
+        return isZweiWabenTarif;
+    }
+
     public Set<Farezone> getValidFarezones() {
         return validFarezones;
     }
@@ -286,12 +296,28 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         for (Integer crossedFarezone : tripItem.getCrossedFarezones()) {
             boolean contains = false;
             for (Farezone f : validFarezones) {
-                if (f.getId() == crossedFarezone / 10) {
-                    contains = true;
-                    break;
+                if(isZweiWabenTarif){
+                    if(f.getId() == crossedFarezone){
+                        contains = true;
+                        break;
+                    }
+                }else{
+                    if (f.getId() == crossedFarezone / 10) {
+                        contains = true;
+                        break;
+                    }
                 }
             }
             if (!contains) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkFarezones(ArrayList<TripItem> tripItems){
+        for(TripItem tripItem :tripItems){
+            if(! checkFarezone(tripItem)){
                 return false;
             }
         }
