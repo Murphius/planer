@@ -1,13 +1,18 @@
 package com.example.lkjhgf.recyclerView.futureTrips;
 
+import android.app.Activity;
+
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.publicTransport.provider.Farezone;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
+import com.example.lkjhgf.recyclerView.tickets.allTicketsView.AllTicketAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -75,6 +80,7 @@ public class TripItem implements Serializable {
         usersWithoutTicket = new HashMap<>();
         allTicketInformations = new HashMap<>();
     }
+
     //Nur zum Testen
     public TripItem(HashMap<Fare.Type, Integer> numUserClasses) {
         trip = null;
@@ -83,8 +89,9 @@ public class TripItem implements Serializable {
         allTicketInformations = new HashMap<>();
         usersWithoutTicket = new HashMap(numUserClasses);
     }
+
     //Nur zum Testen
-    public  TripItem(Set<Integer> crossedFarezones, int startID){
+    public TripItem(Set<Integer> crossedFarezones, int startID) {
         this(new HashMap<>());
         this.crossedFarezones = crossedFarezones;
         this.startID = startID;
@@ -115,11 +122,11 @@ public class TripItem implements Serializable {
         return isComplete;
     }
 
-    public int getStartID(){
+    public int getStartID() {
         return startID;
     }
 
-    public Set<Integer> getCrossedFarezones(){
+    public Set<Integer> getCrossedFarezones() {
         return crossedFarezones;
     }
 
@@ -138,6 +145,7 @@ public class TripItem implements Serializable {
      * Wenn das Ticket bereits enthalten ist, dann wird nur die Häufigkeit des Tickets erhöht, sonst wird
      * das Ticket neu in die Liste der zugeordneten Tickets eingefügt <br/>
      * Jedes Ticket verringert die Anzahl der Nutzer ohne Tickets um 1
+     *
      * @param ticket Ticket, dass der Fahrt hinzugefügt werden soll
      */
     public void addTicket(TicketToBuy ticket) {
@@ -160,8 +168,8 @@ public class TripItem implements Serializable {
                 c.add(new TripTicketInformationHolder(ticket.getTicket(), ticket.getPreisstufe(), ticket.getTicketID()));
             }
         }
-        if(ticket.getTicket() instanceof TimeTicket){
-            int value = Math.max(0, usersWithoutTicket.get(ticket.getTicket().getType()) - ((TimeTicket)ticket.getTicket()).getNumPersons());
+        if (ticket.getTicket() instanceof TimeTicket) {
+            int value = Math.max(0, usersWithoutTicket.get(ticket.getTicket().getType()) - ((TimeTicket) ticket.getTicket()).getNumPersons());
             usersWithoutTicket.put(ticket.getTicket().getType(), value);
         } else {
             usersWithoutTicket.put(ticket.getTicket().getType(), usersWithoutTicket.get(ticket.getTicket().getType()) - 1);
@@ -177,16 +185,16 @@ public class TripItem implements Serializable {
      * @return einen String, der alle Informationen zu den Fahrscheinen enthält
      */
     String getTicketListAsString() {
-        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformation();
+        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformationNumTicket();
         return buildStringTicketList(allInformations.getValue0(), allInformations.getValue1(), allInformations.getValue2()).toString();
     }
 
     /**
-     * Fasst die Tickets nach Typen und Fahrscheinen zusammen, und zählt die entsprechende Häufigkeit
+     * Fasst die Tickets mit fester Fahrtenanzahl zusammen, und zählt die entsprechende Häufigkeit
      *
      * @return Ein Triple mit den Tickets, der jeweiligen Häufigkeit und den Preisstufen
      */
-    private Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> shortTicketInformation() {
+    private Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> shortTicketInformationNumTicket() {
         ArrayList<Ticket> ticketsToUse = new ArrayList<>();
         ArrayList<String> preisstufeToUse = new ArrayList<>();
         ArrayList<Integer> num = new ArrayList<>();
@@ -218,9 +226,32 @@ public class TripItem implements Serializable {
                     }
                 }
             }
-
         }
         return Triplet.with(ticketsToUse, num, preisstufeToUse);
+    }
+
+    private ArrayList<TicketToBuy> shortTicketInformationTimeTicket(Activity activity) {
+        ArrayList<TicketToBuy> tripTickets = new ArrayList<>();
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> allTickets = AllTickets.loadTickets(activity);
+        for (Fare.Type type : allTicketInformations.keySet()) {
+            ArrayList<TripTicketInformationHolder> informationHolder = allTicketInformations.get(type);
+            ArrayList<TicketToBuy> savedTickets = allTickets.get(type);
+            if (!informationHolder.isEmpty() && informationHolder != null
+                    && !savedTickets.isEmpty() && savedTickets != null) {
+                for (int i = 0; i < informationHolder.size(); i++) {
+                    for (int j = 0; j < savedTickets.size(); j++) {
+                        if (informationHolder.get(i).ticketIdentifier.equals(savedTickets.get(j).getTicketID())) {
+                            if (savedTickets.get(j).getTicket() instanceof TimeTicket) {
+                                tripTickets.add(savedTickets.get(j));
+                            }
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+        return tripTickets;
     }
 
     /**
@@ -229,9 +260,11 @@ public class TripItem implements Serializable {
      *
      * @return Preisstufe, Ticket, Häufigkeit, Entwerten des Tickets als String
      */
-    public String getDetailedTicketListAsString() {
-        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformation();
-        return MainMenu.myProvider.getTicketInformation(allInformations.getValue0(), allInformations.getValue1(), allInformations.getValue2(), this);
+    public String getDetailedTicketListAsString(Activity activity) {
+        Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> allInformations = shortTicketInformationNumTicket();
+        String numTicketInformation = MainMenu.myProvider.getTicketInformationNumTicket(allInformations.getValue0(), allInformations.getValue1(), allInformations.getValue2(), this);
+        String timeTicketInformation = MainMenu.myProvider.getTicketInformationTimeTicket(shortTicketInformationTimeTicket(activity));
+        return numTicketInformation + "\n" + timeTicketInformation;
     }
 
     /**
@@ -258,8 +291,7 @@ public class TripItem implements Serializable {
         return ticketIDs;
     }
 
-    public void removeTickets(Fare.Type type, UUID uuid)
-    {
+    public void removeTickets(Fare.Type type, UUID uuid) {
         removeTickets(type, uuid, 1);
     }
 
@@ -274,14 +306,14 @@ public class TripItem implements Serializable {
         for (Iterator<TripTicketInformationHolder> iterator = d.iterator(); iterator.hasNext(); ) {
             TripTicketInformationHolder current = iterator.next();
             if (current.ticketIdentifier.equals(uuid)) {
-                current.quantity-= quantity;
-                if(current.quantity == 0){
+                current.quantity -= quantity;
+                if (current.quantity == 0) {
                     iterator.remove();
                 }
                 int numPersonsOnTicket;
-                if(current.ticket instanceof TimeTicket){
+                if (current.ticket instanceof TimeTicket) {
                     numPersonsOnTicket = ((TimeTicket) current.ticket).getNumPersons();
-                }else{
+                } else {
                     numPersonsOnTicket = quantity;
                 }
                 //TODO
@@ -327,7 +359,7 @@ public class TripItem implements Serializable {
         return trip.getLastArrivalTime();
     }
 
-    public int getUserClassWithoutTicket(Fare.Type type){
+    public int getUserClassWithoutTicket(Fare.Type type) {
         return usersWithoutTicket.get(type);
     }
 
@@ -356,7 +388,7 @@ public class TripItem implements Serializable {
                 if (restTicket != 0) {
                     value.append("1x ").append(numTicket.toString()).append(" \n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \t").append(restTicket).append("x entwerten");
                 }
-            }else{
+            } else {
                 TimeTicket timeTicket = (TimeTicket) ticketsToUse.get(i);
                 int wholeTickets = num.get(i);
                 value.append(wholeTickets).append("x ").append(timeTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i));

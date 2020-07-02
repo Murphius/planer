@@ -80,7 +80,7 @@ public class MultipleCloseUp extends CloseUp {
             textViewClass.useTicket.setVisibility(View.GONE);
             textViewClass.ticketView.setVisibility(View.GONE);
         }else{
-            textViewClass.useTicket.setText(tripItem.getDetailedTicketListAsString());
+            textViewClass.useTicket.setText(tripItem.getDetailedTicketListAsString(activity));
             textViewClass.useTicket.setVisibility(View.VISIBLE);
             textViewClass.ticketView.setVisibility(View.VISIBLE);
         }

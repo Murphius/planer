@@ -68,10 +68,18 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
             if(current.isZweiWabenTarif()){
                 ArrayList<Farezone> f = new ArrayList<>(current.getValidFarezones());
                 v+= f.get(0).getId() + " - " + current.getTripList().get(0).getTrip().from.place + ", \n";
-                v += f.get(0).getId() + " - " + current.getTripList().get(1).getTrip().to.place;
+                v += f.get(1).getId() + " - " + current.getTripList().get(1).getTrip().from.place;
             }else{
-                for(Farezone f : current.getValidFarezones()){
-                    v += f.getId() + " - " + f.getName() + ", \n";
+                if(current.getPreisstufe().equals(MainMenu.myProvider.getPreisstufe(MainMenu.myProvider.getPreisstufenSize()-1))){
+                    v = "Gesamtes VRR-Gebiet";
+                }else{
+                    ArrayList<Farezone> f = new ArrayList<>(current.getValidFarezones());
+                    for(int i = 0; i < f.size(); i++){
+                        v += f.get(i).getId() + " - " + f.get(i).getName();
+                        if( i + 1 < f.size()){
+                            v += ", \n";
+                        }
+                    }
                 }
             }
 

@@ -233,7 +233,7 @@ public final class UtilsString {
             c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime());
             int startH = c.get(Calendar.HOUR_OF_DAY);
             if (startH < 6) {
-                return setDate(ticketToBuy.getFirstDepartureTime()) + " 6 : 00";
+                return setDate(ticketToBuy.getFirstDepartureTime()) + " 06 : 00";
             } else {
                 c.setTimeInMillis(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
                 return setDate(c.getTime()) + " 6h 00";
@@ -241,13 +241,13 @@ public final class UtilsString {
         } else if (t.equals(MyVRRprovider.vierStundenTicket)) {
             c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime());
             if (!(c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)) {
-                if (c.get(Calendar.HOUR_OF_DAY) <= 23) {
+                if (c.get(Calendar.HOUR_OF_DAY) >= 23) {
                     c.setTimeInMillis(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
                     String result = setDate(c.getTime());
                     c.setTimeInMillis(c.getTimeInMillis() - 20 * 60 * 60 * 1000);
                     return result + " " + setTime(c.getTime());
-                } else {
-                    return setDate(c.getTime()) + " 3 : 00";
+                } else if(c.get(Calendar.HOUR_OF_DAY) < 3 ){
+                    return setDate(c.getTime()) + " 03 : 00";
                 }
             }
         }

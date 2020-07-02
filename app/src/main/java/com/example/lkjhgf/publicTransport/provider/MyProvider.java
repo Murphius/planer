@@ -163,7 +163,9 @@ public abstract class MyProvider implements Comparator<TripItem> {
      */
     public abstract HashMap<Fare.Type, HashMap<Integer,ArrayList<TripItem>>> createUserClassHashMap(HashMap<Fare.Type,ArrayList<TripItem>> allTrips);
 
-    public abstract String getTicketInformation(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem);
+    public abstract String getTicketInformationNumTicket(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem);
+
+    public abstract String getTicketInformationTimeTicket(ArrayList<TicketToBuy> timeTicketsToBuy);
 
     public int getMaxNumTrip() {
         return maxNumTrip;

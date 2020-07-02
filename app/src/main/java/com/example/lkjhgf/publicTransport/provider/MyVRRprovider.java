@@ -45,8 +45,8 @@ public class MyVRRprovider extends MyProvider {
     private static final String siebenTagesTicket_s = "7-TageTicket";
     private static final String dreissigTagesTicket_s = "30-TageTicket";
 
-    public static final TimeTicket vierStundenTicket = new TimeTicket(new int[]{420, 420, 420, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, vierStundenTicket_s, Fare.Type.ADULT, 4 * 60 * 60 * 1000, new int[]{3,2,2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 9, 3, true, 1);
-    public static final TimeTicket happyHourTicket = new TimeTicket(new int[]{319, 319, 319, 319, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, happyHourTicket_s , Fare.Type.ADULT, 12 * 60 * 60 * 1000, new int[]{3, 2, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 18, 6, false, 1);
+    public static final TimeTicket vierStundenTicket = new TimeTicket(new int[]{420, 420, 420, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, vierStundenTicket_s, Fare.Type.ADULT, 4 * 60 * 60 * 1000, new int[]{3, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 9, 3, true, 1);
+    public static final TimeTicket happyHourTicket = new TimeTicket(new int[]{319, 319, 319, 319, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, happyHourTicket_s, Fare.Type.ADULT, 12 * 60 * 60 * 1000, new int[]{3, 2, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 18, 6, false, 1);
 
     public static final TimeTicket tagesTicket_5 = new TimeTicket(new int[]{2120, 2120, 2120, 2120, 3070, 4410, 5200}, tagesTicket_5_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 5);
     public static final TimeTicket tagesTicket_4 = new TimeTicket(new int[]{1710, 1710, 1710, 1710, 2670, 3940, 4660}, tagesTicket_4_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 4);
@@ -60,8 +60,8 @@ public class MyVRRprovider extends MyProvider {
     public static final TimeTicket zweiTagesTicket_4 = new TimeTicket(new int[]{3350, 3350, 3350, 3350, 5070, 7480, 8840}, zweiTagesTicket_4_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 4);
     public static final TimeTicket zweiTagesTicket_5 = new TimeTicket(new int[]{4010, 4010, 4010, 4010, 5830, 8370, 9860}, zweiTagesTicket_5_s, Fare.Type.ADULT, 24 * 60 * 60 * 1000, new int[]{}, 0, 24, false, 5);
 
-    public static final TimeTicket siebenTagesTicket = new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, siebenTagesTicket_s , Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1);
-    public static final TimeTicket dreissigTagesTicket = new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, dreissigTagesTicket_s , Fare.Type.ADULT, Math.multiplyExact((long) 30, (long) 24 * 60 * 60 * 1000), new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1);
+    public static final TimeTicket siebenTagesTicket = new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, siebenTagesTicket_s, Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1);
+    public static final TimeTicket dreissigTagesTicket = new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, dreissigTagesTicket_s, Fare.Type.ADULT, Math.multiplyExact((long) 30, (long) 24 * 60 * 60 * 1000), new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1);
 
 
     private HashMap<Fare.Type, ArrayList<TimeTicket>> timeTickets;
@@ -139,6 +139,7 @@ public class MyVRRprovider extends MyProvider {
 
     /**
      * Teilt die Fahrten auf die Nutzerklassen auf
+     *
      * @param allTrips alle Fahrten
      * @return HashMap mit einer Liste an Fahrten für jede Nutzerklasse
      */
@@ -246,7 +247,7 @@ public class MyVRRprovider extends MyProvider {
     }
 
     @Override
-    public String getTicketInformation(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem) {
+    public String getTicketInformationNumTicket(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem) {
         StringBuilder value = new StringBuilder();
         Location startLocation, destinationLocation;
         for (int i = 0; i < tickets.size(); i++) {
@@ -285,19 +286,27 @@ public class MyVRRprovider extends MyProvider {
                             value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
                         }
                     }*/
-                    int startID = tripItem.getStartID();
-                    //TODO
-                    if(startID/10 != 10){
+                    ArrayList<Integer> crossedFarezones = new ArrayList<>(tripItem.getCrossedFarezones());
+                    boolean isZweiWaben = false;
+                    int firstZone = crossedFarezones.get(0);
+                    for (Integer crossedFarezone : crossedFarezones) {
+                        if (crossedFarezone / 10 != firstZone / 10) {
+                            isZweiWaben = true;
+                            break;
+                        }
+                    }
+
+                    if (isZweiWaben) {
                         value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                         value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
-                    }else{
-                        for(Farezone f : farezones){
-                            if(f.getId()/10 == startID){
-                                value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getName());
+                    } else {
+                        for (Farezone f : farezones) {
+                            if (f.getId() == firstZone / 10) {
+                                value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());
                             }
                         }
                     }
-                } else {
+                } else if(!preisstufe.get(i).equals(preisstufen[preisstufen.length-1])){
                     /*startLocation = tripItem.getTrip().from;
                     String startID = startLocation.id.substring(1);
                     int startIDint = Integer.parseInt(startID);
@@ -312,36 +321,46 @@ public class MyVRRprovider extends MyProvider {
                     if (!waben.isEmpty()) {
                         value.append("\n\tEntwerten für das Tarifgebiet: ").append(waben.get(0) / 10);
                     }*/
-                    for(Farezone f : farezones) {
-                        if (f.getId() == tripItem.getStartID()/10) {
-                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getName());
+                    for (Farezone f : farezones) {
+                        if (f.getId() == tripItem.getStartID() / 10) {
+                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());
                         }
                     }
                 }
-            } else {
-                if(preisstufe.get(i).equals(preisstufen[preisstufen.length-1])){
-                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
-                }else if(preisstufe.get(i).equals(preisstufen[preisstufen.length-2])){
-                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
-                    value.append("entwerten für die Region: ");
-                    //TODO
-                }else if(preisstufe.get(i).equals(preisstufen[preisstufen.length-3])){
-                    value.append(quantity.get(i) + "x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i));
-                    value.append("entwerten mit dem Zentralgebiet: ");
-                    //TODO
-                }else{
-                    //TODO Preisstufe K/A1/A2/A3
-                }
-
-                //TODO für andere Preisstufen als D muss die Region festgelegt werden
             }
-
-
-            if (i != tickets.size() - 1) {
+            if (i != tickets.size() - 1 && tickets.get(i) instanceof NumTicket) {
                 value.append("\n");
             }
         }
         return value.toString();
+    }
+
+    public String getTicketInformationTimeTicket(ArrayList<TicketToBuy> timeTicketsToBuy) {
+        String result = "";
+        for (int i = 0; i < timeTicketsToBuy.size(); i++) {
+            TicketToBuy ticket = timeTicketsToBuy.get(i);
+            result += ticket.getTicket().getName() + " Preisstufe: " + ticket.getPreisstufe();
+            if (ticket.getPreisstufe().equals(preisstufen[1]) || ticket.getPreisstufe().equals(preisstufen[2]) || ticket.getPreisstufe().equals(preisstufen[3]) || ticket.getPreisstufe().equals(preisstufen[4])) {//Peisstufe A1-A3,B
+                if (ticket.isZweiWabenTarif()) {
+                    result += "\nEntwerten für die Starthaltestelle: " + UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().from);
+                    result += "\nund die Zielhaltestelle: " + UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().to);
+                } else {
+                    for(Farezone f : farezones){
+                        if(f.getId() == ticket.getMainRegionID()){
+                            result += "\nEntwerten für das Tarifgebiet: " + f.getId() + " - " + f.getName();
+                            break;
+                        }
+                    }
+                }
+            } else if (ticket.getPreisstufe().equals(preisstufen[5])) { //Preisstufe C
+                result += "\nRegion: " + ticket.getMainRegionID();
+            }//Preisstufe D hat keine Region, für die entwertet werden muss
+            result += "\nStartzeitpunkt: " + UtilsString.setDate(ticket.getFirstDepartureTime()) + " " + UtilsString.setTime(ticket.getFirstDepartureTime());
+            if(i+1 < timeTicketsToBuy.size()){
+                result +="\n";
+            }
+        }
+        return result;
     }
 
     /**

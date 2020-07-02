@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.TripItemTimeComparator;
+import com.example.lkjhgf.helper.util.TripQuantitiesTimeComparator;
+import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.GroupedTicketAdapter;
 import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.TicketItem;
 
@@ -75,21 +78,34 @@ class RecyclerViewGroupedTicketOverview {
             quantity.add(1);
             while (it.hasNext()) {
                 TicketToBuy next = it.next();
-                if (current.equals(next)) {
-                    tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
-                    quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
-                    freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
-                } else {
-                    tickets.add(next);
-                    quantity.add(1);
-                    freeTrips.add(next.getFreeTrips());
+                if(current.getTicket() instanceof NumTicket){
+                    if (current.equals(next)) {
+                        tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
+                        quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                        freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
+                    }
+                }
+                else {
+                    if(next.getValidFarezones().equals(current.getValidFarezones())
+                    && current.getFirstDepartureTime().equals(next.getFirstDepartureTime())
+                    && current.getLastArrivalTime().equals(next.getLastArrivalTime())){
+                        tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
+                        quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                        freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
+                    }else{
+                        tickets.add(next);
+                        quantity.add(1);
+                        freeTrips.add(next.getFreeTrips());
+                    }
+
                 }
                 current = next;
             }
 
             ticketItems = new ArrayList<>();
             for (int i = 0; i < quantity.size(); i++) {
-                Collections.sort(tickets.get(i).getTripList(), new TripItemTimeComparator());
+                //TODO prüfen
+                Collections.sort(tickets.get(i).getTripQuantities(), new TripQuantitiesTimeComparator());
                 ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i), freeTrips.get(i)));
             }
         }
