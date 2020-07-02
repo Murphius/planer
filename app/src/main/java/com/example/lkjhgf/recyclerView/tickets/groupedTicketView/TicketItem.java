@@ -1,4 +1,4 @@
-package com.example.lkjhgf.recyclerView.tickets;
+package com.example.lkjhgf.recyclerView.tickets.groupedTicketView;
 
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;

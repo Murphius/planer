@@ -1,4 +1,4 @@
-package com.example.lkjhgf.recyclerView.tickets;
+package com.example.lkjhgf.recyclerView.tickets.groupedTicketView;
 
 import android.app.Activity;
 import android.view.View;

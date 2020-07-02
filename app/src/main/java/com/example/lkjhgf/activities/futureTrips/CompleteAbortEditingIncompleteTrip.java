@@ -10,7 +10,7 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.futureTrip.TripListComplete;
-import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.helper.util.WabenTask;
 import com.example.lkjhgf.optimisation.TicketToBuy;

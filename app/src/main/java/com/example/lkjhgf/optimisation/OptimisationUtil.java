@@ -3,7 +3,7 @@ package com.example.lkjhgf.optimisation;
 import android.app.Activity;
 
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;

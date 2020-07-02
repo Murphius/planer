@@ -1,4 +1,4 @@
-package com.example.lkjhgf.recyclerView.tickets;
+package com.example.lkjhgf.recyclerView.tickets.groupedTicketView;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * Verbindung zwischen {@link TicketItem} und {@link TicketViewHolder}
  */
-public class TicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
+public class GroupedTicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
 
     private Activity activity;
     /**
@@ -25,7 +25,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
     private ArrayList<TicketItem> ticketItems;
     private OnItemClickListener onItemClickListener;
 
-    public TicketAdapter (Activity activity, ArrayList<TicketItem> ticketItems){
+    public GroupedTicketAdapter(Activity activity, ArrayList<TicketItem> ticketItems){
         this.activity = activity;
         this.ticketItems = ticketItems;
     }

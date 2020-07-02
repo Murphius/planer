@@ -40,7 +40,7 @@ import de.schildbach.pte.dto.TripOptions;
  * 
  * @author Andreas Schildbach
  */
-public interface NetworkProvider{
+public interface NetworkProvider {
     public enum Capability {
         /* can suggest locations */
         SUGGEST_LOCATIONS,

@@ -992,12 +992,14 @@ public abstract class AbstractEfaProvider extends AbstractNetworkProvider {
                 return new Line(id, network, Product.REGIONAL_TRAIN, symbol);
             if ("R-Bahn".equals(trainName))
                 return new Line(id, network, Product.REGIONAL_TRAIN, symbol);
+            if ("RE1 (RRX)".equals(trainNum))
+                return new Line(id, network, Product.REGIONAL_TRAIN, "RE1 - RRX");
             if ("RE5 (RRX)".equals(trainNum))
-                return new Line(id, network, Product.REGIONAL_TRAIN, "RE5");
+                return new Line(id, network, Product.REGIONAL_TRAIN, "RE5 - RRX");
             if ("RE6 (RRX)".equals(trainNum))
-                return new Line(id, network, Product.REGIONAL_TRAIN, "RE6");
+                return new Line(id, network, Product.REGIONAL_TRAIN, "RE6 - RRX");
             if ("RE11 (RRX)".equals(trainNum))
-                return new Line(id, network, Product.REGIONAL_TRAIN, "RE11");
+                return new Line(id, network, Product.REGIONAL_TRAIN, "RE11 - RRX");
             if ("RB-Bahn".equals(trainName))
                 return new Line(id, network, Product.REGIONAL_TRAIN, symbol);
             if (trainType == null && "RB67/71".equals(trainNum))
@@ -1080,6 +1082,8 @@ public abstract class AbstractEfaProvider extends AbstractNetworkProvider {
                 return new Line(id, network, Product.REGIONAL_TRAIN, "CB" + trainNum);
             if (trainType == null && ("C11".equals(trainNum) || "C13".equals(trainNum) || "C14".equals(trainNum)
                     || "C15".equals(trainNum)))
+                return new Line(id, network, Product.REGIONAL_TRAIN, trainNum);
+            if ("CB523".equals(trainNum))
                 return new Line(id, network, Product.REGIONAL_TRAIN, trainNum);
             if ("VEC".equals(trainType) || "vectus Verkehrsgesellschaft".equals(trainName))
                 return new Line(id, network, Product.REGIONAL_TRAIN, "VEC" + trainNum);
@@ -2492,6 +2496,7 @@ public abstract class AbstractEfaProvider extends AbstractNetworkProvider {
 
                 XmlPullUtil.enter(pp, "itdPoint");
                 XmlPullUtil.optSkip(pp, "genAttrList");
+                XmlPullUtil.optSkip(pp, "sPAs");
                 XmlPullUtil.require(pp, "itdDateTime");
 
                 final Date plannedStopArrivalTime;
@@ -2708,7 +2713,7 @@ public abstract class AbstractEfaProvider extends AbstractNetworkProvider {
                             if (!id.equals(departure.location.id) && !id.equals(arrival.location.id)) {
                                 final String name = normalizeLocationName(intermediateParts[1]);
 
-                                if (!("0000-1".equals(intermediateParts[2]) && "000-1".equals(intermediateParts[3]))) {
+                                if (!(intermediateParts[2].startsWith("000") && intermediateParts[3].startsWith("000"))) {
                                     ParserUtils.parseIsoDate(plannedTimeCal, intermediateParts[2]);
                                     ParserUtils.parseIsoTime(plannedTimeCal, intermediateParts[3]);
 

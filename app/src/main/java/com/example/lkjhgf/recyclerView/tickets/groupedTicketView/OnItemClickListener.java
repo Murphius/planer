@@ -1,4 +1,4 @@
-package com.example.lkjhgf.recyclerView.tickets;
+package com.example.lkjhgf.recyclerView.tickets.groupedTicketView;
 
 /**
  * Enthält die Funktionen, die ausgeführt werden sollen, für klicks <br/>

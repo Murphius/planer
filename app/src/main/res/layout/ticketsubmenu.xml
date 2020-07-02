@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/BootstrapButton38"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:backgroundTintMode="src_over"
+            android:clickable="true"
+            android:fontFamily="serif"
+            android:hapticFeedbackEnabled="false"
+            android:longClickable="false"
+            android:minWidth="@android:dimen/thumbnail_width"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapBrand="regular"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrscheinliste"
+            app:roundedCorners="true"
+            app:showOutline="false" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/BootstrapButton39"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:backgroundTintMode="src_over"
+            android:clickable="true"
+            android:fontFamily="serif"
+            android:hapticFeedbackEnabled="false"
+            android:longClickable="false"
+            android:minWidth="@android:dimen/thumbnail_width"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:bootstrapBrand="regular"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/fahrscheingruppen"
+            app:roundedCorners="true"
+            app:showOutline="false" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

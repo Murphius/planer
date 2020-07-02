@@ -1,4 +1,4 @@
-package com.example.lkjhgf.helper.ticketOverview;
+package com.example.lkjhgf.helper.ticketOverview.groupedOverview;
 
 import android.app.Activity;
 import android.view.View;
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.TripItemTimeComparator;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.recyclerView.tickets.TicketAdapter;
-import com.example.lkjhgf.recyclerView.tickets.TicketItem;
+import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.GroupedTicketAdapter;
+import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.TicketItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import de.schildbach.pte.dto.Fare;
 /**
  * Handhabung des RecyclerViews, in dem die Tickets angezeigt werden
  */
-class RecyclerViewTicketOverview {
+class RecyclerViewGroupedTicketOverview {
 
     private Activity activity;
 
@@ -35,7 +35,7 @@ class RecyclerViewTicketOverview {
     /**
      * Managed die Klicks und das Anzeigen der Liste an TicketItems
      */
-    private TicketAdapter adapter;
+    private GroupedTicketAdapter adapter;
 
     /**
      * Erzeugt aus den gespeicherten Fahrten ({@link TicketToBuy}) eine Liste mit Objekten der
@@ -45,7 +45,7 @@ class RecyclerViewTicketOverview {
      * @param view       Layout
      * @param allTickets enthält alle gespeicherten Fahrten
      */
-    RecyclerViewTicketOverview(Activity activity, View view, AllTickets allTickets) {
+    RecyclerViewGroupedTicketOverview(Activity activity, View view, AllTickets allTickets) {
         this.activity = activity;
 
         recyclerView = view.findViewById(R.id.recyclerView7);
@@ -94,7 +94,7 @@ class RecyclerViewTicketOverview {
             }
         }
 
-        adapter = new TicketAdapter(activity, ticketItems);
+        adapter = new GroupedTicketAdapter(activity, ticketItems);
         buildRecyclerView();
     }
 

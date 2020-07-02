@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constraintLayout4">
+    android:id="@+id/constraintLayout5">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,13 +15,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView95"
+            android:id="@+id/textView105"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/mr_and_mrs_jones"
             android:fontFamily="serif"
             android:gravity="center"
-            android:text="@string/fahrscheingruppen"
+            android:text="@string/fahrscheinuebersicht"
             android:textColor="@color/mr_and_mrs_jones_25"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -33,7 +33,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView97"
+                android:id="@+id/textView106"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:text="@string/gesamtpreis" />
 
             <TextView
-                android:id="@+id/textView99"
+                android:id="@+id/textView107"
                 style="@style/textViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -50,16 +50,15 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view7"
+            android:id="@+id/view10"
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="@color/mr_and_mrs_jones" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView7"
+            android:id="@+id/recyclerView9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

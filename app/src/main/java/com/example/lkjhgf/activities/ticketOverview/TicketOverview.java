@@ -1,35 +1,32 @@
 package com.example.lkjhgf.activities.ticketOverview;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 
-/**
- * Anzeigen aller benötigten Fahrscheine <br/>
- *
- * Das Handling der Ansicht erfolgt in der Klasse {@link AllTickets}
- */
 public class TicketOverview extends Activity {
 
-    AllTickets myAllTickets;
     @Override
-    public void onCreate(Bundle savedInstances) {
+    public void onCreate(Bundle savedInstances){
         super.onCreate(savedInstances);
+        setContentView(R.layout.ticketsubmenu);
 
-        setContentView(R.layout.ticket_generalview);
+        BootstrapButton groupedTickets = this.findViewById(R.id.BootstrapButton39);
+        groupedTickets.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        groupedTickets.setOnClickListener(v -> {
+                Intent intent = new Intent(this, TicketOverviewGroupedTickets.class);
+                startActivity(intent);
+        });
 
-        ConstraintLayout layout = findViewById(R.id.constraintLayout4);
-
-        myAllTickets = new AllTickets(this, layout);
-    }
-
-    @Override
-    public void onBackPressed(){
-        myAllTickets.saveData();
-        super.onBackPressed();
+        BootstrapButton allTicketsList = this.findViewById(R.id.BootstrapButton38);
+        allTicketsList.setBootstrapBrand(new ButtonBootstrapBrandVisible());
+        allTicketsList.setOnClickListener(v ->{
+            Intent intent = new Intent(this, AllTicketList.class);
+            startActivity(intent);
+        });
     }
 }

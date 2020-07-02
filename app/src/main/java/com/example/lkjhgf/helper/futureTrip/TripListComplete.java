@@ -10,7 +10,7 @@ import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncomplet
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
 import com.example.lkjhgf.activities.singleTrip.EditTrip;
-import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
@@ -271,7 +271,7 @@ public class TripListComplete extends MyTripList {
         adapter.notifyDataSetChanged();
         //TODO überprüfen
         AllTickets.saveData(allSavedTickets, activity);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems,AllTickets.loadTickets(activity), activity);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, AllTickets.loadTickets(activity), activity);
         AllTickets.saveData(newTicketList, activity);
         saveData(ALL_SAVED_TRIPS);
     }

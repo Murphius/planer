@@ -61,7 +61,7 @@ public class VRR_Farezones {
         farezones.add(new Farezone(43,"Düsseldorf Mitte/Nord"));
         farezones.add(new Farezone(44,"Ratingen/Heiligenhaus"));
         farezones.add(new Farezone(45,"Essen Süd"));
-        farezones.add(new Farezone(46,"Hattingen/Sprochhövel"));
+        farezones.add(new Farezone(46,"Hattingen/Sprockhövel"));
         farezones.add(new Farezone(47,"Witten/Wetter/Herdecke"));
 
         farezones.add(new Farezone(50,"Mönchengladbach"));

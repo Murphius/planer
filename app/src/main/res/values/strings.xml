@@ -5,6 +5,10 @@
     <string name="fahrtenplanen">Mehrere Fahrten</string>
     <string name="fahrtenuebersicht">Zukünftige Fahrten</string>
     <string name="fahrscheinuebersicht">Fahrscheinübersicht</string>
+    <string name="gruppiertefahrscheinuebersicht">Gruppierte Fahrscheinübersicht</string>
+
+    <string name="fahrscheinliste">Liste aller Fahrscheine</string>
+    <string name="fahrscheingruppen">Gruppierte Ansicht aller Fahrscheine</string>
 
     <string name="einstellungen">Einstellungen</string>
 
@@ -68,6 +72,10 @@
     <string name="fahrschein">Fahrschein:</string>
 
     <string name="gesamtpreis">Gesamtpreis:</string>
+    
+    <string name="gueltigeBereiche">Gültige Bereiche:</string>
+    <string name="gueltigerZeitraum">Gültiger Zeitraum:</string>
+    <string name="usedTrips">Genutzte Fahrten:</string>
 
 
 </resources>

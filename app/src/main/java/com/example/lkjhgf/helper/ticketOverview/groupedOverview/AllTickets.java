@@ -1,4 +1,4 @@
-package com.example.lkjhgf.helper.ticketOverview;
+package com.example.lkjhgf.helper.ticketOverview.groupedOverview;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -48,7 +48,7 @@ public class AllTickets {
 
 
     /**
-     * Lädt die gespeicherten Fahrten und lagert das Management des RecyclerViews an die Klasse {@link RecyclerViewTicketOverview} aus.
+     * Lädt die gespeicherten Fahrten und lagert das Management des RecyclerViews an die Klasse {@link RecyclerViewGroupedTicketOverview} aus.
      * <br/>
      * Berechnung des Gesamtpreises
      *
@@ -62,7 +62,7 @@ public class AllTickets {
 
         TextView fullpriceHolder = view.findViewById(R.id.textView99);
 
-        new RecyclerViewTicketOverview(activity, view, this);
+        new RecyclerViewGroupedTicketOverview(activity, view, this);
         fullpriceHolder.setText(UtilsString.centToString(fullPrice));
     }
 
@@ -165,6 +165,10 @@ public class AllTickets {
     public static HashMap<Fare.Type, ArrayList<TicketToBuy>> loadTickets(Activity activity) {
         loadData(activity, 0);
         return allTickets;
+    }
+
+    public static int getFullPrice(){
+        return fullPrice;
     }
 
 }

@@ -1,8 +1,14 @@
 package com.example.lkjhgf.helper.util;
 
+import com.example.lkjhgf.optimisation.NumTicket;
+import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
@@ -200,21 +206,55 @@ public final class UtilsString {
     /**
      * Wandelt einen Cent Betrag in € um, mit korrektor Formatierung
      *
-     * @return String Cent-Betrag in Euro mit deutscher Formatierung
      * @param costs Kosten in Cent, welche angezeigt werden sollen
+     * @return String Cent-Betrag in Euro mit deutscher Formatierung
      */
-    public static String centToString(int costs){
+    public static String centToString(int costs) {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-        double currencyAmmount = (costs/100) + (double)(costs%100)/100;
+        double currencyAmmount = (costs / 100) + (double) (costs % 100) / 100;
         return currencyFormatter.format(currencyAmmount);
     }
 
-    public static String setPreisstufenName(Trip trip){
+    public static String setPreisstufenName(Trip trip) {
         if (trip.fares != null) {
             return trip.fares.get(0).units;
         } else {
-            return  "?";
+            return "?";
         }
+    }
+
+    public static String endDate(TicketToBuy ticketToBuy) {
+        if (ticketToBuy.getTicket() instanceof NumTicket) {
+            return "";
+        }
+        TimeTicket t = (TimeTicket) ticketToBuy.getTicket();
+        Calendar c = Calendar.getInstance();
+        if (t.equals(MyVRRprovider.happyHourTicket)) {
+            c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime());
+            int startH = c.get(Calendar.HOUR_OF_DAY);
+            if (startH < 6) {
+                return setDate(ticketToBuy.getFirstDepartureTime()) + " 6 : 00";
+            } else {
+                c.setTimeInMillis(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
+                return setDate(c.getTime()) + " 6h 00";
+            }
+        } else if (t.equals(MyVRRprovider.vierStundenTicket)) {
+            c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime());
+            if (!(c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)) {
+                if (c.get(Calendar.HOUR_OF_DAY) <= 23) {
+                    c.setTimeInMillis(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
+                    String result = setDate(c.getTime());
+                    c.setTimeInMillis(c.getTimeInMillis() - 20 * 60 * 60 * 1000);
+                    return result + " " + setTime(c.getTime());
+                } else {
+                    return setDate(c.getTime()) + " 3 : 00";
+                }
+            }
+        }
+        c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime() + t.getMaxDuration());
+        return setDate(c.getTime()) + " " +
+                setTime(c.getTime());
+
     }
 
 }

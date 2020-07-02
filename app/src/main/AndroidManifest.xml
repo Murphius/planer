@@ -42,6 +42,10 @@
             android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.ticketOverview.TicketOverview"
             android:parentActivityName=".activities.MainMenu"/>
+        <activity android:name=".activities.ticketOverview.TicketOverviewGroupedTickets"
+            android:parentActivityName=".activities.ticketOverview.TicketOverview"/>
+        <activity android:name=".activities.ticketOverview.AllTicketList"
+            android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.Settings" />
         <activity android:name=".activities.MainMenu">
             <intent-filter>
