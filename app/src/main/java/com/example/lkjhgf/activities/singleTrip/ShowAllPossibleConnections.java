@@ -9,9 +9,11 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.service.SinglePossibleConnection;
 
 import de.schildbach.pte.VrrProvider;
+import de.schildbach.pte.dto.Trip;
 
 /**
  * Planung einer einzelnen Fahrt <br/>
@@ -33,16 +35,10 @@ public class ShowAllPossibleConnections extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_possible_connections_single);
-
-        Intent intent = getIntent();
-
         ConstraintLayout layout = findViewById(R.id.constraintLayout1);
 
         new SinglePossibleConnection(this,
-                layout,
-                intent,
-                new VrrProvider());
-
+                layout);
     }
 
 }

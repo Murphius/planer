@@ -9,7 +9,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncompleteView;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
-import com.example.lkjhgf.activities.singleTrip.EditTrip;
+import com.example.lkjhgf.activities.singleTrip.EditTripFromComplete;
 import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -102,7 +102,7 @@ public class TripListComplete extends MyTripList {
         if (current.isComplete()) {
             tripItems.remove(position);
             adapter.notifyItemRemoved(position);
-            Intent newIntent = new Intent(activity.getApplicationContext(), EditTrip.class);
+            Intent newIntent = new Intent(activity.getApplicationContext(), EditTripFromComplete.class);
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
             startNextActivity(newIntent);
         } else {

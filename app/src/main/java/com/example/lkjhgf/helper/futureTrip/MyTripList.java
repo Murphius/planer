@@ -44,7 +44,7 @@ import static android.content.Context.MODE_PRIVATE;
 public abstract class MyTripList {
 
     public static String ALL_SAVED_TRIPS = "com.example.lkjhgf.futureTrips.ALL_SAVED_TRIPS";
-    static String SAVED_TRIPS = "com.example.lkjhgf.futureTrips.SAVED_TRIPS";
+    public static String NEW_SAVED_TRIPS = "com.example.lkjhgf.futureTrips.SAVED_TRIPS";
     private static String SAVED_TRIPS_TASK = "com.example.lkjhgf.futureTrips.SAVED_TRIPS_TASK";
 
     Activity activity;
@@ -294,6 +294,16 @@ public abstract class MyTripList {
      * Manuelle Serialisierung mittels {@link InterfaceAdapter} für Trip (Individual und Public) <br/>
      */
     public void saveData(String dataPath) {
+        saveTrips(tripItems, dataPath, activity);
+    }
+
+
+
+    private void loadData(){
+        tripItems = loadData(activity, dataPath);
+    }
+
+    public static void saveTrips(ArrayList<TripItem> newTripItems, String dataPath, Activity activity){
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
@@ -305,14 +315,9 @@ public abstract class MyTripList {
         builder.registerTypeAdapter(NumTicket.class, adapter);
         builder.registerTypeAdapter(TimeTicket.class, adapter);
         Gson gson = builder.create();
-        String json = gson.toJson(tripItems);
+        String json = gson.toJson(newTripItems);
         editor.putString(SAVED_TRIPS_TASK, json);
         editor.apply();
-    }
-
-    private void loadData()
-    {
-        tripItems = loadData(activity, dataPath);
     }
 
     /**

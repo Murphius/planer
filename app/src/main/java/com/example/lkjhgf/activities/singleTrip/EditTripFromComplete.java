@@ -34,7 +34,7 @@ import de.schildbach.pte.dto.Trip;
  * </p>
  */
 
-public class EditTrip extends Activity {
+public class EditTripFromComplete extends Activity {
 
     Form form;
     Trip trip;
@@ -51,7 +51,7 @@ public class EditTrip extends Activity {
 
         trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
 
-        form = new SingleTrip(this, layout, new VrrProvider(), trip);
+        form = new SingleTrip(this, layout, trip);
 
         form.setOnClickListener();
 

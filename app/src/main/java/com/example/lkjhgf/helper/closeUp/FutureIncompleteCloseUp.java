@@ -1,7 +1,17 @@
 package com.example.lkjhgf.helper.closeUp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
+
+import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
+import com.example.lkjhgf.helper.futureTrip.MyTripList;
+import com.example.lkjhgf.helper.futureTrip.TripListComplete;
+import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+
+import java.util.ArrayList;
 
 /**
  * Ansicht einer fertig geplanten "optimierten" Fahrt <br/>
@@ -30,5 +40,21 @@ public class FutureIncompleteCloseUp extends MultipleCloseUp {
                                    View view) {
         super(activity, view);
         buttons.button_accept.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void startEditing(){
+        //TODO: Editieren ansicht öffnen,
+        // Bei Abbruch Fahrt wieder einfügen
+        //Fahrt aus der Liste der Fahrten löschen
+        ArrayList<TripItem> savedTrips = TripListIncomplete.loadTripList(activity, TripListIncomplete.NEW_SAVED_TRIPS);
+        savedTrips.remove(new TripItem(trip, false, null));
+        MyTripList.saveTrips(savedTrips, TripListComplete.NEW_SAVED_TRIPS, activity);
+        //Editieren ansicht öffnen
+        Intent intent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
+        intent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
+        intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
+        activity.startActivity(intent);
     }
 }

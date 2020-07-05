@@ -3,6 +3,7 @@ package com.example.lkjhgf.recyclerView.futureTrips;
 import android.app.Activity;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.helper.util.UtilsString;
@@ -10,9 +11,7 @@ import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeTicket;
-import com.example.lkjhgf.publicTransport.provider.Farezone;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
-import com.example.lkjhgf.recyclerView.tickets.allTicketsView.AllTicketAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ public class TripItem implements Serializable {
     private Set<Integer> crossedFarezones;
     private String preisstufe;
     private boolean isComplete;
+    private MyURLParameter myURLParameter;
 
     private class TripTicketInformationHolder implements Serializable {
         private Ticket ticket;
@@ -72,13 +72,15 @@ public class TripItem implements Serializable {
      * @param isComplete - gibt an, ob die Fahrt bei der Optimierung berücksichtigt werden soll <br/>
      *                   false - keine Berücksichtigung
      */
-    public TripItem(Trip trip, boolean isComplete) {
+    public TripItem(Trip trip, boolean isComplete, MyURLParameter myURLParameter) {
         this.trip = trip;
         this.isComplete = isComplete;
         preisstufe = UtilsString.setPreisstufenName(trip);
+        this.myURLParameter = myURLParameter;
         numUserClasses = new HashMap<>();
         usersWithoutTicket = new HashMap<>();
         allTicketInformations = new HashMap<>();
+
     }
 
     //Nur zum Testen
@@ -106,12 +108,12 @@ public class TripItem implements Serializable {
      * @param numUserClasses gibt an, wie viele Personen einer Nutzerklasse reisen - stimmt zu Beginn mit der Anzahl
      *                       Personen ohne Ticket überein
      */
-    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses, int startID, Set<Integer> crossedFarezones) {
-        this(trip, isComplete);
+    public TripItem(Trip trip, boolean isComplete, HashMap<Fare.Type, Integer> numUserClasses, int startID, Set<Integer> crossedFarezones, MyURLParameter myURLParameter) {
+        this(trip, isComplete,myURLParameter);
         this.startID = startID;
         this.crossedFarezones = crossedFarezones;
-        this.numUserClasses = new HashMap(numUserClasses);
-        this.usersWithoutTicket = new HashMap(numUserClasses);
+        this.numUserClasses = new HashMap<>(numUserClasses);
+        this.usersWithoutTicket = new HashMap<>(numUserClasses);
     }
 
     public Trip getTrip() {
@@ -365,6 +367,10 @@ public class TripItem implements Serializable {
 
     public String getTripID() {
         return trip.getId();
+    }
+
+    public MyURLParameter getMyURLParameter(){
+        return myURLParameter;
     }
 
     /**

@@ -1,11 +1,17 @@
 package com.example.lkjhgf.helper.closeUp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.Settings;
+import com.example.lkjhgf.publicTransport.query.QueryParameter;
+import com.example.lkjhgf.publicTransport.query.QueryRefresh;
 
+import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -19,6 +25,7 @@ public abstract class CloseUp {
     Trip trip;
 
     Activity activity;
+    View view;
 
     /**
      * Initialisierung der Attribute <br/>
@@ -30,6 +37,7 @@ public abstract class CloseUp {
      */
     CloseUp(Activity activity, View view) {
         this.activity = activity;
+        this.view = view;
         // Fahrt die betrachtet werden soll
         this.trip = (Trip) activity.getIntent().getSerializableExtra(MainMenu.EXTRA_TRIP);
 
@@ -38,7 +46,7 @@ public abstract class CloseUp {
         new CloseUpRecyclerView(activity, view, this);
     }
 
-    CloseUp(Trip trip,Activity activity, View view){
+    CloseUp(Trip trip, Activity activity, View view) {
         this.trip = trip;
         this.activity = activity;
         textViewClass = new TextViewClass(view, activity.getResources(), this);
@@ -72,6 +80,46 @@ public abstract class CloseUp {
         newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
         activity.startActivity(newIntent);
     }
+
+    void refreshTrip() {
+        QueryParameter q = new QueryParameter(trip.from, null, trip.to, trip.getFirstDepartureTime(), true, Settings.getTripOptions(activity));
+        new QueryRefresh(activity, this::findTrip).execute(q);
+    }
+
+    private void findTrip(QueryTripsResult result) {
+        if (result == null || result.status != QueryTripsResult.Status.OK) {
+            Toast.makeText(activity.getApplicationContext(), "Keine Verbindung gefunden", Toast.LENGTH_SHORT).show();
+        } else {
+            boolean contains = false;
+            for (Trip t : result.trips) {
+                if (t.getId().equals(trip.getId())) {
+                    trip = t;
+                    contains = true;
+                    textViewClass.fillTextView();
+                    break;
+                }
+            }
+            //TODO in !contains ändern
+            if(contains){
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage("Diese Fahrt ist nicht mehr möglich.\n" +
+                        "Soll diese Fahrt editiert werden?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Ja", (dialog, which) -> startEditing());
+                builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        }
+    }
+
+    public void onBackPressed(Intent intent){
+        //intent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        activity.startActivity(intent);
+    }
+
+
+    public abstract void startEditing();
 
 
 }

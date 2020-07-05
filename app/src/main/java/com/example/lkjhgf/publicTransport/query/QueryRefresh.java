@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.adapter.MyArrayAdapter;
 
 import java.io.IOException;
 import java.util.Date;
@@ -19,39 +20,33 @@ import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.TripOptions;
 
-/**
- * Verbindungsanfrage an den Provider <br/>
- *
- * Während der Anfrage selbst, wird ein Ladebildschirm angezeigt, anschließend wird die nächste
- * Aktivität gestartet ({@link com.example.lkjhgf.helper.service.SinglePossibleConnection} oder
- * {@link com.example.lkjhgf.helper.service.MultiplePossibleConnections})
- */
-public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
+public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
 
-    // Konstanten fuer Intent
-    public static final String EXTRA_QUERY_TRIPS_RESULT = "com.example.lkjhgf.public_transport.EXTRA_QUERYTRIPSRESULT";
+    public interface Action
+    {
+        void DoSomeThing(QueryTripsResult result);
+    }
 
+    private Context context;
+    private Action action;
     private NetworkProvider provider;
-    private Activity context;
     private AlertDialog dialog;
-    private Intent intent;
-    private boolean clearStack;
+    private QueryTripsResult result;
 
     /**
      * Konstruktor mit allen im Verlauf benötigten Werte
      *
      * @param context  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
-     * @param intent   - zum Wechseln der Aktivität benötigt
      */
-    public QueryTask(Activity context, Intent intent, boolean clearStack) {
+    public QueryRefresh(Context context, Action action) {
         this.provider = MainMenu.myProvider.getNetworkProvider();
         this.context = context;
-        this.intent = intent;
-        this.clearStack = clearStack;
+        this.action = action;
     }
 
-    public QueryTask(Activity context, Intent intent) {
-        this(context, intent, false);
+    public QueryRefresh(Context context){
+        this.context = context;
+        this.provider = MainMenu.myProvider.getNetworkProvider();
     }
 
     /**
@@ -114,25 +109,12 @@ public class QueryTask extends AsyncTask<QueryParameter, Void, QueryTripsResult>
         return provider.queryTrips(from, via, to, date, dep, options);
     }
 
-    /**
-     * Startet die nächste Aktivität <br/>
-     * <p>
-     * Startet die nächste Aktivität (welche das ist, ist im Intent hinterlegt) <br/>
-     * dabei wird das Ergebnis der Anfrage an die
-     * nächste Ansicht übergeben (Verwendung in {@link com.example.lkjhgf.helper.service.PossibleConnections}<br/>
-     * Anschließend wird der Dialog geschlossen <br/>
-     *
-     * @param result Ergebnis der Provider Anfrage
-     */
     @Override
     protected void onPostExecute(QueryTripsResult result) {
-        if (result != null) {
-            intent.putExtra(EXTRA_QUERY_TRIPS_RESULT, result);
-            if (clearStack)
-                context.finish();
-            context.startActivity(intent);
-        }
+        this.result = result;
+        action.DoSomeThing(result);
         dialog.dismiss();
     }
+
 
 }

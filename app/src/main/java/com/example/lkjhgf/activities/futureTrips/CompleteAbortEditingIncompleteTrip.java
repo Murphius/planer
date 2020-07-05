@@ -61,8 +61,8 @@ public class CompleteAbortEditingIncompleteTrip extends Activity {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-
-        TripItem newTripItem = new TripItem(trip, false, numUserClass, waben.first, waben.second);
+    //TODO MyUrlParameter
+        TripItem newTripItem = new TripItem(trip, false, numUserClass, waben.first, waben.second, null);
 
         ArrayList<TripItem> list = MyTripList.loadTripList(this, ALL_SAVED_TRIPS);
         list.add(newTripItem);

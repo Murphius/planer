@@ -32,7 +32,7 @@ public class UserForm extends Activity {
 
         ConstraintLayout layout = findViewById(R.id.constraintLayout);
 
-        form = new MultipleTrip(this, layout, new VrrProvider());
+        form = new MultipleTrip(this, layout);
 
         form.setOnClickListener();
 

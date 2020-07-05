@@ -1,10 +1,13 @@
 package com.example.lkjhgf.activities.futureTrips.closeUp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.closeUp.CloseUp;
 import com.example.lkjhgf.helper.closeUp.FutureSingleCloseUp;
+import com.example.lkjhgf.helper.futureTrip.TripListComplete;
 
 /**
  * Öffnet die Detailansicht für eine einzelne Fahrt <br/>
@@ -24,12 +27,20 @@ import com.example.lkjhgf.helper.closeUp.FutureSingleCloseUp;
 
 public class AllTripsCompleteView extends Activity {
 
+    CloseUp closeUp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.detailed_view);
 
-        new FutureSingleCloseUp(this, findViewById(R.id.constraintLayout2));
+        closeUp = new FutureSingleCloseUp(this, findViewById(R.id.constraintLayout2));
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, TripListComplete.class);
+        closeUp.onBackPressed(intent);
     }
 }

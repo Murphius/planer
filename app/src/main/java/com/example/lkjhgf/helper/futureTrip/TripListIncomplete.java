@@ -33,7 +33,16 @@ public class TripListIncomplete extends MyTripList {
      * @see MyTripList#MyTripList(Activity, View, TripItem, String Data Path)
      */
     public TripListIncomplete(Activity activity, View view, TripItem tripItem) {
-        super(activity, view, tripItem, MyTripList.SAVED_TRIPS);
+        super(activity, view, tripItem, MyTripList.NEW_SAVED_TRIPS);
+
+        numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
+
+        setOnClickListener();
+        setRecyclerView();
+    }
+
+    public TripListIncomplete(Activity activity, View view) {
+        super(activity, view, null, MyTripList.NEW_SAVED_TRIPS);
 
         numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
@@ -73,7 +82,7 @@ public class TripListIncomplete extends MyTripList {
     void startEdit(int position) {
         TripItem current = tripItems.get(position);
         tripItems.remove(position);
-        saveData(SAVED_TRIPS);
+        saveData(NEW_SAVED_TRIPS);
         Intent newIntent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
@@ -105,7 +114,7 @@ public class TripListIncomplete extends MyTripList {
             //Liste leeren
             tripItems.clear();
             //Speichern, dass keine Fahrten geplant sind
-            saveData(SAVED_TRIPS);
+            saveData(NEW_SAVED_TRIPS);
             //Laden aller gespeicherten Fahrten
             tripItems = loadData(activity, ALL_SAVED_TRIPS);
             //Neue Fahrten hinzufügen
@@ -116,7 +125,8 @@ public class TripListIncomplete extends MyTripList {
             UtilsList.removeOverlappingTrips(tripItems);
             if (tripItems.size() != size + copy.size()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("Nicht alle Fahrten konnten hinzugefügt werden \n Mögliche Ursachen: Fahrten sind bereits in der Liste, Fahrten haben sich überlappt, ...");
+                builder.setMessage("Nicht alle Fahrten konnten hinzugefügt werden \n" +
+                        "Mögliche Ursachen: Fahrten sind bereits in der Liste enthalten, Fahrten haben sich überlappt, ...");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Ok", (dialog, which) -> startOptimierung());
                 AlertDialog dialog = builder.create();

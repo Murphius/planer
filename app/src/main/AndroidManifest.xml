@@ -23,7 +23,7 @@
             android:parentActivityName=".activities.futureTrips.Complete"/>
         <activity android:name=".activities.futureTrips.closeUp.AllConnectionsIncompleteView"
             android:parentActivityName=".activities.futureTrips.Incomplete"/>
-        <activity android:name=".activities.singleTrip.EditTrip"/>
+        <activity android:name=".activities.singleTrip.EditTripFromComplete"/>
         <activity android:name=".activities.multipleTrips.CopyTrip"/>
         <activity android:name=".activities.multipleTrips.EditIncompleteTripFromCompleteList"/>
         <activity android:name=".activities.singleTrip.CopyTrip"/>
@@ -47,6 +47,12 @@
         <activity android:name=".activities.ticketOverview.AllTicketList"
             android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.Settings" />
+        <activity android:name=".activities.singleTrip.EditTripFromRefresh"
+            android:parentActivityName=".activities.MainMenu"/>
+        <activity android:name=".activities.multipleTrips.EditTripFromRefresh_1"
+            android:parentActivityName=".activities.futureTrips.IncompleteAfterRefresh"/>
+        <activity android:name=".activities.futureTrips.IncompleteAfterRefresh"
+            android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -48,7 +48,7 @@ public class CopyTrip extends Activity {
 
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
 
-        form = new SingleTrip(this, layout, new VrrProvider(), trip);
+        form = new SingleTrip(this, layout, trip);
 
         form.setOnClickListener();
 

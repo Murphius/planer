@@ -34,20 +34,18 @@ public class MultipleTrip extends Form {
      * Wenn eine Fahrt editiert oder kopiert werden soll, sollen die zugehörigen Informationen
      * angezeigt werden <br/>
      * <p>
-     * Nutzt {@link #MultipleTrip(Activity, View, NetworkProvider)} als Basis für den View
+     * Nutzt {@link #MultipleTrip(Activity, View)} als Basis für den View
      *
      * @param trip               Trip der editiert oder kopiert werden soll
      * @param numPersonsPerClass gibt die Anzahl der reisenden Personen pro "Klasse" an zB Erwachsene - 5
      * @param numTrip            #Trip
      */
     public MultipleTrip(Activity activity,
-                        View view,
-                        NetworkProvider provider,
-                        Trip trip,
+                        View view, Trip trip,
                         HashMap<Fare.Type, Integer> numPersonsPerClass,
                         int numTrip) {
         // "Normale" Ansicht herstellen
-        this(activity, view, provider);
+        this(activity, view);
         if (numPersonsPerClass == null) {
             this.numPersonsPerClass = new HashMap<>();
         } else {
@@ -84,12 +82,11 @@ public class MultipleTrip extends Form {
      * Neben den Informationen zu Start, Ziel, Zeitpunkt, werden auch die #reisender Personen
      * sowie die #Fahrt "benätigt"
      *
-     * @see Form#Form(Activity, View, NetworkProvider)
+     * @see Form#Form(Activity, View)
      */
     public MultipleTrip(Activity activity,
-                        View view,
-                        NetworkProvider provider) {
-        super(activity, view, provider);
+                        View view) {
+        super(activity, view);
         if (numPersonsPerClass == null) {
             numPersonsPerClass = new HashMap<>();
         }

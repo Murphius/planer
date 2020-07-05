@@ -36,10 +36,6 @@ public class ShowAllPossibleConnections extends Activity {
 
         ConstraintLayout layout = findViewById(R.id.constraintLayout1);
 
-        new MultiplePossibleConnections(this,
-                layout,
-                intent,
-                new VrrProvider());
-
+        new MultiplePossibleConnections(this, layout, intent);
     }
 }

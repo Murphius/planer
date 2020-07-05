@@ -78,7 +78,7 @@ public class TextViewClass {
      * Dabei werden die wesentlichen Informationen zur Fahrt angezeigt: <br/>
      * #Umsteige, Preisstufe, Dauer, Abfahrtszeit, Ankunftszeit, (ggf. Verspätungen), Datum
      */
-    private void fillTextView() {
+    public void fillTextView() {
         //#Umstiege
         num_changes.setText(UtilsString.setNumChanges(closeUp.trip));
 

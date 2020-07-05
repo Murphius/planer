@@ -40,9 +40,8 @@ public class MultiplePossibleConnections extends PossibleConnections {
      */
     public MultiplePossibleConnections(Activity activity,
                                        View view,
-                                       Intent intent,
-                                       NetworkProvider provider) {
-        super(activity, view, intent, provider);
+                                       Intent intent) {
+        super(activity, view, intent);
 
         //#Fahrt
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);

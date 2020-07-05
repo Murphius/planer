@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.futureTrip.TripListComplete;
@@ -13,6 +14,7 @@ import com.example.lkjhgf.activities.MainMenu;
 
 import de.schildbach.pte.dto.Trip;
 
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 import static com.example.lkjhgf.helper.futureTrip.MyTripList.ALL_SAVED_TRIPS;
 
 /**
@@ -43,9 +45,10 @@ public class Complete extends Activity {
 
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        MyURLParameter myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
 
         if (trip != null) {
-            TripItem newTripItem = new TripItem(trip, true);
+            TripItem newTripItem = new TripItem(trip, true, myURLParameter);
             myTripList = new TripListComplete(this, view, newTripItem);
         } else {
             myTripList = new TripListComplete(this, view, null);

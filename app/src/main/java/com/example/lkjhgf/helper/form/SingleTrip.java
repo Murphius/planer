@@ -20,10 +20,10 @@ public class SingleTrip extends Form {
      * Erzeugen einer neuen Fahrt <br/>
      *
      * Da keine #Personen von Interesse ist, wird dies für den Nutzer nicht angezeigt
-     * @see Form#Form(Activity, View, NetworkProvider)
+     * @see Form#Form(Activity, View)
      */
-    public SingleTrip(Activity activity, View view, NetworkProvider provider){
-        super(activity, view, provider);
+    public SingleTrip(Activity activity, View view){
+        super(activity, view);
         setVisibility(view);
     }
 
@@ -31,10 +31,10 @@ public class SingleTrip extends Form {
      * Kopieren oder Editieren einer Fahrt <br/>
      *
      * Das Layout anpassen -> {@link #setVisibility(View)}
-     * @see Form#Form(Activity, View, NetworkProvider, Trip)
+     * @see Form#Form(Activity, View, Trip)
      */
-    public SingleTrip(Activity activity, View view, NetworkProvider provider, Trip trip){
-        super(activity, view, provider, trip);
+    public SingleTrip(Activity activity, View view, Trip trip){
+        super(activity, view, trip);
         setVisibility(view);
     }
 

@@ -61,7 +61,7 @@ public class EditIncompleteTripFromCompleteList extends Activity {
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
 
-        Form form = new MultipleTrip(this, layout, new VrrProvider(), trip, numPersonsPerClass, numTrip);
+        Form form = new MultipleTrip(this, layout, trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.lkjhgf.activities.Settings;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.publicTransport.query.QueryParameter;
 import com.example.lkjhgf.publicTransport.query.QueryTask;
 
@@ -28,6 +29,7 @@ public abstract class Form {
 
 
     //Intent für die Übergabe an die nächste Aktivität
+    public static final String EXTRA_MYURLPARAMETER = "com.example.lkjhgf.individual_trip.form.EXTRA_MYURLPARAMETER";
     public static final String EXTRA_DATE = "com.example.lkjhgf.individual_trip.form.EXTRA_DATE";
     public static final String EXTRA_START = "com.example.lkjhgf.individual_trip.form.EXTRA_START";
     public static final String EXTRA_DESTINATION = "com.example.lkjhgf.individual_trip.form.EXTRA_DESTINATION";
@@ -39,7 +41,6 @@ public abstract class Form {
     Location startLocation, stopoverLocation, destinationLocation;
     Calendar selectedDate;
     boolean isArrivalTime;
-    private NetworkProvider provider;
 
     //
     protected Context context;
@@ -55,11 +56,9 @@ public abstract class Form {
      *
      * @param activity - Aufrufende Aktivität, benötigt für das Starten der nächsten Aktivität
      * @param view     - Layout
-     * @param provider - "Zuweisung" eines Verkehrsverbundes -> Anfrage
      */
-    Form(Activity activity, View view, NetworkProvider provider) {
+    Form(Activity activity, View view) {
         this.activity = activity;
-        this.provider = provider;
         context = activity.getApplicationContext();
 
         buttons = new ButtonClass(view, activity, this);
@@ -75,12 +74,11 @@ public abstract class Form {
      *
      * @param activity aufrufende Aktivität
      * @param view     Layout
-     * @param provider - Verkehrsverbund für Anfragen
      * @param trip     - Trip der bearbeitet werden soll
      * @preconditions der Nutzer hat eine Fahrt zum Editieren oder Kopieren ausgewählt
      */
-    Form(Activity activity, View view, NetworkProvider provider, Trip trip) {
-        this(activity, view, provider);
+    Form(Activity activity, View view, Trip trip) {
+        this(activity, view);
         // Die Angaben sollen mit den angaben der Fahrt übereinstimmen
         text.fillTextViews(trip);
         // Der Zeitpunkt soll mit dem der übergebenen Fahrt übereinstimmen
@@ -168,11 +166,8 @@ public abstract class Form {
      * @preconditions erfolgreiche Prüfung des Formulars, Nutzer hat auf "weiter" geklickt
      */
     private void setIntentExtras() {
-        intent.putExtra(EXTRA_DATE, selectedDate.getTime());
-        intent.putExtra(EXTRA_ISARRIVALTIME, isArrivalTime);
-        intent.putExtra(EXTRA_START, startLocation);
-        intent.putExtra(EXTRA_STOPOVER, stopoverLocation);
-        intent.putExtra(EXTRA_DESTINATION, destinationLocation);
+        MyURLParameter myURLParameter = new MyURLParameter(selectedDate.getTime(), startLocation, stopoverLocation, destinationLocation, !isArrivalTime, Settings.getTripOptions(activity));
+        intent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
     }
 
     public void setOnClickListener() {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.publicTransport.query.QueryTask;
 import com.example.lkjhgf.helper.form.Form;
 
@@ -15,6 +16,8 @@ import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
+
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 
 /**
  * Handhabung des Layouts für mögliche Verbindungen <br/>
@@ -33,6 +36,7 @@ public abstract class PossibleConnections {
     protected Context context;
     protected Activity activity;
     protected Intent intent;
+    protected MyURLParameter myURLParameter;
 
     private TextViewClass textViews;
     private ButtonClass buttons;
@@ -56,19 +60,28 @@ public abstract class PossibleConnections {
      * @param activity - aufrufende Aktivität
      * @param view     - Layout das gefüllt wird
      * @param intent   - Werte aus der vorherigen Aktivität
-     * @param provider - für das Laden von früheren / späteren Verbindungen
      */
-    PossibleConnections(Activity activity, View view, Intent intent, NetworkProvider provider) {
+    PossibleConnections(Activity activity, View view, Intent intent) {
         this.activity = activity;
+        this.myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
         context = activity.getApplicationContext();
 
-        user_date_time = (Date) intent.getSerializableExtra(Form.EXTRA_DATE);
-        start = (Location) intent.getSerializableExtra(Form.EXTRA_START);
-        stopover = (Location) intent.getSerializableExtra(Form.EXTRA_STOPOVER);
-        destination = (Location) intent.getSerializableExtra(Form.EXTRA_DESTINATION);
-        isArrivalTime = intent.getBooleanExtra(Form.EXTRA_ISARRIVALTIME, false);
+        user_date_time = myURLParameter.getStartDate();
+        start = myURLParameter.getStartLocation();
+        stopover = myURLParameter.getVia();
+        destination = myURLParameter.getDestinationLocation();
+        isArrivalTime = ! myURLParameter.isDepartureTime();
         result = (QueryTripsResult) intent.getSerializableExtra(QueryTask.EXTRA_QUERY_TRIPS_RESULT);
-
+        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        if(trip != null){
+            for(int i = 0; i < result.trips.size(); i++){
+                if(result.trips.get(i).getId().equals(trip.getId())){
+                    result.trips.remove(i);
+                    result.trips.add(trip);
+                    break;
+                }
+            }
+        }
         textViews = new TextViewClass(view, this);
 
 
@@ -90,7 +103,9 @@ public abstract class PossibleConnections {
      */
     void changeViewConnectionDetail(Trip trip, Intent newIntent) {
         newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        newIntent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
         activity.startActivity(newIntent);
+        activity.finish();
     }
 
     TextViewClass getTextViews() {

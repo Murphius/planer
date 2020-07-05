@@ -20,11 +20,11 @@ public class SinglePossibleConnection extends PossibleConnections {
      * Ruft den Konstruktor der Superklasse auf <br/>
      * <p>
      * Anschließend wird die Sichtbarkeit der Textfelder für die Personenanzahl auf unsichtbar gestellt
-     * Siehe {@link PossibleConnections#PossibleConnections(Activity, View, Intent, NetworkProvider)} für
+     * Siehe {@link PossibleConnections#PossibleConnections(Activity, View, Intent)} für
      * eine Erläuterung der Parameter.
      */
-    public SinglePossibleConnection(Activity activity, View view, Intent intent, NetworkProvider provider) {
-        super(activity, view, intent, provider);
+    public SinglePossibleConnection(Activity activity, View view) {
+        super(activity, view, activity.getIntent());
         TextViewClass text = getTextViews();
         text.numChildren.setVisibility(View.GONE);
         text.numAdult.setVisibility(View.GONE);

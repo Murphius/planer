@@ -276,15 +276,17 @@ public final class UtilsList {
 
     public static void removeOverlappingTrips(ArrayList<TripItem> tripItems) {
         Iterator<TripItem> iterator = tripItems.iterator();
-        TripItem current = iterator.next();
-        while (iterator.hasNext()) {
+        if(iterator.hasNext()){
+            TripItem current = iterator.next();
             while (iterator.hasNext()) {
-                TripItem next = iterator.next();
-                if (isOverlapping(current.getFirstDepartureTime(), current.getLastArrivalTime(), next.getFirstDepartureTime(), next.getLastArrivalTime())) {
-                    iterator.remove();
-                } else if (current.getLastArrivalTime().before(next.getFirstDepartureTime())) {
-                    current = next;
-                    break;
+                while (iterator.hasNext()) {
+                    TripItem next = iterator.next();
+                    if (isOverlapping(current.getFirstDepartureTime(), current.getLastArrivalTime(), next.getFirstDepartureTime(), next.getLastArrivalTime())) {
+                        iterator.remove();
+                    } else if (current.getLastArrivalTime().before(next.getFirstDepartureTime())) {
+                        current = next;
+                        break;
+                    }
                 }
             }
         }

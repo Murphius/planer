@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
 import com.example.lkjhgf.R;
@@ -33,7 +34,7 @@ public class UserForm extends Activity {
 
         ConstraintLayout layout = findViewById(R.id.constraintLayout);
 
-        form = new SingleTrip(this, layout, new VrrProvider());
+        form = new SingleTrip(this, layout);
 
         form.setOnClickListener();
         

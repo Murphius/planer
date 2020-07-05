@@ -6,6 +6,7 @@ import android.view.View;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.publicTransport.query.QueryParameter;
 
 /**
  * Handhabung der Buttons in der detaillierten Ansicht einer Fahrt
@@ -74,6 +75,8 @@ class ButtonClass {
         button_back.setOnClickListener(v -> activity.onBackPressed());
 
         //TODO
-        button_refresh.setOnClickListener(v -> activity.recreate());
+        button_refresh.setOnClickListener(v -> {
+            closeUp.refreshTrip();
+        });
     }
 }
