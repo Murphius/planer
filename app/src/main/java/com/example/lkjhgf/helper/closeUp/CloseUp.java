@@ -3,16 +3,23 @@ package com.example.lkjhgf.helper.closeUp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.Settings;
+import com.example.lkjhgf.helper.MyURLParameter;
+import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.publicTransport.query.QueryParameter;
 import com.example.lkjhgf.publicTransport.query.QueryRefresh;
 
+import java.util.concurrent.ExecutionException;
+
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
+
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 
 /**
  * Handhabung von der detaillierten Ansicht einer Fahrt
@@ -21,11 +28,14 @@ public abstract class CloseUp {
 
     TextViewClass textViewClass;
     ButtonClass buttons;
+    CloseUpRecyclerView recyclerView;
 
     Trip trip;
 
     Activity activity;
     View view;
+    boolean changed;
+    MyURLParameter myURLParameter;
 
     /**
      * Initialisierung der Attribute <br/>
@@ -40,18 +50,19 @@ public abstract class CloseUp {
         this.view = view;
         // Fahrt die betrachtet werden soll
         this.trip = (Trip) activity.getIntent().getSerializableExtra(MainMenu.EXTRA_TRIP);
-
+        myURLParameter = (MyURLParameter) activity.getIntent().getSerializableExtra(EXTRA_MYURLPARAMETER);
         textViewClass = new TextViewClass(view, activity.getResources(), this);
         buttons = new ButtonClass(activity, view, this);
-        new CloseUpRecyclerView(activity, view, this);
+        recyclerView = new CloseUpRecyclerView(activity, view, this);
     }
 
     CloseUp(Trip trip, Activity activity, View view) {
         this.trip = trip;
         this.activity = activity;
+        myURLParameter = (MyURLParameter) activity.getIntent().getSerializableExtra(EXTRA_MYURLPARAMETER);
         textViewClass = new TextViewClass(view, activity.getResources(), this);
         buttons = new ButtonClass(activity, view, this);
-        new CloseUpRecyclerView(activity, view, this);
+        recyclerView = new CloseUpRecyclerView(activity, view, this);
     }
 
     /**
@@ -78,48 +89,71 @@ public abstract class CloseUp {
      */
     void onAcceptClicked(Intent newIntent) {
         newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        newIntent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
         activity.startActivity(newIntent);
     }
 
     void refreshTrip() {
-        QueryParameter q = new QueryParameter(trip.from, null, trip.to, trip.getFirstDepartureTime(), true, Settings.getTripOptions(activity));
-        new QueryRefresh(activity, this::findTrip).execute(q);
+        setChanged(false);
+        QueryParameter q = new QueryParameter(myURLParameter);
+        refreshTrip(q);
+
+    }
+
+    void refreshTrip(QueryParameter q) {
+        new QueryRefresh(activity, this::findTripOuter).execute(q);
     }
 
     private void findTrip(QueryTripsResult result) {
         if (result == null || result.status != QueryTripsResult.Status.OK) {
             Toast.makeText(activity.getApplicationContext(), "Keine Verbindung gefunden", Toast.LENGTH_SHORT).show();
         } else {
-            boolean contains = false;
             for (Trip t : result.trips) {
                 if (t.getId().equals(trip.getId())) {
                     trip = t;
-                    contains = true;
                     textViewClass.fillTextView();
+                    recyclerView.update(UtilsList.fillDetailedConnectionList(trip.legs));
+                    setChanged(true);
                     break;
                 }
-            }
-            //TODO in !contains ändern
-            if(contains){
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("Diese Fahrt ist nicht mehr möglich.\n" +
-                        "Soll diese Fahrt editiert werden?");
-                builder.setCancelable(false);
-                builder.setPositiveButton("Ja", (dialog, which) -> startEditing());
-                builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
-                AlertDialog dialog = builder.create();
-                dialog.show();
             }
         }
     }
 
-    public void onBackPressed(Intent intent){
-        //intent.putExtra(MainMenu.EXTRA_TRIP, trip);
+    private void findTripOuter2(QueryTripsResult result) {
+        findTrip(result);
+        if (!changed) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Diese Fahrt ist nicht mehr möglich.\n" +
+                    "Soll diese Fahrt editiert werden?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ja", (dialog, which) -> startEditing());
+            builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void findTripOuter(QueryTripsResult result) {
+        findTrip(result);
+        if (!changed) {
+            myURLParameter.changeDate(trip.getFirstDepartureTime());
+            QueryParameter q = new QueryParameter(myURLParameter);
+            new QueryRefresh(activity, this::findTripOuter2).execute(q);
+        }
+    }
+
+    public void onBackPressed(Intent intent) {
         activity.startActivity(intent);
     }
 
-
     public abstract void startEditing();
 
+    private void setChanged(boolean b) {
+        changed = b;
+    }
 
+    public Trip getTrip(){
+        return trip;
+    }
 }

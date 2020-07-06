@@ -8,6 +8,7 @@ import android.util.Pair;
 import android.view.View;
 
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.helper.util.WabenTask;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -23,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
+
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 
 /**
  * Diese Aktivität handhabt die Übersicht über aller aktuell geplanten Fahrten,
@@ -54,6 +57,7 @@ public class Incomplete extends Activity {
 
         Intent intent = getIntent();
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        MyURLParameter myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
 
         HashMap<Fare.Type, Integer> numUserClasses = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
@@ -79,7 +83,7 @@ public class Incomplete extends Activity {
             e.printStackTrace();
         }
         //TODO my url parameter
-        TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.first, waben.second, null);
+        TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.first, waben.second, myURLParameter);
 
         new TripListIncomplete(this, view, newTripItem);
     }

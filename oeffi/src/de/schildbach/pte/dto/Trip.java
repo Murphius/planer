@@ -53,7 +53,7 @@ public final class Trip implements Serializable {
     public final Integer numChanges;
 
     public Trip(final String id, final Location from, final Location to, final List<Leg> legs, final List<Fare> fares,
-            final int[] capacity, final Integer numChanges) {
+                final int[] capacity, final Integer numChanges) {
         this.id = id;
         this.from = checkNotNull(from);
         this.to = checkNotNull(to);
@@ -65,11 +65,17 @@ public final class Trip implements Serializable {
         checkArgument(!legs.isEmpty());
     }
 
+    //TODO wieder löschen
+    public void setNewID(String newID) {
+        this.id = id + "\n" + newID;
+    }
+
     public Date getFirstDepartureTime() {
         return legs.get(0).getDepartureTime();
     }
 
-    public @Nullable Public getFirstPublicLeg() {
+    public @Nullable
+    Public getFirstPublicLeg() {
         for (final Leg leg : legs)
             if (leg instanceof Public)
                 return (Public) leg;
@@ -77,7 +83,8 @@ public final class Trip implements Serializable {
         return null;
     }
 
-    public @Nullable Date getFirstPublicLegDepartureTime() {
+    public @Nullable
+    Date getFirstPublicLegDepartureTime() {
         final Public firstPublicLeg = getFirstPublicLeg();
         if (firstPublicLeg != null)
             return firstPublicLeg.getDepartureTime();
@@ -89,7 +96,8 @@ public final class Trip implements Serializable {
         return legs.get(legs.size() - 1).getArrivalTime();
     }
 
-    public @Nullable Public getLastPublicLeg() {
+    public @Nullable
+    Public getLastPublicLeg() {
         for (int i = legs.size() - 1; i >= 0; i--) {
             final Leg leg = legs.get(i);
             if (leg instanceof Public)
@@ -99,7 +107,8 @@ public final class Trip implements Serializable {
         return null;
     }
 
-    public @Nullable Date getLastPublicLegArrivalTime() {
+    public @Nullable
+    Date getLastPublicLegArrivalTime() {
         final Public lastPublicLeg = getLastPublicLeg();
         if (lastPublicLeg != null)
             return lastPublicLeg.getArrivalTime();
@@ -109,7 +118,7 @@ public final class Trip implements Serializable {
 
     /**
      * Duration of whole trip in milliseconds, including leading and trailing individual legs.
-     * 
+     *
      * @return duration in ms
      */
     public long getDuration() {
@@ -121,10 +130,11 @@ public final class Trip implements Serializable {
     /**
      * Duration of the public leg part in milliseconds. This includes individual legs between public legs, but
      * excludes individual legs that lead or trail the trip.
-     * 
+     *
      * @return duration in ms, or null if there are no public legs
      */
-    public @Nullable Long getPublicDuration() {
+    public @Nullable
+    Long getPublicDuration() {
         final Date first = getFirstPublicLegDepartureTime();
         final Date last = getLastPublicLegArrivalTime();
         if (first != null && last != null)
@@ -133,7 +143,9 @@ public final class Trip implements Serializable {
             return null;
     }
 
-    /** Minimum time occurring in this trip. */
+    /**
+     * Minimum time occurring in this trip.
+     */
     public Date getMinTime() {
         Date minTime = null;
 
@@ -144,7 +156,9 @@ public final class Trip implements Serializable {
         return minTime;
     }
 
-    /** Maximum time occurring in this trip. */
+    /**
+     * Maximum time occurring in this trip.
+     */
     public Date getMaxTime() {
         Date maxTime = null;
 
@@ -159,7 +173,7 @@ public final class Trip implements Serializable {
      * <p>
      * Number of changes on the trip.
      * </p>
-     * 
+     *
      * <p>
      * Returns {@link #numChanges} if it isn't null. Otherwise, it tries to compute the number by counting
      * public legs of the trip. The number of changes for a Trip consisting of only individual Legs is null.
@@ -215,7 +229,9 @@ public final class Trip implements Serializable {
         return true;
     }
 
-    /** If an individual leg overlaps, try to adjust so that it doesn't. */
+    /**
+     * If an individual leg overlaps, try to adjust so that it doesn't.
+     */
     public void adjustUntravelableIndividualLegs() {
         final int numLegs = legs.size();
         if (numLegs < 1)
@@ -303,7 +319,7 @@ public final class Trip implements Serializable {
         helper.addValue(
                 firstPublicLegDepartureTime != null ? String.format(Locale.US, "%ta %<tR", firstPublicLegDepartureTime)
                         : "null" + '-' + lastPublicLegArrivalTime != null
-                                ? String.format(Locale.US, "%ta %<tR", lastPublicLegArrivalTime) : "null");
+                        ? String.format(Locale.US, "%ta %<tR", lastPublicLegArrivalTime) : "null");
         helper.add("numChanges", numChanges);
         return helper.toString();
     }
@@ -321,16 +337,24 @@ public final class Trip implements Serializable {
             this.path = path;
         }
 
-        /** Coarse departure time. */
+        /**
+         * Coarse departure time.
+         */
         public abstract Date getDepartureTime();
 
-        /** Coarse arrival time. */
+        /**
+         * Coarse arrival time.
+         */
         public abstract Date getArrivalTime();
 
-        /** Minimum time occurring in this leg. */
+        /**
+         * Minimum time occurring in this leg.
+         */
         public abstract Date getMinTime();
 
-        /** Maximum time occurring in this leg. */
+        /**
+         * Maximum time occurring in this leg.
+         */
         public abstract Date getMaxTime();
 
         private void writeObject(final ObjectOutputStream os) throws IOException {
@@ -367,14 +391,17 @@ public final class Trip implements Serializable {
         private static final long serialVersionUID = 1312066446239817422L;
 
         public final Line line;
-        public final @Nullable Location destination;
+        public final @Nullable
+        Location destination;
         public final Stop departureStop;
         public final Stop arrivalStop;
-        public final @Nullable List<Stop> intermediateStops;
-        public final @Nullable String message;
+        public final @Nullable
+        List<Stop> intermediateStops;
+        public final @Nullable
+        String message;
 
         public Public(final Line line, final Location destination, final Stop departureStop, final Stop arrivalStop,
-                final List<Stop> intermediateStops, final List<Point> path, final String message) {
+                      final List<Stop> intermediateStops, final List<Point> path, final String message) {
             super(departureStop.location, arrivalStop.location, path);
 
             this.line = checkNotNull(line);
@@ -469,7 +496,7 @@ public final class Trip implements Serializable {
         public final int distance;
 
         public Individual(final Type type, final Location departure, final Date departureTime, final Location arrival,
-                final Date arrivalTime, final List<Point> path, final int distance) {
+                          final Date arrivalTime, final List<Point> path, final int distance) {
             super(departure, arrival, path);
 
             this.type = checkNotNull(type);

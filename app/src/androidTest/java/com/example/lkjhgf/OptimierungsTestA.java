@@ -159,8 +159,61 @@ public class OptimierungsTestA {
         Assert.assertFalse(tickets.isEmpty());
         //Lösung: 3 Tickets:
         //          - Düsseldorf: 24h Ticket (A3) gültige Tarifgebiete: 43 & 53 - 5 Fahrten
-        //          - Mühlheim: 24h Ticket (A2) gültige Waben: 344 & 422 - 3 Fahrten
+        //          - Mühlheim: 24h Ticket (A2) gültige Waben: 344 & 442 - 3 Fahrten
         //          - Recklinghausen: 4h Ticket (A1) gültiges Tarifgebiet: 17 - 4 Fahrten
+    }
+
+    @Test
+    public void test(){
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        ArrayList<TripItem> trips = new ArrayList<>();
+        int id = 1;
+
+        //Preisstufe A1
+        Set<Integer> recklinghausen = new HashSet<>();
+        recklinghausen.add(178);
+
+        //Preisstufe A1
+        Set<Integer> marlHerten = new HashSet<>();
+        marlHerten.add(178);
+        marlHerten.add(154);
+
+
+        startCalendar.set(2020, Calendar.JULY, 3, 9, 0);
+        endCalendar.set(2020, Calendar.JULY, 3, 9, 45);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, marlHerten));
+
+        startCalendar.set(2020, Calendar.JULY, 3, 10, 0);
+        endCalendar.set(2020, Calendar.JULY, 3, 11, 0);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, recklinghausen));
+
+        startCalendar.set(2020, Calendar.JULY, 3, 12, 0);
+        endCalendar.set(2020, Calendar.JULY, 3, 12, 30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, recklinghausen));
+
+        startCalendar.set(2020, Calendar.JULY, 3, 13, 30);
+        endCalendar.set(2020, Calendar.JULY, 3, 14, 0);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, recklinghausen));
+
+        startCalendar.set(2020, Calendar.JULY, 3, 14, 45);
+        endCalendar.set(2020, Calendar.JULY, 3, 16, 30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, marlHerten));
+
+        startCalendar.set(2020, Calendar.JULY, 3, 17, 0);
+        endCalendar.set(2020, Calendar.JULY, 3, 18, 45);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A1", id++, 178, marlHerten));
+
+        System.gc();
+        long start = System.currentTimeMillis();
+        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, timeTickets);
+        long end = System.currentTimeMillis();
+
+        long s = (end-start)/1000;
+        long ms = (end-start)%1000;
+
+        Assert.assertFalse(tickets.isEmpty());
+        Assert.assertTrue(trips.isEmpty());
     }
 
 }

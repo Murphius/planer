@@ -20,6 +20,8 @@ import java.util.HashMap;
 
 import de.schildbach.pte.dto.Fare;
 
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
+
 /**
  * Ansicht bei der Planung mehrerer Fahrten, deren Fahrscheine optimiert werden sollen
  */
@@ -66,6 +68,7 @@ public class TripListIncomplete extends MyTripList {
         TripItem current = tripItems.get(position);
         Intent newIntent = new Intent(activity, PlanIncompleteView.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, current.getTrip());
+        newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
         //TODO erweitern für weitere Personenklassen
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);

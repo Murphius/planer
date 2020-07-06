@@ -23,6 +23,8 @@ import java.util.UUID;
 
 import de.schildbach.pte.dto.Fare;
 
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
+
 /**
  * Ansicht nach der Planung einer Fahrt, die nicht Optimiert werden muss <br/>
  * Ansicht, wenn aus dem Hauptmenü aufgerufen
@@ -66,6 +68,7 @@ public class TripListComplete extends MyTripList {
         //Abhängig von der Fahrt wird eine andere Aktivität gestartet
         if (current.isComplete()) {
             newIntent = new Intent(activity.getApplicationContext(), AllTripsCompleteView.class);
+            tripItems.remove(position);
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         } else {
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
@@ -73,6 +76,7 @@ public class TripListComplete extends MyTripList {
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current);
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         }
+        newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
         startNextActivity(newIntent);
     }
 

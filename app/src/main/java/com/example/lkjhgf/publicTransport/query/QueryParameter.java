@@ -1,5 +1,7 @@
 package com.example.lkjhgf.publicTransport.query;
 
+import com.example.lkjhgf.helper.MyURLParameter;
+
 import java.util.Date;
 
 import de.schildbach.pte.dto.Location;
@@ -33,6 +35,10 @@ public class QueryParameter {
         this.date = date;
         this.isDeparture = isDeparture;
         this.options = options;
+    }
+
+    public QueryParameter(MyURLParameter parameter){
+        this(parameter.getStartLocation(), parameter.getVia(), parameter.getDestinationLocation(), parameter.getStartDate(), parameter.isDepartureTime(), parameter.getTripOptions());
     }
 
     public Location getFrom() {

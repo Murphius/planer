@@ -87,6 +87,10 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         public TripItem getTripItem() {
             return tripItem;
         }
+
+        public void updateTrip(TripItem trip){
+            this.tripItem = trip;
+        }
     }
 
     public TicketToBuy(Ticket ticket, String preisstufe) {

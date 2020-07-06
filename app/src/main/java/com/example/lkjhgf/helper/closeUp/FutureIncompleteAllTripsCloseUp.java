@@ -22,4 +22,5 @@ public class FutureIncompleteAllTripsCloseUp extends MultipleCloseUp {
         textViewClass.useTicket.setVisibility(View.VISIBLE);
         buttons.button_accept.setVisibility(View.INVISIBLE);
     }
+
 }

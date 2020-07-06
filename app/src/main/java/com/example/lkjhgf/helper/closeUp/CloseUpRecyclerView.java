@@ -32,6 +32,8 @@ public class CloseUpRecyclerView {
 
     private ArrayList<CloseUpItem> items;
 
+    RecyclerView recyclerView;
+
     /**
      * Füllt den RecyclerView, setzt Layout Manager, OnClickListener, und Adapter
      *
@@ -41,7 +43,7 @@ public class CloseUpRecyclerView {
      */
     CloseUpRecyclerView(Activity activity, View view, CloseUp closeUp) {
         //RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
+        recyclerView = view.findViewById(R.id.recyclerView3);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
 
@@ -102,5 +104,11 @@ public class CloseUpRecyclerView {
             }
         });
         recyclerView.setFocusable(false);
+    }
+
+    public void update(ArrayList<CloseUpItem> closeUpItems){
+        items.clear();
+        items.addAll(closeUpItems);
+        adapter.notifyDataSetChanged();
     }
 }

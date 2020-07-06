@@ -293,8 +293,8 @@ public class TripItem implements Serializable {
         return ticketIDs;
     }
 
-    public void removeTickets(Fare.Type type, UUID uuid) {
-        removeTickets(type, uuid, 1);
+    public void setTrip(Trip trip){
+        this.trip = trip;
     }
 
     /**

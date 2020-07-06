@@ -610,10 +610,15 @@ public class TimeOptimisation {
         HashMap<Farezone, ArrayList<TripItem>> tarifgebietTrips = new HashMap<>();
         HashMap<HashSet<Integer>, ArrayList<TripItem>> zweiWabenTarif = new HashMap<>();
         splitTrips(tripsPreisstufe, tarifgebietTrips, zweiWabenTarif);
-        //Tarifgebiet Optimierung
-        result.addAll(tarifgebietOptimierung(tarifgebietTrips, allTrips, possibleTicketsTarifgebiet, preisstufenIndex));
         //Zwei Waben Optimierung
         result.addAll(zweiWabenOptimierung(zweiWabenTarif, allTrips, possibleTicketsZweiWaben, preisstufenIndex));
+        tripsPreisstufe = collectTripsPreisstufe(allTrips, preisstufenIndex);
+        tarifgebietTrips.clear();
+        zweiWabenTarif.clear();
+        splitTrips(tripsPreisstufe, tarifgebietTrips, zweiWabenTarif);
+        //Tarifgebiet Optimierung
+        result.addAll(tarifgebietOptimierung(tarifgebietTrips, allTrips, possibleTicketsTarifgebiet, preisstufenIndex));
+
         return result;
     }
 

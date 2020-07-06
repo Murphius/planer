@@ -46,4 +46,8 @@ public class MyURLParameter implements Serializable {
     public boolean isDepartureTime(){
         return isDepartureTime;
     }
+
+    public void changeDate(Date newDate){
+        startDate = newDate;
+    }
 }

@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
+
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 
 /**
  * Ansicht einer fertig geplanten " nicht optimierten" Fahrt <br/>
@@ -30,6 +33,8 @@ public class FutureSingleCloseUp extends SingleCloseUp {
         buttons.button_accept.setVisibility(View.INVISIBLE);
         buttons.button_back.setOnClickListener(v -> {
             Intent intent = new Intent(activity.getApplicationContext(), Complete.class);
+            intent.putExtra(MainMenu.EXTRA_TRIP, trip);
+            intent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
             activity.startActivity(intent);
         });
     }
