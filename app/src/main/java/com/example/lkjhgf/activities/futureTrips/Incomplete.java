@@ -17,9 +17,7 @@ import com.example.lkjhgf.activities.MainMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Stop;
@@ -43,49 +41,41 @@ import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
  * kommt nur ins Hauptmenü zurück, wenn er dies bestätigt.
  * </p>
  */
-
-
 public class Incomplete extends Activity {
+
+    private Pair<Integer, Set<Integer>> wabenResult;
+    private Trip trip;
+    private MyURLParameter myURLParameter;
+    private HashMap<Fare.Type, Integer> numUserClasses;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.future_trips);
-
-        View view = findViewById(R.id.constraintLayout3);
+        view = findViewById(R.id.constraintLayout3);
 
         Intent intent = getIntent();
-        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        MyURLParameter myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
-
-        HashMap<Fare.Type, Integer> numUserClasses = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
+        trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
+        myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
+        numUserClasses = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
         String preisstufe = UtilsString.setPreisstufenName(trip);
 
         ArrayList<Integer> stopIDs = new ArrayList<>();
-        for(Trip.Leg leg : trip.legs){
-            if(leg instanceof Trip.Public){
+        for (Trip.Leg leg : trip.legs) {
+            if (leg instanceof Trip.Public) {
                 Trip.Public publicLeg = (Trip.Public) leg;
                 stopIDs.add(Integer.parseInt(((Trip.Public) leg).departureStop.location.id.substring(1)));
-                for(Stop stop : publicLeg.intermediateStops){
+                for (Stop stop : publicLeg.intermediateStops) {
                     stopIDs.add(Integer.parseInt(stop.location.id.substring(1)));
                 }
                 stopIDs.add(Integer.parseInt(((Trip.Public) leg).arrivalStop.location.id.substring(1)));
             }
         }
-        WabenTask wabenTask = new WabenTask(MainMenu.myProvider.getPreisstufenIndex(preisstufe) < MainMenu.myProvider.getPreisstufenIndex("B"), stopIDs);
-        wabenTask.execute();
-        Pair<Integer, Set<Integer>> waben = new Pair<>(0, new HashSet<>());
-        try {
-            waben = wabenTask.get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.first, waben.second, myURLParameter);
-
-        new TripListIncomplete(this, view, newTripItem);
+        //Ermitteln der Durchfahrenen Waben bzw. Tarifgebiete
+        new WabenTask(MainMenu.myProvider.getPreisstufenIndex(preisstufe) < MainMenu.myProvider.getPreisstufenIndex("B"), stopIDs, this, this::setWaben).execute();
     }
 
     /**
@@ -114,5 +104,14 @@ public class Incomplete extends Activity {
         dialog.show();
     }
 
-
+    /**
+     * Setzt für das neu hinzugefügte TripItem die benötigten Waben bzw Tarifgebiete und füllt anschließend die Ansicht
+     *
+     * @param result benötigte Waben bzw. Tarifgebiete
+     */
+    private void setWaben(Pair<Integer, Set<Integer>> result) {
+        wabenResult = result;
+        TripItem newTripItem = new TripItem(trip, false, numUserClasses, wabenResult.first, wabenResult.second, myURLParameter);
+        new TripListIncomplete(this, view, newTripItem);
+    }
 }

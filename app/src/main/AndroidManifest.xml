@@ -46,7 +46,7 @@
             android:parentActivityName=".activities.ticketOverview.TicketOverview"/>
         <activity android:name=".activities.ticketOverview.AllTicketList"
             android:parentActivityName=".activities.MainMenu"/>
-        <activity android:name=".activities.futureTrips.IncompleteAfterRefresh"
+        <activity android:name=".activities.futureTrips.IncompleteWithoutAddingTrip"
             android:parentActivityName=".activities.MainMenu"/>
         <activity android:name=".activities.Settings" />
         <activity android:name=".activities.MainMenu">

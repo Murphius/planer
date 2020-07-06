@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activities.futureTrips.IncompleteAfterRefresh;
+import com.example.lkjhgf.activities.futureTrips.IncompleteWithoutAddingTrip;
 import com.example.lkjhgf.helper.closeUp.FutureIncompleteCloseUp;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -43,16 +43,24 @@ public class PlanIncompleteView extends Activity {
        closeUp =  new FutureIncompleteCloseUp(this, findViewById(R.id.constraintLayout2));
     }
 
+    /**
+     * Speichern von Veränderungen in der Liste der zu optimierenden Fahrten
+     */
     @Override
     public void onBackPressed(){
         Trip trip = closeUp.getTrip();
+        //Laden der Fahrten, die aktuell geplant sind und optimiert werden sollen
         ArrayList<TripItem> tripItems = MyTripList.loadTripList(this, MyTripList.NEW_SAVED_TRIPS);
+        //Erstellung des neuen TripItems, um den Index zu erhalten (Equals arbeitet auf TripID)
         int indexOfTrip = tripItems.indexOf(new TripItem(trip, false, null));
         if(indexOfTrip > -1){
+            //Anpassung der Fahrt
             tripItems.get(indexOfTrip).setTrip(trip);
         }
+        //Speichern der Änderung
         MyTripList.saveTrips(tripItems, MyTripList.NEW_SAVED_TRIPS, this);
-        Intent intent = new Intent(this, IncompleteAfterRefresh.class);
+        //Liste aller aktuell geplanten Fahrten anzeigen
+        Intent intent = new Intent(this, IncompleteWithoutAddingTrip.class);
         startActivity(intent);
     }
 }

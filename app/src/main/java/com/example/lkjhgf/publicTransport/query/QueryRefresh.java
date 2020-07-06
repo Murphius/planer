@@ -31,7 +31,6 @@ public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResu
     private Action action;
     private NetworkProvider provider;
     private AlertDialog dialog;
-    private QueryTripsResult result;
 
     /**
      * Konstruktor mit allen im Verlauf benötigten Werte
@@ -42,11 +41,6 @@ public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResu
         this.provider = MainMenu.myProvider.getNetworkProvider();
         this.context = context;
         this.action = action;
-    }
-
-    public QueryRefresh(Context context){
-        this.context = context;
-        this.provider = MainMenu.myProvider.getNetworkProvider();
     }
 
     /**
@@ -111,7 +105,6 @@ public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResu
 
     @Override
     protected void onPostExecute(QueryTripsResult result) {
-        this.result = result;
         action.DoSomeThing(result);
         dialog.dismiss();
     }

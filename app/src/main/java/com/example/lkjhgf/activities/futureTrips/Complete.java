@@ -29,8 +29,6 @@ import static com.example.lkjhgf.helper.futureTrip.MyTripList.ALL_SAVED_TRIPS;
  * <br/></p>
  * Unabhängig von der vorherigen Aktivität kommt der Nutzer zurück in das Hauptmenü {@link #onBackPressed()}
  */
-
-
 public class Complete extends Activity {
 
     private MyTripList myTripList;

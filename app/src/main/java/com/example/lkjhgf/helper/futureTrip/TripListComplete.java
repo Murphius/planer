@@ -108,6 +108,7 @@ public class TripListComplete extends MyTripList {
             tripItems.remove(position);
             adapter.notifyItemRemoved(position);
             Intent newIntent = new Intent(activity.getApplicationContext(), EditTripFromComplete.class);
+            newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
             startNextActivity(newIntent);
         } else {
@@ -119,6 +120,7 @@ public class TripListComplete extends MyTripList {
                 newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
                 newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
                 newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+                newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
                 startNextActivity(newIntent);
             } else {
                 //Fahrt nutzt angefangene Tickets
@@ -134,6 +136,7 @@ public class TripListComplete extends MyTripList {
                     newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
                     newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
                     newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
+                    newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
                     startNextActivity(newIntent);
                 });
                 secondBuilder.setNegativeButton("Nein", (secondDialog, which1) -> secondDialog.cancel());

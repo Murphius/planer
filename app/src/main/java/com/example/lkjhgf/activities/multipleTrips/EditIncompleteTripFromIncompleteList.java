@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 
@@ -18,6 +19,8 @@ import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
+
 /**
  * Ansicht des Formulars, mit den Angaben einer geplanten Fahrt, die optimiert werden soll </br>
  *
@@ -26,10 +29,11 @@ import de.schildbach.pte.dto.Trip;
  */
 public class EditIncompleteTripFromIncompleteList extends Activity {
 
-    Form form;
-    Trip trip;
-    HashMap<Fare.Type, Integer> numPersonsPerClass;
-    int numTrip;
+    private Form form;
+    private Trip trip;
+    private HashMap<Fare.Type, Integer> numPersonsPerClass;
+    private int numTrip;
+    private MyURLParameter myURLParameter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
         numPersonsPerClass =  (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
 
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
+
+        myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
 
 
         form = new MultipleTrip(this, layout, trip, numPersonsPerClass, numTrip);
@@ -67,8 +73,9 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
         Intent intent = new Intent(this, Incomplete.class);
 
         intent.putExtra(MainMenu.EXTRA_TRIP, trip);
-        intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
+        intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip + 1);
         intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
+        intent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
 
         startActivity(intent);
     }

@@ -38,6 +38,9 @@ public class AllTripsCompleteView extends Activity {
         closeUp = new FutureSingleCloseUp(this, findViewById(R.id.constraintLayout2));
     }
 
+    /**
+     * Legt fest, dass anschließend die Ansicht mit allen Fahrten angezeigt werden soll
+     */
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, TripListComplete.class);

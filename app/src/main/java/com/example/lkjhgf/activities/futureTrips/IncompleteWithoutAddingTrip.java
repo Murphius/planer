@@ -13,10 +13,10 @@ import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
 /**
  * @preconditions Der Nutzer hat das Editieren einer aktualisierten Fahrt abgebrochen
  */
-public class IncompleteAfterRefresh extends Activity {
+public class IncompleteWithoutAddingTrip extends Activity {
 
     @Override
-    public void onCreate(Bundle savedInstances){
+    public void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
 
         setContentView(R.layout.future_trips);

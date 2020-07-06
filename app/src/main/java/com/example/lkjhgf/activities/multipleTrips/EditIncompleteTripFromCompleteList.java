@@ -11,6 +11,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.CompleteAbortEditingIncompleteTrip;
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
+import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
+
+import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
 
 /**
  * Editieren einer geplanten Fahrt, die bei der Ermittlung der günstigsten
@@ -41,9 +44,10 @@ import de.schildbach.pte.dto.Trip;
  */
 public class EditIncompleteTripFromCompleteList extends Activity {
 
-    Trip trip;
-    HashMap<Fare.Type, Integer> numPersonsPerClass;
-    int numTrip;
+    private Trip trip;
+    private HashMap<Fare.Type, Integer> numPersonsPerClass;
+    private int numTrip;
+    private MyURLParameter myURLParameter;
 
 
     @Override
@@ -59,7 +63,7 @@ public class EditIncompleteTripFromCompleteList extends Activity {
         trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
         numPersonsPerClass = (HashMap<Fare.Type, Integer>) intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS);
         numTrip = intent.getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
-
+        myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
 
         Form form = new MultipleTrip(this, layout, trip, numPersonsPerClass, numTrip);
 
@@ -82,7 +86,7 @@ public class EditIncompleteTripFromCompleteList extends Activity {
         intent.putExtra(MainMenu.EXTRA_TRIP, trip);
         intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
-
+        intent.putExtra(EXTRA_MYURLPARAMETER, getIntent().getSerializableExtra(EXTRA_MYURLPARAMETER));
         startActivity(intent);
     }
 }

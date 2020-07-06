@@ -1,7 +1,11 @@
 package com.example.lkjhgf.helper.util;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.util.Pair;
+
+import com.example.lkjhgf.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,12 +21,30 @@ import java.util.Set;
 
 public class WabenTask extends AsyncTask<Integer, Void, Pair<Integer, Set<Integer>>> {
 
+    public interface GetWaben{
+        void getWabenFunction(Pair<Integer, Set<Integer>> waben);
+    }
+
     private boolean isPreisstufeA;
     private ArrayList<Integer> stopIDs;
+    private Activity activity;
+    private AlertDialog dialog;
+    private GetWaben getWaben;
 
-    public WabenTask(boolean isPreisstufeA, ArrayList<Integer> stopIDs) {
+    public WabenTask(boolean isPreisstufeA, ArrayList<Integer> stopIDs, Activity activity, GetWaben getWaben) {
         this.isPreisstufeA = isPreisstufeA;
         this.stopIDs = stopIDs;
+        this.activity = activity;
+        this.getWaben = getWaben;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setView(R.layout.fragment);
+        builder.setCancelable(false);
+        dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -51,7 +73,6 @@ public class WabenTask extends AsyncTask<Integer, Void, Pair<Integer, Set<Intege
             crossedRegions.add(startWabe);
             crossedRegions.add(destinationWabe);
             return new Pair<>(startWabe, crossedRegions);
-            
         } else {
             Set<Integer> crossedFarezones = new HashSet<>();
             int startIndex = 0;
@@ -70,8 +91,6 @@ public class WabenTask extends AsyncTask<Integer, Void, Pair<Integer, Set<Intege
                 if (farezones.length == 1) {
                     int zws = Integer.parseInt(farezones[0]);
                     crossedFarezones.add(zws);
-                } else {
-                    System.out.println(stopIDs.get(startIndex));
                 }
             }
             return new Pair<>(startWabe, crossedFarezones);
@@ -87,8 +106,6 @@ public class WabenTask extends AsyncTask<Integer, Void, Pair<Integer, Set<Intege
             int code = connection.getResponseCode();
             // optional default is GET
             //add request header
-            System.out.println("\nSending 'GET' request to URL : " + url);
-            System.out.println("Response Code : " + code);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
             String inputLine;
@@ -98,19 +115,19 @@ public class WabenTask extends AsyncTask<Integer, Void, Pair<Integer, Set<Intege
             }
             in.close();
 
-            //print in String
-            System.out.println(response.toString());
-
             //Read JSON response and print
             JSONObject myResponse = new JSONObject(response.toString());
-            System.out.println("result after Reading JSON Response");
-            //System.out.println("origin- " + myResponse.getJSONObject("result").getJSONArray("records").getJSONObject(0).getInt("Tarifzone"));
-            //result.add(myResponse.getJSONObject("result").getJSONArray("records").getJSONObject(0).getInt("Tarifzone"));
             Object object = myResponse.getJSONObject("result").getJSONArray("records").getJSONObject(0).get("Tarifzone");
             return object.toString().split("\n");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
         return new String[]{};
+    }
+
+    @Override
+    protected void onPostExecute(Pair<Integer, Set<Integer>>result) {
+        getWaben.getWabenFunction(result);
+        dialog.dismiss();
     }
 }

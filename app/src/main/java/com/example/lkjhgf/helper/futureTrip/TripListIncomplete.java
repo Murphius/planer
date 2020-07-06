@@ -27,8 +27,6 @@ import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
  */
 public class TripListIncomplete extends MyTripList {
 
-    private int numTrip;
-
     /**
      * Arbeitet nur auf den in einem "Durchlauf" geplanten Fahrten
      *
@@ -37,16 +35,12 @@ public class TripListIncomplete extends MyTripList {
     public TripListIncomplete(Activity activity, View view, TripItem tripItem) {
         super(activity, view, tripItem, MyTripList.NEW_SAVED_TRIPS);
 
-        numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
-
         setOnClickListener();
         setRecyclerView();
     }
 
     public TripListIncomplete(Activity activity, View view) {
         super(activity, view, null, MyTripList.NEW_SAVED_TRIPS);
-
-        numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
 
         setOnClickListener();
         setRecyclerView();
@@ -89,6 +83,7 @@ public class TripListIncomplete extends MyTripList {
         Intent newIntent = new Intent(activity, EditIncompleteTripFromIncompleteList.class);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
+        newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         activity.startActivity(newIntent);
     }
@@ -103,7 +98,7 @@ public class TripListIncomplete extends MyTripList {
     private void setOnClickListener() {
         addTrip.setOnClickListener(v -> {
             Intent newIntent = new Intent(activity, UserForm.class);
-            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip + 1);
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, tripItems.size() + 1);
             startNextActivity(newIntent);
         });
 

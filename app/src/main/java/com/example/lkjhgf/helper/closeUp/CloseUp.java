@@ -98,7 +98,6 @@ public abstract class CloseUp {
         setChanged(false);
         QueryParameter q = new QueryParameter(myURLParameter);
         refreshTrip(q);
-
     }
 
     void refreshTrip(QueryParameter q) {
