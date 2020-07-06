@@ -9,8 +9,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.service.MultiplePossibleConnections;
 
-import de.schildbach.pte.VrrProvider;
-
 /**
  * Planung mehrerer Fahrten <br/>
  * Anzeigen aller möglichen Verbindungen

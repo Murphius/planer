@@ -8,8 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.form.MultipleTrip;
 
-import de.schildbach.pte.VrrProvider;
-
 /**
  * Planung mehrerer Fahrten <br/>
  * Ansicht eines Formulars, dass der Nutzer ausfüllen muss <br/>
@@ -19,7 +17,6 @@ import de.schildbach.pte.VrrProvider;
  * Das Managen dieser Ansicht erfolgt in der Klasse Form
  * {@link MultipleTrip}
  */
-
 public class UserForm extends Activity {
 
     com.example.lkjhgf.helper.form.Form form;

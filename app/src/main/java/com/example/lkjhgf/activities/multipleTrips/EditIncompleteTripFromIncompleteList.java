@@ -15,7 +15,6 @@ import com.example.lkjhgf.helper.form.MultipleTrip;
 
 import java.util.HashMap;
 
-import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
@@ -29,7 +28,6 @@ import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
  */
 public class EditIncompleteTripFromIncompleteList extends Activity {
 
-    private Form form;
     private Trip trip;
     private HashMap<Fare.Type, Integer> numPersonsPerClass;
     private int numTrip;
@@ -53,8 +51,7 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
 
         myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
 
-
-        form = new MultipleTrip(this, layout, trip, numPersonsPerClass, numTrip);
+        Form form = new MultipleTrip(this, layout, trip, numPersonsPerClass, numTrip);
 
         form.setOnClickListener();
 
@@ -71,7 +68,6 @@ public class EditIncompleteTripFromIncompleteList extends Activity {
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, Incomplete.class);
-
         intent.putExtra(MainMenu.EXTRA_TRIP, trip);
         intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip + 1);
         intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);

@@ -23,7 +23,6 @@ import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
  * <p>
  * Die Ansicht wird mittels {@link MultipleCloseUp} gefüllt
  */
-
 public class DetailedView extends Activity {
 
     @Override
@@ -36,15 +35,23 @@ public class DetailedView extends Activity {
         new MultipleCloseUp(this, layout);
     }
 
+    /**
+     * Wenn der Nutzer zurück zur Liste aller möglichen Verbindungen will, werden diese neu ermittelt
+     *
+     * @preconditions Der Nutzer hat zurück geklickt
+     * @postconditions Anzeigen weiterer Verbindungen - neu geladen -> aktualisierte Verbindungslage
+     */
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Intent intent = getIntent();
         MyURLParameter myURLParameter = (MyURLParameter) intent.getSerializableExtra(EXTRA_MYURLPARAMETER);
-        QueryParameter queryParameter = new QueryParameter(myURLParameter.getStartLocation(), myURLParameter.getVia(), myURLParameter.getDestinationLocation(), myURLParameter.getStartDate() ,myURLParameter.isDepartureTime(), myURLParameter.getTripOptions());
+        QueryParameter queryParameter = new QueryParameter(myURLParameter.getStartLocation(), myURLParameter.getVia(), myURLParameter.getDestinationLocation(), myURLParameter.getStartDate(), myURLParameter.isDepartureTime(), myURLParameter.getTripOptions());
+        //In welche Ansicht gewechselt werden soll
         Intent newIntent = new Intent(this, ShowAllPossibleConnections.class);
         newIntent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, intent.getIntArrayExtra(MainMenu.EXTRA_NUM_TRIP));
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, intent.getSerializableExtra(MainMenu.NUM_PERSONS_PER_CLASS));
+        //Nach möglichen Verbindungen suchen
         new QueryTask(this, newIntent, true).execute(queryParameter);
     }
 

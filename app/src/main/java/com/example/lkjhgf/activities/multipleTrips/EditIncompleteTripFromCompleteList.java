@@ -49,7 +49,6 @@ public class EditIncompleteTripFromCompleteList extends Activity {
     private int numTrip;
     private MyURLParameter myURLParameter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +81,10 @@ public class EditIncompleteTripFromCompleteList extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, CompleteAbortEditingIncompleteTrip.class);
-
         intent.putExtra(MainMenu.EXTRA_TRIP, trip);
         intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
-        intent.putExtra(EXTRA_MYURLPARAMETER, getIntent().getSerializableExtra(EXTRA_MYURLPARAMETER));
+        intent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
         startActivity(intent);
     }
 }

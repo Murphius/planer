@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.example.lkjhgf.activities.MainMenu;
+import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncompleteView;
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
@@ -72,11 +73,11 @@ public class TripListComplete extends MyTripList {
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         } else {
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
-            newIntent.putExtra(MainMenu.EXTRA_CLASS, activity.getClass());
             //#Fahrt und #reisende Personen ebenfalls übergeben
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current);
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
         }
+        newIntent.putExtra(MainMenu.EXTRA_CLASS, Complete.class);
         newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
         startNextActivity(newIntent);
     }
