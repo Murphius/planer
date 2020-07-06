@@ -7,11 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.util.TripItemTimeComparator;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.TripQuantitiesTimeComparator;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.GroupedTicketAdapter;
 import com.example.lkjhgf.recyclerView.tickets.groupedTicketView.TicketItem;
 
@@ -25,7 +24,7 @@ import de.schildbach.pte.dto.Fare;
 /**
  * Handhabung des RecyclerViews, in dem die Tickets angezeigt werden
  */
-class RecyclerViewGroupedTicketOverview {
+public class RecyclerViewGroupedTicketOverview {
 
     private Activity activity;
 
@@ -48,66 +47,23 @@ class RecyclerViewGroupedTicketOverview {
      * @param view       Layout
      * @param allTickets enthält alle gespeicherten Fahrten
      */
-    RecyclerViewGroupedTicketOverview(Activity activity, View view, AllTickets allTickets) {
+    public RecyclerViewGroupedTicketOverview(Activity activity, View view, AllTickets allTickets) {
         this.activity = activity;
 
         recyclerView = view.findViewById(R.id.recyclerView7);
+        ticketItems = new ArrayList<>();
 
         //gespeicherte Tickets holen
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketsToBuy = allTickets.getTickets();
         ArrayList<TicketToBuy> ticketsToBuy = new ArrayList<>();
         for (Fare.Type type : allTicketsToBuy.keySet()) {
-            ticketsToBuy.addAll(allTicketsToBuy.get(type));
+            if (allTicketsToBuy.get(type) != null) {
+                ticketsToBuy.addAll(allTicketsToBuy.get(type));
+            }
         }
 
-        //Gesamte Ticketliste
-        ArrayList<TicketToBuy> tickets = new ArrayList<>();
-        //jeweilige Häufigkeit
-        ArrayList<Integer> quantity = new ArrayList<>();
-        //jeweilige freie Fahrten
-        ArrayList<Integer> freeTrips = new ArrayList<>();
-        //Liste mit den Items zum anzeigen
-        ticketItems = new ArrayList<>();
-
-        //Umwandlung TicketToBuy -> TicketItem
         if (!ticketsToBuy.isEmpty()) {
-            Iterator<TicketToBuy> it = ticketsToBuy.iterator();
-            TicketToBuy current = it.next();
-            tickets.add(current);
-            freeTrips.add(current.getFreeTrips());
-            quantity.add(1);
-            while (it.hasNext()) {
-                TicketToBuy next = it.next();
-                if(current.getTicket() instanceof NumTicket){
-                    if (current.equals(next)) {
-                        tickets.get(tickets.size() - 1).addTripItems(next.getTripList());
-                        quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
-                        freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
-                    }
-                }
-                else {
-                    if(next.getValidFarezones().equals(current.getValidFarezones())
-                    && current.getFirstDepartureTime().equals(next.getFirstDepartureTime())
-                    && current.getLastArrivalTime().equals(next.getLastArrivalTime())){
-                        tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
-                        quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
-                        freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
-                    }else{
-                        tickets.add(next);
-                        quantity.add(1);
-                        freeTrips.add(next.getFreeTrips());
-                    }
-
-                }
-                current = next;
-            }
-
-            ticketItems = new ArrayList<>();
-            for (int i = 0; i < quantity.size(); i++) {
-                //TODO prüfen
-                Collections.sort(tickets.get(i).getTripQuantities(), new TripQuantitiesTimeComparator());
-                ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i), freeTrips.get(i)));
-            }
+            sumUpTicketToBuyList(ticketsToBuy);
         }
 
         adapter = new GroupedTicketAdapter(activity, ticketItems);
@@ -127,6 +83,56 @@ class RecyclerViewGroupedTicketOverview {
             ticketItems.get(position).setShowDetails();
             adapter.notifyDataSetChanged();
         });
+    }
+
+    /**
+     * Umwandlung TicketToBuy -> TicketItem <br/>
+     * <p>
+     * Fasst Tickets wenn möglich zusammen und wandelt die zusammengefassten
+     * anschließend in TicketItems um
+     *
+     * @param ticketsToBuy Fahrten die zusammengefasst werden sollen
+     */
+    private void sumUpTicketToBuyList(ArrayList<TicketToBuy> ticketsToBuy) {
+        //Gesamte Ticketliste
+        ArrayList<TicketToBuy> tickets = new ArrayList<>();
+        //jeweilige Häufigkeit
+        ArrayList<Integer> quantity = new ArrayList<>();
+        //jeweilige freie Fahrten
+        ArrayList<Integer> freeTrips = new ArrayList<>();
+
+        Iterator<TicketToBuy> it = ticketsToBuy.iterator();
+        TicketToBuy current = it.next();
+        tickets.add(current);
+        freeTrips.add(current.getFreeTrips());
+        quantity.add(1);
+        while (it.hasNext()) {
+            TicketToBuy next = it.next();
+            if (current.getTicket() instanceof NumTicket) {
+                if (current.equals(next)) {
+                    tickets.get(tickets.size() - 1).addTripItems(next.getTripList());
+                    quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                    freeTrips.set(freeTrips.size() - 1, freeTrips.get(freeTrips.size() - 1) + next.getFreeTrips());
+                }
+            } else {
+                if (next.getValidFarezones().equals(current.getValidFarezones())
+                        && current.getFirstDepartureTime().equals(next.getFirstDepartureTime())
+                        && current.getLastArrivalTime().equals(next.getLastArrivalTime())) {
+                    tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
+                    quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
+                    freeTrips.set(freeTrips.size() - 1, freeTrips.get(freeTrips.size() - 1) + next.getFreeTrips());
+                } else {
+                    tickets.add(next);
+                    quantity.add(1);
+                    freeTrips.add(next.getFreeTrips());
+                }
+            }
+            current = next;
+        }
+        for (int i = 0; i < quantity.size(); i++) {
+            Collections.sort(tickets.get(i).getTripQuantities(), new TripQuantitiesTimeComparator());
+            ticketItems.add(new TicketItem(tickets.get(i), quantity.get(i), freeTrips.get(i)));
+        }
     }
 
 

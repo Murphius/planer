@@ -7,7 +7,6 @@ import android.view.View;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.singleTrip.ShowAllPossibleConnections;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -45,7 +44,7 @@ public class SingleTrip extends Form {
      * @param view - Layot
      */
     private void setVisibility(View view){
-        Form_Text text = this.getText();
+        TextViewClass text = this.getText();
         text.numAdult.setVisibility(View.GONE);
         text.numAdultView.setVisibility(View.GONE);
         text.numChildren.setVisibility(View.GONE);

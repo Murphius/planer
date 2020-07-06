@@ -10,7 +10,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.helper.closeUp.FutureIncompleteAllTripsCloseUp;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 

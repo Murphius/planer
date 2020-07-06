@@ -11,9 +11,9 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.futureTrip.TripListComplete;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.helper.util.WabenTask;
+import com.example.lkjhgf.publicTransport.query.WabenTask;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 

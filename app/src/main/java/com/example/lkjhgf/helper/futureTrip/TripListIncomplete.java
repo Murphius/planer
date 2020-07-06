@@ -9,7 +9,7 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
 import com.example.lkjhgf.activities.futureTrips.closeUp.PlanIncompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
@@ -39,6 +39,12 @@ public class TripListIncomplete extends MyTripList {
         setRecyclerView();
     }
 
+    /**
+     * Ansicht füllen, jedoch keine weitere Fahrt hinzugekommen <br/>
+     *
+     * @param activity zum Laden benötigt
+     * @param view     Layout das gefüllt werden soll
+     */
     public TripListIncomplete(Activity activity, View view) {
         super(activity, view, null, MyTripList.NEW_SAVED_TRIPS);
 
@@ -104,38 +110,62 @@ public class TripListIncomplete extends MyTripList {
 
         abort.setOnClickListener(v -> activity.onBackPressed());
 
-
         calculateTickets.setOnClickListener(v -> {
-            //Kopieren aller geplanten Fahrten
-            ArrayList<TripItem> copy = new ArrayList<>(tripItems);
-
-            //Liste leeren
-            tripItems.clear();
-            //Speichern, dass keine Fahrten geplant sind
-            saveData(NEW_SAVED_TRIPS);
-            //Laden aller gespeicherten Fahrten
-            tripItems = loadData(activity, ALL_SAVED_TRIPS);
-            //Neue Fahrten hinzufügen
-            int size = tripItems.size();
-            for (TripItem item : copy) {
-                insertTrip(item);
-            }
-            UtilsList.removeOverlappingTrips(tripItems);
-            if (tripItems.size() != size + copy.size()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("Nicht alle Fahrten konnten hinzugefügt werden \n" +
-                        "Mögliche Ursachen: Fahrten sind bereits in der Liste enthalten, Fahrten haben sich überlappt, ...");
-                builder.setCancelable(false);
-                builder.setPositiveButton("Ok", (dialog, which) -> startOptimierung());
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }else{
-                startOptimierung();
-            }
+            prepareOptimisation();
         });
     }
 
-    private void startOptimierung(){
+    /**
+     * Vorbereitung der Optimierung <br/>
+     * <p>
+     * Die Fahrten werden in die Liste der zu optimierenden Fahrten gepackt, dabei wird überprüft,
+     * ob sich Fahrten überlappen, falls ja, werden diese entfernt. <br/>
+     * Anschließend wird die Liste der zu optimierenden Fahrten als leer gespeichert. <br/>
+     * Sollten nicht alle Fahrten hinzugefügt werden, wird der Nutzer darüber informiert. <br/>
+     * Anschließend startet die Optimierung ({@link #startOptimisation()})
+     *
+     * @preconditions Der Nutzer hat auf "weiter/Optimieren" geklickt
+     * @postconditions Die Fahrten werden in die Liste aller gespeicherter Fahrten gepackt (sofern
+     * sie optimierbar sind & sich nicht überlappen). Die Liste der zu optimierenden Fahrten wird
+     * als leer gespeichert.
+     */
+    private void prepareOptimisation() {
+        //Kopieren aller geplanten Fahrten
+        ArrayList<TripItem> copy = new ArrayList<>(tripItems);
+        //Liste leeren
+        tripItems.clear();
+        //Speichern, dass keine Fahrten geplant sind
+        saveData(NEW_SAVED_TRIPS);
+        //Laden aller gespeicherten Fahrten
+        tripItems = loadData(activity, ALL_SAVED_TRIPS);
+        //Neue Fahrten hinzufügen
+        int size = tripItems.size();
+        for (TripItem item : copy) {
+            insertTrip(item);
+        }
+        UtilsList.removeOverlappingTrips(tripItems);
+        if (tripItems.size() != size + copy.size()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Nicht alle Fahrten konnten hinzugefügt werden \n" +
+                    "Mögliche Ursachen: Fahrten sind bereits in der Liste enthalten, Fahrten haben sich überlappt, ...");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", (dialog, which) -> startOptimisation());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            startOptimisation();
+        }
+    }
+
+    /**
+     * Die Optimierung der Fahrten <br/>
+     * <p>
+     * Jede zu optimierende Fahrt (mit dem Attribut isComplete = false) erhält so viele Fahrscheine, wie sie benötigt.
+     *
+     * @preconditions Alle überlappenden Fahrten wurden gelöscht <br/>
+     * @postconditions Die Fahrten und ihre zugewiesenen Fahrscheine werden gespeichert.
+     */
+    private void startOptimisation() {
         //Optimieren der Fahrten
         HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(activity);
         HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, savedTickets, activity);

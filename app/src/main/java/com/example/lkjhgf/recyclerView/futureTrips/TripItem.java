@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.MyURLParameter;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;

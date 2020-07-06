@@ -11,7 +11,6 @@ import com.example.lkjhgf.activities.multipleTrips.DetailedView;
 
 import java.util.HashMap;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
@@ -35,12 +34,10 @@ public class MultiplePossibleConnections extends PossibleConnections {
      * Zusätzlich zu den Attributen der Oberklasse gibt es noch die Attribute #Fahrt, #reisende Personen.
      * Diese werden mit den Werten aus dem Intent initialisiert. <br/>
      * <p>
-     * Die Erläuterung der Parameter ist in {@link PossibleConnections#PossibleConnections(Activity, View, Intent, NetworkProvider)}
+     * Die Erläuterung der Parameter ist in {@link PossibleConnections#PossibleConnections(Activity, View, Intent)}
      * zu finden
      */
-    public MultiplePossibleConnections(Activity activity,
-                                       View view,
-                                       Intent intent) {
+    public MultiplePossibleConnections(Activity activity, View view, Intent intent) {
         super(activity, view, intent);
 
         //#Fahrt
@@ -57,7 +54,7 @@ public class MultiplePossibleConnections extends PossibleConnections {
         putText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         textViews.numChildren.setText(putText);
 
-        RecyclerViewService recyclerViewService = new RecyclerViewMultipleService(view, activity, this, super.getButtons());
+        RecyclerViewService recyclerViewService = new RecyclerViewService(view, activity, this, super.getButtons());
         super.getButtons().setRecyclerView(recyclerViewService);
     }
 

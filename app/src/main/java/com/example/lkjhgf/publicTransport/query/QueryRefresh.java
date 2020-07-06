@@ -1,16 +1,13 @@
 package com.example.lkjhgf.publicTransport.query;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.adapter.MyArrayAdapter;
 
 import java.io.IOException;
 import java.util.Date;

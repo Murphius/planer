@@ -89,6 +89,15 @@ public final class Utils {
         }
     }
 
+    /**
+     * Prüft ob zwei Intervalle sich überlappen
+     *
+     * @param start1 Startzeit von Fahrt 1
+     * @param end1 Endezeit von Fahrt 1
+     * @param start2 Startzeit von Fahrt 2
+     * @param end2 Endzeit von Fahrt 2
+     * @return true wenn sich die Fahrten überlappen, sonst false
+     */
     public static boolean isOverlapping(Date start1, Date end1, Date start2, Date end2) {
         return start1.before(end2) && start2.before(end1);
     }

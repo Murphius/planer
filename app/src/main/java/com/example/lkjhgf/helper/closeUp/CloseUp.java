@@ -3,19 +3,15 @@ package com.example.lkjhgf.helper.closeUp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.activities.Settings;
 import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.publicTransport.query.QueryParameter;
 import com.example.lkjhgf.publicTransport.query.QueryRefresh;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
-
-import java.util.concurrent.ExecutionException;
 
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
@@ -30,12 +26,20 @@ public abstract class CloseUp {
     TextViewClass textViewClass;
     ButtonClass buttons;
     CloseUpRecyclerView recyclerView;
-
+    /**
+     * Fahrt die betrachtet wird
+     */
     Trip trip;
 
     Activity activity;
     View view;
+    /**
+     * Ob die Fahrt bei der Verbindungsabfrage gefunden wurde
+     */
     boolean changed;
+    /**
+     * Parameter, mit denen nach der Verbindung gesucht werden soll
+     */
     MyURLParameter myURLParameter;
 
     /**
@@ -43,7 +47,8 @@ public abstract class CloseUp {
      * <p>
      * Mittels Intent wird die Fahrt geladen, welche aktuell betrachtet werden soll
      *
-     * @param activity - wird für die Textfarbe von Verspätungen benötigt, sowie für das Starten von Aktivitäten
+     * @param activity - wird für die Textfarbe von Verspätungen benötigt, sowie für das Starten von Aktivitäten,
+     *                 enthält den Informationen aus der vorherigen Aktivität
      * @param view     - Layout
      */
     CloseUp(Activity activity, View view) {
@@ -57,10 +62,20 @@ public abstract class CloseUp {
         recyclerView = new CloseUpRecyclerView(activity, view, this);
     }
 
-    CloseUp(TripItem trip, Activity activity, View view) {
-        this.trip = trip.getTrip();
+    /**
+     * Initialisierung der Attribute <br/>
+     * <p>
+     * Wenn eine bereits optimierte Fahrt betrachtet wird, so werden die Informationen nicht mittels Intent übergeben,
+     * sondern sind im TripItem enthalten.
+     *
+     * @param tripItem Fahrt, die betrachtet wird
+     * @param activity aufrufende Aktivität - für Farben und das Starten weiterer Aktivitäten benötigt
+     * @param view     - Layout
+     */
+    CloseUp(TripItem tripItem, Activity activity, View view) {
+        this.trip = tripItem.getTrip();
         this.activity = activity;
-        myURLParameter = trip.getMyURLParameter();
+        myURLParameter = tripItem.getMyURLParameter();
         textViewClass = new TextViewClass(view, activity.getResources(), this);
         buttons = new ButtonClass(activity, view, this);
         recyclerView = new CloseUpRecyclerView(activity, view, this);
@@ -90,20 +105,60 @@ public abstract class CloseUp {
      */
     void onAcceptClicked(Intent newIntent) {
         newIntent.putExtra(MainMenu.EXTRA_TRIP, trip);
+        //Merken, mit welchen Informationen nach der Fahrt gesucht wurde
         newIntent.putExtra(EXTRA_MYURLPARAMETER, myURLParameter);
         activity.startActivity(newIntent);
     }
 
+    /**
+     * Aktualisierung der Informationen zum Trip <br/>
+     *
+     * @preconditions Der Nutzer hat auf Aktualisieren geklickt
+     * @postconditions Die aktualisierten Informationen werden angezeigt und gegebenenfalls gespeichert
+     */
     void refreshTrip() {
         setChanged(false);
         QueryParameter q = new QueryParameter(myURLParameter);
         refreshTrip(q);
     }
 
-    void refreshTrip(QueryParameter q) {
+    /**
+     * Akutalisierung der Informationen zum Trip
+     *
+     * @param q Parameter, die benötigt werden, um die Fahrt zu suchen
+     */
+    private void refreshTrip(QueryParameter q) {
         new QueryRefresh(activity, this::findTripOuter).execute(q);
     }
 
+    /**
+     * Sucht die Verbindung in der ersten Anfrage an den Server <br/>
+     *
+     * @param result Ergebnis der Serveranfrage
+     * @postconditions Falls die gesuchte Verbindung nicht in der Liste der Fahrten enthalten ist,
+     * wird die Zeit des MyURLParameters nicht auf die gleiche Zeit wie bei der Suche gestellt, sondern
+     * auf die Abfahrtszeit der Fahrt und es folgt eine erneute Anfrage {@link #findTripInner} <br/>
+     * @preconditions Sollte die Fahrt in der Verbindungsliste enthalten sein, ist die Ansicht an
+     * diese aktualisiert worden {@link #findTrip(QueryTripsResult)}
+     */
+    private void findTripOuter(QueryTripsResult result) {
+        findTrip(result);
+        if (!changed) {
+            myURLParameter.changeDate(trip.getFirstDepartureTime());
+            QueryParameter q = new QueryParameter(myURLParameter);
+            new QueryRefresh(activity, this::findTripInner).execute(q);
+        }
+    }
+
+    /**
+     * Prüft, ob eine Fahrt in der Liste an Verbindungen enthalten ist <br/>
+     *
+     * @param result Liste mit möglichen Verbindungen
+     * @preconditions Der Nutzer hat auf Aktualiseren geklickt
+     * @postconditions Wenn die Fahrt in der Liste der Verbindungen enthalten ist, wird die Ansicht
+     * an die neuen Informationen angepasst. <br/>
+     * Wenn die Fahrt in der Liste enthalten ist, wird dies in der Variablen changed vermerkt.
+     */
     private void findTrip(QueryTripsResult result) {
         if (result == null || result.status != QueryTripsResult.Status.OK) {
             Toast.makeText(activity.getApplicationContext(), "Keine Verbindung gefunden", Toast.LENGTH_SHORT).show();
@@ -120,7 +175,18 @@ public abstract class CloseUp {
         }
     }
 
-    private void findTripOuter2(QueryTripsResult result) {
+    /**
+     * Prüft, ob eine Fahrt in der Liste an Verbindungen enthalten ist <br/>
+     *
+     * @param result Ergebnis der zweiten Anfrage an den Server mit der Startzeit der Fahrt als
+     *               Abfahrts- bzw. Ankunftszeit.
+     * @preconditions Die Originalanfrage enthält nicht die Fahrt
+     * @postconditions Wenn die Fahrt auch in der erneuten Anfrage nicht enthalten ist, wird der
+     * Nutzer informiert, dass er sich eine andere Lösung suchen sollte (zB löschen der Fahrt und
+     * eine alternative Verbindung suchen) <br/>
+     * Ist die Fahrt hingegen enthalten gewesen, so ist die Ansicht aktualisiert.
+     */
+    private void findTripInner(QueryTripsResult result) {
         findTrip(result);
         if (!changed) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -134,15 +200,6 @@ public abstract class CloseUp {
         }
     }
 
-    private void findTripOuter(QueryTripsResult result) {
-        findTrip(result);
-        if (!changed) {
-            myURLParameter.changeDate(trip.getFirstDepartureTime());
-            QueryParameter q = new QueryParameter(myURLParameter);
-            new QueryRefresh(activity, this::findTripOuter2).execute(q);
-        }
-    }
-
     public void onBackPressed(Intent intent) {
         activity.startActivity(intent);
     }
@@ -151,7 +208,7 @@ public abstract class CloseUp {
         changed = b;
     }
 
-    public Trip getTrip(){
+    public Trip getTrip() {
         return trip;
     }
 }

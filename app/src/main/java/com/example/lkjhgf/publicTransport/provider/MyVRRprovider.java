@@ -265,27 +265,7 @@ public class MyVRRprovider extends MyProvider {
                 if (preisstufe.get(i).equals(preisstufen[0])) {
                     value.append("\n \tEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                 } else if (preisstufe.get(i).equals(preisstufen[1]) || preisstufe.get(i).equals(preisstufen[2]) || preisstufe.get(i).equals(preisstufen[3])) {
-                    /*String startID = startLocation.id.substring(1);
-                    String destinationID = destinationLocation.id.substring(1);
-                    int startIDint = Integer.parseInt(startID);
-                    int destinationIDint = Integer.parseInt(destinationID);
 
-                    testAsyncTaskextends wabenTask = new testAsyncTaskextends();
-                    wabenTask.execute(startIDint, destinationIDint);
-                    ArrayList<Integer> waben = new ArrayList<>();
-                    try {
-                        waben = wabenTask.get();
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (waben.size() == 2) {
-                        if (waben.get(0) / 10 == waben.get(1) / 10) {
-                            value.append("\n \tEntwerten für das Tarifgebiet: ").append(waben.get(0));
-                        } else {
-                            value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
-                            value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
-                        }
-                    }*/
                     ArrayList<Integer> crossedFarezones = new ArrayList<>(tripItem.getCrossedFarezones());
                     boolean isZweiWaben = false;
                     int firstZone = crossedFarezones.get(0);
@@ -307,20 +287,7 @@ public class MyVRRprovider extends MyProvider {
                         }
                     }
                 } else if(!preisstufe.get(i).equals(preisstufen[preisstufen.length-1])){
-                    /*startLocation = tripItem.getTrip().from;
-                    String startID = startLocation.id.substring(1);
-                    int startIDint = Integer.parseInt(startID);
-                    testAsyncTaskextends wabenTask = new testAsyncTaskextends();
-                    wabenTask.execute(startIDint);
-                    ArrayList<Integer> waben = new ArrayList<>();
-                    try {
-                        waben = wabenTask.get();
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (!waben.isEmpty()) {
-                        value.append("\n\tEntwerten für das Tarifgebiet: ").append(waben.get(0) / 10);
-                    }*/
+
                     for (Farezone f : farezones) {
                         if (f.getId() == tripItem.getStartID() / 10) {
                             value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());

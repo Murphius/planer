@@ -25,7 +25,7 @@ import de.schildbach.pte.dto.Fare;
 public class MultipleCloseUp extends CloseUp {
 
     protected int numTrip;
-    protected  HashMap<Fare.Type, Integer> numPersonsPerClass;
+    protected HashMap<Fare.Type, Integer> numPersonsPerClass;
 
     /**
      * Layout mit weiteren Informationen füllen <br/>
@@ -36,8 +36,7 @@ public class MultipleCloseUp extends CloseUp {
      *
      * @see CloseUp#CloseUp(Activity, View)
      */
-    public MultipleCloseUp(Activity activity,
-                           View view) {
+    public MultipleCloseUp(Activity activity, View view) {
         super(activity, view);
 
         textViewClass.useTicket.setVisibility(View.GONE);
@@ -59,7 +58,14 @@ public class MultipleCloseUp extends CloseUp {
         textViewClass.numChildren.setText(setText);
     }
 
-    MultipleCloseUp(TripItem tripItem, Activity activity, View view){
+    /**
+     * Betrachten einer bereits optimierten Fahrt <br/>
+     * <p>
+     * Dabei müssen zusätzlich die Informationen für den Fahrschein angezeigt werden <br/>
+     *
+     * @param tripItem enthält alle Informationen zu der Fahrt, die betrachtet wird
+     */
+    MultipleCloseUp(TripItem tripItem, Activity activity, View view) {
         super(tripItem, activity, view);
         numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
         numPersonsPerClass = tripItem.getNumUserClasses();
@@ -75,10 +81,10 @@ public class MultipleCloseUp extends CloseUp {
         setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
         textViewClass.numChildren.setText(setText);
 
-        if(tripItem.hasNoTicket()){
+        if (tripItem.hasNoTicket()) {
             textViewClass.useTicket.setVisibility(View.GONE);
             textViewClass.ticketView.setVisibility(View.GONE);
-        }else{
+        } else {
             textViewClass.useTicket.setText(tripItem.getDetailedTicketListAsString(activity));
             textViewClass.useTicket.setVisibility(View.VISIBLE);
             textViewClass.ticketView.setVisibility(View.VISIBLE);
@@ -102,6 +108,4 @@ public class MultipleCloseUp extends CloseUp {
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         super.onAcceptClicked(newIntent);
     }
-
-
 }

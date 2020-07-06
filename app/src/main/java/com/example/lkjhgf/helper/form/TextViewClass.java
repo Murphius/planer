@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
-import com.example.lkjhgf.adapter.MyArrayAdapter;
+import com.example.lkjhgf.adapter.SuggestLocationsAdapter;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.UtilsString;
 
@@ -14,7 +14,7 @@ import de.schildbach.pte.dto.Trip;
 /**
  * Handhabung der TextViews in der Formularansicht
  */
-class Form_Text {
+class TextViewClass {
 
     private View view;
     private Context context;
@@ -34,7 +34,7 @@ class Form_Text {
      * @param context für die Adapter / Vorschläge möglicher Haltestellen
      * @param form    zugehlriges Formular
      */
-    Form_Text(View view, Context context, Form form) {
+    TextViewClass(View view, Context context, Form form) {
         this.view = view;
         this.context = context;
         this.form = form;
@@ -63,7 +63,7 @@ class Form_Text {
      * Die Textfelder für die Punkte mit Vorschlägen benötigen "Filter" mit Vorschlägen <br/>
      * <p>
      * Die Orts-Vorschläge werden vom Provider erzeugt, passend zur Nutzereingabe.
-     * Dies geschieht in der Klasse {@link MyArrayAdapter}.
+     * Dies geschieht in der Klasse {@link SuggestLocationsAdapter}.
      *
      * @preconditions Der Nutzer klickt auf eins der drei Textfelder, und tippt eine Adresse ein,
      * anschließend wählt er einen der Vorschläge aus
@@ -71,14 +71,14 @@ class Form_Text {
      * berücksichtigt, sowie in der Ansicht angezeigt
      */
     void setAdapter() {
-        start_view.setAdapter(new MyArrayAdapter(context, start_view.getThreshold()));
-        start_view.setOnItemClickListener((parent, view, position, id) -> form.startLocation = ((MyArrayAdapter.LocationHolder) parent.getItemAtPosition(
+        start_view.setAdapter(new SuggestLocationsAdapter(context, start_view.getThreshold()));
+        start_view.setOnItemClickListener((parent, view, position, id) -> form.startLocation = ((SuggestLocationsAdapter.LocationHolder) parent.getItemAtPosition(
                 position)).location);
-        destination_view.setAdapter(new MyArrayAdapter(context, destination_view.getThreshold()));
-        destination_view.setOnItemClickListener((parent, view, position, id) -> form.destinationLocation = ((MyArrayAdapter.LocationHolder) parent.getItemAtPosition(
+        destination_view.setAdapter(new SuggestLocationsAdapter(context, destination_view.getThreshold()));
+        destination_view.setOnItemClickListener((parent, view, position, id) -> form.destinationLocation = ((SuggestLocationsAdapter.LocationHolder) parent.getItemAtPosition(
                 position)).location);
-        stopover_view.setAdapter(new MyArrayAdapter(context, stopover_view.getThreshold()));
-        stopover_view.setOnItemClickListener((parent, view, position, id) -> form.stopoverLocation = ((MyArrayAdapter.LocationHolder) parent.getItemAtPosition(
+        stopover_view.setAdapter(new SuggestLocationsAdapter(context, stopover_view.getThreshold()));
+        stopover_view.setOnItemClickListener((parent, view, position, id) -> form.stopoverLocation = ((SuggestLocationsAdapter.LocationHolder) parent.getItemAtPosition(
                 position)).location);
     }
 

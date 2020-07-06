@@ -26,8 +26,7 @@ public class FutureIncompleteCloseUp extends MultipleCloseUp {
      * <p>
      * Des weiteren wird in {@link FutureIncompleteAllTripsCloseUp} der zu verwendende Fahrschein angezeigt
      */
-    public FutureIncompleteCloseUp(Activity activity,
-                                   View view) {
+    public FutureIncompleteCloseUp(Activity activity, View view) {
         super(activity, view);
         buttons.button_accept.setVisibility(View.INVISIBLE);
     }

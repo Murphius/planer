@@ -11,7 +11,7 @@ import com.example.lkjhgf.activities.futureTrips.closeUp.AllConnectionsIncomplet
 import com.example.lkjhgf.activities.futureTrips.closeUp.AllTripsCompleteView;
 import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromCompleteList;
 import com.example.lkjhgf.activities.singleTrip.EditTripFromComplete;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.activities.singleTrip.UserForm;
@@ -113,8 +113,7 @@ public class TripListComplete extends MyTripList {
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
             startNextActivity(newIntent);
         } else {
-            if (checkTicketsIfFuture(position)) {
-                //Nur freie Fahrten
+            if (checkTicketsIfFuture(position)) {//Nur freie Fahrten
                 removeTripAndTicket(position);
                 Intent newIntent = new Intent(activity.getApplicationContext(),
                         EditIncompleteTripFromCompleteList.class);
@@ -123,8 +122,7 @@ public class TripListComplete extends MyTripList {
                 newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
                 newIntent.putExtra(EXTRA_MYURLPARAMETER, current.getMyURLParameter());
                 startNextActivity(newIntent);
-            } else {
-                //Fahrt nutzt angefangene Tickets
+            } else {//Fahrt nutzt angefangene Tickets
                 AlertDialog.Builder secondBuilder = new AlertDialog.Builder(activity);
                 secondBuilder.setMessage("Diese Fahrt besitzt mindestens ein angefangenes Ticket, durch das editieren dieser Fahrt könnten die " +
                         "Kosten nicht mehr minimal sein. \n Trotzdem editieren?");
@@ -145,7 +143,6 @@ public class TripListComplete extends MyTripList {
                 secondDialog.show();
             }
         }
-
     }
 
     /**
@@ -215,6 +212,9 @@ public class TripListComplete extends MyTripList {
         for (Fare.Type type : keys) {
             ArrayList<UUID> ticketUUIDs = currentTrip.getTicketIDs(type);
             ArrayList<TicketToBuy> tickets = allSavedTickets.get(type);
+            if(tickets == null || tickets.isEmpty()){
+                continue;
+            }
             for (UUID currentTicketUUID : ticketUUIDs) {
                 for (TicketToBuy currentTicketToBuy : tickets) {
                     if (currentTicketUUID.equals(currentTicketToBuy.getTicketID())) {
@@ -264,6 +264,9 @@ public class TripListComplete extends MyTripList {
         for (Fare.Type type : keys) {
             ArrayList<UUID> currentTicketUUIDs = currentTrip.getTicketIDs(type);
             ArrayList<TicketToBuy> possibleTickets = allSavedTickets.get(type);
+            if(possibleTickets == null || possibleTickets.isEmpty()){
+                continue;
+            }
             for (UUID currentTicketUUID : currentTicketUUIDs) {
                 for (Iterator<TicketToBuy> iteratorTicketToBuy = possibleTickets.iterator(); iteratorTicketToBuy.hasNext(); ) {
                     TicketToBuy currentTicketToBuy = iteratorTicketToBuy.next();
@@ -278,7 +281,6 @@ public class TripListComplete extends MyTripList {
         }
         tripItems.remove(position);
         adapter.notifyDataSetChanged();
-        //TODO überprüfen
         AllTickets.saveData(allSavedTickets, activity);
         HashMap<Fare.Type, ArrayList<TicketToBuy>> newTicketList = MainMenu.myProvider.optimise(tripItems, AllTickets.loadTickets(activity), activity);
         AllTickets.saveData(newTicketList, activity);

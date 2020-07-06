@@ -36,10 +36,10 @@ import de.schildbach.pte.dto.SuggestLocationsResult;
  *
  * @preconditions Der Nutzer gibt in ein Autcomplete Textfeld mit diesem Adapter etwas ein
  */
-public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> {
+public class SuggestLocationsAdapter extends ArrayAdapter<SuggestLocationsAdapter.LocationHolder> {
 
     private Context mContext;
-    private List<MyArrayAdapter.LocationHolder> mList;
+    private List<SuggestLocationsAdapter.LocationHolder> mList;
     private ArrayFilter mFilter;
     private int threshhold;
 
@@ -49,7 +49,7 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
      * @param context    - für das Erzeugen vom Layout in {@link #getView(int, View, ViewGroup)}
      * @param threshhold - ab wie vielen Zeichen die Suche nach möglichen Zielen starten soll
      */
-    public MyArrayAdapter(@NonNull Context context, int threshhold) {
+    public SuggestLocationsAdapter(@NonNull Context context, int threshhold) {
         this(context, new ArrayList<>(), threshhold);
     }
 
@@ -59,9 +59,9 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
      *
      * @param list - Vorschlagsliste
      */
-    private MyArrayAdapter(@NonNull Context context,
-                           ArrayList<MyArrayAdapter.LocationHolder> list,
-                           int threshhold) {
+    private SuggestLocationsAdapter(@NonNull Context context,
+                                    ArrayList<SuggestLocationsAdapter.LocationHolder> list,
+                                    int threshhold) {
         super(context, 0, list);
         mContext = context;
         mList = list;
@@ -140,9 +140,9 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
     private class ArrayFilter extends Filter {
 
         private NetworkProvider provider;
-        private ArrayAdapter<MyArrayAdapter.LocationHolder> adapter;
+        private ArrayAdapter<SuggestLocationsAdapter.LocationHolder> adapter;
 
-        ArrayFilter(ArrayAdapter<MyArrayAdapter.LocationHolder> adapter) {
+        ArrayFilter(ArrayAdapter<SuggestLocationsAdapter.LocationHolder> adapter) {
             this.provider = new VrrProvider();
             this.adapter = adapter;
         }
@@ -165,7 +165,7 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
                 e.printStackTrace();
             }
             //Umformung SuggestLocationResult -> Location / LocationHolder
-            List<MyArrayAdapter.LocationHolder> suggestedLocations = new ArrayList<>();
+            List<SuggestLocationsAdapter.LocationHolder> suggestedLocations = new ArrayList<>();
             if (suggestedLocationsResult != null) {
                 for (Location location : suggestedLocationsResult.getLocations()) {
                     suggestedLocations.add(new LocationHolder(location));
@@ -211,7 +211,7 @@ public class MyArrayAdapter extends ArrayAdapter<MyArrayAdapter.LocationHolder> 
             adapter.clear();
             if (results.count > 0) {
                 //Alle neuen Vorschläge hinzufügen
-                adapter.addAll((ArrayList<MyArrayAdapter.LocationHolder>) results.values);
+                adapter.addAll((ArrayList<SuggestLocationsAdapter.LocationHolder>) results.values);
                 notifyDataSetChanged();
             } else {
                 notifyDataSetInvalidated();

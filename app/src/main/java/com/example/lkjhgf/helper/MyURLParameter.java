@@ -6,6 +6,13 @@ import java.util.Date;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.TripOptions;
 
+/**
+ * Enthält alle benötigten Informationen, um später die gleiche Abfrage an den Server zu stellen <br/>
+ *
+ * Um auch die unterschiedlichen TripOptions einer Fahrt beim Aktualisieren gleich zu haben, wie bei
+ * der original Anfrage, werden die Anfrage Parameter in dieser Klasse gespeichert. <br/>
+ * Zusätzlich ist so ein Zugriff auf einen eventuell Zwischenhalt möglich.
+ */
 public class MyURLParameter implements Serializable {
 
     private Date startDate;

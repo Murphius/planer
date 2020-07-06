@@ -4,6 +4,9 @@ import com.example.lkjhgf.optimisation.TicketToBuy;
 
 import java.util.Comparator;
 
+/**
+ * Vergleicht zwei TicketToBuy Elemente nach ihrer ersten Abfahrtszeit
+ */
 public class TicketToBuyTimeComporator implements Comparator<TicketToBuy> {
     @Override
     public int compare(TicketToBuy o1, TicketToBuy o2) {

@@ -28,7 +28,7 @@ import de.schildbach.pte.dto.Trip;
  * <p>
  * Die Ansicht der möglichen Verbindungen erfolgt im groben Überblick
  */
-abstract class RecyclerViewService {
+public class RecyclerViewService {
 
     private ArrayList<ConnectionItem> connection_items;
 
@@ -49,14 +49,13 @@ abstract class RecyclerViewService {
      * Hinzufügen von Adaopter und Layoutmanager für diesen in {@link #buildRecyclerView()} <br/>
      * <p>
      * Für das Füllen der Liste möglicher Verbindungen wird die Funktion {@link UtilsList#fillConnectionList(List Trips)}
+     * verwendet
      *
      * @param view                - Layout
      * @param activity            - benötigt, um ggf. eine Nachricht anzuzeigen, wenn keine passenden Verbindungen gefunden wurden
      * @param possibleConnections - enthält das QueryTripsResult
      */
-    RecyclerViewService(View view,
-                        Activity activity,
-                        PossibleConnections possibleConnections, ButtonClass buttons) {
+    RecyclerViewService(View view, Activity activity, PossibleConnections possibleConnections, ButtonClass buttons) {
         //Attribut <-> ID
         recyclerView = view.findViewById(R.id.recyclerView1);
 
@@ -89,7 +88,9 @@ abstract class RecyclerViewService {
      * @param trips Alle Verbindungen vom Server
      * @return Anzuzeigende Elemente für den Nutzer
      */
-    abstract ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips);
+    ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips){
+        return UtilsList.fillConnectionList(trips);
+    }
 
     /**
      * Setzt den Adapter und Layout Manager für den RecyclerView, sowie einen OnItemClickListerner <br/>
@@ -130,17 +131,15 @@ abstract class RecyclerViewService {
 
         //Provider -> suche nach weiteren Verbindungen
         QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, true);
+        //TODO
         AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(query);
-
         QueryTripsResult resultLater = null;
-
         try {
             //Neue Ergebnisse holen
             resultLater = execute.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         if (resultLater == null) {
             Toast.makeText(context,
                     "Es konnten keine späteren Verbindungen gefunden werden",
@@ -182,11 +181,9 @@ abstract class RecyclerViewService {
 
         // Suche nach neuen Verbindungen
         QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false);
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(
-                query);
-
+        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(query);
         QueryTripsResult resultEarlier = null;
-
+        //TODO
         try {
             // Neue Ergebnisse holen
             resultEarlier = execute.get();
@@ -212,7 +209,6 @@ abstract class RecyclerViewService {
                 //In diesem Fall kann der Nutzer nicht nach weiteren früheren Verbindungen suchen
                 buttons.earlierButton.setEnabled(false);
             }
-
             adapter.notifyDataSetChanged();
             // Scrollen an die Position des ersten neuen Elements
             layoutManager.smoothScrollToPosition(recyclerView, null, connection_items.size() - length);

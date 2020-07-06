@@ -35,7 +35,7 @@ import de.schildbach.pte.dto.Trip;
  * Bei der Serialisierung ist die Klasse bekannt, beim Deserialisieren hingegen nicht, deshalb muss
  * der Klassenname ebenfalls gespeichert werden, um das Objekt korrekt zu "rekonstruieren"
  */
-public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
+public class SerializeAdapter implements JsonSerializer, JsonDeserializer {
 
     private static String CLASSNAME = "CLASSNAME";
     private static String DATA = "DATA";
@@ -144,7 +144,7 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
             int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
             Fare.Type type = context.deserialize(jsonObject.get(EXTRA_FARE_TYPE), Fare.Type.class);
             return new NumTicket(numTrips, prices, name,type);
-        }else if(className.equals(TimeTicket.class.getName())){
+        }else if(className.equals(TimeTicket.class.getName())){//Erzeugen eines neuen TimeTickets
             String name = context.deserialize(jsonObject.get(EXTRA_NAME_TICKET), String.class);
             int[] prices = context.deserialize(jsonObject.getAsJsonArray(EXTRA_ARRAY_PRICE), int[].class);
             Fare.Type type = context.deserialize(jsonObject.get(EXTRA_FARE_TYPE), Fare.Type.class);
@@ -195,7 +195,6 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                         context.serialize(individualTrip.departureTime));
                 jsonObject.add(EXTRA_ARRIVAL, context.serialize(individualTrip.arrival));
                 jsonObject.add(EXTRA_ARRIVAL_TIME, context.serialize(individualTrip.arrivalTime));
-                //jsonObject.add(EXTRA_PATH, context.serialize(individualTrip.path));
                 jsonObject.add(EXTRA_DISTANCE, context.serialize(individualTrip.distance));
             }
         }else if(src instanceof Ticket){

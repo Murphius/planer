@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
-import com.example.lkjhgf.adapter.InterfaceAdapter;
+import com.example.lkjhgf.adapter.SerializeAdapter;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.util.TripItemTimeComparator;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TimeTicket;
@@ -30,10 +31,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 
-import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -93,7 +92,7 @@ public abstract class MyTripList {
         if (tripItem != null) {
             if (!tripItems.contains(tripItem)) {
                 tripItems.add(tripItem);
-                sortTrips();
+                Collections.sort(tripItems, new TripItemTimeComparator());
             }
         }
     }
@@ -274,42 +273,40 @@ public abstract class MyTripList {
     }
 
     /**
-     * Sortiert die Liste an TripItems nach dem Zeitpunkt, wann die Fahrt stattfindet <br/>
-     * (t1 < t2 < ... < tn)
-     */
-    private void sortTrips() {
-        Collections.sort(tripItems, (tripItem1, tripItem2) -> {
-            if (tripItem1.getTrip().getFirstDepartureTime().before(tripItem2.getTrip().getFirstDepartureTime())) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
-    }
-
-    /**
      * Speichern der Daten <br/>
      * <p>
-     * Speichern mittels Shared Preferences und GSON <br/>
-     * Manuelle Serialisierung mittels {@link InterfaceAdapter} für Trip (Individual und Public) <br/>
+     * Aufruf der Methode {@link #saveTrips(ArrayList tripItems, String dataPath, Activity)}
      */
     public void saveData(String dataPath) {
         saveTrips(tripItems, dataPath, activity);
     }
 
-
-
-    private void loadData(){
+    /**
+     * Laden der Daten <br/>
+     * <p>
+     * Aufruf der Methode {@link #loadData(Activity, String dataPath)}
+     */
+    private void loadData() {
         tripItems = loadData(activity, dataPath);
     }
 
-    public static void saveTrips(ArrayList<TripItem> newTripItems, String dataPath, Activity activity){
+    /**
+     * Speichern der übergebenen Liste <br/>
+     * <p>
+     * Speichern mittels Shared Preferences und GSON <br/>
+     * Manuelle Serialisierung mittels {@link SerializeAdapter} für Trip (Individual und Public) <br/>
+     *
+     * @param newTripItems - Liste der zu speichernden Elemente
+     * @param dataPath     - unter welchem String die Liste gespeichert werden soll
+     * @param activity     - zum Speichern benötigt
+     */
+    public static void saveTrips(ArrayList<TripItem> newTripItems, String dataPath, Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         GsonBuilder builder = new GsonBuilder();
-        InterfaceAdapter adapter = new InterfaceAdapter();
+        SerializeAdapter adapter = new SerializeAdapter();
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
@@ -323,19 +320,19 @@ public abstract class MyTripList {
     /**
      * Laden der Daten <br/>
      * <p>
-     * Abhängig vom Datenpfad, werden entweder alle Fahrten geladen, oder nur die zu Optimierenden <br/>
-     * <p>
      * Manuelle deserialisierung von Trip.leg -> Public und Individual
      * <p>
      * Aus den gespeicherten Verbindungen, werden die Fahrten gelöscht, deren Ankunftszeitpunkt mehr als 24h
      * in der Vergangenheit liegen.
+     *
+     * @param dataPath Abhängig vom Datenpfad, werden entweder alle Fahrten geladen, oder nur die zu Optimierenden
      */
     static ArrayList<TripItem> loadData(Activity activity, String dataPath) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
         String json = sharedPreferences.getString(SAVED_TRIPS_TASK, null);
-        InterfaceAdapter adapter = new InterfaceAdapter();
+        SerializeAdapter adapter = new SerializeAdapter();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
@@ -352,7 +349,7 @@ public abstract class MyTripList {
         } else {
             Date today = Calendar.getInstance().getTime();
             long oneDay = 24 * 60 * 60 * 1000;
-            for (Iterator<TripItem> it = tripItems.iterator(); it.hasNext();) {
+            for (Iterator<TripItem> it = tripItems.iterator(); it.hasNext(); ) {
                 TripItem item = it.next();
                 if (item.getTrip().getLastArrivalTime().getTime() + oneDay - today.getTime() <= 0) {
                     it.remove();
@@ -362,7 +359,15 @@ public abstract class MyTripList {
         return tripItems;
     }
 
-    public static ArrayList<TripItem> loadTripList(Activity activity, String dataPath){
+    /**
+     * Laden der gespeicherten Fahrten <br/>
+     *
+     * Ruft {@link #loadData(Activity, String dataPath)} auf.
+     * @param activity zum Laden benötigt
+     * @param dataPath legt fest, welche Fahrten geladen werden
+     * @return Liste, der unter dem Datenpfad gespeicherten Fahrten
+     */
+    public static ArrayList<TripItem> loadTripList(Activity activity, String dataPath) {
         return loadData(activity, dataPath);
     }
 

@@ -1,4 +1,4 @@
-package com.example.lkjhgf.helper.ticketOverview.groupedOverview;
+package com.example.lkjhgf.helper.ticketOverview;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -7,7 +7,8 @@ import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.adapter.InterfaceAdapter;
+import com.example.lkjhgf.adapter.SerializeAdapter;
+import com.example.lkjhgf.helper.ticketOverview.groupedOverview.RecyclerViewGroupedTicketOverview;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.Ticket;
@@ -46,19 +47,18 @@ public class AllTickets {
      */
     private static int fullPrice;
 
-
     /**
      * Lädt die gespeicherten Fahrten und lagert das Management des RecyclerViews an die Klasse {@link RecyclerViewGroupedTicketOverview} aus.
      * <br/>
      * Berechnung des Gesamtpreises
      *
      * @param activity aufrufende Aktivität zum Laden & Speichern benötigt
-     * @param view Layout
+     * @param view     Layout
      */
     public AllTickets(Activity activity, View view) {
         this.activity = activity;
 
-        loadData(activity, 24*60*60*1000);
+        loadData(activity, 24 * 60 * 60 * 1000);
 
         TextView fullpriceHolder = view.findViewById(R.id.textView99);
 
@@ -67,29 +67,25 @@ public class AllTickets {
     }
 
     /**
-     * Lädt die gespeicherten Fahrscheine
+     * Lädt die gespeicherten Fahrscheine <br/>
+     *
+     * Die Fahrten, welche länger als der Offset her sind, werden nicht in die Liste
+     *      * aufgenommen
+     *
      * @param activity zum laden benötigt
+     * @param offset   gibt an, wie viel Zeit verstrichen sein soll, zwischen aktuellem Zeitpunkt und
+     *                 letzter Fahrt, bis ein Ticket gelöscht werden soll
      */
-    private static void loadData(Activity activity, long offset) {
+    public static void loadData(Activity activity, long offset) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
                 MODE_PRIVATE);
 
         String json = sharedPreferences.getString(SAVED_TICKETS_TASK, null);
         //Manuelles laden der Klassen -> abstrakte Oberklasse -> beim Laden nicht klar, welche
         //Klasse die Objekte haben
-        InterfaceAdapter adapter = new InterfaceAdapter();
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Trip.Public.class, adapter);
-        builder.registerTypeAdapter(Trip.Individual.class, adapter);
-        builder.registerTypeAdapter(Trip.Leg.class, adapter);
-        builder.registerTypeAdapter(Ticket.class, adapter);
-        builder.registerTypeAdapter(NumTicket.class, adapter);
-        builder.registerTypeAdapter(TimeTicket.class, adapter);
-        Gson gson = builder.create();
-
         Type type = new TypeToken<HashMap<Fare.Type, ArrayList<TicketToBuy>>>() {
         }.getType();
-
+        Gson gson = generateGson();
         allTickets = gson.fromJson(json, type);
 
         fullPrice = 0;
@@ -99,7 +95,11 @@ public class AllTickets {
         } else {
             //Entfernen von "abgelaufenen" Tickets und Berechnung des aktuellen Gesamtpreises
             for (Fare.Type type1 : allTickets.keySet()) {
-                for (Iterator<TicketToBuy> it = allTickets.get(type1).iterator(); it.hasNext(); ) {
+                ArrayList<TicketToBuy> currentList = allTickets.get(type1);
+                if(currentList == null){
+                    currentList = new ArrayList<>();
+                }
+                for (Iterator<TicketToBuy> it = currentList.iterator(); it.hasNext(); ) {
                     TicketToBuy current = it.next();
                     if (current.isPastTicket(offset)) {
                         it.remove();
@@ -111,13 +111,20 @@ public class AllTickets {
         }
     }
 
+    /**
+     * Speichern der Tickets <br/>
+     *
+     * Ruft {@link #saveData(Activity)} auf
+     */
     public void saveData() {
         saveData(activity);
     }
 
     /**
      * Speichern der Daten
+     *
      * @param activity zum Speichern benötigt
+     * @postconditions Die Fahrten sind gespeichert
      */
     private static void saveData(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(dataPath,
@@ -126,7 +133,7 @@ public class AllTickets {
         //Manuelles Speichern
         SharedPreferences.Editor editor = sharedPreferences.edit();
         GsonBuilder builder = new GsonBuilder();
-        InterfaceAdapter adapter = new InterfaceAdapter();
+        SerializeAdapter adapter = new SerializeAdapter();
         builder.registerTypeAdapter(Trip.Public.class, adapter);
         builder.registerTypeAdapter(Trip.Individual.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
@@ -143,9 +150,12 @@ public class AllTickets {
     }
 
     /**
-     * Die bei der Optimierung ermittelten optimalen Fahrscheine speichern ({@link com.example.lkjhgf.helper.util.UtilsOptimisation#brauchtEinenTollenNamen(ArrayList zu optimierende Fahrten, Activity)}
+     * Die bei der Optimierung ermittelten optimalen Fahrscheine speichern <br/>
+     *
+     * ({@link com.example.lkjhgf.publicTransport.provider.MyProvider#optimise(ArrayList trips, HashMap savedTickets, Activity)})
+     *
      * @param newTickets neue Fahrscheine die gespeichert werden sollen
-     * @param activity
+     * @param activity zum Speichern benötigt
      */
     public static void saveData(HashMap<Fare.Type, ArrayList<TicketToBuy>> newTickets, Activity activity) {
         allTickets = newTickets;
@@ -157,7 +167,11 @@ public class AllTickets {
     }
 
     /**
-     * Lädt die aktuell gespeicherten Daten
+     * Lädt die aktuell gespeicherten Daten <br/>
+     *
+     * Bei der Optimierung werden nur aktuelle Fahrscheine benötigt, also wird der Offset für
+     * {@link #loadData(Activity, long offset)} 0 gewählt.
+     *
      * @param activity zum Laden benötigt
      * @return die gespeicherten Fahrten
      */
@@ -166,8 +180,38 @@ public class AllTickets {
         return allTickets;
     }
 
-    public static int getFullPrice(){
+    /**
+     * Lädt die gespeicherten Fahrten und gibt diese zurück <br/>
+     *
+     * Laden der Fahrten in das Attribut, Rückgabe des Attributs
+     *
+     * @param activity zum Laden benötigt
+     * @param offset Gibt den zeitlichen Abstand zwischen akutellem Zeitpunkt und letzter Fahrt an,
+     *               die maximal vergangen sein darf, bis die Fahrt nicht mehr angezeigt wird
+     * @return Liste aller Fahrscheine, deren letzte Fahrt kürzer als der offset vorbei ist
+     */
+    public static HashMap<Fare.Type, ArrayList<TicketToBuy>> loadTickets(Activity activity, long offset){
+        loadData(activity, offset);
+        return allTickets;
+    }
+
+    public static int getFullPrice() {
         return fullPrice;
+    }
+
+    /**
+     * Für die manuelle deserialisierung
+     */
+    private static Gson generateGson(){
+        SerializeAdapter adapter = new SerializeAdapter();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Trip.Public.class, adapter);
+        builder.registerTypeAdapter(Trip.Individual.class, adapter);
+        builder.registerTypeAdapter(Trip.Leg.class, adapter);
+        builder.registerTypeAdapter(Ticket.class, adapter);
+        builder.registerTypeAdapter(NumTicket.class, adapter);
+        builder.registerTypeAdapter(TimeTicket.class, adapter);
+        return builder.create();
     }
 
 }

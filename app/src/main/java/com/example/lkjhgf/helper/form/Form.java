@@ -13,7 +13,6 @@ import com.example.lkjhgf.publicTransport.query.QueryTask;
 
 import java.util.Calendar;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.QueryTripsResult;
 import de.schildbach.pte.dto.Trip;
@@ -23,33 +22,24 @@ import de.schildbach.pte.dto.TripOptions;
  * Handhabung der Nutzereingaben und des gesammten Layouts für das Formular <br/>
  * <p>
  * Die Buttons sind in der Klasse {@link ButtonClass} und die Textfelder in die Klasse
- * {@link Form_Text} ausgelagert <br/>
+ * {@link TextViewClass} ausgelagert <br/>
  */
 public abstract class Form {
 
-
     //Intent für die Übergabe an die nächste Aktivität
     public static final String EXTRA_MYURLPARAMETER = "com.example.lkjhgf.individual_trip.form.EXTRA_MYURLPARAMETER";
-    public static final String EXTRA_DATE = "com.example.lkjhgf.individual_trip.form.EXTRA_DATE";
-    public static final String EXTRA_START = "com.example.lkjhgf.individual_trip.form.EXTRA_START";
-    public static final String EXTRA_DESTINATION = "com.example.lkjhgf.individual_trip.form.EXTRA_DESTINATION";
-    public static final String EXTRA_ISARRIVALTIME = "com.example.lkjhgf.individual_trip.form.EXTRA_ISARRIVALTIME";
-    public static final String EXTRA_STOPOVER = "com.example.lkjhgf.individual_trip.form.EXTRA_STOPOVER";
-
 
     // Parameter der Fahrt
     Location startLocation, stopoverLocation, destinationLocation;
     Calendar selectedDate;
     boolean isArrivalTime;
 
-    //
     protected Context context;
     protected Activity activity;
     protected Intent intent;
 
-
     protected ButtonClass buttons;
-    protected Form_Text text;
+    protected TextViewClass text;
 
     /**
      * Erstellen der Klassen für die Buttons und Textfelder, initialisierung der Attribute <br/>
@@ -62,7 +52,7 @@ public abstract class Form {
         context = activity.getApplicationContext();
 
         buttons = new ButtonClass(view, activity, this);
-        text = new Form_Text(view, activity, this);
+        text = new TextViewClass(view, activity, this);
         buttons.setText(text);
 
         // Aktuellen Zeitpunkt als Defaultwert
@@ -178,7 +168,7 @@ public abstract class Form {
         text.setAdapter();
     }
 
-    Form_Text getText() {
+    TextViewClass getText() {
         return text;
     }
 }

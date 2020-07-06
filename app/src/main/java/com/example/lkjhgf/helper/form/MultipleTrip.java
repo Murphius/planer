@@ -15,7 +15,6 @@ import com.example.lkjhgf.activities.multipleTrips.ShowAllPossibleConnections;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Trip;
 
@@ -28,55 +27,6 @@ public class MultipleTrip extends Form {
     private HashMap<Fare.Type, Integer> numPersonsPerClass;
 
     private TextView titleView;
-    private View separator;
-
-    /**
-     * Wenn eine Fahrt editiert oder kopiert werden soll, sollen die zugehörigen Informationen
-     * angezeigt werden <br/>
-     * <p>
-     * Nutzt {@link #MultipleTrip(Activity, View)} als Basis für den View
-     *
-     * @param trip               Trip der editiert oder kopiert werden soll
-     * @param numPersonsPerClass gibt die Anzahl der reisenden Personen pro "Klasse" an zB Erwachsene - 5
-     * @param numTrip            #Trip
-     */
-    public MultipleTrip(Activity activity,
-                        View view, Trip trip,
-                        HashMap<Fare.Type, Integer> numPersonsPerClass,
-                        int numTrip) {
-        // "Normale" Ansicht herstellen
-        this(activity, view);
-        if (numPersonsPerClass == null) {
-            this.numPersonsPerClass = new HashMap<>();
-        } else {
-            this.numPersonsPerClass = numPersonsPerClass;
-        }
-
-        //Informationen über die #reisender Personen anzeigen
-        //ToDo bei anderen Providern müssen mehr Textfelder angelegt werden & diese anschließend mit den Werten befüllt werden
-        String setText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
-        text.numAdultView.setText(setText);
-        setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
-        text.numChildrenView.setText(setText);
-
-        this.numTrip = numTrip;
-        String titleString = numTrip + ". Fahrt";
-        titleView.setText(titleString);
-
-
-        //Informationen der Verbindung den Attributen zuweisen
-        startLocation = trip.from;
-        destinationLocation = trip.to;
-        selectedDate.setTime(trip.getFirstDepartureTime());
-
-        // Informationen der Verbindung in den jeweiligen Textfelder anzeigen
-        text.date_view.setText(UtilsString.setDate(selectedDate.getTime()));
-        text.arrivalDepartureView.setText(UtilsString.setTime(selectedDate.getTime()));
-        text.start_view.setText(UtilsString.setLocationName(startLocation));
-        text.destination_view.setText(UtilsString.setLocationName(destinationLocation));
-
-        hideStopover(view);
-    }
 
     /**
      * Neben den Informationen zu Start, Ziel, Zeitpunkt, werden auch die #reisender Personen
@@ -102,6 +52,52 @@ public class MultipleTrip extends Form {
     }
 
     /**
+     * Wenn eine Fahrt editiert oder kopiert werden soll, sollen die zugehörigen Informationen
+     * angezeigt werden <br/>
+     * <p>
+     * Nutzt {@link #MultipleTrip(Activity, View)} als Basis für den View
+     *
+     * @param trip               Trip der editiert oder kopiert werden soll
+     * @param numPersonsPerClass gibt die Anzahl der reisenden Personen pro "Klasse" an zB Erwachsene - 5
+     * @param numTrip            #Trip
+     */
+    public MultipleTrip(Activity activity, View view, Trip trip,
+                        HashMap<Fare.Type, Integer> numPersonsPerClass,
+                        int numTrip) {
+        // "Normale" Ansicht herstellen
+        this(activity, view);
+        if (numPersonsPerClass == null) {
+            this.numPersonsPerClass = new HashMap<>();
+        } else {
+            this.numPersonsPerClass = numPersonsPerClass;
+        }
+
+        //Informationen über die #reisender Personen anzeigen
+        //ToDo bei anderen Providern müssen mehr Textfelder angelegt werden & diese anschließend mit den Werten befüllt werden
+        String setText = numPersonsPerClass.get(Fare.Type.ADULT) + "";
+        text.numAdultView.setText(setText);
+        setText = numPersonsPerClass.get(Fare.Type.CHILD) + "";
+        text.numChildrenView.setText(setText);
+
+        this.numTrip = numTrip;
+        String titleString = numTrip + ". Fahrt";
+        titleView.setText(titleString);
+
+        //Informationen der Verbindung den Attributen zuweisen
+        startLocation = trip.from;
+        destinationLocation = trip.to;
+        selectedDate.setTime(trip.getFirstDepartureTime());
+
+        // Informationen der Verbindung in den jeweiligen Textfelder anzeigen
+        text.date_view.setText(UtilsString.setDate(selectedDate.getTime()));
+        text.arrivalDepartureView.setText(UtilsString.setTime(selectedDate.getTime()));
+        text.start_view.setText(UtilsString.setLocationName(startLocation));
+        text.destination_view.setText(UtilsString.setLocationName(destinationLocation));
+
+        hideStopover(view);
+    }
+
+    /**
      * @return false - wenn {@link Form#checkFormComplete()} false ist <br/>
      * false - wenn der Zeitpunkt nicht in der Zukunft liegt  <br/>
      * false - wenn insgesammt nicht mindestens eine Person reist <br/>
@@ -118,6 +114,20 @@ public class MultipleTrip extends Form {
                     Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        return checkNumPersons();
+    }
+
+    /**
+     * Überprüft, ob nicht zu viele oder keine Personen für die Fahrt angegeben sind <br/>
+     * <p>
+     * Die Zahl der reisenden Personen muss insgesamt größer 0 sein, darf je Klasse aber auch
+     * nicht zu groß werden -> NumberFormatException
+     *
+     * @return true - die Anzahl Personen befindet sich im erlaubten Bereich
+     * false - sonst
+     */
+    private boolean checkNumPersons() {
         //ToDo Erweiterung bei anderem Provider
         String numAdultString = text.numAdultView.getText().toString();
         String numChildrenString = text.numChildrenView.getText().toString();
@@ -181,7 +191,7 @@ public class MultipleTrip extends Form {
         text.stopover_view.setVisibility(View.GONE);
         buttons.stopoverButton.setVisibility(View.GONE);
         buttons.clearStopover.setVisibility(View.GONE);
-        separator = view.findViewById(R.id.view9);
+        View separator = view.findViewById(R.id.view9);
         separator.setVisibility(View.GONE);
     }
 

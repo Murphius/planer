@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 
 /**
  * Anzeigen der benötigten Fahrscheine <br/>

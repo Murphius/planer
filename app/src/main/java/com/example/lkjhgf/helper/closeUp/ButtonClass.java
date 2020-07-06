@@ -64,9 +64,9 @@ class ButtonClass {
 
     /**
      * OnClickListener für die einzelnen Buttons <br/>
-     *
+     * <p>
      * zurück -> aktivität.onBackPressed <br/>
-     * refresh -> derzeit nur neu laden der Ansicht, nicht der Fahrt selbst -> Gleisänderung...
+     * refresh -> Aktualisiert die Fahrt - Siehe {@link CloseUp#refreshTrip()} <br/>
      * accept -> {@link CloseUp#onAcceptClicked()}
      */
     private void setOnClickListener() {
@@ -74,9 +74,6 @@ class ButtonClass {
 
         button_back.setOnClickListener(v -> activity.onBackPressed());
 
-        //TODO
-        button_refresh.setOnClickListener(v -> {
-            closeUp.refreshTrip();
-        });
+        button_refresh.setOnClickListener(v -> closeUp.refreshTrip());
     }
 }

@@ -52,33 +52,6 @@ public final class UtilsList {
     }
 
     /**
-     * Wandelt eine Liste an Trips in eine Liste von ConnectionItems um, deren Fahrten alle in der Zukunft liegen <br/>
-     * <p>
-     * Die Umwandlung erfolgt, um den RecyclierView ({@link com.example.lkjhgf.helper.service.PossibleConnections})
-     * zu füllen. <br/>
-     * <p>
-     * Ruft {@link #journeyItems(List Trip.Legs)} auf -> Kompakte Ansicht der Abfolge von Verkehrsmitteln
-     *
-     * @param trips Liste an möglichen Verbindungen
-     * @return Liste mit {@link ConnectionItem}, für die Service Ansicht, welche Fahrten in der Zukunft liegen
-     */
-    public static ArrayList<ConnectionItem> fillFutureConnectionList(List<Trip> trips) {
-        if (trips == null) {
-            return new ArrayList<>();
-        }
-        ArrayList<ConnectionItem> connectionItems = new ArrayList<>();
-        for (Iterator<Trip> iterator = trips.iterator(); iterator.hasNext(); ) {
-            Trip trip = iterator.next();
-            if (trip.getFirstDepartureTime().before(Calendar.getInstance().getTime())) {
-                iterator.remove();
-            } else if (trip.isTravelable()) {
-                connectionItems.add(new ConnectionItem(trip, journeyItems(trip.legs)));
-            }
-        }
-        return connectionItems;
-    }
-
-    /**
      * Erzeugt aus der Liste mit Fahrtabschnitten einer Verbindung eine kompakte übersicht <br/>
      * <p>
      * Für jedes Leg wird nur der Typ (Icon) und die Linie (für ÖPNV) oder die Dauer (für individuelle Abschnitte)
@@ -152,7 +125,6 @@ public final class UtilsList {
 
         if (stops != null) {
             for (Stop stop : stops) {
-                //TODO für den ersten Zwischenhalt prüfen
                 int delay;
                 if (stop.getDepartureDelay() != null) { // Wenn die Funktion nicht null liefert, gibt es eine geplante Abfahrtszeit
                     delay = Utils.longToInt(stop.getDepartureDelay());
@@ -181,7 +153,6 @@ public final class UtilsList {
                 }
             }
         }
-
         return stopoverItems;
     }
 
@@ -257,12 +228,9 @@ public final class UtilsList {
      * @return Eine Liste an {@link CloseUpItem}, welche für den RecyclerView genutzt werden
      */
     public static ArrayList<CloseUpItem> fillDetailedConnectionList(List<Trip.Leg> legs) {
-        //TODO Verbindungsarten -> andere Farben
-        // versuchen Umstiege anzuzeigen
         if (legs == null) {
             return new ArrayList<>();
         }
-
         ArrayList<CloseUpItem> items = new ArrayList<>();
         for (Trip.Leg leg : legs) {
             if (leg instanceof Trip.Public) {
@@ -274,9 +242,18 @@ public final class UtilsList {
         return items;
     }
 
+    /**
+     * Entfernt sich überlappende Fahrten aus der Liste <br/>
+     * <p>
+     * Prüft für jede Fahrt, ob diese sich mit der nächsten Fahrt überappt
+     * Wenn ja wird die nächste Fahrt gelöscht, sonst werden die nächsten Fahrt betrachtet
+     *
+     * @param tripItems Liste an Fahrten, aus der sich überlappende Fahrten entfernt werden sollen
+     * @postconditions Die Liste enthält keine sich überlappenden Fahrten mehr
+     */
     public static void removeOverlappingTrips(ArrayList<TripItem> tripItems) {
         Iterator<TripItem> iterator = tripItems.iterator();
-        if(iterator.hasNext()){
+        if (iterator.hasNext()) {
             TripItem current = iterator.next();
             while (iterator.hasNext()) {
                 while (iterator.hasNext()) {

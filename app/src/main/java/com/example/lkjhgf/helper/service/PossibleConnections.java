@@ -53,7 +53,7 @@ public abstract class PossibleConnections {
      * Datum, Start, Ziel, Via, Abfahrts / Ankunftszeit sind Nutzereingaben aus dem Formular.
      * Result ist hingegen die passende Provider Antwort auf diese. <br/>
      * <p>
-     *  Initialisierung der Attribute <br/>
+     * Initialisierung der Attribute <br/>
      * Initialisierung des Attributs der Klasse TextViewClass;
      * anlegen des RecyclerViews sowie der Buttons.
      *
@@ -72,18 +72,8 @@ public abstract class PossibleConnections {
         destination = myURLParameter.getDestinationLocation();
         isArrivalTime = ! myURLParameter.isDepartureTime();
         result = (QueryTripsResult) intent.getSerializableExtra(QueryTask.EXTRA_QUERY_TRIPS_RESULT);
-        Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
-        if(trip != null){
-            for(int i = 0; i < result.trips.size(); i++){
-                if(result.trips.get(i).getId().equals(trip.getId())){
-                    result.trips.remove(i);
-                    result.trips.add(trip);
-                    break;
-                }
-            }
-        }
-        textViews = new TextViewClass(view, this);
 
+        textViews = new TextViewClass(view, this);
 
         buttons = new ButtonClass(view, activity);
     }
@@ -96,7 +86,8 @@ public abstract class PossibleConnections {
     public abstract void changeViewConnectionDetail(Trip trip);
 
     /**
-     * 
+     * Wechsel in die Detailansicht <br/>
+     * <p>
      * @param trip Verbindung die detaillierter betrachtet werden soll
      * @param newIntent Informationen die an die nächste Ansicht übergeben werden sollen, ebenfalls ist 
      *                  enthalten, welche Aktivität als nächstes gestartet werden soll

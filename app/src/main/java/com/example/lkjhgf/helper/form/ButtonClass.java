@@ -26,7 +26,7 @@ class ButtonClass {
     private Activity activity;
 
     private Form form;
-    private Form_Text text;
+    private TextViewClass text;
 
     //Alle Buttons in der Ansicht
     private BootstrapButton dateButton, arrivalDepartureButton;
@@ -301,8 +301,7 @@ class ButtonClass {
     }
 
 
-    void setText(Form_Text text) {
+    void setText(TextViewClass text) {
         this.text = text;
     }
-
 }

@@ -27,8 +27,7 @@ public class FutureSingleCloseUp extends SingleCloseUp {
      * Der Button "weiter" wird nicht sichtbar gesetzt <br/>
      * Auf zurück -> Ansicht aller geplanten Fahrten
      */
-    public FutureSingleCloseUp(Activity activity,
-                               View view) {
+    public FutureSingleCloseUp(Activity activity, View view) {
         super(activity, view);
         buttons.button_accept.setVisibility(View.INVISIBLE);
         buttons.button_back.setOnClickListener(v -> {

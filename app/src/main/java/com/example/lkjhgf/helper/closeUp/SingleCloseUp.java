@@ -58,5 +58,4 @@ public class SingleCloseUp extends CloseUp {
         super.onAcceptClicked(newIntent);
     }
 
-
 }

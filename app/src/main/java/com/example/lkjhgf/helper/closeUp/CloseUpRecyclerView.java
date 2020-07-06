@@ -14,7 +14,6 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpAdapter;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
-import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 import com.example.lkjhgf.recyclerView.detailedView.OnItemClickListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,6 +28,7 @@ import java.util.Locale;
 public class CloseUpRecyclerView {
 
     private CloseUpAdapter adapter;
+    private Activity activity;
 
     private ArrayList<CloseUpItem> items;
 
@@ -42,6 +42,7 @@ public class CloseUpRecyclerView {
      * @param closeUp  - zugriff auf die Fahrt
      */
     CloseUpRecyclerView(Activity activity, View view, CloseUp closeUp) {
+        this.activity = activity;
         //RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView3);
         recyclerView.setHasFixedSize(true);
@@ -65,48 +66,70 @@ public class CloseUpRecyclerView {
 
             @Override
             public void onOpenGoogleMaps(int position) {
-                CloseUpPrivateItem closeUpPrivateItem = (CloseUpPrivateItem) items.get(position);
-                //Da der VRR keine GPS Koordinaten für die Fußgängernavigation zur Verfügung stellt,
-                //und ich für Google Directions nicht zahlen möchte, wird zur Navigation eine
-                //Anwendung (-> GoogleMaps) geöffnet
-                LatLng departure = closeUpPrivateItem.getDepartureLocation();
-                LatLng destination = closeUpPrivateItem.getDestinationLocation();
-        /*URL, die die Anfrage repräsentiert
-         %f -> Float Werte = Lat bzw Lng der jeweiligen Koordinate
-        Locale.ENGLISH -> WICHTIG, mit GERMAN -> funktioniert nicht -> vermutlich formatierung
-        der Ziffern
-        */
-                String uri = String.format(Locale.ENGLISH,
-                        "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
-                        departure.latitude,
-                        departure.longitude,
-                        destination.latitude,
-                        destination.longitude);
-
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                // Google Maps sollte geöffnet werden
-                intent.setPackage("com.google.android.apps.maps");
-                try {
-                    // Starten von Google Maps
-                    activity.startActivity(intent);
-                } catch (ActivityNotFoundException ex) {
-                    //Wenn Google Maps nicht installiert ist, versuche andere Anwendung zu starten
-                    try {
-                        Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                        activity.startActivity(unrestrictedIntent);
-                    } catch (ActivityNotFoundException innerEx) {
-                        //Keine Navigationssoftware gefunden
-                        Toast.makeText(activity.getApplicationContext(),
-                                "Please install a maps application",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
+                navigate(position);
             }
         });
         recyclerView.setFocusable(false);
     }
 
-    public void update(ArrayList<CloseUpItem> closeUpItems){
+    /**
+     * Öffnet die Fußgängernavigation für den gewählten Abschnitt <br/>
+     * <p>
+     * Da der VRR keine GPS Koordinaten für die Fußgängernavigation zur Verfügung stellt,
+     * und ich für Google Directions nicht zahlen möchte, wird zur Navigation eine
+     * Anwendung (-> GoogleMaps) geöffnet
+     *
+     * @param position Abschnitt, für den die Navigation erfolgen soll
+     */
+    private void navigate(int position) {
+        CloseUpPrivateItem closeUpPrivateItem = (CloseUpPrivateItem) items.get(position);
+
+        LatLng departure = closeUpPrivateItem.getDepartureLocation();
+        LatLng destination = closeUpPrivateItem.getDestinationLocation();
+        /*URL, die die Anfrage repräsentiert
+         %f -> Float Werte = Lat bzw Lng der jeweiligen Koordinate
+        Locale.ENGLISH -> WICHTIG, mit GERMAN -> funktioniert nicht -> vermutlich formatierung
+        der Ziffern
+        */
+        String uri = String.format(Locale.ENGLISH,
+                "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
+                departure.latitude,
+                departure.longitude,
+                destination.latitude,
+                destination.longitude);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        // Google Maps sollte geöffnet werden
+        intent.setPackage("com.google.android.apps.maps");
+        try {
+            // Starten von Google Maps
+            activity.startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            //Wenn Google Maps nicht installiert ist, versuche andere Anwendung zu starten
+            try {
+                Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                activity.startActivity(unrestrictedIntent);
+            } catch (ActivityNotFoundException innerEx) {
+                //Keine Navigationssoftware gefunden
+                Toast.makeText(activity.getApplicationContext(),
+                        "Please install a maps application",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * Aktualisierung der einzelnen Schritte <br/>
+     * <p>
+     * Nach der Aktualisierung der Fahrt, ist es notwendig, die einzelnen Abschnitte einer
+     * Fahrt ebenfalls zu updaten.
+     *
+     * @param closeUpItems neue Informationen zu den einzelnen Schritten
+     * @preconditions Der Nutzer hat auf aktualisieren geklickt, und die Fahrt wurde in der
+     * Liste der möglichen Verbindungen gefunden
+     * @postconditions Die neuen Verbindungsinformationen werden angezeigt
+     */
+    public void update(ArrayList<CloseUpItem> closeUpItems) {
         items.clear();
         items.addAll(closeUpItems);
         adapter.notifyDataSetChanged();

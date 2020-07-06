@@ -10,7 +10,7 @@ import android.view.View;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.util.UtilsString;
-import com.example.lkjhgf.helper.util.WabenTask;
+import com.example.lkjhgf.publicTransport.query.WabenTask;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import com.example.lkjhgf.helper.futureTrip.TripListIncomplete;
 import com.example.lkjhgf.activities.MainMenu;

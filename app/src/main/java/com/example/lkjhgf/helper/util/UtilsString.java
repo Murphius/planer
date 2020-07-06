@@ -105,24 +105,6 @@ public final class UtilsString {
     }
 
     /**
-     * Gibt den Namen eines Ortes zurück <br/>
-     * <p>
-     * Überprüft, ob der Stadtname im Namen des Punktes bereits enthalten ist
-     *
-     * @param place "Stadt" des Orts
-     * @param name  Name des Orts
-     * @return eine Kombination aus Stadt und Name mit möglichst wenig Dopplungen
-     */
-    public static String setLocationName(String place, String name) {
-        //TODO vielleicht Lösung von oben & oben dann diese Funktion aufrufen mit place,name ??
-        if (name.contains(place)) {
-            return name;
-        } else {
-            return place + " " + name;
-        }
-    }
-
-    /**
      * Wandelt ein Date-Objekt in einen Datum (String) um (Datum, nicht Zeitpunkt!) <br/>
      *
      * @param date Zeitpunkt, der formatiert werden soll
@@ -215,6 +197,12 @@ public final class UtilsString {
         return currencyFormatter.format(currencyAmmount);
     }
 
+    /**
+     * Liefert die Preisstufe einer Fahrt <br/>
+     *
+     * @param trip Trip dessen Preisstufe gesucht wird
+     * @return String, der die Preisstufe der Fahrt angibt
+     */
     public static String setPreisstufenName(Trip trip) {
         if (trip.fares != null) {
             return trip.fares.get(0).units;
@@ -223,6 +211,17 @@ public final class UtilsString {
         }
     }
 
+    /**
+     * Liefert den Endzeitpunkt eines Tickets <br/>
+     * <p>
+     * Für Zeittickets ist der Endzeitpunkt je nach Ticket nicht einfach nur die Startzeit plus
+     * x Stunden, sondern abhängig von der Startzeit. <br/>
+     * Zusätzlich wird hier das Datum des Endzeitpunkts korrekt als String formatiert (ggf. muss z.B.
+     * +1 gerechnet werden)
+     *
+     * @param ticketToBuy Ticket dessen Endzeitpunkt ermittelt werden soll
+     * @return String der den Endzeitpunkt des Tickets angibt - "" bei NumTicket
+     */
     public static String endDate(TicketToBuy ticketToBuy) {
         if (ticketToBuy.getTicket() instanceof NumTicket) {
             return "";
@@ -246,7 +245,7 @@ public final class UtilsString {
                     String result = setDate(c.getTime());
                     c.setTimeInMillis(c.getTimeInMillis() - 20 * 60 * 60 * 1000);
                     return result + " " + setTime(c.getTime());
-                } else if(c.get(Calendar.HOUR_OF_DAY) < 3 ){
+                } else if (c.get(Calendar.HOUR_OF_DAY) < 3) {
                     return setDate(c.getTime()) + " 03 : 00";
                 }
             }
@@ -254,7 +253,6 @@ public final class UtilsString {
         c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime() + t.getMaxDuration());
         return setDate(c.getTime()) + " " +
                 setTime(c.getTime());
-
     }
 
 }
