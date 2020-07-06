@@ -9,6 +9,9 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 
+/**
+ * Aktivität, in welcher der Nutzer entscheidet, wie ihm die Tickets angezeigt werden sollen.
+ */
 public class TicketOverview extends Activity {
 
     @Override
@@ -34,6 +37,7 @@ public class TicketOverview extends Activity {
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, MainMenu.class);
+        finishAffinity();
         startActivity(intent);
     }
 }

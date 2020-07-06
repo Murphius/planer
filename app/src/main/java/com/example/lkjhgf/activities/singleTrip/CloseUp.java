@@ -19,7 +19,7 @@ import static com.example.lkjhgf.helper.form.Form.EXTRA_MYURLPARAMETER;
  * <p>
  * Das Füllen der Ansicht, sowie die Handhabung von Klicks, erfolgt in der Klasse {@link SingleCloseUp}
  */
-public class ThirdView_CloseUp extends Activity {
+public class CloseUp extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

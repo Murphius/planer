@@ -2,18 +2,12 @@ package com.example.lkjhgf.activities.singleTrip;
 
 import android.app.Activity;
 
-import android.content.Intent;
-
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.service.SinglePossibleConnection;
-
-import de.schildbach.pte.VrrProvider;
-import de.schildbach.pte.dto.Trip;
 
 /**
  * Planung einer einzelnen Fahrt <br/>
@@ -36,9 +30,8 @@ public class ShowAllPossibleConnections extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_possible_connections_single);
         ConstraintLayout layout = findViewById(R.id.constraintLayout1);
-
-        new SinglePossibleConnection(this,
-                layout);
+        
+        new SinglePossibleConnection(this, layout);
     }
 
 }

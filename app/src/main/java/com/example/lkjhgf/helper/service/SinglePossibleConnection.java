@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.lkjhgf.activities.singleTrip.ThirdView_CloseUp;
+import com.example.lkjhgf.activities.singleTrip.CloseUp;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -45,7 +44,7 @@ public class SinglePossibleConnection extends PossibleConnections {
      */
     @Override
     public void changeViewConnectionDetail(Trip trip) {
-        Intent newIntent = new Intent(context, ThirdView_CloseUp.class);
+        Intent newIntent = new Intent(context, CloseUp.class);
         super.changeViewConnectionDetail(trip, newIntent);
     }
 }

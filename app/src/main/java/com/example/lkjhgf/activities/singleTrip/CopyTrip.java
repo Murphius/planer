@@ -13,7 +13,6 @@ import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 
-import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -32,10 +31,7 @@ import de.schildbach.pte.dto.Trip;
  *  Das Füllen der Ansicht, sowie das Handling von Klicks erfolgt in der Klasse
  *  {@link SingleTrip}
  */
-
 public class CopyTrip extends Activity {
-    Form form;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +44,7 @@ public class CopyTrip extends Activity {
 
         Trip trip = (Trip) intent.getSerializableExtra(MainMenu.EXTRA_TRIP);
 
-        form = new SingleTrip(this, layout, trip);
+        Form form = new SingleTrip(this, layout, trip);
 
         form.setOnClickListener();
 

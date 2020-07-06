@@ -10,13 +10,18 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.ticketOverview.groupedOverview.AllTickets;
 
 /**
- * Anzeigen aller benötigten Fahrscheine <br/>
+ * Anzeigen der benötigten Fahrscheine <br/>
+ *
+ * Die Tickets werden dabei möglichst groupiert. <br/>
+ * D.h. für Fahrscheine mit gleichem Namen sowie gleicher Preisstufe werden die
+ * jeweiligen Fahrten zusammen angezeigt.
  *
  * Das Handling der Ansicht erfolgt in der Klasse {@link AllTickets}
  */
 public class TicketOverviewGroupedTickets extends Activity {
 
-    AllTickets myGroupedTickets;
+    private AllTickets myGroupedTickets;
+
     @Override
     public void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);

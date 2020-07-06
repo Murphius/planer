@@ -6,12 +6,9 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.form.Form;
 import com.example.lkjhgf.helper.form.SingleTrip;
 import com.example.lkjhgf.R;
-
-import de.schildbach.pte.VrrProvider;
 
 /**
  * Planung einer einzelnen Fahrt <br/>
@@ -21,10 +18,7 @@ import de.schildbach.pte.VrrProvider;
  * Das Managen dieser Ansicht erfolgt in der Klasse Form
  * {@link SingleTrip}
  */
-
 public class UserForm extends Activity {
-
-    Form form;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +28,7 @@ public class UserForm extends Activity {
 
         ConstraintLayout layout = findViewById(R.id.constraintLayout);
 
-        form = new SingleTrip(this, layout);
+        Form form = new SingleTrip(this, layout);
 
         form.setOnClickListener();
         

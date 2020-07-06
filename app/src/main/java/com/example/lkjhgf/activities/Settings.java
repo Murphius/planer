@@ -21,7 +21,6 @@ import de.schildbach.pte.dto.TripOptions;
 /**
  * Die Einstellungen, welche bei der Verbindungssuche berücksichtigt werden sollen
  */
-
 public class Settings extends Activity {
 
     private RadioButton notBarrierfree, barrierfree, limitedBarrierfree;
@@ -231,7 +230,7 @@ public class Settings extends Activity {
      */
     private static TripOptions tripOptions() {
 
-        Set<Product> products = new LinkedHashSet<Product>();
+        Set<Product> products = new LinkedHashSet<>();
         if (busB) {
             products.add(Product.BUS);
         }
@@ -297,8 +296,8 @@ public class Settings extends Activity {
      *     Die aktuellen Einstellungen werden außerdem in der statischen Variable tripOptions
      *     gespeichert
      * </p>
-     * @param activity
-     * @return
+     * @param activity zum Laden der Optionen benötigt
+     * @return Optionen für die Verbindungsanfrage zB Barrierefrei, siehe {@link TripOptions}
      */
     public static TripOptions getTripOptions(Activity activity){
         loadData(activity);
