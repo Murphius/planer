@@ -22,6 +22,7 @@ public class MainMenu extends Activity {
     public static String NUM_PERSONS_PER_CLASS = "com.example.lkjhgf.main_menu.NUM_NUM_PERSONS_PER_CLASS";
     public static String EXTRA_NUM_TRIP = "com.example.lkjhgf.main_menu.EXTRA_NUM_TRIP";
     public static String EXTRA_TRIP = "com.example.lkjhgf.main_menu.EXTRA_TRIP";
+    public static String EXTRA_CLASS = "com.example.lkjhgf.main_menu.EXTRA_CLASS";
 
     //An dieser Stelle -> ändern für andere Provider
     public static MyProvider myProvider = new MyVRRprovider();

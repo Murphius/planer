@@ -80,7 +80,7 @@ class RecyclerViewGroupedTicketOverview {
                 TicketToBuy next = it.next();
                 if(current.getTicket() instanceof NumTicket){
                     if (current.equals(next)) {
-                        tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
+                        tickets.get(tickets.size() - 1).addTripItems(next.getTripList());
                         quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
                         freeTrips.set(freeTrips.size()-1, freeTrips.get(freeTrips.size()-1) + next.getFreeTrips());
                     }

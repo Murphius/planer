@@ -1,6 +1,7 @@
 package com.example.lkjhgf.activities.ticketOverview;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,6 +31,7 @@ public class TicketOverviewGroupedTickets extends Activity {
     @Override
     public void onBackPressed(){
         myGroupedTickets.saveData();
-        super.onBackPressed();
+        Intent intent = new Intent(this, TicketOverview.class);
+        startActivity(intent);
     }
 }

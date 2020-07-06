@@ -46,13 +46,9 @@
             android:parentActivityName=".activities.ticketOverview.TicketOverview"/>
         <activity android:name=".activities.ticketOverview.AllTicketList"
             android:parentActivityName=".activities.MainMenu"/>
-        <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.singleTrip.EditTripFromRefresh"
-            android:parentActivityName=".activities.MainMenu"/>
-        <activity android:name=".activities.multipleTrips.EditTripFromRefresh_1"
-            android:parentActivityName=".activities.futureTrips.IncompleteAfterRefresh"/>
         <activity android:name=".activities.futureTrips.IncompleteAfterRefresh"
             android:parentActivityName=".activities.MainMenu"/>
+        <activity android:name=".activities.Settings" />
         <activity android:name=".activities.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

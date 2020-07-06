@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.color.ButtonBootstrapBrandVisible;
 
 public class TicketOverview extends Activity {
@@ -28,5 +29,11 @@ public class TicketOverview extends Activity {
             Intent intent = new Intent(this, AllTicketList.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
     }
 }

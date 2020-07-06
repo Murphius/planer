@@ -8,8 +8,6 @@ import android.widget.TextView;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Incomplete;
-import com.example.lkjhgf.activities.multipleTrips.EditIncompleteTripFromIncompleteList;
-import com.example.lkjhgf.activities.multipleTrips.EditTripFromRefresh_1;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.HashMap;
@@ -62,7 +60,7 @@ public class MultipleCloseUp extends CloseUp {
     }
 
     MultipleCloseUp(TripItem tripItem, Activity activity, View view){
-        super(tripItem.getTrip(), activity, view);
+        super(tripItem, activity, view);
         numTrip = activity.getIntent().getIntExtra(MainMenu.EXTRA_NUM_TRIP, 1);
         numPersonsPerClass = tripItem.getNumUserClasses();
         String setText = numTrip + ". Fahrt \n Detaillierte Fahrt";
@@ -103,15 +101,6 @@ public class MultipleCloseUp extends CloseUp {
         newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
         newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
         super.onAcceptClicked(newIntent);
-    }
-
-    @Override
-    public void startEditing(){
-        Intent intent = new Intent(activity, EditTripFromRefresh_1.class);
-        intent.putExtra(MainMenu.EXTRA_TRIP, trip);
-        intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, numPersonsPerClass);
-        intent.putExtra(MainMenu.EXTRA_NUM_TRIP, numTrip);
-        activity.startActivity(intent);
     }
 
 

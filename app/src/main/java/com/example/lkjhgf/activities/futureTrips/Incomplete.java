@@ -82,7 +82,7 @@ public class Incomplete extends Activity {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        //TODO my url parameter
+
         TripItem newTripItem = new TripItem(trip, false, numUserClasses, waben.first, waben.second, myURLParameter);
 
         new TripListIncomplete(this, view, newTripItem);

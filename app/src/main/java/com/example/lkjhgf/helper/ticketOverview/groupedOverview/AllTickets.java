@@ -85,7 +85,6 @@ public class AllTickets {
         builder.registerTypeAdapter(Ticket.class, adapter);
         builder.registerTypeAdapter(NumTicket.class, adapter);
         builder.registerTypeAdapter(TimeTicket.class, adapter);
-        //TODO Zeitfahrscheine
         Gson gson = builder.create();
 
         Type type = new TypeToken<HashMap<Fare.Type, ArrayList<TicketToBuy>>>() {
@@ -135,7 +134,7 @@ public class AllTickets {
         Gson gson = builder.create();
 
         for (ArrayList<TicketToBuy> ticketList : allTickets.values()) {
-            ticketList.sort((o1, o2) -> o1.compareTo(o2));
+            ticketList.sort(TicketToBuy::compareTo);
         }
 
         String json = gson.toJson(allTickets);

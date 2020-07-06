@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
-import com.example.lkjhgf.activities.singleTrip.EditTripFromRefresh;
 
 import java.util.Calendar;
 
@@ -59,14 +57,6 @@ public class SingleCloseUp extends CloseUp {
         Intent newIntent = new Intent(activity, Complete.class);
         super.onAcceptClicked(newIntent);
     }
-
-    @Override
-    public void startEditing(){
-        Intent intent = new Intent(activity, EditTripFromRefresh.class);
-        intent.putExtra(MainMenu.EXTRA_TRIP, trip);
-        activity.startActivity(intent);
-    }
-
 
 
 }

@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
 
-import androidx.core.app.NavUtils;
-
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.activities.futureTrips.Complete;
@@ -41,7 +39,15 @@ import de.schildbach.pte.dto.Fare;
  */
 
 public class AllConnectionsIncompleteView extends Activity {
-    TripItem tripItem;
+    /**
+     * Zu betrachtende Fahrt
+     */
+    private TripItem tripItem;
+    /**
+     * Aufrufende Klasse - in diese soll anschließend wieder zurück gekehrt werden
+     */
+    private Class parentClass;
+
     FutureIncompleteAllTripsCloseUp closeUp;
 
     @Override
@@ -53,26 +59,44 @@ public class AllConnectionsIncompleteView extends Activity {
         RelativeLayout layout = findViewById(R.id.constraintLayout2);
 
         tripItem = (TripItem) getIntent().getSerializableExtra(MainMenu.EXTRA_TRIP);
+        parentClass = (Class) getIntent().getSerializableExtra(MainMenu.EXTRA_CLASS);
 
         closeUp = new FutureIncompleteAllTripsCloseUp(this, layout, tripItem);
     }
 
+    /**
+     * Da der Nutzer in dieser Ansicht die Möglichkeit hat, die Fahrt zu aktualisieren,
+     * müssen die eventuell dadurch entstandenen Änderungen in der Liste der Fahrten und
+     * in der Liste der Tickets gespeichert werden
+     *
+     * @preconditions Der Nutzer hat auf die Fahrt geklickt, entweder in der Liste aller
+     * Fahrten ({@link Complete}) oder in der Fahrscheinübersicht ({@link com.example.lkjhgf.activities.ticketOverview.TicketOverviewGroupedTickets})
+     * @postconditions Veränderungen in der Fahrt, zB Gleiswechsel oder Verspätungen sind sowohl in
+     * den zugeordneten Tickets, als auch in der Liste der gespeicherten Fahrten ersichtlich
+     */
     @Override
     public void onBackPressed() {
+        //Laden der gespeicherten Fahrten
         ArrayList<TripItem> tripItems = MyTripList.loadTripList(this, MyTripList.ALL_SAVED_TRIPS);
         int indexOfTripItem = tripItems.indexOf(tripItem);
+        //Anpassen des Ticketindexes
         if (indexOfTripItem > -1) {
             tripItems.get(indexOfTripItem).setTrip(closeUp.getTrip());
         }
+        //Aktualisieren der Fahrt des TripItems
+        tripItem.setTrip(closeUp.getTrip());
+        //Laden der Tickets
         HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets = AllTickets.loadTickets(this);
         for (Fare.Type type : savedTickets.keySet()) {
             ArrayList<TicketToBuy> savedTypeTickets = savedTickets.get(type);
             ArrayList<UUID> ticketUUID = tripItem.getTicketIDs(type);
-            if (ticketUUID == null) {
+            if (ticketUUID == null || ticketUUID.isEmpty()) {
                 continue;
             }
+            //Prüfen, ob das jeweilige Ticket dieser Fahrt zugeordnet ist
             for (TicketToBuy ticket : savedTypeTickets) {
                 if (ticketUUID.contains(ticket.getTicketID())) {
+                    //Falls ja, die entsprechende Fahrt aktualisieren
                     ArrayList<TicketToBuy.TripQuantity> tripQuantities = ticket.getTripQuantities();
                     for (TicketToBuy.TripQuantity tripQuantity : tripQuantities) {
                         if (tripQuantity.getTripItem().equals(tripItem)) {
@@ -83,9 +107,11 @@ public class AllConnectionsIncompleteView extends Activity {
                 }
             }
         }
+        //Speichern von Fahrten und Tickets
         MyTripList.saveTrips(tripItems, MyTripList.ALL_SAVED_TRIPS, this);
         AllTickets.saveData(savedTickets, this);
-        Intent intent = new Intent(this, Complete.class);
+        //Aufrufende Aktivität starten
+        Intent intent = new Intent(this, parentClass);
         startActivity(intent);
     }
 

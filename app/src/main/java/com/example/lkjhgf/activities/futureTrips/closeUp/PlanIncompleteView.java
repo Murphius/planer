@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lkjhgf.R;
-import com.example.lkjhgf.activities.futureTrips.Incomplete;
 import com.example.lkjhgf.activities.futureTrips.IncompleteAfterRefresh;
 import com.example.lkjhgf.helper.closeUp.FutureIncompleteCloseUp;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;

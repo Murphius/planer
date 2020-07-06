@@ -72,6 +72,7 @@ public class TripListComplete extends MyTripList {
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());
         } else {
             newIntent = new Intent(activity.getApplicationContext(), AllConnectionsIncompleteView.class);
+            newIntent.putExtra(MainMenu.EXTRA_CLASS, activity.getClass());
             //#Fahrt und #reisende Personen ebenfalls übergeben
             newIntent.putExtra(MainMenu.EXTRA_TRIP, current);
             newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);

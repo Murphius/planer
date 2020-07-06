@@ -13,6 +13,7 @@ import com.example.lkjhgf.helper.MyURLParameter;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.publicTransport.query.QueryParameter;
 import com.example.lkjhgf.publicTransport.query.QueryRefresh;
+import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.concurrent.ExecutionException;
 
@@ -56,10 +57,10 @@ public abstract class CloseUp {
         recyclerView = new CloseUpRecyclerView(activity, view, this);
     }
 
-    CloseUp(Trip trip, Activity activity, View view) {
-        this.trip = trip;
+    CloseUp(TripItem trip, Activity activity, View view) {
+        this.trip = trip.getTrip();
         this.activity = activity;
-        myURLParameter = (MyURLParameter) activity.getIntent().getSerializableExtra(EXTRA_MYURLPARAMETER);
+        myURLParameter = trip.getMyURLParameter();
         textViewClass = new TextViewClass(view, activity.getResources(), this);
         buttons = new ButtonClass(activity, view, this);
         recyclerView = new CloseUpRecyclerView(activity, view, this);
@@ -124,11 +125,11 @@ public abstract class CloseUp {
         findTrip(result);
         if (!changed) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage("Diese Fahrt ist nicht mehr möglich.\n" +
-                    "Soll diese Fahrt editiert werden?");
+            builder.setMessage("Diese Fahrt konnte nicht mehr gefunden werden.\n" +
+                    "Eventuell ist die Fahrt nicht mehr möglich. \n" +
+                    "Unter Umständen muss diese bearbeitet werden.");
             builder.setCancelable(false);
-            builder.setPositiveButton("Ja", (dialog, which) -> startEditing());
-            builder.setNegativeButton("Nein", (dialog, which) -> dialog.cancel());
+            builder.setNegativeButton("Okay", (dialog, which) -> dialog.cancel());
             AlertDialog dialog = builder.create();
             dialog.show();
         }
@@ -146,8 +147,6 @@ public abstract class CloseUp {
     public void onBackPressed(Intent intent) {
         activity.startActivity(intent);
     }
-
-    public abstract void startEditing();
 
     private void setChanged(boolean b) {
         changed = b;
