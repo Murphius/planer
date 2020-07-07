@@ -1,6 +1,7 @@
 package com.example.lkjhgf.helper.util;
 
 import com.example.lkjhgf.optimisation.NumTicket;
+import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
@@ -8,6 +9,7 @@ import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
@@ -253,6 +255,39 @@ public final class UtilsString {
         c.setTimeInMillis(ticketToBuy.getFirstDepartureTime().getTime() + t.getMaxDuration());
         return setDate(c.getTime()) + " " +
                 setTime(c.getTime());
+    }
+
+    /**
+     * Erzeugt den zusammenhängenden String aus den Parametern
+     *
+     * @param ticketsToUse    zu nutzende Fahrscheine
+     * @param num             wie oft dieses Ticket gebraucht wird
+     * @param preisstufeToUse Preisstufe des Tickets
+     * @return Stringbuilder zusammengebaut aus den Informationen
+     */
+    public static StringBuilder buildStringTicketList(ArrayList<Ticket> ticketsToUse, ArrayList<Integer> num, ArrayList<String> preisstufeToUse) {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < ticketsToUse.size(); i++) {
+            if (ticketsToUse.get(i) instanceof NumTicket) {
+                NumTicket numTicket = (NumTicket) ticketsToUse.get(i);
+                int wholeTickets = num.get(i) / numTicket.getNumTrips();
+                int restTicket = num.get(i) % numTicket.getNumTrips();
+                if (wholeTickets != 0) {
+                    value.append(wholeTickets).append("x ").append(numTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \talle Fahrten entwerten");
+                }
+                if (restTicket != 0) {
+                    value.append("1x ").append(numTicket.toString()).append(" \n \tPreisstufe: ").append(preisstufeToUse.get(i)).append("\n \t").append(restTicket).append("x entwerten");
+                }
+            } else {
+                TimeTicket timeTicket = (TimeTicket) ticketsToUse.get(i);
+                int wholeTickets = num.get(i);
+                value.append(wholeTickets).append("x ").append(timeTicket.toString()).append("\n \tPreisstufe: ").append(preisstufeToUse.get(i));
+            }
+            if (i != ticketsToUse.size() - 1) {
+                value.append("\n");
+            }
+        }
+        return value;
     }
 
 }

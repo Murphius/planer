@@ -79,43 +79,40 @@ public class TextViewClass {
     public void fillTextView(Trip trip, Resources resources) {
         // Datum, Ankunfts, Abfahrtszeit
         userDate.setText(UtilsString.setDate(trip.getFirstDepartureTime()));
-        timeOfDeparture.setText(UtilsString.setTime(trip.getFirstDepartureTime()));
-        timeOfArrival.setText(UtilsString.setTime(trip.getLastArrivalTime()));
 
-        // Verspätung bei der Abfahrt
-        int delay = 0;
-        if (trip.getFirstPublicLeg() != null) {
-            if (trip.getFirstPublicLeg().getDepartureDelay() != null) {
-                delay = Utils.longToInt(trip.getFirstPublicLeg().getDepartureDelay());
+        Trip.Leg firstLeg = trip.legs.get(0);
+        Trip.Leg lastLeg = trip.legs.get(trip.legs.size() - 1);
+        if (firstLeg instanceof Trip.Public) {
+            Trip.Public firstPublic = (Trip.Public) firstLeg;
+            if (firstPublic.departureStop != null) {
+                timeOfDeparture.setText(UtilsString.setTime(firstPublic.getDepartureTime(true)));
+                Utils.setDelayView(delayDeparture, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources);
             }
+        } else {
+            timeOfDeparture.setText(UtilsString.setTime(trip.getFirstDepartureTime()));
         }
-        Utils.setDelayView(delayDeparture, delay, resources);
-
-        // Verspätung bei der Ankunft
-        delay = 0;
-        if (trip.getLastPublicLeg() != null) {
-            if (trip.getLastPublicLeg().getArrivalDelay() != null) {
-                delay = Utils.longToInt(trip.getLastPublicLeg().getArrivalDelay());
+        if (lastLeg instanceof Trip.Public) {
+            Trip.Public lastPublic = (Trip.Public) lastLeg;
+            if (lastPublic.arrivalStop != null) {
+                timeOfArrival.setText(UtilsString.setTime(lastPublic.getArrivalTime(true)));
+                Utils.setDelayView(delayArrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources);
             }
+        } else {
+            timeOfArrival.setText(UtilsString.setTime(trip.getLastArrivalTime()));
         }
-        Utils.setDelayView(delayArrival, delay, resources);
-
         // Dauer der Fahrt
         long durationHour = Utils.durationToHour(trip.getDuration());
         long durationMinute = Utils.durationToMinutes(trip.getDuration());
         duration.setText(UtilsString.durationString(durationHour, durationMinute));
-
         //Umstiege
         numChanges.setText(UtilsString.setNumChanges(trip));
-
         // Preisstufe
-        if(trip.fares == null){
+        if (trip.fares == null) {
             String text = "?";
             preisstufe.setText(text);
-        }else{
+        } else {
             preisstufe.setText(trip.fares.get(0).units);
         }
-
         // Start- und Zielpunkt
         startLocation.setText(UtilsString.setLocationName(trip.from));
         destinationLocation.setText(UtilsString.setLocationName(trip.to));

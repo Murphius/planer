@@ -11,10 +11,9 @@ import com.beardedhen.androidbootstrap.font.Typicon;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.util.Utils;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
-import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.OnItemClickListener;
-import com.example.lkjhgf.recyclerView.detailedView.components.Stopover_adapter;
+import com.example.lkjhgf.recyclerView.detailedView.components.StopoverAdapter;
 
 import java.util.ArrayList;
 
@@ -35,9 +34,8 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
     private View horizontalLine;
 
     public RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private StopoverAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private OnItemClickListener listener;
 
     public DetailedConnectionViewHolder(Activity activity,
                                         View itemView,
@@ -45,7 +43,6 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         this.activity = activity;
-        this.listener = listener;
 
         textViewClass = new TextViewClass(itemView);
 
@@ -89,26 +86,24 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
      * @param closeUpPublicItem Objekt, dessen Informationen in der Ansicht zu sehen sein sollen
      */
     public void publicItemSetUpView(CloseUpPublicItem closeUpPublicItem) {
-        // Für den ÖPNV werden dem Nutzer die Zwischenhalte angezeigt, jedoch nicht der Pfad auf
-        // der Karte
+        // Für den ÖPNV werden dem Nutzer die Zwischenhalte angezeigt, jedoch nicht der Pfad auf der Karte
         buttonClass.showOnMap.setVisibility(View.GONE);
-
         //Gleis
         textViewClass.start_platform_view.setText(closeUpPublicItem.getDeparturePlatform());
+        if (!closeUpPublicItem.isDeparturePositionPlanned()) {
+            textViewClass.start_platform_view.setTextColor(activity.getResources().getColor(R.color.berry, null));
+        }
         textViewClass.destination_platform_view.setText(closeUpPublicItem.getDestinationPlatform());
+        if (!closeUpPublicItem.isArrivalPositionPlanned()) {
+            textViewClass.destination_platform_view.setTextColor(activity.getResources().getColor(R.color.berry, null));
+        }
         // Ziel der Linie
         textViewClass.destination_of_number_view.setText(closeUpPublicItem.getDestinationOfNumber());
         // Bezeichner der Linie
         textViewClass.number_view.setText(closeUpPublicItem.getNumber());
-
         // Verspätung bei der Abfahrt bzw. bei der Ankunft
-        Utils.setDelayView(textViewClass.delay_departure,
-                closeUpPublicItem.getDelayDeparture(),
-                activity.getResources());
-        Utils.setDelayView(textViewClass.delay_arrival,
-                closeUpPublicItem.getDelayArrival(),
-                activity.getResources());
-
+        Utils.setDelayView(textViewClass.delay_departure, closeUpPublicItem.getDelayDeparture(), activity.getResources());
+        Utils.setDelayView(textViewClass.delay_arrival, closeUpPublicItem.getDelayArrival(), activity.getResources());
 
         if (closeUpPublicItem.isShowDetails()) {
             recyclerView.setVisibility(View.VISIBLE);
@@ -119,27 +114,20 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
             buttonClass.stopoverLocationsShow.setTypicon(Typicon.TY_ARROW_DOWN);
             horizontalLine.setVisibility(View.GONE);
         }
-
-        // Wenn die Strecke keine Zwischenhalte hat, soll das Layout gleich bleiben, der Nutzer
-        // jedoch den Button für die Zwischenhalte sehen können
+        // Wenn die Strecke keine Zwischenhalte hat, soll das Layout gleich bleiben, der Nutzer jedoch den Button für die Zwischenhalte sehen können
         if (closeUpPublicItem.getStopoverItems().isEmpty()) {
             buttonClass.stopoverLocationsShow.setVisibility(View.INVISIBLE);
         }
-
         //RecyclerView mit den Zwischenhalten
-        adapter = new Stopover_adapter(closeUpPublicItem.getStopoverItems());
+        adapter = new StopoverAdapter(closeUpPublicItem.getStopoverItems());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }
 
     /**
-     * Füllt die Ansicht für einen individuell zurückzulegenden Abschnitt
-     * <br/>
-     *
-     * @param closeUpPrivateItem enthält die Informationen, die in der Ansicht angezeigt werden
-     *                           sollen
+     * Füllt die Ansicht für einen individuell zurückzulegenden Abschnitt<br/>
      */
-    public void privateItemSetUpView(CloseUpPrivateItem closeUpPrivateItem) {
+    public void privateItemSetUpView() {
         // Bei einem individullen Abschnitt sind keine Verspätungen möglich, es können auch
         //keine Zwischenhalte angezeigt werden, keine Linie sowie kein Linienziel
         buttonClass.stopoverLocationsShow.setVisibility(View.INVISIBLE);
@@ -148,7 +136,7 @@ public class DetailedConnectionViewHolder extends RecyclerView.ViewHolder {
         recyclerView.setVisibility(View.GONE);
 
         //die Anzeige der Zwischenhalte entfällt / ist leer
-        adapter = new Stopover_adapter(new ArrayList<>());
+        adapter = new StopoverAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }

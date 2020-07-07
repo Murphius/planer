@@ -74,7 +74,6 @@ public abstract class MyTripList {
         loadData();
 
         insertTrip(tripItem);
-        //TODO kann das hier stehen?
         saveData(dataPath);
 
         findID(view);
@@ -84,7 +83,7 @@ public abstract class MyTripList {
      * Fügt die Fahrt der Liste hinzu, wenn sie noch nicht in der Liste enthalten ist <br/>
      * <p>
      * Wenn die Fahrt noch nicht enthalten ist, soll sie chronologisch eingefügt werden <br/>
-     * Dies geschieht in der Funktion {@link #sortTrips()}
+     * -> Sortieren mit {@link TripItemTimeComparator}
      *
      * @param tripItem Fahrt, die hinzugefügt werden soll
      */

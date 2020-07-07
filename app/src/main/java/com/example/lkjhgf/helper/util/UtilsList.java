@@ -1,19 +1,28 @@
 package com.example.lkjhgf.helper.util;
 
+import android.app.Activity;
+
 import com.example.lkjhgf.R;
+import com.example.lkjhgf.helper.ticketOverview.AllTickets;
+import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPrivateItem;
 import com.example.lkjhgf.recyclerView.detailedView.CloseUpPublicItem;
 import com.example.lkjhgf.recyclerView.detailedView.components.StopoverItem;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
+import com.example.lkjhgf.recyclerView.futureTrips.TripTicketInformationHolder;
 import com.example.lkjhgf.recyclerView.possibleConnections.ConnectionItem;
 import com.example.lkjhgf.recyclerView.possibleConnections.components.JourneyItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import de.schildbach.pte.dto.Fare;
 import de.schildbach.pte.dto.Product;
 import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
@@ -267,5 +276,36 @@ public final class UtilsList {
                 }
             }
         }
+    }
+
+    /**
+     * Sammelt die TimeTickets der Fahrt <br/>
+     * <p>
+     * Da bei einer Fahrt nur die IDs der Tickets stehen, müssen die ensprechenden Objekte selbst
+     * geladen & identifiziert werden. <br/>
+     * In dieser Funktion werden nur die TicketToBuy Elemente mit Zeitfahrschein gesammelt
+     */
+    public static ArrayList<TicketToBuy> shortTicketInformationTimeTicket(Activity activity, HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> allTicketInformations) {
+        ArrayList<TicketToBuy> tripTickets = new ArrayList<>();
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> allTickets = AllTickets.loadTickets(activity);
+        for (Fare.Type type : allTicketInformations.keySet()) {
+            ArrayList<TripTicketInformationHolder> informationHolder = allTicketInformations.get(type);
+            ArrayList<TicketToBuy> savedTickets = allTickets.get(type);
+            if (informationHolder != null && !informationHolder.isEmpty()
+                    && savedTickets != null && !savedTickets.isEmpty()) {
+                for (int i = 0; i < informationHolder.size(); i++) {
+                    for (int j = 0; j < savedTickets.size(); j++) {
+                        if (informationHolder.get(i).getTicketIdentifier().equals(savedTickets.get(j).getTicketID())) {
+                            if (savedTickets.get(j).getTicket() instanceof TimeTicket) {
+                                tripTickets.add(savedTickets.get(j));
+                            }
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+        return tripTickets;
     }
 }

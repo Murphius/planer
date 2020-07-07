@@ -7,6 +7,7 @@ import com.example.lkjhgf.recyclerView.detailedView.components.StopoverItem;
 
 import java.util.ArrayList;
 
+import de.schildbach.pte.dto.Stop;
 import de.schildbach.pte.dto.Trip;
 
 /**
@@ -17,6 +18,7 @@ public class CloseUpPublicItem extends CloseUpItem {
     private int delayDeparture, delayArrival;
     private ArrayList<StopoverItem> stopoverItems;
     private String number, destination_of_number;
+    private boolean departurePositionPlanned, arrivalPositionPlanned;
 
     private  String departure_platform, destination_platform;
 
@@ -28,10 +30,28 @@ public class CloseUpPublicItem extends CloseUpItem {
     public CloseUpPublicItem(Trip.Public publicTrip){
         super(publicTrip);
 
+        Stop departureStop = publicTrip.departureStop;
+        Stop destinationStop = publicTrip.arrivalStop;
+        if(departureStop != null && departureStop.plannedDepartureTime != null){
+            time_of_departure = UtilsString.setTime(departureStop.plannedDepartureTime);
+        }
+        if(destinationStop != null && destinationStop.plannedArrivalTime != null){
+            time_of_arrival = UtilsString.setTime(destinationStop.plannedArrivalTime);
+        }
+
         //Gleise
         departure_platform = UtilsString.platform(publicTrip.departureStop, false);
         destination_platform = UtilsString.platform(publicTrip.arrivalStop, true);
-
+        if(publicTrip.departureStop.plannedDeparturePosition != null && publicTrip.departureStop.predictedDeparturePosition != null){
+            departurePositionPlanned = publicTrip.departureStop.plannedDeparturePosition.equals(publicTrip.departureStop.predictedDeparturePosition);
+        }else{
+            departurePositionPlanned = true;
+        }
+        if(publicTrip.arrivalStop.plannedArrivalPosition != null && publicTrip.arrivalStop.predictedArrivalPosition != null ){
+            arrivalPositionPlanned = publicTrip.arrivalStop.plannedArrivalPosition.equals(publicTrip.arrivalStop.predictedArrivalPosition);
+        }else{
+            arrivalPositionPlanned = true;
+        }
         //Linienname
         number = publicTrip.line.label;
         //Endhaltestelle der Linie
@@ -69,5 +89,13 @@ public class CloseUpPublicItem extends CloseUpItem {
     }
     public ArrayList<StopoverItem> getStopoverItems(){
         return stopoverItems;
+    }
+
+    public boolean isArrivalPositionPlanned() {
+        return arrivalPositionPlanned;
+    }
+
+    public boolean isDeparturePositionPlanned() {
+        return departurePositionPlanned;
     }
 }

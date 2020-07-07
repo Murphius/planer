@@ -18,7 +18,7 @@ import de.schildbach.pte.dto.Trip;
  */
 public abstract class CloseUpItem {
 
-    private String time_of_departure, time_of_arrival;
+    String time_of_departure, time_of_arrival;
     private String departure, destination;
     int image_resource;
     Trip.Leg leg;

@@ -117,7 +117,7 @@ public final class OptimisationUtil {
                 }
                 if(index != -1 && quantityIndex != -1){
                     int quantity = currentTicket.getTripQuantities().get(quantityIndex).getQuantity();
-                    userClassTrips.get(index).removeTickets(currentTicket.getTicket().getType(), currentTicket.getTicketID(), quantity);
+                    userClassTrips.get(index).removeTicket(currentTicket.getTicket().getType(), currentTicket.getTicketID(), quantity);
                 }
             }
         }

@@ -56,6 +56,5 @@ public class FutureTripViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
-
     }
 }

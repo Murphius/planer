@@ -45,16 +45,15 @@ public class CloseUpAdapter extends RecyclerView.Adapter<DetailedConnectionViewH
     @Override
     public DetailedConnectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                            int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detailed_journey,
-                parent,
-                false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detailed_journey, parent, false);
 
-        return new DetailedConnectionViewHolder(activity,
-                view, listener);
+        return new DetailedConnectionViewHolder(activity, view, listener);
     }
 
     /**
-     * Ein einzelnes Layoutfragment wird mit den jeweiligen Informationen gefüllt
+     * Ein einzelnes Layoutfragment wird mit den jeweiligen Informationen gefüllt <br/>
+     * <p>
+     * Verbindung zwischen Ansicht und Daten
      *
      * @param holder   Layout, welches gefüllt werden soll
      * @param position gibt die Position des Items an, dessen Informationen verwendet
@@ -64,10 +63,7 @@ public class CloseUpAdapter extends RecyclerView.Adapter<DetailedConnectionViewH
      *                 abhängig von der Art des Abschnitts, wird eine andere Ansicht erzeugt
      *                 ({@link DetailedConnectionViewHolder#publicItemSetUpView(CloseUpPublicItem)}
      *                 oder
-     *                 {@link DetailedConnectionViewHolder#privateItemSetUpView(CloseUpPrivateItem)}.
-     *                 <br/>
-     *                 <p>
-     *  Verbindung zwischen Ansicht und Daten
+     *                 {@link DetailedConnectionViewHolder#privateItemSetUpView()}.
      */
     @Override
     public void onBindViewHolder(DetailedConnectionViewHolder holder, int position) {
@@ -78,7 +74,7 @@ public class CloseUpAdapter extends RecyclerView.Adapter<DetailedConnectionViewH
         if (current instanceof CloseUpPublicItem) {
             holder.publicItemSetUpView((CloseUpPublicItem) current);
         } else {// instance of IndividualItem
-            holder.privateItemSetUpView((CloseUpPrivateItem) current);
+            holder.privateItemSetUpView();
         }
     }
 

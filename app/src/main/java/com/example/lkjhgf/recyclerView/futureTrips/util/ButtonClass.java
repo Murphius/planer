@@ -23,7 +23,7 @@ public class ButtonClass {
     /**
      * Initialisierung {@link #findButtons(View)}
      * @param view - Ansicht
-     * @param futureTripViewHolder
+     * @param futureTripViewHolder ermöglicht Zugriff auf die Position der RecyclerView Position
      */
     ButtonClass(View view, FutureTripViewHolder futureTripViewHolder){
         this.futureTripViewHolder = futureTripViewHolder;
@@ -33,7 +33,7 @@ public class ButtonClass {
     /**
      * Zuoordnung Attribute - ID, sowie Anpassung des Layouts in {@link #designButtons()}<br/>
      *
-     * @param view
+     * @param view Ansicht die die Buttons enthält
      */
     private void findButtons(View view){
         edit = view.findViewById(R.id.BootstrapButton18);

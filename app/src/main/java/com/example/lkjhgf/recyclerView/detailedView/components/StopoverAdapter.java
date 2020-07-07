@@ -16,15 +16,13 @@ import java.util.ArrayList;
  * Verbindung zwischen der Daten und der Anzeige für Zwischenhalten<br/>
  * Zwischenhalte mit Abfahrtszeit, Verspätung, Name der Haltestelle
  */
-public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
+public class StopoverAdapter extends RecyclerView.Adapter<DetailViewHolder> {
     /**
      * Liste mit allen Zwischenhalten
      */
     private ArrayList<StopoverItem> stopovers;
 
-
-
-    public Stopover_adapter(ArrayList<StopoverItem> stopovers) {
+    public StopoverAdapter(ArrayList<StopoverItem> stopovers) {
         this.stopovers = stopovers;
     }
 
@@ -35,9 +33,7 @@ public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
     @NonNull
     @Override
     public DetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.stopover_view,
-                parent,
-                false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.stopover_view, parent,false);
         return new DetailViewHolder(view);
     }
 
@@ -49,7 +45,6 @@ public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DetailViewHolder holder, int position) {
         StopoverItem stopover = stopovers.get(position);
-
         String time = stopover.getTimeOfDeparture();
         String name = stopover.getNameOfStop();
         int delay = stopover.getDelay();
@@ -70,7 +65,6 @@ public class Stopover_adapter extends RecyclerView.Adapter<DetailViewHolder> {
 
         //Verspätung
         Utils.setDelayView(holder.delay, delay, holder.resources);
-
     }
 
     @Override

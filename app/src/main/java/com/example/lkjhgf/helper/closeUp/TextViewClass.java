@@ -93,21 +93,28 @@ public class TextViewClass {
         duration.setText(UtilsString.durationString(Utils.durationToHour(closeUp.trip.getDuration()),
                 Utils.durationToMinutes(closeUp.trip.getDuration())));
 
-        //TODO ueberpruefen
         //Datum + Abfahrtszeit + Ankunftszeit
         date.setText(UtilsString.setDate(closeUp.trip.getFirstDepartureTime()));
-        time_of_departure.setText(UtilsString.setTime(closeUp.trip.getFirstDepartureTime()));
-        time_of_arrival.setText(UtilsString.setTime(closeUp.trip.getLastArrivalTime()));
-
-        //TODO ueberpruefen
         //Falls es sich um ÖPNV Verbindungen handelt, ggf. die Verspätung anzeigen
         Trip.Leg firstLeg = closeUp.trip.legs.get(0);
         Trip.Leg lastLeg = closeUp.trip.legs.get(closeUp.trip.legs.size() - 1);
         if (firstLeg instanceof Trip.Public) {
-            Utils.setDelayView(delay_departure, Utils.longToInt(((Trip.Public) firstLeg).getDepartureDelay()), resources);
+            Trip.Public firstPublic = (Trip.Public) firstLeg;
+            if(firstPublic.departureStop != null){
+                time_of_departure.setText(UtilsString.setTime(firstPublic.getDepartureTime(true)));
+                Utils.setDelayView(delay_departure, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources);
+            }
+        }else{
+            time_of_departure.setText(UtilsString.setTime(closeUp.trip.getFirstDepartureTime()));
         }
         if (lastLeg instanceof Trip.Public) {
-            Utils.setDelayView(delay_arrival, Utils.longToInt(((Trip.Public) lastLeg).getArrivalDelay()), resources);
+            Trip.Public lastPublic = (Trip.Public) lastLeg;
+            if(lastPublic.arrivalStop != null){
+                time_of_arrival.setText(UtilsString.setTime(lastPublic.getArrivalTime(true)));
+                Utils.setDelayView(delay_arrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources);
+            }
+        }else{
+            time_of_arrival.setText(UtilsString.setTime(closeUp.trip.getLastArrivalTime()));
         }
     }
 }

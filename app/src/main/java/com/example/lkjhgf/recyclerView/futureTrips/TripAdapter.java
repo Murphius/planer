@@ -67,11 +67,9 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
         TripItem currentItem = tripItems.get(position);
 
         // Recycler View für die Abfolge von Verkehrsmitteln
-        RecyclerView.Adapter journey_adapter = new JourneyAdapter(currentItem.getJourneyItems());
+        JourneyAdapter journey_adapter = new JourneyAdapter(currentItem.getJourneyItems());
         Context context = holder.itemView.getContext();
-        RecyclerView.LayoutManager journey_layout = new LinearLayoutManager(context,
-                LinearLayoutManager.HORIZONTAL,
-                false);
+        RecyclerView.LayoutManager journey_layout = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.recyclerView.setLayoutManager(journey_layout);
         holder.recyclerView.setAdapter(journey_adapter);
         if(currentItem.getFirstDepartureTime().before(Calendar.getInstance().getTime())){
@@ -82,35 +80,51 @@ public class TripAdapter extends RecyclerView.Adapter<FutureTripViewHolder> {
             // zur Unterscheidung wird die Farbe anders gesetzt
             holder.view.setBackgroundColor(activity.getResources().getColor(R.color.mr_and_mrs_jones_25,null));
             // diese Fahrten haben keine Personenanzahl
-            holder.textViewClass.numAdult.setVisibility(View.GONE);
-            holder.textViewClass.userNumAdult.setVisibility(View.GONE);
-            holder.textViewClass.numChildren.setVisibility(View.GONE);
-            holder.textViewClass.userNumChildren.setVisibility(View.GONE);
-            holder.textViewClass.line.setVisibility(View.GONE);
-            holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
-            holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
+            hidePersonView(holder);
         }else{
             if(currentItem.getLastArrivalTime().before(Calendar.getInstance().getTime())){
                 holder.view.setBackgroundColor(activity.getResources().getColor(R.color.un_graceful, null));
             }
-            //TODO Erweiterung für weitere Nutzerklassen
-            // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt
-            String text = currentItem.getNumUserClass(Fare.Type.ADULT) + "";
-            holder.textViewClass.userNumAdult.setText(text);
-            text = currentItem.getNumUserClass(Fare.Type.CHILD) + "";
-            holder.textViewClass.userNumChildren.setText(text);
-
+            setNumPersonView(holder, currentItem);
             //Ticket anzeigen, wenn kein Ticket vorhanden -> keine Anzeige
             if(!currentItem.hasNoTicket()){
-                //TODO
                 holder.textViewClass.ticketInformationHolder.setText(currentItem.getTicketListAsString());
             }else{
                 holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
                 holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
             }
         }
-
         holder.textViewClass.fillTextView(currentItem.getTrip(), activity.getResources());
+    }
+
+    /**
+     * Füllt die Felder für die Personenanzahl mit den entsprechenden Zahlen <br/>
+     *
+     * Muss je nach dem, welche Altersstrukturen der Provider anbietet, bearbeitet werden
+     * @param holder Ansicht die gefüllt werden soll
+     * @param currentItem Fahrt die angezeigt werden soll
+     */
+    private void setNumPersonView(@NonNull FutureTripViewHolder holder, TripItem currentItem){
+        //TODO Erweiterung für weitere Nutzerklassen
+        // Fahrten, die optimiert werden sollen, haben die Anzahl an Personen hinterlegt
+        String text = currentItem.getNumUserClass(Fare.Type.ADULT) + "";
+        holder.textViewClass.userNumAdult.setText(text);
+        text = currentItem.getNumUserClass(Fare.Type.CHILD) + "";
+        holder.textViewClass.userNumChildren.setText(text);
+    }
+
+    /**
+     * Verbirgt die Felder für die Anzahl reisender Personen
+     * @param holder zu bearbeitende Ansicht
+     */
+    private void hidePersonView(@NonNull FutureTripViewHolder holder){
+        holder.textViewClass.numAdult.setVisibility(View.GONE);
+        holder.textViewClass.userNumAdult.setVisibility(View.GONE);
+        holder.textViewClass.numChildren.setVisibility(View.GONE);
+        holder.textViewClass.userNumChildren.setVisibility(View.GONE);
+        holder.textViewClass.line.setVisibility(View.GONE);
+        holder.textViewClass.ticketInformationView.setVisibility(View.GONE);
+        holder.textViewClass.ticketInformationHolder.setVisibility(View.GONE);
     }
 
     @Override
