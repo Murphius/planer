@@ -225,14 +225,14 @@ public class OptimierungsTestD {
         Assert.assertEquals(trips.size(), 1);
     }
 
-    @Test
+   /* @Test
     public void test5() {
         ArrayList<TicketToBuy> ticketToBuyArrayList = generateTicketsToBuy(0, 2);
         Assert.assertEquals(ticketToBuyArrayList.size(), 2);
         MyVRRprovider.sumUpTickets(ticketToBuyArrayList);
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
-    }
+    }*/
 
     @Test
     public void testMyVrrOptimise() {
@@ -291,7 +291,7 @@ public class OptimierungsTestD {
         Assert.assertEquals(tickets03.get(Fare.Type.CHILD).get(0).getTicket().getName(), "Einzelticket K");
     }
 
-    @Test
+    /*@Test
     public void testcreateTripListForEachUser() {
         ArrayList<TripItem> trips = generateTripsWithUserInformation(0, 4);
         HashMap<Integer, ArrayList<TripItem>> hashMap = MainMenu.myProvider.createTripListForEachUser(trips, Fare.Type.ADULT);
@@ -305,7 +305,7 @@ public class OptimierungsTestD {
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
         Assert.assertEquals(hashMap.get(1).size(), 1);
-    }
+    }*/
 
     @Test
     public void testVierStundenTicketValid() {

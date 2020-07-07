@@ -5,16 +5,19 @@ import com.example.lkjhgf.publicTransport.provider.Farezone;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Hilfsklasse, in welcher die verschiedenen Geltungsbereiche für den VRR hinterlegt sind
+ */
 public class VRR_Farezones {
-
+    /**
+     * Preisstufe D
+     * @return Liste mit allen Tarifgebieten im VRR
+     */
     public static Set<Farezone> createVRRFarezone(){
         Set<Farezone> farezones = new HashSet<>();
 
@@ -101,8 +104,18 @@ public class VRR_Farezones {
         return farezones;
     }
 
+    /**
+     * Preisstufe B
+     *
+     * Um die verschiedenen Geltungsbereiche der Preisstufe B darzustellen / zu hinterlegen wird ein
+     * Graph mit gerichteten Kanten verwendet. <br/>
+     * Jedes Zentralgebiet hat ausgehende Kanten zu den weiteren erreichbaren Tarifgebieten.
+     * @return Graph mit den Knoten, welchen die Tarifgebiete mit den jeweiligen Fahrten
+     * gespeichert haben. Eine Kante steht dafür, dass vom ausgehenden Knoten das andere Tarifgebiet
+     * erreicht werden kann.
+     */
     public static Graph<FarezoneTrips, DefaultEdge> create_vrr_farezone_graph(){
-        DefaultDirectedGraph<FarezoneTrips, DefaultEdge> g = new DefaultDirectedGraph(DefaultEdge.class);
+        DefaultDirectedGraph<FarezoneTrips, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         FarezoneTrips n1 = new FarezoneTrips(new Farezone(1,"Kerken/Wachtendonk"));
         g.addVertex(n1);
@@ -687,6 +700,15 @@ public class VRR_Farezones {
         return g;
     }
 
+    /**
+     * Preisstufe C <br/>
+     *
+     * Um die verschiedenen Regionen der Preisstufe C zu handhaben, wird eine HashMap erstellt, in
+     * der die Regionen enthalten sind.
+     * Jede Region hat dabei eine Nr. zur idenitifizierung und eine Menge, in der die zugehörigen
+     * Tarifgebiete mit ihren Fahrten enthalten sind.
+     * @return Alle Regionen mit ihren jeweiligen zusammengesetzten Regionen.
+     */
     public static HashMap<Integer, Set<FarezoneTrips>> regionenHashMap(){
         HashMap<Integer, Set<FarezoneTrips>> regionenMitTarifzonenUndFahrten = new HashMap<>();
 

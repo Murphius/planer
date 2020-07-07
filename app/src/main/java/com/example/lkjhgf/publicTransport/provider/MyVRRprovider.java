@@ -45,6 +45,12 @@ public class MyVRRprovider extends MyProvider {
     private static final String siebenTagesTicket_s = "7-TageTicket";
     private static final String dreissigTagesTicket_s = "30-TageTicket";
 
+    private static final String einzelticket_e_s = "Einzelticket E";
+    private static final String einzelticket_k_s = "Einzelticket K";
+    private static final String viererticket_e_s = "4er-Ticket E";
+    private static final String viererticket_k_s = "4er-Ticket K";
+    private static final String zehnerticket_e_s = "10er-Ticket E";
+
     public static final TimeTicket vierStundenTicket = new TimeTicket(new int[]{420, 420, 420, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, vierStundenTicket_s, Fare.Type.ADULT, 4 * 60 * 60 * 1000, new int[]{3, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 9, 3, true, 1);
     public static final TimeTicket happyHourTicket = new TimeTicket(new int[]{319, 319, 319, 319, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, happyHourTicket_s, Fare.Type.ADULT, 12 * 60 * 60 * 1000, new int[]{3, 2, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 18, 6, false, 1);
 
@@ -63,149 +69,68 @@ public class MyVRRprovider extends MyProvider {
     public static final TimeTicket siebenTagesTicket = new TimeTicket(new int[]{2295, 2295, 2815, 2950, 4275, 5730, 7240}, siebenTagesTicket_s, Fare.Type.ADULT, 7 * 24 * 60 * 60 * 1000, new int[]{16, 11, 12, 13, 8, 5, 5}, 0, 24, false, 1);
     public static final TimeTicket dreissigTagesTicket = new TimeTicket(new int[]{7120, 7120, 7560, 7920, 11355, 15355, 19390}, dreissigTagesTicket_s, Fare.Type.ADULT, Math.multiplyExact((long) 30, (long) 24 * 60 * 60 * 1000), new int[]{51, 31, 33, 34, 24, 16, 17}, 0, 24, false, 1);
 
+    public static final NumTicket einzelticket_e = new NumTicket(1, new int[]{170, 280, 280, 290, 600, 1280, 1570}, einzelticket_e_s, Fare.Type.ADULT);
+    public static final NumTicket viererticket_e = new NumTicket(4, new int[]{610, 1070, 1070, 1070, 2250, 4690, 5710}, viererticket_e_s, Fare.Type.ADULT);
+    public static final NumTicket zehnerticket_e = new NumTicket(10, new int[]{1420, 2290, 2290, 2290, 4600, 9315, 10485}, zehnerticket_e_s, Fare.Type.ADULT);
 
-    private HashMap<Fare.Type, ArrayList<TimeTicket>> timeTickets;
+    public static final NumTicket einzelticket_k = new NumTicket(1, new int[]{170, 170, 170, 170, 170, 170, 170}, einzelticket_k_s, Fare.Type.CHILD);
+    public static final NumTicket viererticket_k = new NumTicket(4, new int[]{610, 610, 610, 610, 610, 610, 610}, viererticket_k_s, Fare.Type.CHILD);
 
     /**
      * Verkehrsverbund Rhein Ruhr
      */
     public MyVRRprovider() {
         super();
-
-        String[] preisstufen = {"K", "A1", "A2", "A3", "B", "C", "D"};
+        String[] farezones = {"K", "A1", "A2", "A3", "B", "C", "D"};
 
         ArrayList<Ticket> adultTickets = new ArrayList<>();
-        adultTickets.add(new NumTicket(1, new int[]{170, 280, 280, 290, 600, 1280, 1570}, "Einzelticket E", Fare.Type.ADULT));
-        adultTickets.add(new NumTicket(4, new int[]{610, 1070, 1070, 1070, 2250, 4690, 5710},
-                "4er-Ticket E", Fare.Type.ADULT));
-        adultTickets.add(new NumTicket(10, new int[]{1420, 2290, 2290, 2290, 4600, 9315, 10485},
-                "10er-Ticket E", Fare.Type.ADULT));
+        adultTickets.add(einzelticket_e);
+        adultTickets.add(viererticket_e);
+        adultTickets.add(zehnerticket_e);
+        adultTickets.add(happyHourTicket);
+        adultTickets.add(vierStundenTicket);
+        adultTickets.add(tagesTicket_1);
+        adultTickets.add(siebenTagesTicket);
+        adultTickets.add(dreissigTagesTicket);
+        adultTickets.add(zweiTagesTicket_1);
 
         ArrayList<Ticket> childrenTickets = new ArrayList<>();
-        childrenTickets.add(new NumTicket(1, new int[]{170, 170, 170, 170, 170, 170, 170}, "Einzelticket K", Fare.Type.CHILD));
-        childrenTickets.add(new NumTicket(4, new int[]{610, 610, 610, 610, 610, 610, 610}, "4er-Ticket K", Fare.Type.CHILD));
-
+        childrenTickets.add(einzelticket_k);
+        childrenTickets.add(viererticket_k);
         HashMap<Fare.Type, ArrayList<Ticket>> allTickets = new HashMap<>();
         allTickets.put(Fare.Type.ADULT, adultTickets);
         allTickets.put(Fare.Type.CHILD, childrenTickets);
 
-        timeTickets = new HashMap<>();
-        ArrayList<TimeTicket> timeTicketsAdult = new ArrayList<>();
-        timeTicketsAdult.add(happyHourTicket);
-        timeTicketsAdult.add(vierStundenTicket);
-        timeTicketsAdult.add(tagesTicket_1);
-        timeTicketsAdult.add(siebenTagesTicket);
-        timeTicketsAdult.add(dreissigTagesTicket);
-        timeTicketsAdult.add(zweiTagesTicket_1);
-        timeTickets.put(Fare.Type.ADULT, timeTicketsAdult);
-
         NetworkProvider provider = new VrrProvider();
 
-        initialise(preisstufen, allTickets, provider, createVRRFarezone());
+        initialise(farezones, allTickets, provider, createVRRFarezone());
     }
 
     /**
-     * Sortiert die Fahrten auf die Nutzerklassen <br/>
+     * Optimierung <br/>
      * <p>
-     * Wenn eine Nutzerklasse mehrfach vorkommt, wird die Fahrt entsprechend oft hinzugefügt <br/>
+     * 1. Vorbereitung <br/>
+     * 2. Versuch, wenn möglich angefangene Fahrscheine erneut zu verwenden <br/>
+     * 3. Optimierung mit Zeitfahrscheinen -> nach vorheriger Analyse günstiger als Fahrscheine mit fester Fahrtenanzahl
+     * 4. Optimierung mit Fahrscheinen die eine feste Fahrtenanzahl haben
+     * 5. Zusammenfassen von 4.
      *
-     * @param allTrips Liste aller Fahrten
-     * @return HashMap mit den Fahrten aufgeteilt auf die Nutzerklassen, dabei entspricht einmal hinzufügen
-     * einer Person
+     * @param tripItems1   Fahrten die optimiert werden müssen
+     * @param savedTickets gespeicherte Tickets, ggf. wiederverwenden
+     * @param activity     Aufrufende Aktivität -> zum Laden & speichern der Tickets benötigt
+     * @return HashMap: Für jede Nutzerklasse die Liste an benötigten Tickets
      */
-    @Override
-    public HashMap<Fare.Type, HashMap<Integer, ArrayList<TripItem>>> createUserClassHashMap(HashMap<Fare.Type, ArrayList<TripItem>> allTrips) {
-        HashMap<Fare.Type, HashMap<Integer, ArrayList<TripItem>>> userClassTrips = new HashMap<>();
-        for (Fare.Type type : allTrips.keySet()) {
-            HashMap<Integer, ArrayList<TripItem>> iHashMap = userClassTrips.get(type);
-            if (iHashMap == null) {
-                iHashMap = new HashMap<>();
-                userClassTrips.put(type, iHashMap);
-            }
-            ArrayList<TripItem> tripItems = allTrips.get(type);
-            for (TripItem tripItem : tripItems) {
-                for (int i = 1; i <= tripItem.getUserClassWithoutTicket(type); i++) {
-                    ArrayList<TripItem> c = iHashMap.get(i);
-                    if (c == null) {
-                        c = new ArrayList<>();
-                        iHashMap.put(i, c);
-                    }
-                    c.add(tripItem);
-                }
-            }
-        }
-        return userClassTrips;
-    }
-
-    /**
-     * Teilt die Fahrten auf die Nutzerklassen auf
-     *
-     * @param allTrips alle Fahrten
-     * @return HashMap mit einer Liste an Fahrten für jede Nutzerklasse
-     */
-    @Override
-    public HashMap<Fare.Type, ArrayList<TripItem>> createUserClassTripList(ArrayList<TripItem> allTrips) {
-        HashMap<Fare.Type, ArrayList<TripItem>> userClassTrips = new HashMap<>();
-        for (TripItem tripItem : allTrips) {
-            for (Fare.Type type : tripItem.getNumUserClasses().keySet()) {
-                ArrayList<TripItem> userClass = userClassTrips.get(type);
-                if (userClass == null) {
-                    userClass = new ArrayList<>();
-                    userClassTrips.put(type, userClass);
-                }
-                if (tripItem.getNumUserClass(type) != 0) {
-                    userClass.add(tripItem);
-                }
-            }
-        }
-        return userClassTrips;
-    }
-
-    /**
-     * Fasst 24h und 48hTickets für mehrere Personen wenn möglich zusammen <br/>
-     * <p>
-     * Da das Tages- und Zweitagesticket auch für mehrere Personen verfügbar ist, wird versucht, bei
-     * überschneidenden Zeitslots, diese zusammenzufassen, da die Fahrscheine für die jeweilige Personenanzahl
-     * günstiger ist, als einzelne Tagestickets
-     *
-     * @param ticketItems alle Fahrscheine, die zusammengefasst werden sollen
-     */
-    public static void sumUpTickets(ArrayList<TicketToBuy> ticketItems) {
-        //Laufzeitverbesserung
-        if (ticketItems.size() < 2) {
-            return;
-        }
-        ArrayList<TicketToBuy> oneDayTickets = new ArrayList<>();
-        ArrayList<TicketToBuy> twoDayTickets = new ArrayList<>();
-
-        for (Iterator<TicketToBuy> iterator = ticketItems.iterator(); iterator.hasNext(); ) {
-            TicketToBuy current = iterator.next();
-            if (current.getTicket().getName().equals(tagesTicket_1_s)) {
-                oneDayTickets.add(current);
-                iterator.remove();
-            } else if (current.getTicket().getName().equals(zweiTagesTicket_1_s)) {
-                twoDayTickets.add(current);
-                iterator.remove();
-            }
-        }
-        if (oneDayTickets.size() > 1) {
-            MyVrrTimeOptimisationHelper.sumUpTicketsUpTo5Persons(oneDayTickets, ticketItems, 1);
-        }
-        if (twoDayTickets.size() > 1) {
-            MyVrrTimeOptimisationHelper.sumUpTicketsUpTo5Persons(twoDayTickets, ticketItems, 2);
-        }
-    }
-
     @Override
     public HashMap<Fare.Type, ArrayList<TicketToBuy>> optimise(ArrayList<TripItem> tripItems1, HashMap<Fare.Type, ArrayList<TicketToBuy>> savedTickets, Activity activity) {
         System.gc();
         long startZeit = System.currentTimeMillis();
+
         //Entfernen von Fahrten mit fehlenden / falschen Preisstufen
         ArrayList<TripItem> tripItems = OptimisationUtil.removeTrips(tripItems1);
         // Fahrten nach den Preisstufen sortieren
         Collections.sort(tripItems, MainMenu.myProvider);
         //Fahrscheine der letzten Optimierung
-        HashMap activeTickets = new HashMap(savedTickets);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> activeTickets = new HashMap<>(savedTickets);
         //HashMap mit allen benötigten Fahrscheinen
         HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists = new HashMap<>();
         //HashMap mit Fahrscheinen, auf denen noch mindestens eine Fahrt frei ist
@@ -218,21 +143,8 @@ public class MyVRRprovider extends MyProvider {
         MyVrrTimeOptimisationHelper.optimisationWithOldTickets(tripsPerUserClass, freeTickets);
         //Aufteilen der Fahrten jeder Nutzerklasse auf die jeweilige Personenanzahl
         HashMap<Fare.Type, HashMap<Integer, ArrayList<TripItem>>> sortedTrips = createUserClassHashMap(tripsPerUserClass);
-
-        HashMap<Fare.Type, ArrayList<TripItem>> tripsWithoutTimeTicket = new HashMap<>();
         //Zeitoptimierung
-        for (Fare.Type type : sortedTrips.keySet()) {
-            HashMap<Integer, ArrayList<TripItem>> sortedUserClassTrips = sortedTrips.get(type);
-            ArrayList<TicketToBuy> ticketToBuyArrayList = new ArrayList<>();
-            allTicketLists.put(type, ticketToBuyArrayList);
-            if (sortedUserClassTrips == null) {
-                continue;
-            }
-            if (timeTickets.get(type) != null && !timeTickets.get(type).isEmpty()) {
-                MyVrrTimeOptimisationHelper.timeOptimisation(sortedUserClassTrips, timeTickets, allTicketLists, type);
-            }
-            tripsWithoutTimeTicket.put(type, MyVrrTimeOptimisationHelper.prepareNumTicketOptimisation(sortedUserClassTrips, type));
-        }
+        HashMap<Fare.Type, ArrayList<TripItem>> tripsWithoutTimeTicket = MyVrrTimeOptimisationHelper.timeOptimisation(sortedTrips, allTicketLists);
         //NumTicketoptimierung
         HashMap<Fare.Type, TicketOptimisationHolder> numTicketOptimisationHolder = OptimisationUtil.optimisationWithNewTickets(tripsWithoutTimeTicket);
         HashMap<Fare.Type, ArrayList<TicketToBuy>> numTicket = new HashMap<>();
@@ -246,10 +158,60 @@ public class MyVRRprovider extends MyProvider {
         return allTicketLists;
     }
 
+    /**
+     * Fasst 24h und 48hTickets für mehrere Personen wenn möglich zusammen <br/>
+     * <p>
+     * Da das Tages- und Zweitagesticket auch für mehrere Personen verfügbar ist, wird versucht, bei
+     * überschneidenden Zeitslots, diese zusammenzufassen, da die Fahrscheine für die jeweilige Personenanzahl
+     * günstiger ist, als einzelne Tagestickets
+     *
+     * @param ticketItems alle Fahrscheine, die zusammengefasst werden sollen
+     */
+    @Override
+    public void sumUpTickets(ArrayList<TicketToBuy> ticketItems) {
+        //Laufzeitverbesserung
+        if (ticketItems.size() < 2) {
+            return;
+        }
+        ArrayList<TicketToBuy> oneDayTickets = new ArrayList<>();
+        ArrayList<TicketToBuy> twoDayTickets = new ArrayList<>();
+        //Sammeln von 24h und 48h Tickets
+        for (Iterator<TicketToBuy> iterator = ticketItems.iterator(); iterator.hasNext(); ) {
+            TicketToBuy current = iterator.next();
+            if (current.getTicket().getName().equals(tagesTicket_1_s)) {
+                oneDayTickets.add(current);
+                iterator.remove();
+            } else if (current.getTicket().getName().equals(zweiTagesTicket_1_s)) {
+                twoDayTickets.add(current);
+                iterator.remove();
+            }
+        }
+        //Diese zusammenfassen
+        if (oneDayTickets.size() > 1) {
+            MyVrrTimeOptimisationHelper.sumUpTicketsUpTo5Persons(oneDayTickets, ticketItems, 1);
+        }
+        if (twoDayTickets.size() > 1) {
+            MyVrrTimeOptimisationHelper.sumUpTicketsUpTo5Persons(twoDayTickets, ticketItems, 2);
+        }
+    }
+
+    /**
+     * Informationen darüber, wie die jeweiligen Tickets entwerten müssen <br/>
+     * <p>
+     * Untercheidung zu TimeTickets nötig, diese können nicht einfach zusammengefasst werden. <br/>
+     * Des weiteren ist die Angabe für den Gültigkeitsbereich abweichend
+     *
+     * @param tickets    Tickets deren Informationen angezeigt werden sollen (Zusammengefasst!)
+     * @param quantity   Häufigkeit des jeweiligen Tickets
+     * @param preisstufe Preisstufe des jeweiligen Tickets
+     * @param tripItem   Fahrt dem die ganzen Tickets angehören
+     * @return Fahrscheininformationen für den Nutzer für die Fahrt
+     * @preconditions Die Informationen der Listen tickets, quantity und preisstufe sind zusammengehörig
+     * -> ticket an Position i wird quantity[i] mal in der preisstufe[i] benötigt
+     */
     @Override
     public String getTicketInformationNumTicket(ArrayList<Ticket> tickets, ArrayList<Integer> quantity, ArrayList<String> preisstufe, TripItem tripItem) {
         StringBuilder value = new StringBuilder();
-        Location startLocation, destinationLocation;
         for (int i = 0; i < tickets.size(); i++) {
             if (tickets.get(i) instanceof NumTicket) {
                 int wholeTickets = quantity.get(i) / ((NumTicket) tickets.get(i)).getNumTrips();
@@ -260,34 +222,20 @@ public class MyVRRprovider extends MyProvider {
                 if (restTicket != 0) {
                     value.append("1x ").append(tickets.get(i).toString()).append(" \n \tPreisstufe: ").append(preisstufe.get(i)).append("\n \t").append(restTicket).append("x entwerten");
                 }
-                startLocation = tripItem.getTrip().from;
-                destinationLocation = tripItem.getTrip().to;
                 if (preisstufe.get(i).equals(preisstufen[0])) {
                     value.append("\n \tEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                 } else if (preisstufe.get(i).equals(preisstufen[1]) || preisstufe.get(i).equals(preisstufen[2]) || preisstufe.get(i).equals(preisstufen[3])) {
-
-                    ArrayList<Integer> crossedFarezones = new ArrayList<>(tripItem.getCrossedFarezones());
-                    boolean isZweiWaben = false;
-                    int firstZone = crossedFarezones.get(0);
-                    for (Integer crossedFarezone : crossedFarezones) {
-                        if (crossedFarezone / 10 != firstZone / 10) {
-                            isZweiWaben = true;
-                            break;
-                        }
-                    }
-
-                    if (isZweiWaben) {
+                    if (MyVrrTimeOptimisationHelper.checkIsZweiWaben(tripItem.getCrossedFarezones())) {
                         value.append("\n \tEntwerten für die zwei Waben mit der Starthaltestelle: ").append(UtilsString.setLocationName(tripItem.getTrip().from));
                         value.append(" und der Zielhaltestelle ").append(UtilsString.setLocationName(tripItem.getTrip().to));
                     } else {
                         for (Farezone f : farezones) {
-                            if (f.getId() == firstZone / 10) {
+                            if (f.getId() == tripItem.getStartID() / 10) {
                                 value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());
                             }
                         }
                     }
-                } else if(!preisstufe.get(i).equals(preisstufen[preisstufen.length-1])){
-
+                } else if (!preisstufe.get(i).equals(preisstufen[preisstufen.length - 1])) {
                     for (Farezone f : farezones) {
                         if (f.getId() == tripItem.getStartID() / 10) {
                             value.append("\n \tEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());
@@ -302,32 +250,43 @@ public class MyVRRprovider extends MyProvider {
         return value.toString();
     }
 
+    /**
+     * Informationen zu den TimeTickets <br/>
+     * <p>
+     * Fügt dem String für jedes Ticket die Informationen: Name, Preisstufe, Startdatum und Zentralgebiet hinzu <br/>
+     * Unterscheidet sich zu {@link #getTicketInformationNumTicket}, da hier die Fahrscheine nicht zusammengelegt sind,
+     * und die Angabe für das Zentralgebiet anders funktioniert.
+     *
+     * @param timeTicketsToBuy Liste an Tickets die angezeigt werden soll
+     * @return String mit den Informationen Geltungszeitraum, Zentralgebiet und Ticketname soweie Preisstufe, für jedes in timeTicketsToBuy
+     * enthaltene Ticket
+     */
     public String getTicketInformationTimeTicket(ArrayList<TicketToBuy> timeTicketsToBuy) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < timeTicketsToBuy.size(); i++) {
             TicketToBuy ticket = timeTicketsToBuy.get(i);
-            result += ticket.getTicket().getName() + " Preisstufe: " + ticket.getPreisstufe();
+            result.append(ticket.getTicket().getName()).append(" Preisstufe: ").append(ticket.getPreisstufe());
             if (ticket.getPreisstufe().equals(preisstufen[1]) || ticket.getPreisstufe().equals(preisstufen[2]) || ticket.getPreisstufe().equals(preisstufen[3]) || ticket.getPreisstufe().equals(preisstufen[4])) {//Peisstufe A1-A3,B
                 if (ticket.isZweiWabenTarif()) {
-                    result += "\nEntwerten für die Starthaltestelle: " + UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().from);
-                    result += "\nund die Zielhaltestelle: " + UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().to);
+                    result.append("\nEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().from));
+                    result.append("\nund die Zielhaltestelle: ").append(UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().to));
                 } else {
-                    for(Farezone f : farezones){
-                        if(f.getId() == ticket.getMainRegionID()){
-                            result += "\nEntwerten für das Tarifgebiet: " + f.getId() + " - " + f.getName();
+                    for (Farezone f : farezones) {
+                        if (f.getId() == ticket.getMainRegionID()) {
+                            result.append("\nEntwerten für das Tarifgebiet: ").append(f.getId()).append(" - ").append(f.getName());
                             break;
                         }
                     }
                 }
             } else if (ticket.getPreisstufe().equals(preisstufen[5])) { //Preisstufe C
-                result += "\nRegion: " + ticket.getMainRegionID();
+                result.append("\nRegion: ").append(ticket.getMainRegionID());
             }//Preisstufe D hat keine Region, für die entwertet werden muss
-            result += "\nStartzeitpunkt: " + UtilsString.setDate(ticket.getFirstDepartureTime()) + " " + UtilsString.setTime(ticket.getFirstDepartureTime());
-            if(i+1 < timeTicketsToBuy.size()){
-                result +="\n";
+            result.append("\nStartzeitpunkt: ").append(UtilsString.setDate(ticket.getFirstDepartureTime())).append(" ").append(UtilsString.setTime(ticket.getFirstDepartureTime()));
+            if (i + 1 < timeTicketsToBuy.size()) {
+                result.append("\n");
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -346,13 +305,13 @@ public class MyVRRprovider extends MyProvider {
         String preisstufe1 = tripItem1.getPreisstufe();
         String preisstufe2 = tripItem2.getPreisstufe();
 
-        if (preisstufe1 == preisstufen[0] && preisstufe2 == preisstufen[0]) {
+        if (preisstufe1.equals(preisstufen[0]) && preisstufe2.equals(preisstufen[0])) { //Beide Fahrten Kurzstrecke
             return 0;
-        } else if (preisstufe1 == preisstufen[0] && preisstufe2 != preisstufen[0]) {
+        } else if (preisstufe1.equals(preisstufen[0])) { //Fahrt 1 ist Kurzstrecke und Fahrt 2 nicht
             return -1;
-        } else if (preisstufe1 != preisstufen[0] && preisstufe2 == preisstufen[0]) {
+        } else if (preisstufe2.equals(preisstufen[0])) {//Fahrt 1 ist keine Kurzstrecke und Fahrt 2 ist Kurzstrecke
             return 1;
-        } else {
+        } else {//Vergleich der anderen Preisstufen mittel der compareTo Methode von String
             return preisstufe1.compareTo(preisstufe2);
         }
     }

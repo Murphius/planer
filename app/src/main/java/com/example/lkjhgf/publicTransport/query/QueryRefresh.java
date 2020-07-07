@@ -1,8 +1,10 @@
 package com.example.lkjhgf.publicTransport.query;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -19,24 +21,26 @@ import de.schildbach.pte.dto.TripOptions;
 
 public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResult> {
 
-    public interface Action
-    {
-        void DoSomeThing(QueryTripsResult result);
+    /**
+     * Ermöglicht es, das Ergebnis zu setzen & einen Ladebildschirm zu erhalten
+     */
+    public interface RefreshAction {
+        void refreshAction(QueryTripsResult result);
     }
 
-    private Context context;
-    private Action action;
+    private Activity activity;
+    private RefreshAction action;
     private NetworkProvider provider;
     private AlertDialog dialog;
 
     /**
      * Konstruktor mit allen im Verlauf benötigten Werte
      *
-     * @param context  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
+     * @param activity - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
      */
-    public QueryRefresh(Context context, Action action) {
+    public QueryRefresh(Activity activity, RefreshAction action) {
         this.provider = MainMenu.myProvider.getNetworkProvider();
-        this.context = context;
+        this.activity = activity;
         this.action = action;
     }
 
@@ -52,8 +56,12 @@ public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResu
      */
     @Override
     protected void onPreExecute() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(R.layout.fragment);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View mView = activity.getLayoutInflater().inflate(R.layout.fragment, null);
+        TextView textView = mView.findViewById(R.id.textView80);
+        String text = "Aktualisieren der Verbindung...";
+        textView.setText(text);
+        builder.setView(mView);
         builder.setCancelable(false);
         dialog = builder.create();
         dialog.show();
@@ -102,7 +110,7 @@ public class QueryRefresh extends AsyncTask<QueryParameter, Void, QueryTripsResu
 
     @Override
     protected void onPostExecute(QueryTripsResult result) {
-        action.DoSomeThing(result);
+        action.refreshAction(result);
         dialog.dismiss();
     }
 

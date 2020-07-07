@@ -82,13 +82,14 @@ public class RecyclerViewService {
 
     /**
      * Füllt die Liste mit den anzuzeigenden Elementen <br/>
-     *
+     * <p>
      * Abhängig davon, ob mehrere Farhten geplant werden, oder nur eine, können nur zukünftige Verbindungen oder auch
      * vergangene Verbindungen betrachtet werden.
+     *
      * @param trips Alle Verbindungen vom Server
      * @return Anzuzeigende Elemente für den Nutzer
      */
-    ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips){
+    ArrayList<ConnectionItem> fillConnectionList(List<Trip> trips) {
         return UtilsList.fillConnectionList(trips);
     }
 
@@ -115,31 +116,57 @@ public class RecyclerViewService {
      * <p>
      * Dazu wird eine Anfrage an den Provider gestartet ({@link QueryMoreTask}),
      * und anschließend die Liste möglicher
-     * Verbindungen aktuallisiert.
+     * Verbindungen aktuallisiert {@link #newQueryResultLater(QueryTripsResult)}.
      * <br/>
-     * Damit der Nutzer nicht selbst an den Punkt der neuen
-     * Verbindungen scrollen muss, wird automatisch auf das letzte Element der alten Liste
-     * gescrollt
      *
      * @preconditions der Nutzer hat den Button "später" in {@link ButtonClass} gedrückt
      * @postconditions die Liste der möglichen Verbindungen enthält weitere Verbindungen oder der Nutzer
      * wird darüber informiert, dass keine weiteren Verbindungen gefunden werden konnten
      */
     void newConnectionsLater() {
-        // alte Größe, um später an diese Position zu scrollen
-        int pos = connection_items.size();
-
         //Provider -> suche nach weiteren Verbindungen
         QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, true);
-        //TODO
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(query);
-        QueryTripsResult resultLater = null;
-        try {
-            //Neue Ergebnisse holen
-            resultLater = execute.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        new QueryMoreTask(activity, this::newQueryResultLater).execute(query);
+    }
+
+    /**
+     * Suche nach früheren Verbindungen <br/>
+     * <p>
+     * Dazu wird eine Anfrage an den Provider gestartet ({@link QueryMoreTask}),
+     * und anschließend die Liste möglicher
+     * Verbindungen aktuallisiert.
+     * <br/>
+     * Damit der Nutzer nicht selbst an den Punkt der neuen
+     * Verbindungen scrollen muss, wird automatisch auf das erste Element der neuen Liste
+     * gescrollt
+     *
+     * @preconditions der Nutzer hat den Button "früher" in {@link ButtonClass} gedrückt
+     */
+    void newConnectionsEarlier() {
+        // Suche nach neuen Verbindungen
+        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false);
+        new QueryMoreTask(activity, this::newQueryResultEarlier).execute(query);
+    }
+
+    boolean isConnectionListEmpty() {
+        return connection_items == null;
+    }
+
+    /**
+     * Aktualisierung der Liste möglicher Verbindungen (spätere Verbindungen) <br/>
+     * <p>
+     * Damit der Nutzer nicht selbst an den Punkt der neuen
+     * Verbindungen scrollen muss, wird automatisch auf das letzte Element der alten Liste
+     * gescrollt
+     *
+     * @param result weitere Verbindungen
+     * @postconditions die Liste der möglichen Verbindungen enthält weitere Verbindungen oder der Nutzer
+     * wird darüber informiert, dass keine weiteren Verbindungen gefunden werden konnten
+     */
+    void newQueryResultLater(QueryTripsResult result) {
+        // alte Größe, um später an diese Position zu scrollen
+        int pos = connection_items.size();
+        QueryTripsResult resultLater = result;
         if (resultLater == null) {
             Toast.makeText(context,
                     "Es konnten keine späteren Verbindungen gefunden werden",
@@ -160,36 +187,22 @@ public class RecyclerViewService {
         }
     }
 
+
     /**
-     * Suche nach früheren Verbindungen <br/>
+     * Aktualisierung der Liste möglicher Verbindungen (frühere Verbindungen) <br/>
      * <p>
-     * Dazu wird eine Anfrage an den Provider gestartet ({@link QueryMoreTask}),
-     * und anschließend die Liste möglicher
-     * Verbindungen aktuallisiert.
-     * <br/>
      * Damit der Nutzer nicht selbst an den Punkt der neuen
-     * Verbindungen scrollen muss, wird automatisch auf das erste Element der neuen Liste
+     * Verbindungen scrollen muss, wird automatisch auf das erste Element der alten Liste
      * gescrollt
      *
-     * @preconditions der Nutzer hat den Button "früher" in {@link ButtonClass} gedrückt
+     * @param result weitere Verbindungen
      * @postconditions die Liste der möglichen Verbindungen enthält weitere Verbindungen oder der Nutzer
      * wird darüber informiert, dass keine weiteren Verbindungen gefunden werden konnten
      */
-    void newConnectionsEarlier() {
+    void newQueryResultEarlier(QueryTripsResult result) {
         // Speichern der alten Listengröße um später auf das erste neue Element zu scrollen
         int length = connection_items.size();
-
-        // Suche nach neuen Verbindungen
-        QueryMoreParameter query = new QueryMoreParameter(possibleConnections.result.context, false);
-        AsyncTask<QueryMoreParameter, Void, QueryTripsResult> execute = new QueryMoreTask(activity).execute(query);
-        QueryTripsResult resultEarlier = null;
-        //TODO
-        try {
-            // Neue Ergebnisse holen
-            resultEarlier = execute.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        QueryTripsResult resultEarlier = result;
 
         if (resultEarlier == null) { // Keine weiteren Verbindungen gefunen
             Toast.makeText(context,
@@ -213,9 +226,5 @@ public class RecyclerViewService {
             // Scrollen an die Position des ersten neuen Elements
             layoutManager.smoothScrollToPosition(recyclerView, null, connection_items.size() - length);
         }
-    }
-
-    boolean isConnectionListEmpty() {
-        return connection_items == null;
     }
 }

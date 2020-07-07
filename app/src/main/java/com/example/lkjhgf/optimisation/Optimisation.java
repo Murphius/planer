@@ -27,7 +27,7 @@ public class Optimisation {
      * häufig in der Liste der zu optimierenden Fahrten enthalten. <br/>
      * Die Liste der Fahrten ist der gleichen Klasse zugeordnet, wie die Fahrscheine.
      */
-    static TicketOptimisationHolder optimisationBuyNewTickets(ArrayList<Ticket> tickets,
+    static TicketOptimisationHolder optimisationBuyNewTickets(ArrayList<NumTicket> tickets,
                                                                      ArrayList<TripItem> tripsToOptimise) {
         int maxNumTripTicket = MainMenu.myProvider.getMaxNumTrip();
 

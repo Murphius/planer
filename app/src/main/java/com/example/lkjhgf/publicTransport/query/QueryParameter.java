@@ -23,12 +23,7 @@ public class QueryParameter {
     private boolean isDeparture;
     private TripOptions options;
 
-    public QueryParameter(Location from,
-                          Location via,
-                          Location to,
-                          Date date,
-                          boolean isDeparture,
-                          TripOptions options) {
+    public QueryParameter(Location from, Location via, Location to, Date date, boolean isDeparture, TripOptions options) {
         this.from = from;
         this.via = via;
         this.to = to;

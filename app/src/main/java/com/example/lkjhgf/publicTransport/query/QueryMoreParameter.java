@@ -1,6 +1,5 @@
 package com.example.lkjhgf.publicTransport.query;
 
-import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.dto.QueryTripsContext;
 
 /**

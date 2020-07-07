@@ -1,9 +1,10 @@
 package com.example.lkjhgf.publicTransport.query;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.activities.MainMenu;
@@ -19,18 +20,24 @@ import de.schildbach.pte.dto.QueryTripsResult;
  */
 public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTripsResult> {
 
-    private Context context;
+    public interface GetMoreTrips{
+        void setMoreTrips(QueryTripsResult result);
+    }
+
+    private Activity activity;
     private NetworkProvider provider;
     private AlertDialog dialog;
+    private GetMoreTrips getMoreTrips;
 
     /**
      * Konstruktor mit allen im Verlauf benötigten Werte
      *
-     * @param context  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
+     * @param activity  - benötigt zum Anzeigen des Dialogs während des Warten auf die Antwort vom Provider
      */
-    public QueryMoreTask(Context context) {
+    public QueryMoreTask(Activity activity, GetMoreTrips getMoreTrips) {
         this.provider = MainMenu.myProvider.getNetworkProvider();
-        this.context = context;
+        this.getMoreTrips = getMoreTrips;
+        this.activity = activity;
     }
 
     /**
@@ -45,8 +52,12 @@ public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTrip
      */
     @Override
     protected void onPreExecute() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(R.layout.fragment);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View mView = activity.getLayoutInflater().inflate(R.layout.fragment, null);
+        TextView textView = mView.findViewById(R.id.textView80);
+        String text = "Suche nach weiteren Verbindungen ...";
+        textView.setText(text);
+        builder.setView(mView);
         builder.setCancelable(false);
         dialog = builder.create();
         dialog.show();
@@ -92,6 +103,7 @@ public class QueryMoreTask extends AsyncTask<QueryMoreParameter, Void, QueryTrip
      */
     @Override
     protected void onPostExecute(QueryTripsResult result) {
+        getMoreTrips.setMoreTrips(result);
         dialog.dismiss();
     }
 }

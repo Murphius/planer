@@ -215,7 +215,7 @@ public final class OptimisationUtil {
     public static HashMap<Fare.Type, TicketOptimisationHolder> optimisationWithNewTickets(HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
         //Optimieren mit neuen Fahrscheinen
         HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = new HashMap<>();
-        HashMap<Fare.Type, ArrayList<Ticket>> allTicketsMap = MainMenu.myProvider.getAllTickets();
+        HashMap<Fare.Type, ArrayList<NumTicket>> allTicketsMap = MainMenu.myProvider.getNumTickets();
         for (Fare.Type type : userClassTripLists.keySet()) {
             if (allTicketsMap.containsKey(type)) {
                 lastBestTickets.put(type, Optimisation.optimisationBuyNewTickets(allTicketsMap.get(type), userClassTripLists.get(type)));

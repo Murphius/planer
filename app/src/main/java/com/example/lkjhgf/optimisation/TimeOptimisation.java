@@ -312,14 +312,6 @@ public class TimeOptimisation {
                             }
                         }
                     }
-                    /*if (current.getFirstDepartureTime().getTime() >= ticketToBuy.getFirstDepartureTime().getTime()
-                            && current.getLastArrivalTime().getTime() <= timeTicket.getMaxDuration() + ticketToBuy.getFirstDepartureTime().getTime()
-                            && timeTicket.isValidTrip(current)
-                            && checkIfTripIsInRegion(current, ticketToBuy.getValidFarezones())) {
-                        ticketToBuy.addTripItem(current);
-                        tripItemIterator.remove();
-                        Collections.sort(ticketToBuy.getTripList(), new TripItemTimeComparator());
-                    }*/
                 }
             }
         }

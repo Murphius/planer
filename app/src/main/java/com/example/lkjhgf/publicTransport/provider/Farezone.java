@@ -1,5 +1,8 @@
 package com.example.lkjhgf.publicTransport.provider;
 
+/**
+ * Für ein Tarifgebiet
+ */
 public class Farezone {
     private int id;
     private String name;
