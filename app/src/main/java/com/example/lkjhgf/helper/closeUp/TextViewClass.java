@@ -102,7 +102,7 @@ public class TextViewClass {
             Trip.Public firstPublic = (Trip.Public) firstLeg;
             if(firstPublic.departureStop != null){
                 time_of_departure.setText(UtilsString.setTime(firstPublic.getDepartureTime(true)));
-                Utils.setDelayView(delay_departure, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources);
+                Utils.setDelayView(delay_departure, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources, false);
             }
         }else{
             time_of_departure.setText(UtilsString.setTime(closeUp.trip.getFirstDepartureTime()));
@@ -111,7 +111,7 @@ public class TextViewClass {
             Trip.Public lastPublic = (Trip.Public) lastLeg;
             if(lastPublic.arrivalStop != null){
                 time_of_arrival.setText(UtilsString.setTime(lastPublic.getArrivalTime(true)));
-                Utils.setDelayView(delay_arrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources);
+                Utils.setDelayView(delay_arrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources, false);
             }
         }else{
             time_of_arrival.setText(UtilsString.setTime(closeUp.trip.getLastArrivalTime()));

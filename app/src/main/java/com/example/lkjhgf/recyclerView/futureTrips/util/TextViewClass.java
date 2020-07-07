@@ -86,7 +86,7 @@ public class TextViewClass {
             Trip.Public firstPublic = (Trip.Public) firstLeg;
             if (firstPublic.departureStop != null) {
                 timeOfDeparture.setText(UtilsString.setTime(firstPublic.getDepartureTime(true)));
-                Utils.setDelayView(delayDeparture, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources);
+                Utils.setDelayView(delayDeparture, firstPublic.getDepartureDelay(), firstPublic.getDepartureTime(true), resources, true);
             }
         } else {
             timeOfDeparture.setText(UtilsString.setTime(trip.getFirstDepartureTime()));
@@ -95,7 +95,7 @@ public class TextViewClass {
             Trip.Public lastPublic = (Trip.Public) lastLeg;
             if (lastPublic.arrivalStop != null) {
                 timeOfArrival.setText(UtilsString.setTime(lastPublic.getArrivalTime(true)));
-                Utils.setDelayView(delayArrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources);
+                Utils.setDelayView(delayArrival, lastPublic.getArrivalDelay(), lastPublic.getArrivalTime(true), resources, true);
             }
         } else {
             timeOfArrival.setText(UtilsString.setTime(trip.getLastArrivalTime()));
@@ -107,12 +107,7 @@ public class TextViewClass {
         //Umstiege
         numChanges.setText(UtilsString.setNumChanges(trip));
         // Preisstufe
-        if (trip.fares == null) {
-            String text = "?";
-            preisstufe.setText(text);
-        } else {
-            preisstufe.setText(trip.fares.get(0).units);
-        }
+        preisstufe.setText(UtilsString.setPreisstufenName(trip));
         // Start- und Zielpunkt
         startLocation.setText(UtilsString.setLocationName(trip.from));
         destinationLocation.setText(UtilsString.setLocationName(trip.to));

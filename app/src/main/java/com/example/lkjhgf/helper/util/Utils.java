@@ -86,7 +86,7 @@ public final class Utils {
      * @param plannedTime - geplante Abfahrtszeit
      * @param resources - für die Farben der Verspätung benötigt
      */
-    public static void setDelayView(TextView textView, long delay, Date plannedTime, Resources resources) {
+    private static void setDelayView(TextView textView, long delay, Date plannedTime, Resources resources) {
         if(plannedTime == null){
             textView.setText("");
         }
@@ -99,6 +99,26 @@ public final class Utils {
             textView.setTextColor(resources.getColor(R.color.berry, null));
         }
     }
+
+    /**
+     * Füllt die Anzeige mit der Verspätung <br/>
+     * <p>
+     * Ist die Verspätung <= 5 Minuten, so wird die Verspätung grün eingefärbt,
+     * sonst rot.
+     * Setzt die "echte" Zeit
+     * @param textView  - Anzeige die gefüllt werden soll
+     * @param delay     - Verspätung in ms
+     * @param plannedTime - geplante Abfahrtszeit
+     * @param resources - für die Farben der Verspätung benötigt
+     * @param hideView - gibt an, ob bei keiner Verspätung das Textfeld für Verspätungen angezeigt werden soll oder nicht
+     */
+    public static void setDelayView(TextView textView, long delay, Date plannedTime, Resources resources, boolean hideView) {
+       setDelayView(textView, delay, plannedTime, resources);
+       if(hideView && Utils.longToInt(delay) == 0){
+           textView.setVisibility(View.INVISIBLE);
+       }
+    }
+
 
     /**
      * Füllt die Anzeige mit der Verspätung <br/>
