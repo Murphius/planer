@@ -13,7 +13,12 @@ import com.example.lkjhgf.optimisation.TicketToBuy;
 
 import java.util.ArrayList;
 
-public class AllTicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
+/**
+ * Adapter für die Anzeige der Informationen aller Tickets <br/>
+ * <p>
+ * Verbindung zwischen {@link TicketToBuy} und {@link TicketViewHolder}
+ */
+public class AllTicketsAdapter extends RecyclerView.Adapter<TicketViewHolder> {
 
     private Activity activity;
 
@@ -22,7 +27,7 @@ public class AllTicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
      */
     private ArrayList<TicketToBuy> ticketItems;
 
-    public AllTicketAdapter(Activity activity, ArrayList<TicketToBuy> ticketItems) {
+    public AllTicketsAdapter(Activity activity, ArrayList<TicketToBuy> ticketItems) {
         this.ticketItems = ticketItems;
         this.activity = activity;
     }
@@ -36,7 +41,7 @@ public class AllTicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
     @NonNull
     public TicketViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_allticket_item, parent, false);
-        return new TicketViewHolder(view, activity);
+        return new TicketViewHolder(view);
     }
 
     /**

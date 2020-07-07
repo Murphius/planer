@@ -20,26 +20,40 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
 
+/**
+ * Gruppierte Annzeige von Fahrscheinen <br/>
+ * <p>
+ * Dabei sind NumTickets mit gleicher Preisstufe zusammengefasst und
+ * TimeTickets mit gleichem Geltungsbereich
+ * <br/><
+ * Zeigt auch die zugehörigen Verbindungen an
+ */
 class TicketViewHolder extends RecyclerView.ViewHolder {
 
     private Activity activity;
 
     private TextView quantity;
     private TextView ticketName;
-    private TextView preisstufeView;
+    private TextView farezoneView;
     private TextView costs;
-    private  TextView freeTrips;
+    private TextView freeTrips;
     private BootstrapButton showDetails;
     private RecyclerView recyclerView;
 
-
+    /**
+     * Initalisierung der Attribute <br/>
+     *
+     * @param activity zum Starten der Detailansicht benötigt
+     * @param view     Layout
+     * @param listener - zum Anzeigen / Verbergen der Fahrten
+     */
     TicketViewHolder(Activity activity, View view, OnItemClickListener listener) {
         super(view);
         this.activity = activity;
 
         quantity = view.findViewById(R.id.textView96);
         ticketName = view.findViewById(R.id.textView98);
-        preisstufeView = view.findViewById(R.id.textView100);
+        farezoneView = view.findViewById(R.id.textView100);
         costs = view.findViewById(R.id.textView101);
         freeTrips = view.findViewById(R.id.textView103);
 
@@ -57,8 +71,6 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
         recyclerView = view.findViewById(R.id.recyclerView8);
     }
 
-    //TODO
-
     /**
      * Füllt die Ansicht mit den Werten des Parameters
      *
@@ -68,52 +80,28 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
         String text = currentItem.getQuantity() + "x";
         quantity.setText(text);
         ticketName.setText(currentItem.getTicket().getName());
-        preisstufeView.setText(currentItem.getPreisstufe());
+        farezoneView.setText(currentItem.getPreisstufe());
         int costsValue = currentItem.getQuantity() * currentItem.getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(currentItem.getPreisstufe()));
         text = currentItem.getQuantity() + " * "
                 + UtilsString.centToString(currentItem.getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(currentItem.getPreisstufe())))
                 + " = " + UtilsString.centToString(costsValue);
         costs.setText(text);
-        if(currentItem.getTicket() instanceof NumTicket){
+        if (currentItem.getTicket() instanceof NumTicket) {
             int allTrips = currentItem.getQuantity() * ((NumTicket) currentItem.getTicket()).getNumTrips();
             int usedTrips = allTrips - currentItem.getFreeTrips();
             text = "(" + usedTrips + " / " + allTrips + ")";
             freeTrips.setText(text);
         }
-
-
         if (currentItem.getShowDetails()) {
             recyclerView.setVisibility(View.VISIBLE);
             ArrayList<TripItem> tripItems = currentItem.getTripItems();
             recyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
             TripAdapterTicketList adapter = new TripAdapterTicketList(tripItems, activity);
-
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
-
             showDetails.setTypicon(Typicon.TY_ARROW_UP);
-
-            //Keine Buttons die geklickt werden können -> keine Funktionen die aufgerufen werden müssen
-            adapter.setOnItemClickListener(new com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    TicketViewHolder.this.onItemClick(tripItems.get(position));
-                }
-
-                @Override
-                public void onDeleteClicked(int position) {
-                }
-
-                @Override
-                public void onCopyClicked(int position) {
-                }
-
-                @Override
-                public void onEditClicked(int position) {
-                }
-            });
-
+            setAdapterOnClickListener(adapter,tripItems);
         } else {
             recyclerView.setVisibility(View.GONE);
             showDetails.setTypicon(Typicon.TY_ARROW_DOWN);
@@ -129,8 +117,35 @@ class TicketViewHolder extends RecyclerView.ViewHolder {
         Intent intent = new Intent(activity, AllConnectionsIncompleteView.class);
         intent.putExtra(MainMenu.EXTRA_TRIP, currentItem);
         intent.putExtra(MainMenu.EXTRA_CLASS, activity.getClass());
-        //intent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, currentItem.getNumUserClasses());
-        //intent.putExtra(MainMenu.EXTRA_TRIP, currentItem.getTrip());
         activity.startActivity(intent);
+    }
+
+    /**
+     * OnClickListener für die einzelnen Buttons <br/>
+     *
+     * In dieser Ansicht kann der Nutzer die Fahrt nicht kopieren, editieren oder löschen <br/>
+     * @param adapter für den RecyclerView mit den Fahrten
+     * @param tripItems zugeordnete Fahrten
+     */
+    private void setAdapterOnClickListener(TripAdapterTicketList adapter, ArrayList<TripItem> tripItems){
+        //Keine Buttons die geklickt werden können -> keine Funktionen die aufgerufen werden müssen
+        adapter.setOnItemClickListener(new com.example.lkjhgf.recyclerView.futureTrips.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                TicketViewHolder.this.onItemClick(tripItems.get(position));
+            }
+
+            @Override
+            public void onDeleteClicked(int position) {
+            }
+
+            @Override
+            public void onCopyClicked(int position) {
+            }
+
+            @Override
+            public void onEditClicked(int position) {
+            }
+        });
     }
 }

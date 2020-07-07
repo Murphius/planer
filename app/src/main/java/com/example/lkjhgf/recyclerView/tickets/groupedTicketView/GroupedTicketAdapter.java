@@ -11,9 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lkjhgf.R;
 
 import java.util.ArrayList;
+
 /**
- * Adapter für die Anzeige der wesentlichen Informationen eines Tickets <br/>
- *
+ * Adapter für die Anzeige der wesentlichen Informationen aller Tickets <br/>
+ * <p>
  * Verbindung zwischen {@link TicketItem} und {@link TicketViewHolder}
  */
 public class GroupedTicketAdapter extends RecyclerView.Adapter<TicketViewHolder> {
@@ -25,12 +26,12 @@ public class GroupedTicketAdapter extends RecyclerView.Adapter<TicketViewHolder>
     private ArrayList<TicketItem> ticketItems;
     private OnItemClickListener onItemClickListener;
 
-    public GroupedTicketAdapter(Activity activity, ArrayList<TicketItem> ticketItems){
+    public GroupedTicketAdapter(Activity activity, ArrayList<TicketItem> ticketItems) {
         this.activity = activity;
         this.ticketItems = ticketItems;
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         onItemClickListener = listener;
     }
 
@@ -41,7 +42,7 @@ public class GroupedTicketAdapter extends RecyclerView.Adapter<TicketViewHolder>
      */
     @Override
     @NonNull
-    public TicketViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public TicketViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_view, parent, false);
         return new TicketViewHolder(activity, view, onItemClickListener);
     }
@@ -55,13 +56,13 @@ public class GroupedTicketAdapter extends RecyclerView.Adapter<TicketViewHolder>
      * @param position gibt an, welches Element genutzt werden soll, um die Ansicht zu füllen
      */
     @Override
-    public void onBindViewHolder(TicketViewHolder holder, int position){
+    public void onBindViewHolder(TicketViewHolder holder, int position) {
         TicketItem currentItem = ticketItems.get(position);
         holder.fillView(currentItem);
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return ticketItems.size();
     }
 

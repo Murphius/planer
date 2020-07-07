@@ -11,7 +11,7 @@ import com.example.lkjhgf.R;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.recyclerView.tickets.allTicketsView.AllTicketAdapter;
+import com.example.lkjhgf.recyclerView.tickets.allTicketsView.AllTicketsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,13 +26,13 @@ public class RecyclerViewAllTicketsOverview {
     /**
      * Managed die Klicks und das Anzeigen der Items
      */
-    private AllTicketAdapter adapter;
+    private AllTicketsAdapter adapter;
 
     /**
      * Für das Anzeigen aller gespeicherter Tickets, ohne die zugehörigen Fahrten anzuzeigen. <br/>
      *
      * Kein Zusammenfassen der Fahrscheine.
-     * Das Füllen der Ansicht erfolgt in {@link AllTicketAdapter}
+     * Das Füllen der Ansicht erfolgt in {@link AllTicketsAdapter}
      * @param activity - Zum Laden der Tickets
      * @param view - Ansicht die gefüllt werden soll.
      */
@@ -57,7 +57,7 @@ public class RecyclerViewAllTicketsOverview {
         }
 
         fullpriceHolder.setText(UtilsString.centToString(fullPrice));
-        adapter = new AllTicketAdapter(activity, ticketItems);
+        adapter = new AllTicketsAdapter(activity, ticketItems);
         buildRecyclerView();
     }
 
