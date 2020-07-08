@@ -12,6 +12,7 @@ import com.example.lkjhgf.helper.closeUp.FutureIncompleteAllTripsCloseUp;
 import com.example.lkjhgf.helper.futureTrip.MyTripList;
 import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.optimisation.TicketToBuy;
+import com.example.lkjhgf.optimisation.TripQuantity;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
@@ -97,8 +98,8 @@ public class AllConnectionsIncompleteView extends Activity {
             for (TicketToBuy ticket : savedTypeTickets) {
                 if (ticketUUID.contains(ticket.getTicketID())) {
                     //Falls ja, die entsprechende Fahrt aktualisieren
-                    ArrayList<TicketToBuy.TripQuantity> tripQuantities = ticket.getTripQuantities();
-                    for (TicketToBuy.TripQuantity tripQuantity : tripQuantities) {
+                    ArrayList<TripQuantity> tripQuantities = ticket.getTripQuantities();
+                    for (TripQuantity tripQuantity : tripQuantities) {
                         if (tripQuantity.getTripItem().equals(tripItem)) {
                             tripQuantity.updateTrip(tripItem);
                             break;

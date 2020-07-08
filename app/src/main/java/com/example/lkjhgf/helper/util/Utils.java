@@ -9,6 +9,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.example.lkjhgf.R;
 import com.example.lkjhgf.optimisation.Ticket;
+import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripTicketInformationHolder;
 
 import org.javatuples.Triplet;
@@ -176,12 +177,14 @@ public final class Utils {
                     boolean contains = false;
                     for (int j = 0; j < ticketsToUse.size() && !contains; j++) {
                         if (ticketList.get(i).getTicket().getName().equals(ticketsToUse.get(j).getName())) {
-                            if (ticketList.get(i).getTicketFarezone().equals(preisstufeToUse.get(j))) {
-                                num.set(j, num.get(j) + ticketList.get(i).getQuantity());
-                            } else {
-                                ticketList.add(ticketList.get(i));
-                                preisstufeToUse.add(ticketList.get(i).getTicketFarezone());
-                                num.add(ticketList.get(i).getQuantity());
+                            if(ticketList.get(i).getTicket() instanceof TimeTicket){
+                                if (ticketList.get(i).getTicketFarezone().equals(preisstufeToUse.get(j))) {
+                                    num.set(j, num.get(j) + ticketList.get(i).getQuantity());
+                            }else {
+                                    ticketList.add(ticketList.get(i));
+                                    preisstufeToUse.add(ticketList.get(i).getTicketFarezone());
+                                    num.add(ticketList.get(i).getQuantity());
+                                }
                             }
                             contains = true;
                         }

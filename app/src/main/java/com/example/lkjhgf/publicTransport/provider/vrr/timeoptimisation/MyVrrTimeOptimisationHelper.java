@@ -14,7 +14,6 @@ import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 import de.schildbach.pte.dto.Fare;
