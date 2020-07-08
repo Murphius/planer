@@ -8,11 +8,11 @@ import java.util.ArrayList;
 /**
  * Ein Tarifgebiet und die Fahrten, dessen Startgebiet in diesem liegen
  */
-public class FarezoneTrips {
+public class FarezoneTrip {
     Farezone farezone;
     ArrayList<TripItem> tripItems;
 
-    FarezoneTrips(Farezone f) {
+    FarezoneTrip(Farezone f) {
         farezone = f;
         tripItems = new ArrayList<>();
     }

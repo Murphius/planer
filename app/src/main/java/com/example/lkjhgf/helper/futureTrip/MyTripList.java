@@ -159,7 +159,7 @@ public abstract class MyTripList {
                     com.example.lkjhgf.activities.multipleTrips.CopyTrip.class);
             // bei einer zu optimierenden Fahrt, müssen noch die #Fahrt und #reisende Personen
             // mit übergeben werden
-            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, position + 1);
+            newIntent.putExtra(MainMenu.EXTRA_NUM_TRIP, tripItems.size() + 1);
             newIntent.putExtra(MainMenu.NUM_PERSONS_PER_CLASS, current.getNumUserClasses());
         }
         newIntent.putExtra(MainMenu.EXTRA_TRIP, current.getTrip());

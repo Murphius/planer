@@ -7,7 +7,7 @@ import com.example.lkjhgf.helper.util.UtilsString;
 import com.example.lkjhgf.optimisation.NumTicket;
 import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.Ticket;
-import com.example.lkjhgf.optimisation.TicketOptimisationHolder;
+import com.example.lkjhgf.optimisation.numTicketOptimisation.NumTicketOptimisation;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.MyVrrTimeOptimisationHelper;
@@ -21,7 +21,6 @@ import java.util.Iterator;
 import de.schildbach.pte.NetworkProvider;
 import de.schildbach.pte.VrrProvider;
 import de.schildbach.pte.dto.Fare;
-import de.schildbach.pte.dto.Location;
 
 import static com.example.lkjhgf.publicTransport.provider.vrr.timeoptimisation.VRR_Farezones.createVRRFarezone;
 
@@ -146,9 +145,8 @@ public class MyVRRprovider extends MyProvider {
         //Zeitoptimierung
         HashMap<Fare.Type, ArrayList<TripItem>> tripsWithoutTimeTicket = MyVrrTimeOptimisationHelper.timeOptimisation(sortedTrips, allTicketLists);
         //NumTicketoptimierung
-        HashMap<Fare.Type, TicketOptimisationHolder> numTicketOptimisationHolder = OptimisationUtil.optimisationWithNewTickets(tripsWithoutTimeTicket);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> numTicket = new HashMap<>();
-        OptimisationUtil.buildTicketList(numTicketOptimisationHolder, numTicket);
+        HashMap<Fare.Type, ArrayList<TicketToBuy>> numTicket = NumTicketOptimisation.optimisationNewTickets(tripsWithoutTimeTicket);
+
         //Zusammenfassen der Ergebnisse
         MyVrrTimeOptimisationHelper.sumUpNumAndTimeAndOldTickets(allTicketLists, numTicket, activeTickets);
 

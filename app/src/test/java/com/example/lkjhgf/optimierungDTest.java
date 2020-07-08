@@ -2,7 +2,6 @@ package com.example.lkjhgf;
 
 import com.example.lkjhgf.optimisation.Ticket;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 

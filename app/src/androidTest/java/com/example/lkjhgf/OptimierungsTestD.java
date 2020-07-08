@@ -7,9 +7,9 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
-import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
+import com.example.lkjhgf.optimisation.timeOptimisation.FarezoneUtil;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneD;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import org.junit.Assert;
@@ -196,12 +196,12 @@ public class OptimierungsTestD {
         ArrayList<TripItem> trips = new ArrayList<>();
         //einzelne Fahrt - Preisstufe D
         trips = generateTripsWithoutUserInformation(0, 1);
-        ArrayList<TicketToBuy> ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
         Assert.assertEquals(ticketToBuyArrayList.size(), 0);
 
         //zwei Fahrten innerhalb von 24h - Preisstufe D
         trips = generateTripsWithoutUserInformation(0, 2);
-        ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(trips, timeTickets);
+        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
     }
 
@@ -211,15 +211,15 @@ public class OptimierungsTestD {
         ArrayList<TicketToBuy> ticketToBuyArrayList;
         //Drei Fahrten innerhalb von 24h - 2x D 1x C
         trips = generateTripsWithoutUserInformation(0, 3);
-        ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(trips, timeTickets);
-        TimeOptimisation.checkTicketForOtherTrips(trips, ticketToBuyArrayList);
+        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        FarezoneUtil.checkTicketsForOtherTrips(trips, ticketToBuyArrayList);
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
 
         //Vier Fahrten - 3x innerhalb von 24h - 2x D 1x C - 1x außerhalb A2
         trips = generateTripsWithoutUserInformation(0, 4);
-        ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(trips, timeTickets);
-        TimeOptimisation.checkTicketForOtherTrips(trips, ticketToBuyArrayList);
+        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        FarezoneUtil.checkTicketsForOtherTrips(trips, ticketToBuyArrayList);
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
         Assert.assertEquals(trips.size(), 1);
@@ -301,7 +301,7 @@ public class OptimierungsTestD {
         Assert.assertEquals(hashMap.get(3).size(), 1);
 
         ArrayList<TicketToBuy> ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(hashMap.get(1), timeTickets);
-        TimeOptimisation.checkTicketForOtherTrips(hashMap.get(1), ticketToBuyArrayList);
+        TimeOptimisation.checkTicketsForOtherTrips(hashMap.get(1), ticketToBuyArrayList);
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
         Assert.assertEquals(hashMap.get(1).size(), 1);
@@ -489,7 +489,7 @@ public class OptimierungsTestD {
         endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
         trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3));
 
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneD.optimisation(trips, timeTickets);
         Assert.assertEquals(tickets.size(), 1);
         Assert.assertEquals(tickets.get(0).getTripList().size(), 3);
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "24-StundenTicket-1");
@@ -563,7 +563,7 @@ public class OptimierungsTestD {
 
         System.gc();
         long start = System.currentTimeMillis();
-        tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        tickets = FarezoneD.optimisation(trips, timeTickets);
         long ende = System.currentTimeMillis();
         long sekunden = (ende-start) / 1000;
         long msekunden = (ende-start)%1000;
@@ -758,7 +758,7 @@ public class OptimierungsTestD {
         System.out.println(i);
         System.gc();
         start = System.currentTimeMillis();
-        tickets = TimeOptimisation.optimierungPreisstufeDNew(trips, timeTickets);
+        tickets = FarezoneD.optimisation(trips, timeTickets);
         ende = System.currentTimeMillis();
         sekunden = (ende-start) / 1000;
         msekunden = (ende-start)%1000;

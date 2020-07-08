@@ -4,10 +4,14 @@ import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.TicketToBuyTimeComporator;
 import com.example.lkjhgf.helper.util.TripQuantitiesTimeComparator;
 import com.example.lkjhgf.optimisation.NumTicket;
-import com.example.lkjhgf.optimisation.OptimisationUtil;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.optimisation.numTicketOptimisation.NumTicketOptimisation;
+import com.example.lkjhgf.optimisation.timeOptimisation.FarezoneUtil;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneA;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneB;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneC;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneD;
 import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
@@ -53,8 +57,8 @@ public final class MyVrrTimeOptimisationHelper {
             if (indexOfVierStundenTicket > -1) {
                 timeTickets.get(type).remove(indexOfVierStundenTicket);
             }
-            ArrayList<TicketToBuy> zws = TimeOptimisation.optimierungPreisstufeDNew(sortedUserClassTrips.get(i), timeTickets.get(type));
-            TimeOptimisation.checkTicketForOtherTrips(sortedUserClassTrips.get(i), zws);
+            ArrayList<TicketToBuy> zws = FarezoneD.optimisation(sortedUserClassTrips.get(i), timeTickets.get(type));
+            FarezoneUtil.checkTicketsForOtherTrips(sortedUserClassTrips.get(i), zws);
             ArrayList<TicketToBuy> e = ticketsPerFarezone.get("D");
             if (e == null) {
                 e = new ArrayList<>();
@@ -62,7 +66,7 @@ public final class MyVrrTimeOptimisationHelper {
             }
             e.addAll(zws);
             zws.clear();
-            zws.addAll(TimeOptimisation.optimieriungPreisstufeC(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            zws.addAll(FarezoneC.optimieriungPreisstufeC(sortedUserClassTrips.get(i), timeTickets.get(type)));
             e = ticketsPerFarezone.get("C");
             if (e == null) {
                 e = new ArrayList<>();
@@ -70,7 +74,7 @@ public final class MyVrrTimeOptimisationHelper {
             }
             e.addAll(zws);
             zws.clear();
-            zws.addAll(TimeOptimisation.optimierungPreisstufeB(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            zws.addAll(FarezoneB.optimisation(sortedUserClassTrips.get(i), timeTickets.get(type)));
             e = ticketsPerFarezone.get("B");
             if (e == null) {
                 e = new ArrayList<>();
@@ -85,7 +89,7 @@ public final class MyVrrTimeOptimisationHelper {
             if (indexOfHappyHourTicket > -1) {
                 timeTickets.get(type).add(indexOfHappyHourTicket, MyVRRprovider.happyHourTicket);
             }
-            zws.addAll(TimeOptimisation.optimierungPreisstufeA(sortedUserClassTrips.get(i), timeTickets.get(type)));
+            zws.addAll(FarezoneA.optimierungPreisstufeA(sortedUserClassTrips.get(i), timeTickets.get(type)));
             e = ticketsPerFarezone.get("A");
             if (e == null) {
                 e = new ArrayList<>();
@@ -255,7 +259,7 @@ public final class MyVrrTimeOptimisationHelper {
             numTicketsHM.put(type, numTickets);
         }
         //Optimierung mit NumTickets
-        OptimisationUtil.optimisationWithOldTickets(numTicketsHM, trips);
+        NumTicketOptimisation.useOldTickets(numTicketsHM, trips);
     }
 
     /**

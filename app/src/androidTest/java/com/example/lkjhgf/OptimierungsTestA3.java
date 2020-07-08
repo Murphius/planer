@@ -5,8 +5,8 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.TicketToBuyTimeComporator;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneA;
 import com.example.lkjhgf.publicTransport.provider.MyVRRprovider;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
@@ -332,7 +332,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -383,7 +383,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -416,7 +416,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -450,7 +450,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         startT = System.currentTimeMillis();
-        tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         endT = System.currentTimeMillis();
         s = (endT - startT) / 1000;
         ms = (endT - startT) % 1000;
@@ -564,7 +564,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -679,7 +679,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -737,7 +737,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -796,7 +796,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;

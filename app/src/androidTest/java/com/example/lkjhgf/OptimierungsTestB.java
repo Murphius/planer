@@ -4,8 +4,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneB;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import org.junit.Assert;
@@ -108,7 +108,7 @@ public class OptimierungsTestB {
         trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "B", id++, 180, f3)); //Datteln -> Herten
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -165,7 +165,7 @@ public class OptimierungsTestB {
         trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "B", id++, 180, f3)); //Datteln -> Herten
 
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -230,7 +230,7 @@ public class OptimierungsTestB {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -299,7 +299,7 @@ public class OptimierungsTestB {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -380,7 +380,7 @@ public class OptimierungsTestB {
         System.gc();
         long startT = System.currentTimeMillis();
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -441,7 +441,7 @@ public class OptimierungsTestB {
         System.gc();
         long startT = System.currentTimeMillis();
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -505,7 +505,7 @@ public class OptimierungsTestB {
         System.gc();
         long startT = System.currentTimeMillis();
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneB.optimisation(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -564,7 +564,7 @@ public class OptimierungsTestB {
 
         System.gc();
         long start = System.currentTimeMillis();
-        ArrayList<TicketToBuy> ticket = TimeOptimisation.optimierungPreisstufeB(trips, timeTickets);
+        ArrayList<TicketToBuy> ticket = FarezoneB.optimisation(trips, timeTickets);
         long end = System.currentTimeMillis();
         long s = (end-start)/1000;
         long ms = (end-start)%1000;

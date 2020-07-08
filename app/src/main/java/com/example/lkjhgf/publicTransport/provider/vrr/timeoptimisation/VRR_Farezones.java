@@ -114,158 +114,158 @@ public class VRR_Farezones {
      * gespeichert haben. Eine Kante steht dafür, dass vom ausgehenden Knoten das andere Tarifgebiet
      * erreicht werden kann.
      */
-    public static Graph<FarezoneTrips, DefaultEdge> create_vrr_farezone_graph(){
-        DefaultDirectedGraph<FarezoneTrips, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    public static Graph<FarezoneTrip, DefaultEdge> createVrrFarezoneGraph(){
+        DefaultDirectedGraph<FarezoneTrip, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
-        FarezoneTrips n1 = new FarezoneTrips(new Farezone(1,"Kerken/Wachtendonk"));
+        FarezoneTrip n1 = new FarezoneTrip(new Farezone(1,"Kerken/Wachtendonk"));
         g.addVertex(n1);
-        FarezoneTrips n2 = new FarezoneTrips(new Farezone(2,"Kamp-Lintfort"));
+        FarezoneTrip n2 = new FarezoneTrip(new Farezone(2,"Kamp-Lintfort"));
         g.addVertex(n2);
-        FarezoneTrips n3 = new FarezoneTrips(new Farezone(3,"Wesel"));
+        FarezoneTrip n3 = new FarezoneTrip(new Farezone(3,"Wesel"));
         g.addVertex(n3);
-        FarezoneTrips n4 = new FarezoneTrips(new Farezone(4,"Geldern/Issum"));
+        FarezoneTrip n4 = new FarezoneTrip(new Farezone(4,"Geldern/Issum"));
         g.addVertex(n4);
-        FarezoneTrips n5 = new FarezoneTrips(new Farezone(5,"Dorsten"));
+        FarezoneTrip n5 = new FarezoneTrip(new Farezone(5,"Dorsten"));
         g.addVertex(n5);
-        FarezoneTrips n6 = new FarezoneTrips(new Farezone(6,"Haltern"));
+        FarezoneTrip n6 = new FarezoneTrip(new Farezone(6,"Haltern"));
         g.addVertex(n6);
-        FarezoneTrips n10 = new FarezoneTrips(new Farezone(10,"Straelen"));
+        FarezoneTrip n10 = new FarezoneTrip(new Farezone(10,"Straelen"));
         g.addVertex(n10);
-        FarezoneTrips n11 = new FarezoneTrips(new Farezone(11,"Neukirchen-Vluyn/Rheurdt"));
+        FarezoneTrip n11 = new FarezoneTrip(new Farezone(11,"Neukirchen-Vluyn/Rheurdt"));
         g.addVertex(n11);
-        FarezoneTrips n12 = new FarezoneTrips(new Farezone(12,"Rheinberg"));
+        FarezoneTrip n12 = new FarezoneTrip(new Farezone(12,"Rheinberg"));
         g.addVertex(n12);
-        FarezoneTrips n13 = new FarezoneTrips(new Farezone(13,"Dinslaken/Voerde"));
+        FarezoneTrip n13 = new FarezoneTrip(new Farezone(13,"Dinslaken/Voerde"));
         g.addVertex(n13);
-        FarezoneTrips n14 = new FarezoneTrips(new Farezone(14,"Schermbeck/Hünxe"));
+        FarezoneTrip n14 = new FarezoneTrip(new Farezone(14,"Schermbeck/Hünxe"));
         g.addVertex(n14);
-        FarezoneTrips n15 = new FarezoneTrips(new Farezone(15,"Marl"));
+        FarezoneTrip n15 = new FarezoneTrip(new Farezone(15,"Marl"));
         g.addVertex(n15);
-        FarezoneTrips n16 = new FarezoneTrips(new Farezone(16,"Alpen"));
+        FarezoneTrip n16 = new FarezoneTrip(new Farezone(16,"Alpen"));
         g.addVertex(n16);
-        FarezoneTrips n17 = new FarezoneTrips(new Farezone(17,"Recklinghausen/Herten"));
+        FarezoneTrip n17 = new FarezoneTrip(new Farezone(17,"Recklinghausen/Herten"));
         g.addVertex(n17);
-        FarezoneTrips n18 = new FarezoneTrips(new Farezone(18,"Oer-Erkenschwick/Datteln"));
+        FarezoneTrip n18 = new FarezoneTrip(new Farezone(18,"Oer-Erkenschwick/Datteln"));
         g.addVertex(n18);
 
-        FarezoneTrips n20 = new FarezoneTrips(new Farezone(20,"Nettetal/Brüggen"));
+        FarezoneTrip n20 = new FarezoneTrip(new Farezone(20,"Nettetal/Brüggen"));
         g.addVertex(n20);
-        FarezoneTrips n21 = new FarezoneTrips(new Farezone(21,"Kempen/Grefrath/Tönisvorst"));
+        FarezoneTrip n21 = new FarezoneTrip(new Farezone(21,"Kempen/Grefrath/Tönisvorst"));
         g.addVertex(n21);
-        FarezoneTrips n22 = new FarezoneTrips(new Farezone(22,"Moers"));
+        FarezoneTrip n22 = new FarezoneTrip(new Farezone(22,"Moers"));
         g.addVertex(n22);
-        FarezoneTrips n23 = new FarezoneTrips(new Farezone(23,"Duisburg Nord"));
+        FarezoneTrip n23 = new FarezoneTrip(new Farezone(23,"Duisburg Nord"));
         g.addVertex(n23);
-        FarezoneTrips n24 = new FarezoneTrips(new Farezone(24,"Oberhausen"));
+        FarezoneTrip n24 = new FarezoneTrip(new Farezone(24,"Oberhausen"));
         g.addVertex(n24);
-        FarezoneTrips n25 = new FarezoneTrips(new Farezone(25,"Bottrop/Gladbeck"));
+        FarezoneTrip n25 = new FarezoneTrip(new Farezone(25,"Bottrop/Gladbeck"));
         g.addVertex(n25);
-        FarezoneTrips n26 = new FarezoneTrips(new Farezone(26,"Gelsenkirchen"));
+        FarezoneTrip n26 = new FarezoneTrip(new Farezone(26,"Gelsenkirchen"));
         g.addVertex(n26);
-        FarezoneTrips n27 = new FarezoneTrips(new Farezone(27,"Herne"));
+        FarezoneTrip n27 = new FarezoneTrip(new Farezone(27,"Herne"));
         g.addVertex(n27);
-        FarezoneTrips n28 = new FarezoneTrips(new Farezone(28,"Castrop-Rauxel"));
+        FarezoneTrip n28 = new FarezoneTrip(new Farezone(28,"Castrop-Rauxel"));
         g.addVertex(n28);
-        FarezoneTrips n29 = new FarezoneTrips(new Farezone(29,"Waltrop"));
+        FarezoneTrip n29 = new FarezoneTrip(new Farezone(29,"Waltrop"));
         g.addVertex(n29);
-        FarezoneTrips n30 = new FarezoneTrips(new Farezone(30,"Schwalmtal/Niederkrüchten"));
+        FarezoneTrip n30 = new FarezoneTrip(new Farezone(30,"Schwalmtal/Niederkrüchten"));
 
         g.addVertex(n30);
-        FarezoneTrips n31 = new FarezoneTrips(new Farezone(31,"Viersen"));
+        FarezoneTrip n31 = new FarezoneTrip(new Farezone(31,"Viersen"));
         g.addVertex(n31);
-        FarezoneTrips n32 = new FarezoneTrips(new Farezone(32,"Krefeld"));
+        FarezoneTrip n32 = new FarezoneTrip(new Farezone(32,"Krefeld"));
         g.addVertex(n32);
-        FarezoneTrips n33 = new FarezoneTrips(new Farezone(33,"Duisburg Mitte/Süd"));
+        FarezoneTrip n33 = new FarezoneTrip(new Farezone(33,"Duisburg Mitte/Süd"));
         g.addVertex(n33);
-        FarezoneTrips n34 = new FarezoneTrips(new Farezone(34,"Mühlheim/Ruhr"));
+        FarezoneTrip n34 = new FarezoneTrip(new Farezone(34,"Mühlheim/Ruhr"));
         g.addVertex(n34);
-        FarezoneTrips n35 = new FarezoneTrips(new Farezone(35,"Essen Mitte/Nord"));
+        FarezoneTrip n35 = new FarezoneTrip(new Farezone(35,"Essen Mitte/Nord"));
         g.addVertex(n35);
-        FarezoneTrips n36 = new FarezoneTrips(new Farezone(36,"Bochum"));
+        FarezoneTrip n36 = new FarezoneTrip(new Farezone(36,"Bochum"));
         g.addVertex(n36);
-        FarezoneTrips n37 = new FarezoneTrips(new Farezone(37,"Dortmund Mitte/West"));
+        FarezoneTrip n37 = new FarezoneTrip(new Farezone(37,"Dortmund Mitte/West"));
         g.addVertex(n37);
-        FarezoneTrips n38 = new FarezoneTrips(new Farezone(38,"Dortmund Ost"));
+        FarezoneTrip n38 = new FarezoneTrip(new Farezone(38,"Dortmund Ost"));
         g.addVertex(n38);
 
-        FarezoneTrips n41 = new FarezoneTrips(new Farezone(41,"Willich"));
+        FarezoneTrip n41 = new FarezoneTrip(new Farezone(41,"Willich"));
         g.addVertex(n41);
-        FarezoneTrips n42 = new FarezoneTrips(new Farezone(42,"Meerbusch"));
+        FarezoneTrip n42 = new FarezoneTrip(new Farezone(42,"Meerbusch"));
         g.addVertex(n42);
-        FarezoneTrips n43 = new FarezoneTrips(new Farezone(43,"Düsseldorf Mitte/Nord"));
+        FarezoneTrip n43 = new FarezoneTrip(new Farezone(43,"Düsseldorf Mitte/Nord"));
         g.addVertex(n43);
-        FarezoneTrips n44 = new FarezoneTrips(new Farezone(44,"Ratingen/Heiligenhaus"));
+        FarezoneTrip n44 = new FarezoneTrip(new Farezone(44,"Ratingen/Heiligenhaus"));
         g.addVertex(n44);
-        FarezoneTrips n45 = new FarezoneTrips(new Farezone(45,"Essen Süd"));
+        FarezoneTrip n45 = new FarezoneTrip(new Farezone(45,"Essen Süd"));
         g.addVertex(n45);
-        FarezoneTrips n46 = new FarezoneTrips(new Farezone(46,"Hattingen/Sprochhövel"));
+        FarezoneTrip n46 = new FarezoneTrip(new Farezone(46,"Hattingen/Sprochhövel"));
         g.addVertex(n46);
-        FarezoneTrips n47 = new FarezoneTrips(new Farezone(47,"Witten/Wetter/Herdecke"));
+        FarezoneTrip n47 = new FarezoneTrip(new Farezone(47,"Witten/Wetter/Herdecke"));
         g.addVertex(n47);
 
-        FarezoneTrips n50 = new FarezoneTrips(new Farezone(50,"Mönchengladbach"));
+        FarezoneTrip n50 = new FarezoneTrip(new Farezone(50,"Mönchengladbach"));
         g.addVertex(n50);
-        FarezoneTrips n51 = new FarezoneTrips(new Farezone(51,"Korschenbroich"));
+        FarezoneTrip n51 = new FarezoneTrip(new Farezone(51,"Korschenbroich"));
         g.addVertex(n51);
-        FarezoneTrips n52 = new FarezoneTrips(new Farezone(52,"Neuss/Kaarst"));
+        FarezoneTrip n52 = new FarezoneTrip(new Farezone(52,"Neuss/Kaarst"));
         g.addVertex(n52);
-        FarezoneTrips n53 = new FarezoneTrips(new Farezone(53,"Düsseldorf Süd"));
+        FarezoneTrip n53 = new FarezoneTrip(new Farezone(53,"Düsseldorf Süd"));
         g.addVertex(n53);
-        FarezoneTrips n54 = new FarezoneTrips(new Farezone(54,"Mettmann/Wülfrath"));
+        FarezoneTrip n54 = new FarezoneTrip(new Farezone(54,"Mettmann/Wülfrath"));
         g.addVertex(n54);
-        FarezoneTrips n55 = new FarezoneTrips(new Farezone(55,"Velbert"));
+        FarezoneTrip n55 = new FarezoneTrip(new Farezone(55,"Velbert"));
         g.addVertex(n55);
-        FarezoneTrips n58 = new FarezoneTrips(new Farezone(58,"Hagen"));
+        FarezoneTrip n58 = new FarezoneTrip(new Farezone(58,"Hagen"));
         g.addVertex(n58);
 
-        FarezoneTrips n61 = new FarezoneTrips(new Farezone(61,"Grevenbroich"));
+        FarezoneTrip n61 = new FarezoneTrip(new Farezone(61,"Grevenbroich"));
         g.addVertex(n61);
-        FarezoneTrips n62 = new FarezoneTrips(new Farezone(62,"Dormagen"));
+        FarezoneTrip n62 = new FarezoneTrip(new Farezone(62,"Dormagen"));
         g.addVertex(n62);
-        FarezoneTrips n63 = new FarezoneTrips(new Farezone(63,"Rommerskirchen"));
+        FarezoneTrip n63 = new FarezoneTrip(new Farezone(63,"Rommerskirchen"));
         g.addVertex(n63);
-        FarezoneTrips n64 = new FarezoneTrips(new Farezone(64,"Erkrath/Haan/Hilden"));
+        FarezoneTrip n64 = new FarezoneTrip(new Farezone(64,"Erkrath/Haan/Hilden"));
         g.addVertex(n64);
-        FarezoneTrips n65 = new FarezoneTrips(new Farezone(65,"Wuppertal West"));
+        FarezoneTrip n65 = new FarezoneTrip(new Farezone(65,"Wuppertal West"));
         g.addVertex(n65);
-        FarezoneTrips n66 = new FarezoneTrips(new Farezone(66,"Wuppertal Ost"));
+        FarezoneTrip n66 = new FarezoneTrip(new Farezone(66,"Wuppertal Ost"));
         g.addVertex(n66);
-        FarezoneTrips n67 = new FarezoneTrips(new Farezone(67,"Schwelm/Ennepetal/Gevelsberg/Breckerfeld"));
+        FarezoneTrip n67 = new FarezoneTrip(new Farezone(67,"Schwelm/Ennepetal/Gevelsberg/Breckerfeld"));
         g.addVertex(n67);
 
-        FarezoneTrips n71 = new FarezoneTrips(new Farezone(71,"Emmerich"));
+        FarezoneTrip n71 = new FarezoneTrip(new Farezone(71,"Emmerich"));
         g.addVertex(n71);
-        FarezoneTrips n72 = new FarezoneTrips(new Farezone(72,"Jüchen"));
+        FarezoneTrip n72 = new FarezoneTrip(new Farezone(72,"Jüchen"));
         g.addVertex(n72);
-        FarezoneTrips n73 = new FarezoneTrips(new Farezone(73,"Langenfeld/Monheim"));
+        FarezoneTrip n73 = new FarezoneTrip(new Farezone(73,"Langenfeld/Monheim"));
         g.addVertex(n73);
-        FarezoneTrips n74 = new FarezoneTrips(new Farezone(74,"Solingen"));
+        FarezoneTrip n74 = new FarezoneTrip(new Farezone(74,"Solingen"));
         g.addVertex(n74);
-        FarezoneTrips n75 = new FarezoneTrips(new Farezone(75,"Remscheid"));
+        FarezoneTrip n75 = new FarezoneTrip(new Farezone(75,"Remscheid"));
         g.addVertex(n75);
-        FarezoneTrips n77 = new FarezoneTrips(new Farezone(77,"Uedem"));
+        FarezoneTrip n77 = new FarezoneTrip(new Farezone(77,"Uedem"));
         g.addVertex(n77);
-        FarezoneTrips n78 = new FarezoneTrips(new Farezone(78,"Kalkar"));
+        FarezoneTrip n78 = new FarezoneTrip(new Farezone(78,"Kalkar"));
         g.addVertex(n78);
-        FarezoneTrips n79 = new FarezoneTrips(new Farezone(79,"Rees"));
+        FarezoneTrip n79 = new FarezoneTrip(new Farezone(79,"Rees"));
         g.addVertex(n79);
 
-        FarezoneTrips n80 = new FarezoneTrips(new Farezone(80,"Kleve"));
+        FarezoneTrip n80 = new FarezoneTrip(new Farezone(80,"Kleve"));
         g.addVertex(n80);
-        FarezoneTrips n81 = new FarezoneTrips(new Farezone(81,"Kranenburg"));
+        FarezoneTrip n81 = new FarezoneTrip(new Farezone(81,"Kranenburg"));
         g.addVertex(n81);
-        FarezoneTrips n82 = new FarezoneTrips(new Farezone(82,"Bedburg-Hau"));
+        FarezoneTrip n82 = new FarezoneTrip(new Farezone(82,"Bedburg-Hau"));
         g.addVertex(n82);
-        FarezoneTrips n83 = new FarezoneTrips(new Farezone(83,"Xanten"));
+        FarezoneTrip n83 = new FarezoneTrip(new Farezone(83,"Xanten"));
         g.addVertex(n83);
-        FarezoneTrips n84 = new FarezoneTrips(new Farezone(84,"Sonsbeck"));
+        FarezoneTrip n84 = new FarezoneTrip(new Farezone(84,"Sonsbeck"));
         g.addVertex(n84);
 
-        FarezoneTrips n85 = new FarezoneTrips(new Farezone(85,"Kevelaer"));
+        FarezoneTrip n85 = new FarezoneTrip(new Farezone(85,"Kevelaer"));
         g.addVertex(n85);
-        FarezoneTrips n86 = new FarezoneTrips(new Farezone(86,"Goch/Weeze"));
+        FarezoneTrip n86 = new FarezoneTrip(new Farezone(86,"Goch/Weeze"));
         g.addVertex(n86);
-        FarezoneTrips n88 = new FarezoneTrips(new Farezone(88,"Hamminkeln"));
+        FarezoneTrip n88 = new FarezoneTrip(new Farezone(88,"Hamminkeln"));
         g.addVertex(n88);
 
         g.addEdge(n1, n4);
@@ -709,92 +709,92 @@ public class VRR_Farezones {
      * Tarifgebiete mit ihren Fahrten enthalten sind.
      * @return Alle Regionen mit ihren jeweiligen zusammengesetzten Regionen.
      */
-    public static HashMap<Integer, Set<FarezoneTrips>> regionenHashMap(){
-        HashMap<Integer, Set<FarezoneTrips>> regionenMitTarifzonenUndFahrten = new HashMap<>();
+    public static HashMap<Integer, Set<FarezoneTrip>> regionenHashMap(){
+        HashMap<Integer, Set<FarezoneTrip>> regionenMitTarifzonenUndFahrten = new HashMap<>();
 
-        FarezoneTrips n1 = new FarezoneTrips(new Farezone(1,"Kerken/Wachtendonk"));
-        FarezoneTrips n2 = new FarezoneTrips(new Farezone(2,"Kamp-Lintfort"));
-        FarezoneTrips n3 = new FarezoneTrips(new Farezone(3,"Wesel"));
-        FarezoneTrips n4 = new FarezoneTrips(new Farezone(4,"Geldern/Issum"));
-        FarezoneTrips n5 = new FarezoneTrips(new Farezone(5,"Dorsten"));
-        FarezoneTrips n6 = new FarezoneTrips(new Farezone(6,"Haltern"));
+        FarezoneTrip n1 = new FarezoneTrip(new Farezone(1,"Kerken/Wachtendonk"));
+        FarezoneTrip n2 = new FarezoneTrip(new Farezone(2,"Kamp-Lintfort"));
+        FarezoneTrip n3 = new FarezoneTrip(new Farezone(3,"Wesel"));
+        FarezoneTrip n4 = new FarezoneTrip(new Farezone(4,"Geldern/Issum"));
+        FarezoneTrip n5 = new FarezoneTrip(new Farezone(5,"Dorsten"));
+        FarezoneTrip n6 = new FarezoneTrip(new Farezone(6,"Haltern"));
 
-        FarezoneTrips n10 = new FarezoneTrips(new Farezone(10,"Straelen"));
-        FarezoneTrips n11 = new FarezoneTrips(new Farezone(11,"Neukirchen-Vluyn/Rheurdt"));
-        FarezoneTrips n12 = new FarezoneTrips(new Farezone(12,"Rheinberg"));
-        FarezoneTrips n13 = new FarezoneTrips(new Farezone(13,"Dinslaken/Voerde"));
-        FarezoneTrips n14 = new FarezoneTrips(new Farezone(14,"Schermbeck/Hünxe"));
-        FarezoneTrips n15 = new FarezoneTrips(new Farezone(15,"Marl"));
-        FarezoneTrips n16 = new FarezoneTrips(new Farezone(16,"Alpen"));
-        FarezoneTrips n17 = new FarezoneTrips(new Farezone(17,"Recklinghausen/Herten"));
-        FarezoneTrips n18 = new FarezoneTrips(new Farezone(18,"Oer-Erkenschwick/Datteln"));
+        FarezoneTrip n10 = new FarezoneTrip(new Farezone(10,"Straelen"));
+        FarezoneTrip n11 = new FarezoneTrip(new Farezone(11,"Neukirchen-Vluyn/Rheurdt"));
+        FarezoneTrip n12 = new FarezoneTrip(new Farezone(12,"Rheinberg"));
+        FarezoneTrip n13 = new FarezoneTrip(new Farezone(13,"Dinslaken/Voerde"));
+        FarezoneTrip n14 = new FarezoneTrip(new Farezone(14,"Schermbeck/Hünxe"));
+        FarezoneTrip n15 = new FarezoneTrip(new Farezone(15,"Marl"));
+        FarezoneTrip n16 = new FarezoneTrip(new Farezone(16,"Alpen"));
+        FarezoneTrip n17 = new FarezoneTrip(new Farezone(17,"Recklinghausen/Herten"));
+        FarezoneTrip n18 = new FarezoneTrip(new Farezone(18,"Oer-Erkenschwick/Datteln"));
 
-        FarezoneTrips n20 = new FarezoneTrips(new Farezone(20,"Nettetal/Brüggen"));
-        FarezoneTrips n21 = new FarezoneTrips(new Farezone(21,"Kempen/Grefrath/Tönisvorst"));
-        FarezoneTrips n22 = new FarezoneTrips(new Farezone(22,"Moers"));
-        FarezoneTrips n23 = new FarezoneTrips(new Farezone(23,"Duisburg Nord"));
-        FarezoneTrips n24 = new FarezoneTrips(new Farezone(24,"Oberhausen"));
-        FarezoneTrips n25 = new FarezoneTrips(new Farezone(25,"Bottrop/Gladbeck"));
-        FarezoneTrips n26 = new FarezoneTrips(new Farezone(26,"Gelsenkirchen"));
-        FarezoneTrips n27 = new FarezoneTrips(new Farezone(27,"Herne"));
-        FarezoneTrips n28 = new FarezoneTrips(new Farezone(28,"Castrop-Rauxel"));
-        FarezoneTrips n29 = new FarezoneTrips(new Farezone(29,"Waltrop"));
+        FarezoneTrip n20 = new FarezoneTrip(new Farezone(20,"Nettetal/Brüggen"));
+        FarezoneTrip n21 = new FarezoneTrip(new Farezone(21,"Kempen/Grefrath/Tönisvorst"));
+        FarezoneTrip n22 = new FarezoneTrip(new Farezone(22,"Moers"));
+        FarezoneTrip n23 = new FarezoneTrip(new Farezone(23,"Duisburg Nord"));
+        FarezoneTrip n24 = new FarezoneTrip(new Farezone(24,"Oberhausen"));
+        FarezoneTrip n25 = new FarezoneTrip(new Farezone(25,"Bottrop/Gladbeck"));
+        FarezoneTrip n26 = new FarezoneTrip(new Farezone(26,"Gelsenkirchen"));
+        FarezoneTrip n27 = new FarezoneTrip(new Farezone(27,"Herne"));
+        FarezoneTrip n28 = new FarezoneTrip(new Farezone(28,"Castrop-Rauxel"));
+        FarezoneTrip n29 = new FarezoneTrip(new Farezone(29,"Waltrop"));
 
-        FarezoneTrips n30 = new FarezoneTrips(new Farezone(30,"Schwalmtal/Niederkrüchten"));
-        FarezoneTrips n31 = new FarezoneTrips(new Farezone(31,"Viersen"));
-        FarezoneTrips n32 = new FarezoneTrips(new Farezone(32,"Krefeld"));
-        FarezoneTrips n33 = new FarezoneTrips(new Farezone(33,"Duisburg Mitte/Süd"));
-        FarezoneTrips n34 = new FarezoneTrips(new Farezone(34,"Mühlheim/Ruhr"));
-        FarezoneTrips n35 = new FarezoneTrips(new Farezone(35,"Essen Mitte/Nord"));
-        FarezoneTrips n36 = new FarezoneTrips(new Farezone(36,"Bochum"));
-        FarezoneTrips n37 = new FarezoneTrips(new Farezone(37,"Dortmund Mitte/West"));
-        FarezoneTrips n38 = new FarezoneTrips(new Farezone(38,"Dortmund Ost"));
-
-
-        FarezoneTrips n41 = new FarezoneTrips(new Farezone(41,"Willich"));
-        FarezoneTrips n42 = new FarezoneTrips(new Farezone(42,"Meerbusch"));
-        FarezoneTrips n43 = new FarezoneTrips(new Farezone(43,"Düsseldorf Mitte/Nord"));
-        FarezoneTrips n44 = new FarezoneTrips(new Farezone(44,"Ratingen/Heiligenhaus"));
-        FarezoneTrips n45 = new FarezoneTrips(new Farezone(45,"Essen Süd"));
-        FarezoneTrips n46 = new FarezoneTrips(new Farezone(46,"Hattingen/Sprochhövel"));
-        FarezoneTrips n47 = new FarezoneTrips(new Farezone(47,"Witten/Wetter/Herdecke"));
-
-        FarezoneTrips n50 = new FarezoneTrips(new Farezone(50,"Mönchengladbach"));
-        FarezoneTrips n51 = new FarezoneTrips(new Farezone(51,"Korschenbroich"));
-        FarezoneTrips n52 = new FarezoneTrips(new Farezone(52,"Neuss/Kaarst"));
-        FarezoneTrips n53 = new FarezoneTrips(new Farezone(53,"Düsseldorf Süd"));
-        FarezoneTrips n54 = new FarezoneTrips(new Farezone(54,"Mettmann/Wülfrath"));
-        FarezoneTrips n55 = new FarezoneTrips(new Farezone(55,"Velbert"));
-        FarezoneTrips n58 = new FarezoneTrips(new Farezone(58,"Hagen"));
-
-        FarezoneTrips n61 = new FarezoneTrips(new Farezone(61,"Grevenbroich"));
-        FarezoneTrips n62 = new FarezoneTrips(new Farezone(62,"Dormagen"));
-        FarezoneTrips n63 = new FarezoneTrips(new Farezone(63,"Rommerskirchen"));
-        FarezoneTrips n64 = new FarezoneTrips(new Farezone(64,"Erkrath/Haan/Hilden"));
-        FarezoneTrips n65 = new FarezoneTrips(new Farezone(65,"Wuppertal West"));
-        FarezoneTrips n66 = new FarezoneTrips(new Farezone(66,"Wuppertal Ost"));
-        FarezoneTrips n67 = new FarezoneTrips(new Farezone(67,"Schwelm/Ennepetal/Gevelsberg/Breckerfeld"));
-
-        FarezoneTrips n71 = new FarezoneTrips(new Farezone(71,"Emmerich"));
-        FarezoneTrips n72 = new FarezoneTrips(new Farezone(72,"Jüchen"));
-        FarezoneTrips n73 = new FarezoneTrips(new Farezone(73,"Langenfeld/Monheim"));
-        FarezoneTrips n74 = new FarezoneTrips(new Farezone(74,"Solingen"));
-        FarezoneTrips n75 = new FarezoneTrips(new Farezone(75,"Remscheid"));
-        FarezoneTrips n77 = new FarezoneTrips(new Farezone(77,"Uedem"));
-        FarezoneTrips n78 = new FarezoneTrips(new Farezone(78,"Kalkar"));
-        FarezoneTrips n79 = new FarezoneTrips(new Farezone(79,"Rees"));
-
-        FarezoneTrips n80 = new FarezoneTrips(new Farezone(80,"Kleve"));
-        FarezoneTrips n81 = new FarezoneTrips(new Farezone(81,"Kranenburg"));
-        FarezoneTrips n82 = new FarezoneTrips(new Farezone(82,"Bedburg-Hau"));
-        FarezoneTrips n83 = new FarezoneTrips(new Farezone(83,"Xanten"));
-        FarezoneTrips n84 = new FarezoneTrips(new Farezone(84,"Sonsbeck"));
-        FarezoneTrips n85 = new FarezoneTrips(new Farezone(85,"Kevelaer"));
-        FarezoneTrips n86 = new FarezoneTrips(new Farezone(86,"Goch/Weeze"));
-        FarezoneTrips n88 = new FarezoneTrips(new Farezone(88,"Hamminkeln"));
+        FarezoneTrip n30 = new FarezoneTrip(new Farezone(30,"Schwalmtal/Niederkrüchten"));
+        FarezoneTrip n31 = new FarezoneTrip(new Farezone(31,"Viersen"));
+        FarezoneTrip n32 = new FarezoneTrip(new Farezone(32,"Krefeld"));
+        FarezoneTrip n33 = new FarezoneTrip(new Farezone(33,"Duisburg Mitte/Süd"));
+        FarezoneTrip n34 = new FarezoneTrip(new Farezone(34,"Mühlheim/Ruhr"));
+        FarezoneTrip n35 = new FarezoneTrip(new Farezone(35,"Essen Mitte/Nord"));
+        FarezoneTrip n36 = new FarezoneTrip(new Farezone(36,"Bochum"));
+        FarezoneTrip n37 = new FarezoneTrip(new Farezone(37,"Dortmund Mitte/West"));
+        FarezoneTrip n38 = new FarezoneTrip(new Farezone(38,"Dortmund Ost"));
 
 
-        Set<FarezoneTrips> region1 = new HashSet<>();
+        FarezoneTrip n41 = new FarezoneTrip(new Farezone(41,"Willich"));
+        FarezoneTrip n42 = new FarezoneTrip(new Farezone(42,"Meerbusch"));
+        FarezoneTrip n43 = new FarezoneTrip(new Farezone(43,"Düsseldorf Mitte/Nord"));
+        FarezoneTrip n44 = new FarezoneTrip(new Farezone(44,"Ratingen/Heiligenhaus"));
+        FarezoneTrip n45 = new FarezoneTrip(new Farezone(45,"Essen Süd"));
+        FarezoneTrip n46 = new FarezoneTrip(new Farezone(46,"Hattingen/Sprochhövel"));
+        FarezoneTrip n47 = new FarezoneTrip(new Farezone(47,"Witten/Wetter/Herdecke"));
+
+        FarezoneTrip n50 = new FarezoneTrip(new Farezone(50,"Mönchengladbach"));
+        FarezoneTrip n51 = new FarezoneTrip(new Farezone(51,"Korschenbroich"));
+        FarezoneTrip n52 = new FarezoneTrip(new Farezone(52,"Neuss/Kaarst"));
+        FarezoneTrip n53 = new FarezoneTrip(new Farezone(53,"Düsseldorf Süd"));
+        FarezoneTrip n54 = new FarezoneTrip(new Farezone(54,"Mettmann/Wülfrath"));
+        FarezoneTrip n55 = new FarezoneTrip(new Farezone(55,"Velbert"));
+        FarezoneTrip n58 = new FarezoneTrip(new Farezone(58,"Hagen"));
+
+        FarezoneTrip n61 = new FarezoneTrip(new Farezone(61,"Grevenbroich"));
+        FarezoneTrip n62 = new FarezoneTrip(new Farezone(62,"Dormagen"));
+        FarezoneTrip n63 = new FarezoneTrip(new Farezone(63,"Rommerskirchen"));
+        FarezoneTrip n64 = new FarezoneTrip(new Farezone(64,"Erkrath/Haan/Hilden"));
+        FarezoneTrip n65 = new FarezoneTrip(new Farezone(65,"Wuppertal West"));
+        FarezoneTrip n66 = new FarezoneTrip(new Farezone(66,"Wuppertal Ost"));
+        FarezoneTrip n67 = new FarezoneTrip(new Farezone(67,"Schwelm/Ennepetal/Gevelsberg/Breckerfeld"));
+
+        FarezoneTrip n71 = new FarezoneTrip(new Farezone(71,"Emmerich"));
+        FarezoneTrip n72 = new FarezoneTrip(new Farezone(72,"Jüchen"));
+        FarezoneTrip n73 = new FarezoneTrip(new Farezone(73,"Langenfeld/Monheim"));
+        FarezoneTrip n74 = new FarezoneTrip(new Farezone(74,"Solingen"));
+        FarezoneTrip n75 = new FarezoneTrip(new Farezone(75,"Remscheid"));
+        FarezoneTrip n77 = new FarezoneTrip(new Farezone(77,"Uedem"));
+        FarezoneTrip n78 = new FarezoneTrip(new Farezone(78,"Kalkar"));
+        FarezoneTrip n79 = new FarezoneTrip(new Farezone(79,"Rees"));
+
+        FarezoneTrip n80 = new FarezoneTrip(new Farezone(80,"Kleve"));
+        FarezoneTrip n81 = new FarezoneTrip(new Farezone(81,"Kranenburg"));
+        FarezoneTrip n82 = new FarezoneTrip(new Farezone(82,"Bedburg-Hau"));
+        FarezoneTrip n83 = new FarezoneTrip(new Farezone(83,"Xanten"));
+        FarezoneTrip n84 = new FarezoneTrip(new Farezone(84,"Sonsbeck"));
+        FarezoneTrip n85 = new FarezoneTrip(new Farezone(85,"Kevelaer"));
+        FarezoneTrip n86 = new FarezoneTrip(new Farezone(86,"Goch/Weeze"));
+        FarezoneTrip n88 = new FarezoneTrip(new Farezone(88,"Hamminkeln"));
+
+
+        Set<FarezoneTrip> region1 = new HashSet<>();
         region1.add(n3);
         region1.add(n4);
         region1.add(n16);
@@ -811,7 +811,7 @@ public class VRR_Farezones {
         region1.add(n86);
         region1.add(n88);
 
-        Set<FarezoneTrips> region2 = new HashSet<>();
+        Set<FarezoneTrip> region2 = new HashSet<>();
         region2.add(n1);
         region2.add(n2);
         region2.add(n4);
@@ -830,7 +830,7 @@ public class VRR_Farezones {
         region2.add(n85);
         region2.add(n86);
 
-        Set<FarezoneTrips> region3 = new HashSet<>();
+        Set<FarezoneTrip> region3 = new HashSet<>();
         region3.add(n1);
         region3.add(n2);
         region3.add(n3);
@@ -851,7 +851,7 @@ public class VRR_Farezones {
         region3.add(n84);
         region3.add(n85);
 
-        Set<FarezoneTrips> region4 = new HashSet<>();
+        Set<FarezoneTrip> region4 = new HashSet<>();
         region4.add(n2);
         region4.add(n3);
         region4.add(n4);
@@ -869,7 +869,7 @@ public class VRR_Farezones {
         region4.add(n85);
         region4.add(n88);
 
-        Set<FarezoneTrips> region5 = new HashSet<>();
+        Set<FarezoneTrip> region5 = new HashSet<>();
         region5.add(n3);
         region5.add(n5);
         region5.add(n12);
@@ -886,7 +886,7 @@ public class VRR_Farezones {
         region5.add(n84);
         region5.add(n88);
 
-        Set<FarezoneTrips> region6 = new HashSet<>();
+        Set<FarezoneTrip> region6 = new HashSet<>();
         region6.add(n2);
         region6.add(n3);
         region6.add(n5);
@@ -910,7 +910,7 @@ public class VRR_Farezones {
         region6.add(n83);
         region6.add(n88);
 
-        Set<FarezoneTrips> region7 = new HashSet<>();
+        Set<FarezoneTrip> region7 = new HashSet<>();
         region7.add(n5);
         region7.add(n6);
         region7.add(n13);
@@ -932,7 +932,7 @@ public class VRR_Farezones {
         region7.add(n46);
         region7.add(n47);
 
-        Set<FarezoneTrips> region8 = new HashSet<>();
+        Set<FarezoneTrip> region8 = new HashSet<>();
         region8.add(n5);
         region8.add(n13);
         region8.add(n14);
@@ -950,7 +950,7 @@ public class VRR_Farezones {
         region8.add(n47);
         region8.add(n55);
 
-        Set<FarezoneTrips> region9 = new HashSet<>();
+        Set<FarezoneTrip> region9 = new HashSet<>();
         region9.add(n6);
         region9.add(n15);
         region9.add(n17);
@@ -969,7 +969,7 @@ public class VRR_Farezones {
         region9.add(n58);
         region9.add(n67);
 
-        Set<FarezoneTrips> region10 = new HashSet<>();
+        Set<FarezoneTrip> region10 = new HashSet<>();
         region10.add(n17);
         region10.add(n24);
         region10.add(n25);
@@ -990,7 +990,7 @@ public class VRR_Farezones {
         region10.add(n66);
         region10.add(n67);
 
-        Set<FarezoneTrips> region11 = new HashSet<>();
+        Set<FarezoneTrip> region11 = new HashSet<>();
         region11.add(n28);
         region11.add(n35);
         region11.add(n36);
@@ -1008,7 +1008,7 @@ public class VRR_Farezones {
         region11.add(n67);
         region11.add(n75);
 
-        Set<FarezoneTrips> region12 = new HashSet<>();
+        Set<FarezoneTrip> region12 = new HashSet<>();
         region12.add(n12);
         region12.add(n13);
         region12.add(n22);
@@ -1029,7 +1029,7 @@ public class VRR_Farezones {
         region12.add(n65);
         region12.add(n66);
 
-        Set<FarezoneTrips> region13 = new HashSet<>();
+        Set<FarezoneTrip> region13 = new HashSet<>();
         region13.add(n23);
         region13.add(n24);
         region13.add(n25);
@@ -1047,7 +1047,7 @@ public class VRR_Farezones {
         region13.add(n65);
         region13.add(n66);
 
-        Set<FarezoneTrips> region14 = new HashSet<>();
+        Set<FarezoneTrip> region14 = new HashSet<>();
         region14.add(n35);
         region14.add(n43);
         region14.add(n44);
@@ -1063,7 +1063,7 @@ public class VRR_Farezones {
         region14.add(n74);
         region14.add(n75);
 
-        Set<FarezoneTrips> region15 = new HashSet<>();
+        Set<FarezoneTrip> region15 = new HashSet<>();
         region15.add(n22);
         region15.add(n23);
         region15.add(n24);
@@ -1087,7 +1087,7 @@ public class VRR_Farezones {
         region15.add(n74);
         region15.add(n75);
 
-        Set<FarezoneTrips> region16 = new HashSet<>();
+        Set<FarezoneTrip> region16 = new HashSet<>();
         region16.add(n2);
         region16.add(n11);
         region16.add(n12);
@@ -1110,7 +1110,7 @@ public class VRR_Farezones {
         region16.add(n54);
         region16.add(n64);
 
-        Set<FarezoneTrips> region17 = new HashSet<>();
+        Set<FarezoneTrip> region17 = new HashSet<>();
         region17.add(n11);
         region17.add(n21);
         region17.add(n22);
@@ -1134,7 +1134,7 @@ public class VRR_Farezones {
         region17.add(n72);
         region17.add(n73);
 
-        Set<FarezoneTrips> region18 = new HashSet<>();
+        Set<FarezoneTrip> region18 = new HashSet<>();
         region18.add(n1);
         region18.add(n10);
         region18.add(n11);
@@ -1151,7 +1151,7 @@ public class VRR_Farezones {
         region18.add(n61);
         region18.add(n72);
 
-        Set<FarezoneTrips> region19 = new HashSet<>();
+        Set<FarezoneTrip> region19 = new HashSet<>();
         region19.add(n1);
         region19.add(n2);
         region19.add(n4);

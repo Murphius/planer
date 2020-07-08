@@ -1,13 +1,9 @@
 package com.example.lkjhgf.optimisation;
 
-import android.app.Activity;
-
 import com.example.lkjhgf.activities.MainMenu;
-import com.example.lkjhgf.helper.ticketOverview.AllTickets;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -17,38 +13,6 @@ import de.schildbach.pte.dto.Fare;
  * Enthält eine Funktion, die den gesammten Optimierungsprozess "steuert" und zugehörige Hilfsfunktionen
  */
 public final class OptimisationUtil {
-
-    /**
-     * Funktion, die die komplette Optimierung "steuert"
-     *
-     * @param tripItems Liste der zu optimierenden Fahrten
-     * @param activity  Aufrufende Aktivität -> zum Laden & speichern der Tickets benötigt
-     * @return die Liste der benötigten Fahrscheine für jede Nutzerklasse
-     */
-    public static HashMap<Fare.Type, ArrayList<TicketToBuy>> startOptimisation(ArrayList<TripItem> tripItems, Activity activity) {
-        //Fahrten ohne Preisstufe sowie nicht zu optimierende Fahrten aussortieren
-        ArrayList<TripItem> copy = removeTrips(tripItems);
-        // Fahrten nach den Preisstufen sortieren
-        Collections.sort(copy, MainMenu.myProvider);
-        //Fahrten auf Nutzerklassen aufteilen
-        //HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists = MainMenu.myProvider.createUserClassTripLists(copy);
-        //Fahrscheine der letzten Optimierung
-        HashMap activeTickets = new HashMap(AllTickets.loadTickets(activity));
-        //Liste mit allen benötigten Fahrscheinen
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists = new HashMap<>();
-        //Liste mit Fahrscheinen, auf denen noch mindestens eine Fahrt frei ist
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets = new HashMap<>();
-        //Entfernt zukünftige Tickets, bereits optimierte Fahrscheine
-        //cleanUpTicketsAndTrips(activeTickets, userClassTripLists, freeTickets, allTicketLists);
-
-        //Optimierung
-        //optimisationWithOldTickets(freeTickets, userClassTripLists);
-        //HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = optimisationWithNewTickets(userClassTripLists);
-
-        //buildTicketList(lastBestTickets, allTicketLists);
-
-        return allTicketLists;
-    }
 
     /**
      * Entfernt aus der Liste der zu optimierenden Fahrten, Fahrten die einem angefangenen Ticket zugewiesen wurden
@@ -107,7 +71,7 @@ public final class OptimisationUtil {
         for (TripItem currentTrip : currentTicket.getTripList()) {
             if (userClassTrips != null && !userClassTrips.isEmpty()) {
                 int index = userClassTrips.indexOf(currentTrip);
-                ArrayList<TicketToBuy.TripQuantity> tripQuantities = currentTicket.getTripQuantities();
+                ArrayList<TripQuantity> tripQuantities = currentTicket.getTripQuantities();
                 int quantityIndex = -1;
                 for(int i = 0; i < tripQuantities.size(); i++){
                     if(tripQuantities.get(i).getTripItem().getTripID().equals(currentTrip.getTripID())){
@@ -140,7 +104,7 @@ public final class OptimisationUtil {
         //Ticket merken
         allUserClassTickets.add(currentTicket);
         //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
-        for (TicketToBuy.TripQuantity tripQuantity : currentTicket.getTripQuantities()) {
+        for (TripQuantity tripQuantity : currentTicket.getTripQuantities()) {
             int index = userClassTrips.indexOf(tripQuantity.getTripItem());
             if(index > -1){
                 boolean needsTicket = false;
@@ -154,76 +118,11 @@ public final class OptimisationUtil {
                 }
             }
         }
-        //    int quantity = tripQuantity.getQuantity();
-        //
-        //    if (index > -1) {
-         //       for (int i = 0; i < quantity; i++) {
-         //           userClassTrips.remove(tripQuantity.getTripItem())
-         //       }
-         //   }
-        //}
         //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
         //hinzufügen
         if (currentTicket.getFreeTrips() > 0) {
             freeUserClassTickets.add(currentTicket);
         }
-    }
-
-    /**
-     * Erstellt die Liste der benöitgten Fahrscheine
-     *
-     * @param lastBestTickets das letzte Ticket der Optimierung für alle Nutzerklassen
-     * @param allTicketLists  Liste aller benötigten Fahrscheine
-     */
-    public static void buildTicketList(HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets,
-                                       HashMap<Fare.Type, ArrayList<TicketToBuy>> allTicketLists) {
-        //TicketListe Bauen
-        for (Fare.Type type : lastBestTickets.keySet()) {
-            ArrayList<TicketToBuy> ticketList = createTicketList(lastBestTickets.get(type));
-            if (allTicketLists.containsKey(type)) {
-                allTicketLists.get(type).addAll(ticketList);
-            } else {
-                allTicketLists.put(type, ticketList);
-            }
-        }
-    }
-
-    /**
-     * Weist neuen Fahrten bereits gekaufte Fahrscheine zu
-     *
-     * @param freeTickets        Fahrscheine mit mindestens einer freien Fahrt
-     * @param userClassTripLists zu optimierende Fahrscheine
-     */
-    public static void optimisationWithOldTickets(HashMap<Fare.Type, ArrayList<TicketToBuy>> freeTickets, HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
-        //TODO dieser Teil funktioniert nur für NumTicket
-        //Optimierung mit alten Fahrscheinen
-        if (!freeTickets.isEmpty()) {
-            for (Fare.Type type : freeTickets.keySet()) {
-                if (!freeTickets.get(type).isEmpty()) {
-                    Optimisation.optimisationWithOldTickets(freeTickets.get(type), userClassTripLists.get(type),type);
-                }
-            }
-        }
-    }
-
-    /**
-     * Ermittelt die günstigsten neuen Fahrscheine für die zu optimierenden Fahrten
-     *
-     * @param userClassTripLists Zu optimierende Fahrten
-     * @return für jede Nutzerklasse das beste letzte Ticket
-     */
-    public static HashMap<Fare.Type, TicketOptimisationHolder> optimisationWithNewTickets(HashMap<Fare.Type, ArrayList<TripItem>> userClassTripLists) {
-        //Optimieren mit neuen Fahrscheinen
-        HashMap<Fare.Type, TicketOptimisationHolder> lastBestTickets = new HashMap<>();
-        HashMap<Fare.Type, ArrayList<NumTicket>> allTicketsMap = MainMenu.myProvider.getNumTickets();
-        for (Fare.Type type : userClassTripLists.keySet()) {
-            if (allTicketsMap.containsKey(type)) {
-                lastBestTickets.put(type, Optimisation.optimisationBuyNewTickets(allTicketsMap.get(type), userClassTripLists.get(type)));
-            } else {
-                System.err.println("Fehler bei der Optimierung neuer Fahrscheine - unbekannter Tickettyp: " + type);
-            }
-        }
-        return lastBestTickets;
     }
 
     /**
@@ -246,21 +145,4 @@ public final class OptimisationUtil {
         return newTripList;
     }
 
-    /**
-     * Erzeugt die Liste der benötigten Fahrscheine anhand der Vorgänger des übergebenen Tickets
-     * <p>
-     * Mittels previous von lastBestTicket wird der Vorgänger des aktuellen Ticketets ermittelt.
-     * Diese werden solange der Liste hinzugefügt, bis der Vorgänger kein Ticket mehr besitzt
-     *
-     * @param lastBestTicket bester letzter Fahrschein
-     * @return Liste aller benötigten Fahrscheinen
-     */
-    static ArrayList<TicketToBuy> createTicketList(TicketOptimisationHolder lastBestTicket) {
-        ArrayList<TicketToBuy> ticketList = new ArrayList<>();
-        while (lastBestTicket.getTicket() != null) {
-            ticketList.add(lastBestTicket.getTicketToBuy());
-            lastBestTicket = lastBestTicket.getPrevious();
-        }
-        return ticketList;
-    }
 }

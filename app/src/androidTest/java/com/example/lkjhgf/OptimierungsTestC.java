@@ -4,8 +4,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.optimisation.TicketToBuy;
-import com.example.lkjhgf.optimisation.TimeOptimisation;
 import com.example.lkjhgf.optimisation.TimeTicket;
+import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneC;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import org.junit.Assert;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -100,7 +99,7 @@ public class OptimierungsTestC {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimieriungPreisstufeC(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneC.optimieriungPreisstufeC(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -152,7 +151,7 @@ public class OptimierungsTestC {
         trips.add(new  TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", id++, 180, integers)); //Datteln -> Herten
 
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimieriungPreisstufeC(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneC.optimieriungPreisstufeC(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -218,7 +217,7 @@ public class OptimierungsTestC {
         System.gc();
         long startT = System.currentTimeMillis();
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimieriungPreisstufeC(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneC.optimieriungPreisstufeC(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -283,7 +282,7 @@ public class OptimierungsTestC {
         System.gc();
         long startT = System.currentTimeMillis();
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimieriungPreisstufeC(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneC.optimieriungPreisstufeC(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -359,7 +358,7 @@ public class OptimierungsTestC {
         trips.sort(Comparator.comparing(TripItem::getFirstDepartureTime));
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> ticketList = TimeOptimisation.optimieriungPreisstufeC(trips, timeTickets);
+        ArrayList<TicketToBuy> ticketList = FarezoneC.optimieriungPreisstufeC(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;

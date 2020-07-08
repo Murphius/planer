@@ -1,7 +1,9 @@
-package com.example.lkjhgf.optimisation;
+package com.example.lkjhgf.optimisation.numTicketOptimisation;
 
 import androidx.annotation.NonNull;
 
+import com.example.lkjhgf.optimisation.NumTicket;
+import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
 import java.io.Serializable;
@@ -11,7 +13,7 @@ import java.io.Serializable;
  * <p>
  * Den Fahrschein, die Preisstufe, die zugeordneten Fahrten
  */
-public class TicketOptimisationHolder implements Serializable {
+public class NumTicketOptimisationHolder implements Serializable {
     /**
      * Benötigtes Ticket
      */
@@ -24,23 +26,21 @@ public class TicketOptimisationHolder implements Serializable {
     /**
      * Vorhergehendes Ticket, benötigt für die Optimierung
      */
-    private TicketOptimisationHolder previous;
+    private NumTicketOptimisationHolder previous;
 
     /**
      * Enthält alle benötigten Informationen zum Fahrschein <br/>
      * <p>
-     * Die Zuordnung der Fahrten zum Fahrschein erfolgt erst nach der Optimierung; deshalb wird
-     * die Liste hier nur initialisiert, erhält jedoch noch keine Fahrten
      *
      * @param ticket     benötigter Fahrschein
      * @param preisstufe Preisstufe des Fahrscheins
      * @param allCosts   gesamt Kosten bis zu der jeweilgen Fahrt
-     * @param previous   vorheriges Ticket
+     * @param previous   Vorgänger Ticket
      */
-    TicketOptimisationHolder(Ticket ticket,
-                             String preisstufe,
-                             int allCosts,
-                             TicketOptimisationHolder previous) {
+    NumTicketOptimisationHolder(NumTicket ticket,
+                                String preisstufe,
+                                int allCosts,
+                                NumTicketOptimisationHolder previous) {
         this.ticketToBuy = new TicketToBuy(ticket, preisstufe);
         this.allCosts = allCosts;
         this.previous = previous;
@@ -55,12 +55,12 @@ public class TicketOptimisationHolder implements Serializable {
         ticketToBuy.addTripItem(tripItem);
     }
 
-    TicketOptimisationHolder getPrevious() {
+    NumTicketOptimisationHolder getPrevious() {
         return previous;
     }
 
-    public Ticket getTicket() {
-        return ticketToBuy.getTicket();
+    public NumTicket getTicket() {
+        return (NumTicket) ticketToBuy.getTicket();
     }
 
     TicketToBuy getTicketToBuy() {
