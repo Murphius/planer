@@ -237,6 +237,7 @@ public class FarezoneA {
                     removeTrips(tarfigebietTrips, allTrips, ticketToBuy, bestTicketIntervall);
                     //Gültigkeitsbereich setzen
                     setFarezone(farezone, ticketToBuy);
+                    currentTicketList.add(ticketToBuy);
                 }
                 //Zusammenfassen der Tickets
                 if (currentTicketList.size() > 1) {

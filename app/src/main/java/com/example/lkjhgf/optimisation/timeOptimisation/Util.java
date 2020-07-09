@@ -114,10 +114,13 @@ public class Util {
             return new Triplet<>(0, 0, 0);
         }
         for (int i = maxIndex; i < ticketsToBuy.size(); i++) {
+            if (!isNewValidTicket(ticketsToBuy.get(i), ticket)) {
+                continue;
+            }
             int price = ticketsToBuy.get(i).getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(ticketsToBuy.get(i).getPreisstufe()));//Preis des aktuellen Tickets
             int counter = 1;//Wie viele Tickets, ab diesem Ticket genutzt werden können
             for (int k = i + 1; k < ticketsToBuy.size(); k++) {
-                if (isNewValidTicket(ticketsToBuy.get(k), ticket)) {
+                if (isNewValidTicket(ticketsToBuy.get(k), ticketsToBuy.get(i), ticket)) {
                     price += ticketsToBuy.get(k).getTicket().getPrice(MainMenu.myProvider.getPreisstufenIndex(ticketsToBuy.get(k).getPreisstufe()));
                     counter++;
                 } else {
@@ -201,6 +204,32 @@ public class Util {
         long startTime = ticketToBuy.getFirstDepartureTime().getTime();
         long endTime = ticketToBuy.getLastArrivalTime().getTime();
         return endTime - startTime <= ticket.getMaxDuration();
+    }
+
+    /**
+     * Prüft, ob sich die zwei Tickets durch das neue Ticket ersetzen lassen
+     * <p>
+     * Zu erst wird geprüft, ob das Ticket, welches hinzugefügt werden soll, überhaupt durch das
+     * Ticket abedeckt werden darf, falls ja, wird geprüft, ob beide Tickets zusammen durch das
+     * neue Ticket abgedeckt werden würden
+     *
+     * @param ticketToAdd        Ticket das mit dem start-Ticket zusammengelegt werden soll
+     * @param currentStartTicket Ticket das als Startpunkt dient
+     * @param ticket             Ticket, dass die beiden Tickets ersetzen soll
+     * @return true - alle Fahrten des neuen Tickets dürfen mit diesem Ticket zurückgelegt werden
+     * und der gesamte Zeitraum zwischen erster Fahrt und letzter Fahrt wird durch dieses Ticket
+     * abgedeckt <br/>
+     * false - eine Fahrt des neuen Tickets darf nicht mit diesem Ticket zurückgelegt werden, oder
+     * der Zeitraum zwischen beiden Fahrscheinen kann nicht durch dieses Ticket abgedeckt werden
+     * @preconditions Die erste Fahrt von currentStartTicket liegt vor der ersten Fahrt von ticketToAdd
+     */
+    private static boolean isNewValidTicket(TicketToBuy ticketToAdd, TicketToBuy currentStartTicket, TimeTicket ticket) {
+        if (isNewValidTicket(ticketToAdd, ticket)) {
+            long startTime = currentStartTicket.getFirstDepartureTime().getTime();
+            long endTime = ticketToAdd.getLastArrivalTime().getTime();
+            return endTime - startTime <= ticket.getMaxDuration();
+        }
+        return false;
     }
 
     /**

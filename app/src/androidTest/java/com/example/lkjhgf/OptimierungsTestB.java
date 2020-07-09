@@ -115,7 +115,7 @@ public class OptimierungsTestB {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertEquals(tickets.size(), 1);
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "24-StundenTicket-1");
-        //Lösung: 24h Ticket der Preisstufe B mit dem Zentralgebiet 6
+        //Lösung: 24h Ticket der Preisstufe B mit dem Zentralgebiet 18
     }
 
     @Test
@@ -172,7 +172,7 @@ public class OptimierungsTestB {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertEquals(tickets.size(), 1);
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "48-StundenTicket-1");
-        //Lösung: 48-h Ticket mit dem Zentralgebiet 17 (Herten/Recklinghausen)
+        //Lösung: 48h Ticket mit dem Zentralgebiet 6 Haltern
         //Alle Fahrten diesem Ticket zugewiesen
     }
 
@@ -238,7 +238,7 @@ public class OptimierungsTestB {
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 1);
         Assert.assertEquals(ticketList.get(0).getTicket().getName(), "7-TageTicket");
-        //Lösung: 7 TagesTicket für alle Fahrten mit dem Zentralgebiet 15 Marl
+        //Lösung: 7 TagesTicket für alle 9 Fahrten mit dem Zentralgebiet 15 Marl
     }
 
     @Test
@@ -387,7 +387,7 @@ public class OptimierungsTestB {
         Assert.assertFalse(ticketList.isEmpty());
         Assert.assertFalse(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 1);
-        //Lösung: 1 7Tage Ticket für die Fahrten mit den IDs 1-18 (Zentralregion 26 - Gelsenkrichen)
+        //Lösung: 1 7Tage Ticket für die Fahrten mit den IDs 1-18 (Zentralregion 26 - Gelsenkrichen), in 8 Tarifgebieten gültig
         //Restfahrten: Fahrten mit den IDs 19-23
     }
 
@@ -449,8 +449,8 @@ public class OptimierungsTestB {
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 2);
         //Lösung: zwei 7 Ttagestickets
-        //Fahrten mit den IDs 4,5,6,10,11,12,16,17,18 sind dem Ticket mit der Zentralreion 25 (Bottrop)
-        //Fahrtenn mit den IDs 1,2,3,7,8,9,13,14,15 sind dem Ticket mit der Zentralregion 64 (Hilden) zugeordnet
+        //Fahrten mit den IDs 4,5,6,10,11,12,16,17,18 sind dem Ticket mit der Zentralreion 15 (Marl) - 9 Fahrten
+        //Fahrten mit den IDs 1,2,3,7,8,9,13,14,15 sind dem Ticket mit der Zentralregion 53 (Düsseldorf Süd) zugeordnet - 9 Fahrten
     }
 
     @Test
@@ -513,8 +513,8 @@ public class OptimierungsTestB {
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(ticketList.size(), 2);
         //Lösung: 2 7Tages Ticket
-        //Fahrten mit den IDs 4,5,6,10,11,12,16,17,18 sind dem Ticket mit dem Zentralgebiet 6 zugeordnet
-        //Fahrten mit ungerader ID 1,2,3,7,8,9,13,14,15 sind dem Ticket mit dem Zentralgebiet 46 zugeordnet
+        //Fahrten mit den IDs 4,5,6,10,11,12,16,17,18 sind dem Ticket mit dem Zentralgebiet 15 zugeordnet
+        //Fahrten mit den IDs 1,2,3,7,8,9,13,14,15 sind dem Ticket mit dem Zentralgebiet 36 zugeordnet
     }
 
     @Test
@@ -570,6 +570,7 @@ public class OptimierungsTestB {
         long ms = (end-start)%1000;
         Assert.assertFalse(ticket.isEmpty());
         Assert.assertTrue(trips.isEmpty());
+        //Lösung: 24h Ticket Preisstufe B - alle Fahrten zugeordnet
     }
 
 }

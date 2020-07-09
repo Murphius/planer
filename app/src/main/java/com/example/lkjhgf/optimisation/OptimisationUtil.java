@@ -59,28 +59,24 @@ public final class OptimisationUtil {
     }
 
     /**
-     * Entfernt allen Fahrten, die dem Ticket zugewiesen sind, dieses Ticket
+     * Leert die Liste zugehöriger Fahrten eines Tickets<br/>
      * <p>
-     * Wird für zukünftige Fahrscheine ausgeführt
+     * Wird für zukünftige Fahrscheine ausgeführt <br/>
+     * Die Anzahl nutzer ohne Tickets von jedem zugehörigen Fahrschein erhöht sich
      *
      * @param currentTicket  Aktuell Betrachtetes Ticket
-     * @param userClassTrips Alle zu optimierenden Fahrten
+     * @param userClassTrips Alle zu optimierenden Fahrten einer Nutzerklasse
+     * @preconditions Die Nutzerklasse des Tickets stimmt mit der der Fahrtenliste überein
      */
     private static void removeTicketFromTrips(TicketToBuy currentTicket, ArrayList<TripItem> userClassTrips) {
         //Über alle zugeordneten Fahrten iterieren
-        for (TripItem currentTrip : currentTicket.getTripList()) {
+        for (TripQuantity tripQuantity : currentTicket.getTripQuantities()) {
             if (userClassTrips != null && !userClassTrips.isEmpty()) {
-                int index = userClassTrips.indexOf(currentTrip);
-                ArrayList<TripQuantity> tripQuantities = currentTicket.getTripQuantities();
-                int quantityIndex = -1;
-                for(int i = 0; i < tripQuantities.size(); i++){
-                    if(tripQuantities.get(i).getTripItem().getTripID().equals(currentTrip.getTripID())){
-                        quantityIndex = i;
-                        break;
-                    }
-                }
-                if(index != -1 && quantityIndex != -1){
-                    int quantity = currentTicket.getTripQuantities().get(quantityIndex).getQuantity();
+                //Index der jeweiligen Fahrt in der Liste aller Fahrten holen
+                int index = userClassTrips.indexOf(tripQuantity.getTripItem());
+                if (index != -1) {
+                    //Anzahl nutzer ohne Tickets entsprechend oft erhöhen
+                    int quantity = tripQuantity.getQuantity();
                     userClassTrips.get(index).removeTicket(currentTicket.getTicket().getType(), currentTicket.getTicketID(), quantity);
                 }
             }
@@ -96,6 +92,7 @@ public final class OptimisationUtil {
      * @param currentTicket        aktuell betrachtets Ticket
      * @param userClassTrips       alle der Nutzerklasse zugeordnete Fahrten
      * @param freeUserClassTickets Fahrscheine der aktuellen Nutzerklasse mit mindestens einer freien Fahrt
+     * @preconditions Glecihe Nutzerklasse für die Tickets und Fahrten
      */
     private static void saveTicketRemoveTripFromTripList(ArrayList<TicketToBuy> allUserClassTickets,
                                                          TicketToBuy currentTicket,
@@ -106,20 +103,14 @@ public final class OptimisationUtil {
         //Die zugeordneten Fahrten dieses Tickets, aus der Liste der zu optimierenden Fahrten entfernen
         for (TripQuantity tripQuantity : currentTicket.getTripQuantities()) {
             int index = userClassTrips.indexOf(tripQuantity.getTripItem());
-            if(index > -1){
-                boolean needsTicket = false;
-                for(Fare.Type type : tripQuantity.getTripItem().getNumUserClasses().keySet()){
-                    if(tripQuantity.getTripItem().getUserClassWithoutTicket(type) != 0){
-                        needsTicket = true;
-                    }
-                }
-                if(!needsTicket){
+            if (index > -1) {
+                if (!needsTicket(tripQuantity.getTripItem())) {//Wenn keine Person mehr ein Ticket benötigt, kann die Fahrt aus
+                    // der Liste der zu optimierenden Fahrten entfernt werden
                     userClassTrips.remove(index);
                 }
             }
         }
-        //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten
-        //hinzufügen
+        //Wenn noch freie Fahrten vorhanden sind -> diese zur Liste der Fahrscheine mit freien Fahrten hinzufügen
         if (currentTicket.getFreeTrips() > 0) {
             freeUserClassTickets.add(currentTicket);
         }
@@ -145,4 +136,18 @@ public final class OptimisationUtil {
         return newTripList;
     }
 
+    /**
+     * Prüft, ob mindestens eine Person noch kein Ticket hat <br/>
+     *
+     * @param tripItem zu prüfende Fahrt
+     * @return true - mindestens eine Person ist ohne Ticket; false - alle Personen haben ein Ticket
+     */
+    private static boolean needsTicket(TripItem tripItem) {
+        for (Fare.Type type : tripItem.getNumUserClasses().keySet()) {
+            if (tripItem.getUserClassWithoutTicket(type) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

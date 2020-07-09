@@ -99,7 +99,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -131,7 +131,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets =  FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -160,7 +160,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets =  FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -168,7 +168,7 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "Happy Hour Ticket");
-        //Lösung: Happy Hour Ticket, Zentralgebiet Herne, alle Fahrten zugewiesen
+        //Lösung: Happy Hour Ticket, Zwei Waben Tarif Herne - Bochum, alle Fahrten zugewiesen
         //keine Fahrten ohne Ticket
     }
 
@@ -192,7 +192,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets =  FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -200,7 +200,7 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "Happy Hour Ticket");
-        //Lösung: Happy Hour Ticket, Zentralgebiet Herne, alle Fahrten zugewiesen
+        //Lösung: Happy Hour Ticket, Zwei Waben Tarif (272 Herne - 360 Bochum), alle Fahrten zugewiesen
         //keine Fahrten ohne Ticket
     }
 
@@ -232,7 +232,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -240,7 +240,7 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertFalse(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "Happy Hour Ticket");
-        //Lösung: Happy Hour Ticket, Zentralregion Herne (272), Fahrt ID 1&2 zugeteilt
+        //Lösung: Happy Hour Ticket, Zwei Waben Tarif Herne (272) Bochum (360), Fahrt ID 1&2 zugeteilt
         //Eine Fahrt ohne Ticket (ID 3)
     }
 
@@ -278,7 +278,7 @@ public class OptimierungsTestA3 {
 
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = TimeOptimisation.optimierungPreisstufeA3(trips, timeTickets);
+        ArrayList<TicketToBuy> tickets =  FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -286,12 +286,12 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         //Lösung: 1 7 Tage Ticket, 3 Happy Hour Ticket
-        // Zentralregionen jeweils Herne
+        // Jeweils im zwei Waben Tarif Herne (272) -  Bochum (360)
         // 7 Tage Ticket: Fahrten mit den IDs 1-16, Gültigkeit: 01.07 10h bis 08.07 10h
         // Happy Hour Ticket: Jeweils zwei Fahrten eines Abends zugeordnet
-        // - 08.07
-        // - 09.07
-        // - 10.07
+        // - 08.07/09.07
+        // - 09.07/10.07
+        // - 10.07/11.07
         //Keine Fahrten ohne Tickets
     }
 
@@ -332,7 +332,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -340,8 +340,8 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
-        //Lösung: 24h Ticket mit der Zentralregion Herne
-        //Alle Fahrten zugewiesen
+        //Lösung: 24h Ticket zwei Waben (272) Herne und (360) Bochum
+        //Alle 5 Fahrten zugewiesen
     }
 
     @Test
@@ -355,10 +355,6 @@ public class OptimierungsTestA3 {
         duesseldorf.add(430);
         duesseldorf.add(438);
         duesseldorf.add(436);
-
-        startCalendar.set(2020, Calendar.JULY, 1, 18, 0);
-        endCalendar.set(2020, Calendar.JULY, 1, 18, 30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", id++, 436, duesseldorf));
 
         startCalendar.set(2020, Calendar.JULY, 1, 10, 0);
         endCalendar.set(2020, Calendar.JULY, 1, 11, 0);
@@ -376,6 +372,10 @@ public class OptimierungsTestA3 {
         endCalendar.set(2020, Calendar.JULY, 1, 16, 30);
         trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A3", id++, 436, duesseldorf));
 
+        startCalendar.set(2020, Calendar.JULY, 1, 18, 0);
+        endCalendar.set(2020, Calendar.JULY, 1, 18, 30);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A3", id++, 436, duesseldorf));
+
         ArrayList<TimeTicket> tarifgebietTickets = new ArrayList<>(timeTickets);
         ArrayList<TimeTicket> zweiWabenTickets = new ArrayList<>(timeTickets);
         int vierStundenTicketIndex = tarifgebietTickets.indexOf(MyVRRprovider.vierStundenTicket);
@@ -383,7 +383,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -392,7 +392,7 @@ public class OptimierungsTestA3 {
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
         //Lösung: 24h Ticket mit der Zentralregion Düsseldorf
-        //Alle Fahrten zugewiesen
+        //Alle 5 Fahrten zugewiesen
         //Gültige Tarifgebiete des Tickets: 43 & 53
     }
 
@@ -424,7 +424,7 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "Happy Hour Ticket");
-        //Lösung: Happy Hour Ticket, Zentralgebiet Herne, alle Fahrten zugewiesen
+        //Lösung: Happy Hour Ticket, Zwei Waben Tarif Herne (272) & Bochum (360), alle Fahrten zugewiesen
         //keine Fahrten ohne Ticket
 
         startCalendar = Calendar.getInstance();
@@ -450,7 +450,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         startT = System.currentTimeMillis();
-        tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         endT = System.currentTimeMillis();
         s = (endT - startT) / 1000;
         ms = (endT - startT) % 1000;
@@ -458,7 +458,7 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), "Happy Hour Ticket");
-        //Lösung: Happy Hour Ticket, Zentralgebiet Herne, alle Fahrten zugewiesen
+        //Lösung: Happy Hour Ticket, Zwei Waben Tarif Herne (272) & Bochum (360), alle Fahrten zugewiesen
         //keine Fahrten ohne Ticket
     }
 
@@ -564,7 +564,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -572,8 +572,8 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.siebenTagesTicket.getName());
-        //Lösung: 7 Tage Ticket mit der Zentralregion Herne
-        //Alle Fahrten zugewiesen
+        //Lösung: 7 Tage Ticket Zwei Waben Tarif Herne (272) und Bochum (360)
+        //Alle 20 Fahrten zugewiesen
     }
 
     @Test
@@ -679,7 +679,7 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
@@ -687,8 +687,8 @@ public class OptimierungsTestA3 {
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
         Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.siebenTagesTicket.getName());
-        //Lösung: 7 Tage Ticket mit der Zentralregion Bochum
-        //Alle Fahrten zugewiesen
+        //Lösung: 7 Tage Ticket mit der Zentralregion Bochum (36)
+        //Alle 20  Fahrten zugewiesen
     }
 
     @Test
@@ -737,16 +737,17 @@ public class OptimierungsTestA3 {
         zweiWabenTickets.remove(vierStundenTicketIndex);
         System.gc();
         long startT = System.currentTimeMillis();
-        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, tarifgebietTickets, zweiWabenTickets, MainMenu.myProvider.getPreisstufenIndex("A3"));
+        ArrayList<TicketToBuy> tickets = FarezoneA.optimierungPreisstufeA(trips, timeTickets);
         long endT = System.currentTimeMillis();
         long s = (endT - startT) / 1000;
         long ms = (endT - startT) % 1000;
 
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
-        Assert.assertEquals(tickets.get(1).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
-        Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.happyHourTicket.getName());
-        //Lösung: Tagesticket mit den Waben Bochum/Herne, HappyHour Ticket für das TG Herten/RE
+        Collections.sort(tickets, new TicketToBuyTimeComporator());
+        Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
+        Assert.assertEquals(tickets.get(1).getTicket().getName(), MyVRRprovider.happyHourTicket.getName());
+        //Lösung: Tagesticket mit den zwei Waben Tarif Herne (272) und Bochum (360), HappyHour Ticket für das Tarifgebiet Herten /Recklinghausen (17)
         //Tagesticket: Fahrt 1-4
         //HappyH Ticket: Fahrt 5,6
     }
@@ -803,9 +804,9 @@ public class OptimierungsTestA3 {
 
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
-        Assert.assertEquals(tickets.get(1).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
-        Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.happyHourTicket.getName());
-        //Lösung: Tagesticket mit den Waben Bochum/Herne, HappyHour Ticket für die Waben Herne/Herten
+        Assert.assertEquals(tickets.get(0).getTicket().getName(), MyVRRprovider.tagesTicket_1.getName());
+        Assert.assertEquals(tickets.get(1).getTicket().getName(), MyVRRprovider.happyHourTicket.getName());
+        //Lösung: Tagesticket mit den zwei Waben Herne (272) und Bochum (360), HappyHour Ticket für die zwei Waben Herne (272) und Herten (176)
         //Tagesticket: Fahrt 1-4
         //HappyH Ticket: Fahrt 5,6
     }

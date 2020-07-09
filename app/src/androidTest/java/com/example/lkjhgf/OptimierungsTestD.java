@@ -1,14 +1,11 @@
 package com.example.lkjhgf;
 
-import android.app.Activity;
-
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.lkjhgf.activities.MainMenu;
 import com.example.lkjhgf.helper.util.UtilsList;
 import com.example.lkjhgf.optimisation.TicketToBuy;
 import com.example.lkjhgf.optimisation.TimeTicket;
-import com.example.lkjhgf.optimisation.timeOptimisation.FarezoneUtil;
 import com.example.lkjhgf.optimisation.timeOptimisation.vrr.FarezoneD;
 import com.example.lkjhgf.recyclerView.futureTrips.TripItem;
 
@@ -22,6 +19,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.schildbach.pte.dto.Fare;
 
@@ -33,16 +32,16 @@ public class OptimierungsTestD {
         String preisstufe;
         int id;
 
-        TestTripItem(Date start, Date end, String preisstufe, int id, HashMap<Fare.Type, Integer> travellingP) {
-            super(travellingP);
+        TestTripItem(Date start, Date end, String preisstufe, int id, HashMap<Fare.Type, Integer> travellingP, int startID, Set<Integer> crossedFarezones) {
+            super(travellingP, startID, crossedFarezones);
             this.start = start;
             this.end = end;
             this.preisstufe = preisstufe;
             this.id = id;
         }
 
-        TestTripItem(Date start, Date end, String preisstufe, int id) {
-            super(new HashMap<>());
+        TestTripItem(Date start, Date end, String preisstufe, int id, int startID, Set<Integer> crossedFarezones) {
+            super(crossedFarezones, startID);
             this.start = start;
             this.end = end;
             this.preisstufe = preisstufe;
@@ -85,25 +84,33 @@ public class OptimierungsTestD {
     }
 
     private ArrayList<TripItem> generateTripsWithoutUserInformation(int startIndex, int endIndex) {
+        Set<Integer> region1 = new HashSet<>();
+        region1.add(170);
+        region1.add(260);
+        region1.add(350);
+        region1.add(340);
+        region1.add(440);
+        region1.add(430);
+
         ArrayList<TripItem> trips = new ArrayList<>();
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
 
         startCalendar.set(2020, Calendar.MAY, 22, 15, 06);
         endCalendar.set(2020, Calendar.MAY, 22, 15, 6 + 38);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1);
+        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1, 43, region1);
 
         startCalendar.set(2020, Calendar.MAY, 23, 12, 15);
         endCalendar.set(2020, Calendar.MAY, 23, 12, 15 + 38);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2);
+        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, 17, region1);
 
         startCalendar.set(2020, Calendar.MAY, 23, 11, 15);
         endCalendar.set(2020, Calendar.MAY, 23, 11, 15 + 38);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", 3);
+        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", 3, 26, region1);
 
         startCalendar.set(2020, Calendar.MAY, 24, 11, 15);
         endCalendar.set(2020, Calendar.MAY, 24, 11, 15 + 38);
-        TripItem tripItem04 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 3);
+        TripItem tripItem04 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 3, 34, region1);
 
         trips.add(tripItem01);
         trips.add(tripItem02);
@@ -119,7 +126,7 @@ public class OptimierungsTestD {
         Collections.sort(tripSubList, MainMenu.myProvider);
         return tripSubList;
     }
-
+/*
     private ArrayList<TripItem> generateTripsWithUserInformation(int startIndex, int endIndex) {
         ArrayList<TripItem> trips = new ArrayList<>();
         Calendar startCalendar = Calendar.getInstance();
@@ -163,7 +170,7 @@ public class OptimierungsTestD {
         Collections.sort(tripSubList, MainMenu.myProvider);
         return tripSubList;
     }
-
+*/
     private ArrayList<TicketToBuy> generateTicketsToBuy(int startIndex, int endIndex) {
         ArrayList<TicketToBuy> ticketToBuyArrayList = new ArrayList<>();
 
@@ -192,668 +199,191 @@ public class OptimierungsTestD {
     }
 
     @Test
-    public void test3() {
+    public void oneTripNoTicket() {
         ArrayList<TripItem> trips = new ArrayList<>();
-        //einzelne Fahrt - Preisstufe D
-        trips = generateTripsWithoutUserInformation(0, 1);
-        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 0);
+        Set<Integer> region1 = new HashSet<>();
+        region1.add(170);
+        region1.add(260);
+        region1.add(350);
+        region1.add(340);
+        region1.add(440);
+        region1.add(430);
 
-        //zwei Fahrten innerhalb von 24h - Preisstufe D
-        trips = generateTripsWithoutUserInformation(0, 2);
-        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
-    }
-
-    @Test
-    public void test4() {
-        ArrayList<TripItem> trips;
-        ArrayList<TicketToBuy> ticketToBuyArrayList;
-        //Drei Fahrten innerhalb von 24h - 2x D 1x C
-        trips = generateTripsWithoutUserInformation(0, 3);
-        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
-        FarezoneUtil.checkTicketsForOtherTrips(trips, ticketToBuyArrayList);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
-        Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
-
-        //Vier Fahrten - 3x innerhalb von 24h - 2x D 1x C - 1x außerhalb A2
-        trips = generateTripsWithoutUserInformation(0, 4);
-        ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
-        FarezoneUtil.checkTicketsForOtherTrips(trips, ticketToBuyArrayList);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
-        Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
-        Assert.assertEquals(trips.size(), 1);
-    }
-
-   /* @Test
-    public void test5() {
-        ArrayList<TicketToBuy> ticketToBuyArrayList = generateTicketsToBuy(0, 2);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 2);
-        MyVRRprovider.sumUpTickets(ticketToBuyArrayList);
-        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
-        Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
-    }*/
-
-    @Test
-    public void testMyVrrOptimise() {
-        Activity activity = rule.getActivity();
-        //Eine Fahrt mit einem Erwachsenen, Preisstufe D
-        ArrayList<TripItem> tripItems = generateTripsWithUserInformation(1, 2);
-        String id = tripItems.get(0).getTripID();
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> tickets01 = MainMenu.myProvider.optimise(tripItems, new HashMap<>(), activity);
-        Assert.assertEquals(tripItems.size(), 1);
-        Assert.assertEquals(tickets01.get(Fare.Type.ADULT).size(), 1);
-        Assert.assertTrue(tickets01.get(Fare.Type.CHILD).isEmpty());
-        Assert.assertEquals(tickets01.get(Fare.Type.ADULT).get(0).getTripList().size(), 1);
-        Assert.assertEquals(tickets01.get(Fare.Type.ADULT).get(0).getTripList().get(0).getTripID(), id);
-        Assert.assertEquals(tickets01.get(Fare.Type.ADULT).get(0).getTicket().getName(), "Einzelticket E");
-
-        //Eine Fahrt mit einem Erwachsenem, einem Kind, Preisstufe D
-        HashMap<Fare.Type, Integer> numP01 = new HashMap<>();
-        numP01.put(Fare.Type.ADULT, 1);
-        numP01.put(Fare.Type.CHILD, 1);
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
+
+        startCalendar.set(2020, Calendar.MAY, 22, 15, 06);
+        endCalendar.set(2020, Calendar.MAY, 22, 15, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1, 43, region1));
+
+        //einzelne Fahrt - Preisstufe D
+        System.gc();
+        long start = System.currentTimeMillis();
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        long end = System.currentTimeMillis();
+        long s = (end - start) / 1000;
+        long ms = (end - start) % 1000;
+        Assert.assertEquals(ticketToBuyArrayList.size(), 0);
+    }
+
+    @Test
+    public void twoTripsOneRegionOneTicket(){
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        ArrayList<TripItem> trips = new ArrayList<>();
+        Set<Integer> region1 = new HashSet<>();
+        region1.add(170);
+        region1.add(260);
+        region1.add(350);
+        region1.add(340);
+        region1.add(440);
+        region1.add(430);
+        int id = 0;
+        //zwei Fahrten innerhalb von 24h - Preisstufe D
+        startCalendar.set(2020, Calendar.MAY, 22, 15, 06);
+        endCalendar.set(2020, Calendar.MAY, 22, 15, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, region1));
+
         startCalendar.set(2020, Calendar.MAY, 23, 12, 15);
         endCalendar.set(2020, Calendar.MAY, 23, 12, 15 + 38);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1, numP01);
-        tripItems.clear();
-        tripItems.add(tripItem01);
-
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> tickets02 = MainMenu.myProvider.optimise(tripItems, new HashMap<>(), activity);
-        Assert.assertEquals(tickets02.get(Fare.Type.ADULT).size(), 1);
-        Assert.assertEquals(tickets02.get(Fare.Type.CHILD).size(), 1);
-        Assert.assertEquals(tickets02.get(Fare.Type.ADULT).get(0).getTripList().size(), 1);
-        Assert.assertEquals(tickets02.get(Fare.Type.CHILD).get(0).getTripList().size(), 1);
-        Assert.assertEquals(tickets02.get(Fare.Type.ADULT).get(0).getTicket().getName(), "Einzelticket E");
-        Assert.assertEquals(tickets02.get(Fare.Type.CHILD).get(0).getTicket().getName(), "Einzelticket K");
-
-        //Eine Fahrt mit einem Erwachsenem, Preisstufe D
-        //Eine Fahrt mit einem Erwachsenem & einem Kind, Preisstufe D
-        numP01.put(Fare.Type.ADULT, 1);
-        numP01.put(Fare.Type.CHILD, 1);
-        HashMap<Fare.Type, Integer> numP02 = new HashMap<>();
-        numP02.put(Fare.Type.ADULT, 1);
-        numP02.put(Fare.Type.CHILD, 0);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1, numP02);
-        startCalendar.set(2020, Calendar.MAY, 23, 15, 6);
-        endCalendar.set(2020, Calendar.MAY, 23, 15, 6 + 38);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, numP01);
-        tripItems.clear();
-        tripItems.add(tripItem02);
-        tripItems.add(tripItem03);
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> tickets03 = MainMenu.myProvider.optimise(tripItems, new HashMap<>(), activity);
-        Assert.assertEquals(tickets03.get(Fare.Type.ADULT).size(), 1);
-        Assert.assertEquals(tickets03.get(Fare.Type.CHILD).size(), 1);
-        Assert.assertEquals(tickets03.get(Fare.Type.ADULT).get(0).getTripList().size(), 2);
-        Assert.assertEquals(tickets03.get(Fare.Type.CHILD).get(0).getTripList().size(), 1);
-        Assert.assertEquals(tickets03.get(Fare.Type.ADULT).get(0).getTicket().getName(), "24-StundenTicket-1");
-        Assert.assertEquals(tickets03.get(Fare.Type.CHILD).get(0).getTicket().getName(), "Einzelticket K");
-    }
-
-    /*@Test
-    public void testcreateTripListForEachUser() {
-        ArrayList<TripItem> trips = generateTripsWithUserInformation(0, 4);
-        HashMap<Integer, ArrayList<TripItem>> hashMap = MainMenu.myProvider.createTripListForEachUser(trips, Fare.Type.ADULT);
-        Assert.assertEquals(hashMap.keySet().size(), 3);
-        Assert.assertEquals(hashMap.get(1).size(), 4);
-        Assert.assertEquals(hashMap.get(2).size(), 3);
-        Assert.assertEquals(hashMap.get(3).size(), 1);
-
-        ArrayList<TicketToBuy> ticketToBuyArrayList = TimeOptimisation.optimierungPreisstufeD(hashMap.get(1), timeTickets);
-        TimeOptimisation.checkTicketsForOtherTrips(hashMap.get(1), ticketToBuyArrayList);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 17, region1));
+        System.gc();
+        long start = System.currentTimeMillis();
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        long end = System.currentTimeMillis();
+        long s = (end - start) / 1000;
+        long ms = (end - start) % 1000;
         Assert.assertEquals(ticketToBuyArrayList.size(), 1);
-        Assert.assertEquals(ticketToBuyArrayList.get(0).getTripList().size(), 3);
-        Assert.assertEquals(hashMap.get(1).size(), 1);
-    }*/
-
-    @Test
-    public void testVierStundenTicketValid() {
-        TimeTicket vierHTicket = new TimeTicket(new int[]{720, 720, 720, 720, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, "4-StundenTicket-1", Fare.Type.ADULT, 4 * 60 * 60 * 1000, new int[]{3, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 9, 3, true, 1);
-
-        Calendar startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 15, 06);
-        endCalendar.set(2020, Calendar.JUNE, 2, 15, 6 + 38);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 8, 40);
-        endCalendar.set(2020, Calendar.JUNE, 2, 9, 6);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 6, 8, 06);
-        endCalendar.set(2020, Calendar.JUNE, 6, 10, 6 + 38);
-        TripItem tripItem04 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 3, 1, 6 + 38);
-        TripItem tripItem05 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 2, 23, 6 + 38);
-        TripItem tripItem06 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 3, 3, 1);
-        TripItem tripItem07 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        Assert.assertFalse(vierHTicket.isValidTrip(tripItem01));
-        Assert.assertTrue(vierHTicket.isValidTrip(tripItem02));
-        Assert.assertFalse(vierHTicket.isValidTrip(tripItem03));
-        Assert.assertTrue(vierHTicket.isValidTrip(tripItem04));
-        Assert.assertTrue(vierHTicket.isValidTrip(tripItem05));
-        Assert.assertTrue(vierHTicket.isValidTrip(tripItem06));
-        Assert.assertFalse(vierHTicket.isValidTrip(tripItem07));
+        Assert.assertTrue(trips.isEmpty());
+        //Ein 24h Ticket, alle Fahrten zugeordnet
     }
 
     @Test
-    public void testHappyHourTicketValidTrip() {
-        TimeTicket happyHourTicket = new TimeTicket(new int[]{1370, 1370, 1370, 1370, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, "Happy Hour Ticket", Fare.Type.ADULT, 12 * 60 * 60 * 1000, new int[]{2, 2, 2, 2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, 18, 6, false, 1);
-
+    public void twoTripsTwoRegionOneTicket(){
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 15, 06);
-        endCalendar.set(2020, Calendar.JUNE, 2, 15, 6 + 38);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 18, 40);
-        endCalendar.set(2020, Calendar.JUNE, 2, 19, 6);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 6, 8, 06);
-        endCalendar.set(2020, Calendar.JUNE, 7, 10, 6 + 38);
-        TripItem tripItem04 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 6, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 7, 1, 6 + 38);
-        TripItem tripItem05 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 2, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 3, 5, 6 + 38);
-        TripItem tripItem06 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 3, 23, 06);
-        endCalendar.set(2020, Calendar.JUNE, 5, 3, 1);
-        TripItem tripItem07 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "A2", 1);
-
-        Assert.assertFalse(happyHourTicket.isValidTrip(tripItem01));
-        Assert.assertFalse(happyHourTicket.isValidTrip(tripItem02));
-        Assert.assertTrue(happyHourTicket.isValidTrip(tripItem03));
-        Assert.assertFalse(happyHourTicket.isValidTrip(tripItem04));
-        Assert.assertTrue(happyHourTicket.isValidTrip(tripItem05));
-        Assert.assertTrue(happyHourTicket.isValidTrip(tripItem06));
-        Assert.assertFalse(happyHourTicket.isValidTrip(tripItem07));
-    }
-
-    @Test
-    public void VRRoptimierung_keine_aktiven_tickets(){
         ArrayList<TripItem> trips = new ArrayList<>();
-        Calendar startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
-        HashMap<Fare.Type, Integer> numP = new HashMap<>();
-        numP.put(Fare.Type.CHILD, 0);
+        int id = 0;
+        Set<Integer> region1 = new HashSet<>();
+        region1.add(170);
+        region1.add(260);
+        region1.add(350);
+        region1.add(340);
+        region1.add(440);
+        region1.add(430);
+        Set<Integer> region2 = new HashSet<>();
+        region2.add(370);
+        region2.add(470);
+        region2.add(460);
+        region2.add(550);
+        region2.add(540);
+        region2.add(640);
+        region2.add(530);
 
-        startCalendar.set(2020, Calendar.JUNE, 22, 15, 06);
-        endCalendar.set(2020, Calendar.MAY, Calendar.JUNE, 15, 6 + 38);
-        numP.put(Fare.Type.ADULT, 8);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", 1, numP);
-        trips.add(tripItem01);
-        Activity activity = rule.getActivity();
-        HashMap<Fare.Type, ArrayList<TicketToBuy>> ticketResult = MainMenu.myProvider.optimise(trips, new HashMap<>(), activity);
+        //zwei Fahrten innerhalb von 24h - Preisstufe D
+        startCalendar.set(2020, Calendar.MAY, 22, 15, 06);
+        endCalendar.set(2020, Calendar.MAY, 22, 15, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, region1));
 
-        Assert.assertTrue(ticketResult.get(Fare.Type.CHILD).isEmpty());
-        Assert.assertFalse(ticketResult.get(Fare.Type.ADULT).isEmpty());
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).size(),1);
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).get(0).getTicket().getName(), "10er-Ticket E");
-
-        trips.clear();
-        trips.add(tripItem01);
-        startCalendar.set(2020, Calendar.JUNE, 23, 12, 15);
-        endCalendar.set(2020, Calendar.JUNE, 23, 12, 15 + 38);
-        numP.put(Fare.Type.ADULT,2);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, numP);
-        trips.add(tripItem02);
-        ticketResult = MainMenu.myProvider.optimise(trips, ticketResult, activity);
-
-        Assert.assertTrue(ticketResult.get(Fare.Type.CHILD).isEmpty());
-        Assert.assertFalse(ticketResult.get(Fare.Type.ADULT).isEmpty());
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).size(),1);
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).get(0).getTicket().getName(), "10er-Ticket E");
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 12, 15);
-        endCalendar.set(2020, Calendar.JUNE, 24, 12, 15 + 38);
-        numP.put(Fare.Type.ADULT,1);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, numP);
-        trips.add(tripItem03);
-        startCalendar.set(2020, Calendar.JUNE, 24, 15, 15);
-        endCalendar.set(2020, Calendar.JUNE, 24, 15, 15 + 38);
-        numP.put(Fare.Type.ADULT,1);
-        TripItem tripItem04 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, numP);
-        trips.add(tripItem04);
-        ticketResult = MainMenu.myProvider.optimise(trips, ticketResult, activity);
-
-        Assert.assertTrue(ticketResult.get(Fare.Type.CHILD).isEmpty());
-        Assert.assertFalse(ticketResult.get(Fare.Type.ADULT).isEmpty());
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).size(),2);
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).get(1).getTicket().getName(), "10er-Ticket E");
-        Assert.assertEquals(ticketResult.get(Fare.Type.ADULT).get(0).getTicket().getName(), "24-StundenTicket-1");
+        startCalendar.set(2020, Calendar.MAY, 23, 12, 15);
+        endCalendar.set(2020, Calendar.MAY, 23, 12, 15 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 53, region2));
+        System.gc();
+        long start = System.currentTimeMillis();
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        long end = System.currentTimeMillis();
+        long s = (end - start) / 1000;
+        long ms = (end - start) % 1000;
+        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
+        Assert.assertTrue(trips.isEmpty());
+        //Ein 24h Ticket, alle Fahrten zugeordnet
     }
 
     @Test
-    public void loeschen_einer_fahrt_zukuenftigeTickets(){
-        ArrayList<TripItem> trips = new ArrayList<>();
+    public void weekTicketRestTrips(){
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
-        HashMap<Fare.Type, Integer> numP = new HashMap<>();
-        numP.put(Fare.Type.CHILD, 0);
-        numP.put(Fare.Type.ADULT, 1);
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 15, 06);
-        endCalendar.set(2020, Calendar.MAY, Calendar.JUNE, 15, 6 + 38);
-        TripItem tripItem01 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", 1, numP);
-        trips.add(tripItem01);
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 15, 06);
-        endCalendar.set(2020, Calendar.JUNE, 24, 15, 6 + 38);
-        TripItem tripItem02 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2, numP);
-        trips.add(tripItem02);
-
-        startCalendar.set(2020, Calendar.JUNE, 25, 10, 06);
-        endCalendar.set(2020, Calendar.JUNE, 25, 10, 6 + 38);
-        TripItem tripItem03 = new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3, numP);
-        trips.add(tripItem03);
-
-
-
-    }
-
-    @Test
-    public void testNewOpti(){
         ArrayList<TripItem> trips = new ArrayList<>();
-        Calendar startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
+        int id = 0;
+        Set<Integer> region1 = new HashSet<>();
+        region1.add(170);
+        region1.add(260);
+        region1.add(350);
+        region1.add(340);
+        region1.add(440);
+        region1.add(430);
 
-        startCalendar.set(2020, Calendar.JUNE, 20, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1));
+        for(int i = 1; i < 6; i++){
+            startCalendar.set(2020, Calendar.MAY, i, 15, 6);
+            endCalendar.set(2020, Calendar.MAY, i, 15, 6 + 38);
+            trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, region1));
 
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2));
+            startCalendar.set(2020, Calendar.MAY, i, 20, 6);
+            endCalendar.set(2020, Calendar.MAY, i, 20, 6 + 38);
+            trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, region1));
+        }
 
-        startCalendar.set(2020, Calendar.JUNE, 20, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3));
-
-        ArrayList<TicketToBuy> tickets = FarezoneD.optimisation(trips, timeTickets);
-        Assert.assertEquals(tickets.size(), 1);
-        Assert.assertEquals(tickets.get(0).getTripList().size(), 3);
-        Assert.assertEquals(tickets.get(0).getTicket().getName(), "24-StundenTicket-1");
-
-        trips.clear();
-        tickets.clear();
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 1));
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 2));
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 3));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 4));
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 5));
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 6));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 26, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 26, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 7));
-
-        startCalendar.set(2020, Calendar.JUNE, 26, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 26, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 8));
-
-        startCalendar.set(2020, Calendar.JUNE, 26, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 26, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 9));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 10));
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 11));
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 12));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 30, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 30, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 13));
-
-        startCalendar.set(2020, Calendar.JUNE, 30, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 30, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 14));
-
-        startCalendar.set(2020, Calendar.JUNE, 30, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 30, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", 15));
+        startCalendar.set(2020, Calendar.MAY, 20, 15, 6);
+        endCalendar.set(2020, Calendar.MAY, 20, 15, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, region1));
 
         System.gc();
         long start = System.currentTimeMillis();
-        tickets = FarezoneD.optimisation(trips, timeTickets);
-        long ende = System.currentTimeMillis();
-        long sekunden = (ende-start) / 1000;
-        long msekunden = (ende-start)%1000;
-        Assert.assertFalse(tickets.isEmpty());
-        Assert.assertEquals(tickets.size(),2);
-        boolean case1 = (tickets.get(0).getTicket().getName().equals("7-TageTicket")) && (tickets.get(1).getTicket().getName().equals("24-StundenTicket-1"));
-        boolean case2 = (tickets.get(1).getTicket().getName().equals("7-TageTicket")) && (tickets.get(0).getTicket().getName().equals("24-StundenTicket-1"));
-        Assert.assertTrue(case1||case2);
-
-        trips.clear();
-        tickets.clear();
-        int i = 0;
-        startCalendar.set(2020, Calendar.JUNE, 1, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 1, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 1, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 1, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 1, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 1, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 3, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 3, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 3, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 3, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 3, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 3, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 5, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 5, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 5, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 5, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 5, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 5, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 15, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 15, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 15, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 15, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 15, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 15, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 22, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 22, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 24, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 24, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JUNE, 29, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 29, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JULY, 1, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 1, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 1, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 1, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 1, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 1, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JULY, 6, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 6, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 6, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 6, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 6, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 6, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JULY, 13, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 13, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 13, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 13, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 13, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 13, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JULY, 20, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 20, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 20, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 20, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 20, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 20, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 27, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 27, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 27, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 27, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 27, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 27, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-
-        startCalendar.set(2020, Calendar.JULY, 29, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 29, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 29, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 29, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 29, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 29, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 31, 10, 0);
-        endCalendar.set(2020, Calendar.JULY, 31, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 31, 11, 0);
-        endCalendar.set(2020, Calendar.JULY, 31, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        startCalendar.set(2020, Calendar.JULY, 31, 12, 0);
-        endCalendar.set(2020, Calendar.JULY, 31, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++i));
-
-        System.out.println(i);
-        System.gc();
-        start = System.currentTimeMillis();
-        tickets = FarezoneD.optimisation(trips, timeTickets);
-        ende = System.currentTimeMillis();
-        sekunden = (ende-start) / 1000;
-        msekunden = (ende-start)%1000;
-        Assert.assertFalse(tickets.isEmpty());
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        long end = System.currentTimeMillis();
+        long s = (end - start) / 1000;
+        long ms = (end - start) % 1000;
+        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
+        Assert.assertFalse(trips.isEmpty());
+        //Ein 7d Ticket, Fahrt mit der ID 11 ohne Ticket
     }
 
     @Test
-    public void testRemoveOverlappingTrips(){
-        ArrayList<TripItem> trips = new ArrayList<>();
+    public void differentFarezonesOneTicket(){
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
-        int id = 1;
-        startCalendar.set(2020, Calendar.JUNE, 20, 10, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 10,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+        ArrayList<TripItem> trips = new ArrayList<>();
+        int id = 0;
+        Set<Integer> regionD = new HashSet<>();
+        regionD.add(170);
+        regionD.add(260);
+        regionD.add(350);
+        regionD.add(340);
+        regionD.add(440);
+        regionD.add(430);
+        Set<Integer> regionC = new HashSet<>();
+        regionC.add(180);
+        regionC.add(150);
+        regionC.add(260);
+        regionC.add(250);
 
-        startCalendar.set(2020, Calendar.JUNE, 20, 10, 5);
-        endCalendar.set(2020, Calendar.JUNE, 20, 10,35);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
+        startCalendar.set(2020, Calendar.MAY, 7, 15, 6);
+        endCalendar.set(2020, Calendar.MAY, 7, 15, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", ++id, 43, regionC));
 
-        UtilsList.removeOverlappingTrips(trips);
+        startCalendar.set(2020, Calendar.MAY, 7, 18, 6);
+        endCalendar.set(2020, Calendar.MAY, 7, 18, 6 + 38);
+        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "C", ++id, 43, regionC));
+
+        for(int i = 1; i < 6; i++){
+            startCalendar.set(2020, Calendar.MAY, i, 15, 6);
+            endCalendar.set(2020, Calendar.MAY, i, 15, 6 + 38);
+            trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, regionD));
+
+            startCalendar.set(2020, Calendar.MAY, i, 20, 6);
+            endCalendar.set(2020, Calendar.MAY, i, 20, 6 + 38);
+            trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", ++id, 43, regionD));
+        }
+
+        System.gc();
+        long start = System.currentTimeMillis();
+        ArrayList<TicketToBuy> ticketToBuyArrayList = FarezoneD.optimisation(trips, timeTickets);
+        long end = System.currentTimeMillis();
+        long s = (end - start) / 1000;
+        long ms = (end - start) % 1000;
+        Assert.assertEquals(ticketToBuyArrayList.size(), 1);
         Assert.assertFalse(trips.isEmpty());
-        Assert.assertEquals(trips.size(), 1);
-        Assert.assertEquals(trips.get(0).getTripID(), "1");
-
-        trips.clear();
-        id = 1;
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        UtilsList.removeOverlappingTrips(trips);
-        Assert.assertFalse(trips.isEmpty());
-        Assert.assertEquals(trips.size(), 1);
-        Assert.assertEquals(trips.get(0).getTripID(), "1");
-
-        trips.clear();
-        id = 1;
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 12, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 13, 15);
-        endCalendar.set(2020, Calendar.JUNE, 20, 13,55);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 13, 20);
-        endCalendar.set(2020, Calendar.JUNE, 20, 13,54);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        UtilsList.removeOverlappingTrips(trips);
-        Assert.assertFalse(trips.isEmpty());
-        Assert.assertEquals(trips.size(), 3);
-        Assert.assertEquals(trips.get(0).getTripID(),"1");
-        Assert.assertEquals(trips.get(1).getTripID(),"3");
-        Assert.assertEquals(trips.get(2).getTripID(),"4");
-
-        trips.clear();
-        id = 1;
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 0);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 15);
-        endCalendar.set(2020, Calendar.JUNE, 20, 11,20);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 11, 20);
-        endCalendar.set(2020, Calendar.JUNE, 20, 12,30);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 13, 15);
-        endCalendar.set(2020, Calendar.JUNE, 20, 13,55);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        startCalendar.set(2020, Calendar.JUNE, 20, 13, 20);
-        endCalendar.set(2020, Calendar.JUNE, 20, 13,54);
-        trips.add(new TestTripItem(startCalendar.getTime(), endCalendar.getTime(), "D", id++));
-
-        UtilsList.removeOverlappingTrips(trips);
-        Assert.assertFalse(trips.isEmpty());
-        Assert.assertEquals(trips.size(),2);
-
+        //Ein 7d Ticket Preisstufe D, alle Fahrten zugeordnet
     }
 
 }

@@ -263,7 +263,7 @@ public class MyVRRprovider extends MyProvider {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < timeTicketsToBuy.size(); i++) {
             TicketToBuy ticket = timeTicketsToBuy.get(i);
-            result.append(ticket.getTicket().getName()).append(" Preisstufe: ").append(ticket.getPreisstufe());
+            result.append("1x ").append(ticket.getTicket().getName()).append(" Preisstufe: ").append(ticket.getPreisstufe());
             if (ticket.getPreisstufe().equals(preisstufen[1]) || ticket.getPreisstufe().equals(preisstufen[2]) || ticket.getPreisstufe().equals(preisstufen[3]) || ticket.getPreisstufe().equals(preisstufen[4])) {//Peisstufe A1-A3,B
                 if (ticket.isZweiWabenTarif()) {
                     result.append("\nEntwerten für die Starthaltestelle: ").append(UtilsString.setLocationName(ticket.getTripList().get(0).getTrip().from));

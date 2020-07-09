@@ -352,11 +352,13 @@ public class TripItem implements Serializable {
      * <p>
      * JUnit Tests bei denen die Anzahl der reisenden Personen berücksichtigt werden soll
      */
-    public TripItem(HashMap<Fare.Type, Integer> numUserClasses) {
+    public TripItem(HashMap<Fare.Type, Integer> numUserClasses, int startID, Set<Integer> crossedFarezones) {
         trip = null;
         preisstufe = "";
         this.numUserClasses = new HashMap(numUserClasses);
         allTicketInformations = new HashMap<>();
+        this.startID = startID;
+        this.crossedFarezones = crossedFarezones;
         usersWithoutTicket = new HashMap(numUserClasses);
     }
 
@@ -370,7 +372,7 @@ public class TripItem implements Serializable {
      * @param startID          Startwabe
      */
     public TripItem(Set<Integer> crossedFarezones, int startID) {
-        this(new HashMap<>());
+        this(new HashMap<>(), startID, crossedFarezones);
         this.crossedFarezones = crossedFarezones;
         this.startID = startID;
     }

@@ -158,9 +158,9 @@ public class OptimierungsTestA {
         Assert.assertTrue(trips.isEmpty());
         Assert.assertFalse(tickets.isEmpty());
         //Lösung: 3 Tickets:
-        //          - Düsseldorf: 24h Ticket (A3) gültige Tarifgebiete: 43 & 53 - 5 Fahrten
-        //          - Mühlheim: 24h Ticket (A2) gültige Waben: 344 & 442 - 3 Fahrten
-        //          - Recklinghausen: 4h Ticket (A1) gültiges Tarifgebiet: 17 - 4 Fahrten
+        //          - Tarifgebiet Düsseldorf: 24h Ticket (A3) gültige Tarifgebiete: 43 & 53 - 5 Fahrten
+        //          - Zwei Waben Tarif Mühlheim / Ratingen: 24h Ticket (A2) gültige Waben: 344 & 442 - 3 Fahrten
+        //          - Tarifgebiet Recklinghausen: 4h Ticket (A1) gültiges Tarifgebiet: 17 - 4 Fahrten
     }
 
     @Test
@@ -214,6 +214,9 @@ public class OptimierungsTestA {
 
         Assert.assertFalse(tickets.isEmpty());
         Assert.assertTrue(trips.isEmpty());
+        //Lösung:
+        // 24h Ticket mit 6 Fahrten
+        // Zwei Waben Tarif Herten (178) und Marl (154)
     }
 
 }

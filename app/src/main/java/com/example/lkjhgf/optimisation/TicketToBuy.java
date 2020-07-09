@@ -63,6 +63,16 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
         validFarezones = new HashSet<>();
     }
 
+    public TicketToBuy(TicketToBuy ticketToBuy){
+        this.ticket = ticketToBuy.ticket;
+        this. preisstufe = ticketToBuy.preisstufe;
+        this. tripQuantities = new ArrayList<>(ticketToBuy.getTripQuantities());
+        this.freeTrips = ticketToBuy.freeTrips;
+        this. validFarezones = ticketToBuy.validFarezones;
+        this.mainRegionID = ticketToBuy.mainRegionID;
+        this.isZweiWabenTarif = ticketToBuy.isZweiWabenTarif;
+    }
+
     /**
      * Ermittelt wie viele Fahrten auf dem Ticket noch frei sind <br/>
      * <p>
@@ -378,10 +388,12 @@ public class TicketToBuy implements Comparable<TicketToBuy> {
                 Integer otherNumTrip = ((NumTicket) o.ticket).getNumTrips();
                 //Bei Fahrscheinen mit einer unterschiedlichen Anzahl an Fahrten, wird anhand der möglichen Fahrten unterschieden
                 return thisNumTrip.compareTo(otherNumTrip);
-            } else {
+            } else if(ticket instanceof  TimeTicket && o.ticket instanceof TimeTicket){
                 long maxDuration = ((TimeTicket) ticket).getMaxDuration();
                 long oMaxDuration = ((TimeTicket) o.ticket).getMaxDuration();
                 return Long.compare(maxDuration, oMaxDuration);
+            }else{
+                return this.ticket.getName().compareTo(o.ticket.getName());
             }
         }
     }

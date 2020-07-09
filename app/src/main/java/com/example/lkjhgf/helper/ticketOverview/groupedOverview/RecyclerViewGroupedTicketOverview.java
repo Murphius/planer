@@ -103,13 +103,15 @@ public class RecyclerViewGroupedTicketOverview {
 
         Iterator<TicketToBuy> it = ticketsToBuy.iterator();
         TicketToBuy current = it.next();
-        tickets.add(current);
+        tickets.add(new TicketToBuy(current));
         freeTrips.add(current.getFreeTrips());
         quantity.add(1);
         while (it.hasNext()) {
             TicketToBuy next = it.next();
+            boolean contains = false;
             if (current.getTicket() instanceof NumTicket) {
                 if (current.equals(next)) {
+                    contains = true;
                     tickets.get(tickets.size() - 1).addTripItems(next.getTripList());
                     quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
                     freeTrips.set(freeTrips.size() - 1, freeTrips.get(freeTrips.size() - 1) + next.getFreeTrips());
@@ -121,11 +123,12 @@ public class RecyclerViewGroupedTicketOverview {
                     tickets.get(tickets.size() - 1).getTripList().addAll(next.getTripList());
                     quantity.set(quantity.size() - 1, quantity.get(quantity.size() - 1) + 1);
                     freeTrips.set(freeTrips.size() - 1, freeTrips.get(freeTrips.size() - 1) + next.getFreeTrips());
-                } else {
-                    tickets.add(next);
-                    quantity.add(1);
-                    freeTrips.add(next.getFreeTrips());
                 }
+            }
+            if (!contains) {
+                tickets.add(next);
+                quantity.add(1);
+                freeTrips.add(next.getFreeTrips());
             }
             current = next;
         }

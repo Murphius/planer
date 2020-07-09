@@ -35,7 +35,7 @@ public class TicketOverviewGroupedTickets extends Activity {
 
     @Override
     public void onBackPressed(){
-        myGroupedTickets.saveData();
+        //myGroupedTickets.saveData();
         Intent intent = new Intent(this, TicketOverview.class);
         startActivity(intent);
     }

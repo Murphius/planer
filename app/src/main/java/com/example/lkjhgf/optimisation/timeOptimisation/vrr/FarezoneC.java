@@ -72,6 +72,7 @@ public class FarezoneC {
                 } else {
                     break;
                 }
+                tripsC = Util.collectTripsPreisstufe(allTrips, preisstufenIndex);
             }
             //Zusammenfassen der Tickets
             for (int region : ticketsPerRegion.keySet()) {

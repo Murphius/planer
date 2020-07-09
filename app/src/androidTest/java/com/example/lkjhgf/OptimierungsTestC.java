@@ -370,5 +370,4 @@ public class OptimierungsTestC {
         //Alle anderen Fahrten sind einem 7Tage Ticket mit der Zentralregion 7 zugewiesen
     }
 
-
 }

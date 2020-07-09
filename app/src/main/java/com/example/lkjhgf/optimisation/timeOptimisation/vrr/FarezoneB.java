@@ -47,7 +47,7 @@ public class FarezoneB {
                 addTripsToNodes(vrrFarezoneGraph, tripsB);
                 HashMap<Farezone, Quartet<Integer, Integer, ArrayList<TripItem>, Set<FarezoneTrip>>> bestTicketIntervalPerFarezone = new HashMap<>();
                 for (FarezoneTrip farezone : vrrFarezoneGraph.vertexSet()) {
-                    Quartet<Integer, Integer, ArrayList<TripItem>, Set<FarezoneTrip>> regionTicketResult = calculateMaxTrips(farezone, possibleTicket);
+                    Quartet<Integer, Integer, ArrayList<TripItem>, Set<FarezoneTrip>> regionTicketResult = calculateMaxTrips(farezone, possibleTicket, vrrFarezoneGraph);
                     if (regionTicketResult != null) {
                         bestTicketIntervalPerFarezone.put(farezone.getFarezone(), regionTicketResult);
                     }
@@ -73,6 +73,7 @@ public class FarezoneB {
                 } else {
                     break;
                 }
+                tripsB = Util.collectTripsPreisstufe(allTrips, preisstufenIndex);
             }
             //Zusammenfassen der Tickets
             for (Farezone farezone : ticketsPerRegion.keySet()) {
@@ -110,8 +111,7 @@ public class FarezoneB {
      * get3 -> Bereich, in dem das Ticket gültig ist
      * @postconditions Der Wert null wird abgefangen, und nicht in die Zentralregionen-HashMap eingefügt
      */
-    private static Quartet<Integer, Integer, ArrayList<TripItem>, Set<FarezoneTrip>> calculateMaxTrips(FarezoneTrip farezone, TimeTicket possibleTicket) {
-        Graph<FarezoneTrip, DefaultEdge> vrrFarezoneGraph = VRR_Farezones.createVrrFarezoneGraph();
+    private static Quartet<Integer, Integer, ArrayList<TripItem>, Set<FarezoneTrip>> calculateMaxTrips(FarezoneTrip farezone, TimeTicket possibleTicket,  Graph<FarezoneTrip, DefaultEdge> vrrFarezoneGraph) {
         Set<DefaultEdge> edges = vrrFarezoneGraph.outgoingEdgesOf(farezone);
         if (!edges.isEmpty()) {
             //D.h. das Tarifgebiet ist ein Zentralgebiet

@@ -82,13 +82,14 @@ public final class Utils {
      * Ist die Verspätung <= 5 Minuten, so wird die Verspätung grün eingefärbt,
      * sonst rot.
      * Setzt die "echte" Zeit
-     * @param textView  - Anzeige die gefüllt werden soll
-     * @param delay     - Verspätung in ms
+     *
+     * @param textView    - Anzeige die gefüllt werden soll
+     * @param delay       - Verspätung in ms
      * @param plannedTime - geplante Abfahrtszeit
-     * @param resources - für die Farben der Verspätung benötigt
+     * @param resources   - für die Farben der Verspätung benötigt
      */
     private static void setDelayView(TextView textView, long delay, Date plannedTime, Resources resources) {
-        if(plannedTime == null){
+        if (plannedTime == null) {
             textView.setText("");
         }
         Calendar c = Calendar.getInstance();
@@ -107,17 +108,18 @@ public final class Utils {
      * Ist die Verspätung <= 5 Minuten, so wird die Verspätung grün eingefärbt,
      * sonst rot.
      * Setzt die "echte" Zeit
-     * @param textView  - Anzeige die gefüllt werden soll
-     * @param delay     - Verspätung in ms
+     *
+     * @param textView    - Anzeige die gefüllt werden soll
+     * @param delay       - Verspätung in ms
      * @param plannedTime - geplante Abfahrtszeit
-     * @param resources - für die Farben der Verspätung benötigt
-     * @param hideView - gibt an, ob bei keiner Verspätung das Textfeld für Verspätungen angezeigt werden soll oder nicht
+     * @param resources   - für die Farben der Verspätung benötigt
+     * @param hideView    - gibt an, ob bei keiner Verspätung das Textfeld für Verspätungen angezeigt werden soll oder nicht
      */
     public static void setDelayView(TextView textView, long delay, Date plannedTime, Resources resources, boolean hideView) {
-       setDelayView(textView, delay, plannedTime, resources);
-       if(hideView && Utils.longToInt(delay) == 0){
-           textView.setVisibility(View.INVISIBLE);
-       }
+        setDelayView(textView, delay, plannedTime, resources);
+        if (hideView && Utils.longToInt(delay) == 0) {
+            textView.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -127,6 +129,7 @@ public final class Utils {
      * Ist die Verspätung <= 5 Minuten, so wird die Verspätung grün eingefärbt,
      * sonst rot.
      * Setzt die "echte" Zeit
+     *
      * @param textView  - Anzeige die gefüllt werden soll
      * @param delay     - Verspätung in Minuten
      * @param resources - für die Farben der Verspätung benötigt
@@ -134,7 +137,7 @@ public final class Utils {
     public static void setDelayView(TextView textView, int delay, Resources resources) {
         String text = "+ " + delay;
         textView.setText(text);
-        if(delay == 0){
+        if (delay == 0) {
             textView.setVisibility(View.INVISIBLE);
         }
         if (delay <= 5) {
@@ -148,9 +151,9 @@ public final class Utils {
      * Prüft ob zwei Intervalle sich überlappen
      *
      * @param start1 Startzeit von Fahrt 1
-     * @param end1 Endezeit von Fahrt 1
+     * @param end1   Endezeit von Fahrt 1
      * @param start2 Startzeit von Fahrt 2
-     * @param end2 Endzeit von Fahrt 2
+     * @param end2   Endzeit von Fahrt 2
      * @return true wenn sich die Fahrten überlappen, sonst false
      */
     public static boolean isOverlapping(Date start1, Date end1, Date start2, Date end2) {
@@ -164,39 +167,39 @@ public final class Utils {
      */
     public static Triplet<ArrayList<Ticket>, ArrayList<Integer>, ArrayList<String>> shortTicketInformationNumTicket(HashMap<Fare.Type, ArrayList<TripTicketInformationHolder>> allTicketInformations) {
         ArrayList<Ticket> ticketsToUse = new ArrayList<>();
-        ArrayList<String> preisstufeToUse = new ArrayList<>();
+        ArrayList<String> farezoneList = new ArrayList<>();
         ArrayList<Integer> num = new ArrayList<>();
 
         for (Fare.Type type : allTicketInformations.keySet()) {
             ArrayList<TripTicketInformationHolder> ticketList = allTicketInformations.get(type);
             if (ticketList != null && !ticketList.isEmpty()) {
                 ticketsToUse.add(ticketList.get(0).getTicket());
-                preisstufeToUse.add(ticketList.get(0).getTicketFarezone());
+                farezoneList.add(ticketList.get(0).getTicketFarezone());
                 num.add(ticketList.get(0).getQuantity());
                 for (int i = 1; i < ticketList.size(); i++) {
                     boolean contains = false;
                     for (int j = 0; j < ticketsToUse.size() && !contains; j++) {
                         if (ticketList.get(i).getTicket().getName().equals(ticketsToUse.get(j).getName())) {
-                            if(ticketList.get(i).getTicket() instanceof TimeTicket){
-                                if (ticketList.get(i).getTicketFarezone().equals(preisstufeToUse.get(j))) {
-                                    num.set(j, num.get(j) + ticketList.get(i).getQuantity());
-                            }else {
-                                    ticketList.add(ticketList.get(i));
-                                    preisstufeToUse.add(ticketList.get(i).getTicketFarezone());
-                                    num.add(ticketList.get(i).getQuantity());
-                                }
+                            //if (ticketList.get(i).getTicket() instanceof TimeTicket) {
+                            if (ticketList.get(i).getTicketFarezone().equals(farezoneList.get(j))) {
+                                num.set(j, num.get(j) + ticketList.get(i).getQuantity());
+                            } else {
+                                ticketList.add(ticketList.get(i));
+                                farezoneList.add(ticketList.get(i).getTicketFarezone());
+                                num.add(ticketList.get(i).getQuantity());
                             }
+                            //}
                             contains = true;
                         }
                     }
                     if (!contains) {
                         ticketsToUse.add(ticketList.get(i).getTicket());
-                        preisstufeToUse.add(ticketList.get(i).getTicketFarezone());
+                        farezoneList.add(ticketList.get(i).getTicketFarezone());
                         num.add(ticketList.get(i).getQuantity());
                     }
                 }
             }
         }
-        return Triplet.with(ticketsToUse, num, preisstufeToUse);
+        return Triplet.with(ticketsToUse, num, farezoneList);
     }
 }
